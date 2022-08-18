@@ -45,4 +45,4 @@ const defaultTheme: DefaultTheme = {
   },
 };
 
-export { defaultTheme };
+export default defaultTheme;
