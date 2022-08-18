@@ -1,25 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+/*
+ * <Route path='/경로' element={<컴포넌트 />}
+ * ex) <Route path="*" element={<NotFound />} />
+ *
+ * {{BASE_URL}}/경로로 해당 컴포넌트 접근 가능
+ */
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Router basename={'/'}>
+        <Routes>
+          /* * ADD <Route /> here */
+        </Routes>
+      </Router>
+    </>
   );
 }
 
