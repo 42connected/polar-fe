@@ -27,7 +27,8 @@ const defaultTheme: DefaultTheme = {
     Red: '#DA0D00',
     Yello: '#F9C132',
   },
-  font: {
+
+  fontFrame: {
     titleSmall: 'font-weight: 700; font-size: 2.0rem;',
     titleMedium: 'font-weight: 700; font-size: 2.5rem;',
     titleLarge: 'font-weight: 700; font-size: 3.0rem;',
@@ -37,6 +38,12 @@ const defaultTheme: DefaultTheme = {
     bodySmall: 'font-weight: 400; font-size: 1.3rem;',
     bodyMiddle: 'font-weight: 400; font-size: 1.6rem;',
   },
+
+  font: {
+    sebangGothic: 'font: "SEBANG Gothic"',
+    nanumGothic: 'font: "NanumGothic"',
+  },
+
   fontColor: {
     titleColor: '#000000',
     blueColor: '#313C7A',

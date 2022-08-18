@@ -14,5 +14,8 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     padding-left: 10px;
   }
+  html{
+    font-size: 10px;
+  }
 `;
 export default GlobalStyle;
