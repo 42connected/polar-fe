@@ -2,7 +2,7 @@ import { DefaultTheme } from 'styled-components';
 
 const defaultTheme: DefaultTheme = {
   shadow: {
-    defaultShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+    defaultShadow: '0px 4px 4px rgba(0, 0, 0, 0.2)',
     buttonShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
   },
   colors: {
@@ -39,9 +39,23 @@ const defaultTheme: DefaultTheme = {
     bodyMiddle: 'font-weight: 400; font-size: 1.6rem;',
   },
 
+  fontWeight: {
+    weightSmall: 'font-weight:400',
+    weightLarge: 'font-weight:700',
+  },
+
+  fontSize: {
+    sizeSmall: 'font-size: 1.3rem',
+    sizeExtraSmall: 'font-size: 1.6rem',
+    sizeMedium: 'font-size: 2.0rem',
+    sizeExtraMedium: 'font-size: 2.5rem',
+    sizeLarge: 'font-size: 3.0rem',
+    sizeExtraLarge: 'font-size: 3.5rem',
+  },
+
   font: {
-    sebangGothic: 'font: "SEBANG Gothic"',
-    nanumGothic: 'font: "NanumGothic"',
+    sebangGothic: 'font-family: "SEBANG Gothic"',
+    nanumGothic: 'font-family: "NanumGothic"',
   },
 
   fontColor: {
