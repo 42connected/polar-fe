@@ -26,6 +26,7 @@ const Button1 = styled.button<Button1Props>`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   border-radius: ${props => props.borderRadius ?? '1rem'};
   border-width: ${props => props.borderWidth ?? '0rem'};
   width: ${props => props.width ?? '7.5rem'};
