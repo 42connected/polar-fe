@@ -27,7 +27,7 @@ declare module 'styled-components' {
       Red: string;
       Yello: string;
     };
-    font: {
+    fontFrame: {
       titleSmall: string;
       titleMedium: string;
       titleLarge: string;
@@ -36,6 +36,24 @@ declare module 'styled-components' {
       subTitleMiddle: string;
       bodySmall: string;
       bodyMiddle: string;
+    };
+    fontWeight: {
+      weightSmall: string;
+      weightLarge: string;
+    };
+
+    fontSize: {
+      sizeSmall: string;
+      sizeExtraSmall: string;
+      sizeMedium: string;
+      sizeExtraMedium: string;
+      sizeLarge: string;
+      sizeExtraLarge: string;
+    };
+
+    font: {
+      sebangGothic: string;
+      nanumGothic: string;
     };
     fontColor: {
       titleColor: string;

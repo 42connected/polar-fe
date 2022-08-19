@@ -7,12 +7,14 @@ const GlobalStyle = createGlobalStyle`
     outline: none;
   }
   body {
-    display: flex;
     font-family: 'NanumGothic';
   }
   input {
     display: flex;
     padding-left: 10px;
+  }
+  html{
+    font-size: 10px;
   }
 `;
 export default GlobalStyle;
