@@ -25,7 +25,7 @@ const defaultTheme: DefaultTheme = {
     inputBoxBackgound: '#F4F4F4',
     fontGray: '#A2A3A8',
     Red: '#DA0D00',
-    Yello: '#F9C132',
+    Yellow: '#F9C132',
   },
 
   fontFrame: {

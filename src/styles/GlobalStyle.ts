@@ -13,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     padding-left: 10px;
   }
-  html{
+  html {
     font-size: 10px;
   }
 `;
