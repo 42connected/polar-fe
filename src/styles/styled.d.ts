@@ -25,7 +25,7 @@ declare module 'styled-components' {
       inputBoxBackgound: string;
       fontGray: string;
       Red: string;
-      Yello: string;
+      Yellow: string;
     };
     fontFrame: {
       titleSmall: string;

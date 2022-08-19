@@ -22,22 +22,23 @@ export interface Button1Props
 }
 
 const Button1 = styled.button<Button1Props>`
-  color: ${p => p.color};
+  color: ${props => props.color};
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: ${p => p.borderRadius ?? '1rem'};
-  border-width: ${p => p.borderWidth ?? '0rem'};
-  width: ${p => p.width ?? '7.5rem'};
-  height: ${p => p.height ?? '2.7rem'};
-  box-shadow: ${p => p.boxShadow ?? ''};
-  color: ${p => p.color ?? theme.colors.backgoundWhite};
-  background-color: ${p => p.backgroundColor ?? theme.colors.polarBrightMain};
-  ${p => p.fontSize ?? theme.font.bodyMiddle};
+  border-radius: ${props => props.borderRadius ?? '1rem'};
+  border-width: ${props => props.borderWidth ?? '0rem'};
+  width: ${props => props.width ?? '7.5rem'};
+  height: ${props => props.height ?? '2.7rem'};
+  box-shadow: ${props => props.boxShadow ?? ''};
+  color: ${props => props.color ?? theme.colors.backgoundWhite};
+  background-color: ${props =>
+    props.backgroundColor ?? theme.colors.polarBrightMain};
+  ${props => props.fontSize ?? theme.fontFrame.bodyMiddle};
   &:active {
-    background-color: ${p =>
-      p.backgroundColor
-        ? darken(p.backgroundColor, 0.15)
+    background-color: ${props =>
+      props.backgroundColor
+        ? darken(props.backgroundColor, 0.15)
         : darken(theme.colors.polarBrightMain, 0.15)};
   }
 `;
