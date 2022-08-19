@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MentorDetail from './contaners/metor-detail';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -10,7 +11,8 @@ function App() {
   return (
     <>
       <Router basename={'/'}>
-        <Routes>
+        <Routes >
+          <Route path='/mentor-detail/:intraId' element={<MentorDetail/>} />
           /* * ADD <Route /> here */
         </Routes>
       </Router>
