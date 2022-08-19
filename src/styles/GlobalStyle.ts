@@ -7,7 +7,6 @@ const GlobalStyle = createGlobalStyle`
     outline: none;
   }
   body {
-    display: flex;
     font-family: 'NanumGothic';
   }
   input {

@@ -37,6 +37,20 @@ declare module 'styled-components' {
       bodySmall: string;
       bodyMiddle: string;
     };
+    fontWeight: {
+      weightSmall: string;
+      weightLarge: string;
+    };
+
+    fontSize: {
+      sizeSmall: string;
+      sizeExtraSmall: string;
+      sizeMedium: string;
+      sizeExtraMedium: string;
+      sizeLarge: string;
+      sizeExtraLarge: string;
+    };
+
     font: {
       sebangGothic: string;
       nanumGothic: string;
