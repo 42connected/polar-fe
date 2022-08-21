@@ -8,6 +8,7 @@ export interface ButtonProps
   text?: string;
   borderRadius?: string;
   borderWidth?: string;
+  borderColor?: string;
   width?: string;
   height?: string;
   color?: string;
@@ -24,6 +25,8 @@ const ButtonStyle = styled.button<ButtonProps>`
   cursor: pointer;
   border-radius: ${props => props.borderRadius ?? '1rem'};
   border-width: ${props => props.borderWidth ?? '0rem'};
+  border-style: solid;
+  border-color: ${props => props.borderColor ?? theme.fontColor.titleColor};
   width: ${props => props.width ?? '7.5rem'};
   height: ${props => props.height ?? '2.7rem'};
   box-shadow: ${props => props.boxShadow ?? ''};
