@@ -3,26 +3,21 @@ import styled from 'styled-components';
 import theme from '../styles/theme';
 import { darken } from '@mui/material';
 
-export interface Button1Props
+export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string;
-  display?: string;
-  alignItems?: string;
-  justifyContent?: string;
   borderRadius?: string;
   borderWidth?: string;
   width?: string;
   height?: string;
   color?: string;
   fontSize?: string;
+  font?: string;
   boxShadow?: string;
   backgroundColor?: string;
-  activeBackgroundColor?: string;
-  activeColor?: string;
 }
 
-const Button1 = styled.button<Button1Props>`
-  color: ${props => props.color};
+const ButtonStyle = styled.button<ButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,6 +31,7 @@ const Button1 = styled.button<Button1Props>`
   background-color: ${props =>
     props.backgroundColor ?? theme.colors.polarBrightMain};
   ${props => props.fontSize ?? theme.fontFrame.bodyMiddle};
+  ${props => props.font ?? theme.font.sebangGothic};
   &:active {
     background-color: ${props =>
       props.backgroundColor
@@ -44,4 +40,8 @@ const Button1 = styled.button<Button1Props>`
   }
 `;
 
-export default Button1;
+function Button(props: ButtonProps) {
+  return <ButtonStyle {...props}>{props.text}</ButtonStyle>;
+}
+
+export default Button;
