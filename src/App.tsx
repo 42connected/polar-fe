@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { MentorList } from './containers/mentor-list/mentor-list';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -12,6 +13,7 @@ function App() {
       <Router basename={'/'}>
         <Routes>
           /* * ADD <Route /> here */
+          <Route path="/mentor-lists/:category" element={<MentorList />} />
         </Routes>
       </Router>
     </>
