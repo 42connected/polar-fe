@@ -11,7 +11,7 @@ const defaultTheme: DefaultTheme = {
     polarSimpleMain: '#313C7A',
     polarBackground: '#F5F4F9',
     polarBrightMain: '#6D77AF',
-    polarGray: '#6D77AF',
+    polarGray: '#F6F6F6',
     grayOne: '#737373',
     grayTwo: '#615C5C',
     grayThree: '#9F9F9F',
@@ -25,7 +25,7 @@ const defaultTheme: DefaultTheme = {
     inputBoxBackgound: '#F4F4F4',
     fontGray: '#A2A3A8',
     Red: '#DA0D00',
-    Yello: '#F9C132',
+    Yellow: '#F9C132',
   },
 
   fontFrame: {
