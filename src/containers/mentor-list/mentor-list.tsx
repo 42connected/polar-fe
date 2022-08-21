@@ -85,9 +85,34 @@ const CardContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
 `;
 
+export interface Categories {
+  id: string;
+  name: string;
+}
+
+export interface MentorsList {
+  category?: Categories;
+  mentorCount: number;
+  mentors: MentorsListElement[];
+}
+
+export interface MentorsListElement {
+  mentor: MentorSimpleInfo;
+  keywords: string[];
+}
+
+export interface MentorSimpleInfo {
+  id: string;
+  name: string;
+  intraId: string;
+  tags: string[];
+  profileImage: string;
+}
+
 export function MentorList() {
   const { category } = useParams();
   const [mentors, setMentors] = useState([]);
+  const [keywords, setKeywords] = useState<string[]>([]);
 
   return (
     <Container component="main" maxWidth="md">

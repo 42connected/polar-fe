@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { MentorKeyword } from './mentor-keyword';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import defaultTheme from '../../styles/theme';
 
 const Container = styled.div`
@@ -52,16 +52,23 @@ export function MentorKeywordList() {
     '취업',
     '취업',
   ];
+
+  const defaultCategories = useMemo(() => {
+    return test.slice(0, 3);
+  }, [test]);
+
+  const expandCategories = useMemo(() => {
+    return test.slice(3, test.length - 1);
+  }, [test]);
+
   const [isExpand, setIsExpand] = useState(false);
   return (
     <Container>
       <KeywordsLine>
         <Button>전체</Button>
-        {test.map((e, i) => {
-          if (i < 3) {
-            return <MentorKeyword name={e} index={i + 1} />;
-          }
-        })}
+        {defaultCategories.map((e, i) => (
+          <MentorKeyword name={e} index={i + 1} />
+        ))}
         <Button
           onClick={() => {
             setIsExpand(!isExpand);
@@ -72,11 +79,9 @@ export function MentorKeywordList() {
       </KeywordsLine>
       {isExpand ? (
         <KeywordsLine>
-          {test.map((e, i) => {
-            if (i > 2) {
-              return <MentorKeyword name={e} index={i + 1} />;
-            }
-          })}
+          {expandCategories.map((e, i) => (
+            <MentorKeyword name={e} index={i + 1} />
+          ))}
         </KeywordsLine>
       ) : (
         <></>
