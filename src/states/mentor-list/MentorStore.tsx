@@ -1,0 +1,73 @@
+import axios from 'axios';
+import { action, makeObservable, observable } from 'mobx';
+import qs from 'qs';
+import { axiosInstance } from '../../context/axios-interface';
+
+export interface Categories {
+  id: string;
+  name: string;
+}
+
+export interface MentorsList {
+  category?: Categories;
+  mentorCount: number;
+  mentors: MentorsListElement[];
+}
+
+export interface MentorsListElement {
+  mentor: MentorSimpleInfo;
+  keywords: string[];
+}
+
+export interface MentorSimpleInfo {
+  id: string;
+  name: string;
+  intraId: string;
+  tags: string[];
+  profileImage: string;
+  introduction: string;
+}
+
+class MentorStore {
+  mentorsList: MentorsList;
+
+  constructor() {
+    makeObservable(this, {
+      mentorsList: observable,
+      clear: action,
+    });
+    this.mentorsList = { mentorCount: 0, mentors: [] };
+  }
+
+  clear() {
+    this.mentorsList = { mentorCount: 0, mentors: [] };
+  }
+
+  async MentorsInitializer(
+    category: string | undefined,
+    keywords: string[],
+    name: string | undefined,
+  ) {
+    if (!category) {
+      console.log('Category is undefined');
+      return;
+    }
+    if (name === '') {
+      name = undefined;
+    }
+    axios.defaults.paramsSerializer = params => {
+      return qs.stringify(params);
+    };
+    const params = { mentorName: name, keywords: keywords };
+    try {
+      const ret = await axiosInstance.get(`/categories/${category}`, {
+        params,
+      });
+      this.mentorsList = ret.data;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
+
+export default new MentorStore();
