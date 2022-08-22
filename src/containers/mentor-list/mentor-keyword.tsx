@@ -1,4 +1,8 @@
 import styled from '@emotion/styled';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import KeywordStore, { Keyword } from '../../states/mentor-list/KeywordStore';
+import MentorStore from '../../states/mentor-list/MentorStore';
 import defaultTheme from '../../styles/theme';
 
 const Container = styled.button`
@@ -8,14 +12,14 @@ const Container = styled.button`
   justify-content: center;
   align-items: center;
   padding: 5px 30px;
-  width: 100px;
-  height: 40px;
+  width: 120px;
+  height: 50px;
   margin: 10px 0px;
   border-radius: 30px;
   border: none;
   text-align: center;
   text-decoration: none;
-  background-color: gray;
+  background-color: ${props => props.color};
   color: #ffffff;
   &:hover {
     opacity: 0.8;
@@ -26,9 +30,34 @@ const Container = styled.button`
 
 export interface KeywordProps {
   name: string;
-  index: number;
+  isClicked: boolean;
 }
 
 export function MentorKeyword(props: KeywordProps) {
-  return <Container>{props.name}</Container>;
+  const { category } = useParams();
+
+  return (
+    <Container
+      onClick={() => {
+        if (!props.isClicked) {
+          KeywordStore.pushSelected(props.name);
+          MentorStore.MentorsInitializer(
+            category,
+            KeywordStore.selected,
+            undefined,
+          );
+        } else {
+          KeywordStore.removeSelectedByKeyword(props.name);
+          MentorStore.MentorsInitializer(
+            category,
+            KeywordStore.selected,
+            undefined,
+          );
+        }
+      }}
+      color={props.isClicked ? defaultTheme.colors.polarSimpleMain : 'gray'}
+    >
+      {props.name}
+    </Container>
+  );
 }

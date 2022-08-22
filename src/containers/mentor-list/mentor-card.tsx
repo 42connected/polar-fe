@@ -1,12 +1,14 @@
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 import defaultTheme from '../../styles/theme';
+import defaultProfile from '../../assets/image/defaultProfileImage.png';
 
 const Container = styled.div`
   display: flex;
-  width: 90%;
+  width: 80%;
+  height: 300px;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   margin: 25px;
   padding: 30px 10px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -19,13 +21,14 @@ const Container = styled.div`
 const InfoContainer = styled.div`
   display: flex;
   width: 100%;
-  justify-content: space-around;
+  justify-content: center;
 `;
 
 const ProfileImg = styled.img`
   width: 90px;
   height: 90px;
   border-radius: 100%;
+  margin-right: 20px;
 `;
 
 const ProfileRight = styled.div`
@@ -46,19 +49,27 @@ const ProfileTag = styled.div`
 `;
 
 const Introduce = styled.div`
+  display: flex;
   ${defaultTheme.font.nanumGothic};
   ${defaultTheme.fontSize.sizeSmall};
   width: 70%;
-  margin: 20px 0px;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 30px 0px;
 `;
 
 const Button = styled.button`
+  display: flex;
   ${defaultTheme.fontSize.sizeSmall};
   ${defaultTheme.font.sebangGothic};
   border-radius: 5px;
   border: none;
   text-align: center;
+  align-items: center;
   text-decoration: none;
+  height: 55px;
   color: #ffffff;
   padding: 7% 20%;
   &:hover {
@@ -68,38 +79,54 @@ const Button = styled.button`
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 `;
 
-export function MentorCard() {
-  const tag = [
-    'Backend',
-    'SW Architecture',
-    '점심 뭐먹지',
-    '아무거나 먹자',
-    '하나 더',
-  ];
+const ProfileLink = styled(Link)`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  text-decoration: none;
+`;
 
+export interface CardProps {
+  name: string;
+  intraId: string;
+  tags: string[] | null;
+  profileImage: string;
+  introduction: string;
+}
+
+export function MentorCard(props: CardProps) {
   return (
     <Container>
       <InfoContainer>
-        <ProfileImg src="https://slack-imgs.com/?c=1&o1=ro&url=https%3A%2F%2Fca.slack-edge.com%2FT039P7U66-U03DU1UN0P3-gc9a7b67d9c4-512"></ProfileImg>
+        <ProfileImg
+          src={props.profileImage ? props.profileImage : defaultProfile}
+        />
         <ProfileRight>
-          <ProfileName>정경호 멘토</ProfileName>
-          {tag.map((e, i) => {
-            if (i < 3) {
-              return <ProfileTag key={i}>#{e}</ProfileTag>;
-            }
-            if (i === 3) {
-              return <ProfileTag key={i}>....</ProfileTag>;
-            }
-          })}
+          <ProfileName>{props.name} 멘토</ProfileName>
+          {props.tags ? (
+            props.tags.map((e, i) => {
+              if (i < 3) {
+                return <ProfileTag key={i}>#{e}</ProfileTag>;
+              }
+              if (i === 3) {
+                return <ProfileTag key={i}>....</ProfileTag>;
+              }
+            })
+          ) : (
+            <></>
+          )}
         </ProfileRight>
       </InfoContainer>
       <Introduce>
-        현재 삼성전자에서 S/W Architect와 Expert Programmer로 활동중이며, 코딩
-        하는 걸 즐기는 개발자 입니다.
+        {props.introduction ? props.introduction : '프로필을 작성중입니다. ✍🏼'}
       </Introduce>
-      <Button style={{ backgroundColor: defaultTheme.colors.polarBrightMain }}>
-        자세히 보기
-      </Button>
+      <ProfileLink to={'/mentor-detail/' + props.intraId}>
+        <Button
+          style={{ backgroundColor: defaultTheme.colors.polarBrightMain }}
+        >
+          자세히 보기
+        </Button>
+      </ProfileLink>
     </Container>
   );
 }

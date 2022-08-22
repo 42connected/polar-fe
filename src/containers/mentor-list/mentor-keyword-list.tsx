@@ -1,7 +1,11 @@
 import styled from '@emotion/styled';
 import { MentorKeyword } from './mentor-keyword';
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import defaultTheme from '../../styles/theme';
+import KeywordStore from '../../states/mentor-list/KeywordStore';
+import { observer } from 'mobx-react-lite';
+import { useParams } from 'react-router-dom';
+import MentorStore from '../../states/mentor-list/MentorStore';
 
 const Container = styled.div`
   display: flex;
@@ -18,19 +22,19 @@ const KeywordsLine = styled.div`
 
 const Button = styled.button`
   ${defaultTheme.font.sebangGothic};
-  ${defaultTheme.fontSize.sizeSmall};
+  ${defaultTheme.fontSize.sizeExtraSmall};
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 5px 30px;
-  width: 100px;
-  height: 40px;
+  width: 120px;
+  height: 50px;
   margin: 10px 0px;
   border-radius: 30px;
   border: none;
   text-align: center;
   text-decoration: none;
-  background-color: #313c7a;
+  background-color: ${defaultTheme.colors.polarSimpleMain};
   color: #ffffff;
   &:hover {
     opacity: 0.8;
@@ -39,53 +43,67 @@ const Button = styled.button`
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 `;
 
-export function MentorKeywordList() {
-  const test: string[] = [
-    '커피',
-    '취업',
-    '취업',
-    '취업',
-    '취업',
-    '취업',
-    '취업',
-    '취업',
-    '취업',
-    '취업',
-  ];
-
-  const defaultCategories = useMemo(() => {
-    return test.slice(0, 3);
-  }, [test]);
-
-  const expandCategories = useMemo(() => {
-    return test.slice(3, test.length - 1);
-  }, [test]);
-
+const MentorKeywordList = observer(() => {
+  const { category } = useParams();
   const [isExpand, setIsExpand] = useState(false);
+
+  useEffect(() => {
+    if (category) {
+      KeywordStore.keywordsInitializer(category);
+    }
+  }, []);
+
   return (
     <Container>
       <KeywordsLine>
-        <Button>전체</Button>
-        {defaultCategories.map((e, i) => (
-          <MentorKeyword name={e} index={i + 1} />
-        ))}
         <Button
           onClick={() => {
-            setIsExpand(!isExpand);
+            KeywordStore.seletedClear();
+            MentorStore.MentorsInitializer(
+              category,
+              KeywordStore.selected,
+              undefined,
+            );
           }}
         >
-          더보기
+          전체
         </Button>
+        {KeywordStore.keywords.slice(0, 3).map((e, i) => (
+          <MentorKeyword
+            name={e.keyword}
+            key={i}
+            isClicked={KeywordStore.selected.indexOf(e.keyword) !== -1}
+          />
+        ))}
+        {KeywordStore.keywords.length > 3 ? (
+          <Button
+            onClick={() => {
+              setIsExpand(!isExpand);
+            }}
+          >
+            더보기
+          </Button>
+        ) : (
+          <></>
+        )}
       </KeywordsLine>
       {isExpand ? (
         <KeywordsLine>
-          {expandCategories.map((e, i) => (
-            <MentorKeyword name={e} index={i + 1} />
-          ))}
+          {KeywordStore.keywords
+            .slice(3, KeywordStore.keywords.length)
+            .map((e, i) => (
+              <MentorKeyword
+                name={e.keyword}
+                key={i + 3}
+                isClicked={KeywordStore.selected.indexOf(e.keyword) !== -1}
+              />
+            ))}
         </KeywordsLine>
       ) : (
         <></>
       )}
     </Container>
   );
-}
+});
+
+export default MentorKeywordList;

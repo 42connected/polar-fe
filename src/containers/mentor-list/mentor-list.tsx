@@ -1,20 +1,21 @@
 import { Container } from '@mui/material';
 import styled from '@emotion/styled';
-import { useState } from 'react';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import defaultTheme from '../../styles/theme';
 import { MentorCard } from './mentor-card';
 import { useParams } from 'react-router-dom';
-import { MentorKeywordList } from './mentor-keyword-list';
+import MentorKeywordList from './mentor-keyword-list';
+import MentorStore from '../../states/mentor-list/MentorStore';
+import KeywordStore from '../../states/mentor-list/KeywordStore';
+import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 
 const Title = styled.div`
   ${defaultTheme.fontSize.sizeExtraMedium};
   ${defaultTheme.font.sebangGothic};
   display: flex;
   justify-content: center;
-  /*padding: 20px 0px 20px 30px;
-  margin: 50px 0px;*/
+  padding: 20px 0px 20px 30px;
+  margin: 50px 0px;
 `;
 
 const Divider = styled.div`
@@ -36,12 +37,13 @@ const SearchContainer = styled.div`
   align-items: center;
 `;
 
-const Text = styled.text`
+const Text = styled.div`
   ${defaultTheme.font.sebangGothic};
   ${defaultTheme.fontSize.sizeExtraSmall};
 `;
 
 const TextContainer = styled.div`
+  display: flex;
   width: 50%;
 `;
 
@@ -50,13 +52,13 @@ const SearchBox = styled.input`
   ${defaultTheme.fontSize.sizeSmall};
   background-color: red;
   border-radius: 30px;
-  width: 50%;
+  width: 30%;
   border: 1px solid rgba(0, 0, 0, 0.1);
   text-align: left;
   text-decoration: none;
   background-color: #ffffff;
   color: black;
-  padding: 10px 65px 10px 15px;
+  padding: 10px 15px 10px 15px;
   margin-top: 10px;
   &:hover {
     background-color: #f6f6f6;
@@ -70,52 +72,22 @@ const Search = styled.div`
   margin: auto;
 `;
 
-const FixableIcon = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 0px 5px 0px -30px;
-  &:hover {
-    color: gray;
-  }
-`;
-
 const CardContainer = styled.div`
   display: grid;
   width: 100%;
   grid-template-columns: repeat(3, 1fr);
 `;
 
-export interface Categories {
-  id: string;
-  name: string;
-}
+const MentorList = observer(() => {
+  const { category } = useParams<string>();
+  const [search, setSearch] = useState<string>('');
 
-export interface MentorsList {
-  category?: Categories;
-  mentorCount: number;
-  mentors: MentorsListElement[];
-}
-
-export interface MentorsListElement {
-  mentor: MentorSimpleInfo;
-  keywords: string[];
-}
-
-export interface MentorSimpleInfo {
-  id: string;
-  name: string;
-  intraId: string;
-  tags: string[];
-  profileImage: string;
-}
-
-export function MentorList() {
-  const { category } = useParams();
-  const [mentors, setMentors] = useState([]);
-  const [keywords, setKeywords] = useState<string[]>([]);
+  useEffect(() => {
+    MentorStore.MentorsInitializer(category, [], search);
+  }, []);
 
   return (
-    <Container component="main" maxWidth="md">
+    <Container component="main" maxWidth="lg">
       <Title>{category}</Title>
       <KeywordsBox>
         <MentorKeywordList />
@@ -124,23 +96,45 @@ export function MentorList() {
       <SearchContainer>
         <TextContainer>
           <Text style={{ color: defaultTheme.colors.polarSimpleMain }}>
-            {mentors.length}{' '}
+            {MentorStore.mentorsList.mentors.length}{' '}
           </Text>
           <Text>명의 멘토님이 기다립니다.</Text>
         </TextContainer>
         <Search>
-          <SearchBox placeholder={'멘토 이름, 멘토 인트라 아이디'} />
-          <FixableIcon>
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </FixableIcon>
+          <SearchBox
+            placeholder={'멘토 이름, 멘토 인트라 아이디'}
+            onChange={e => {
+              setSearch(e.target.value);
+            }}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                MentorStore.clear();
+                MentorStore.MentorsInitializer(
+                  category,
+                  KeywordStore.selected,
+                  search,
+                );
+              }
+            }}
+          />
         </Search>
       </SearchContainer>
       <CardContainer>
-        <MentorCard />
-        <MentorCard />
-        <MentorCard />
-        <MentorCard />
+        {MentorStore.mentorsList.mentors.map((e, i) => {
+          return (
+            <MentorCard
+              key={i}
+              name={e.mentor.name}
+              tags={e.mentor.tags}
+              profileImage={e.mentor.profileImage}
+              introduction={e.mentor.introduction}
+              intraId={e.mentor.intraId}
+            />
+          );
+        })}
       </CardContainer>
     </Container>
   );
-}
+});
+
+export default MentorList;
