@@ -13,6 +13,16 @@ import ReportStore from '../../states/repoort/ReportStore';
 import { observer } from 'mobx-react-lite';
 import AuthStore from '../../states/auth/AuthStore';
 
+const NoneDrag = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+`;
+
 const ReportContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -23,10 +33,6 @@ const ReportContainer = styled.div`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 `;
 
 const ReportInfoContainer = styled.div`
@@ -91,7 +97,6 @@ const ReportForm = observer(() => {
     const startTime: Date = new Date(
       ReportStore.report.mentoringLogs.meetingAt[START_TIME],
     );
-    console.log('sss', startTime);
 
     return `${startTime.getFullYear()}.${startTime.getMonth()}.${startTime.getDate()} (${
       date[startTime.getDay()]
@@ -132,56 +137,58 @@ const ReportForm = observer(() => {
       {isLoading ? (
         <></>
       ) : (
-        <Container component="main" maxWidth="lg">
-          <Title title={'보고서 작성'} />
-          <ReportContainer>
-            <ReportInfoContainer>
-              <ReportElement
-                topic={'구분'}
-                content={
-                  ReportStore.report.cadets.isCommon ? '공통과정' : '심화과정'
-                }
-              />
-              <ReportElement topic={'날짜'} content={getDayToString()} />
-              <ReportElement topic={'시간'} content={getTimeToString()} />
-              <ReportFixableElement
-                topic={'장소'}
-                content={ReportStore.report.place}
-              />
-              <ReportElement
-                topic={'멘토'}
-                content={ReportStore.report.mentors.name}
-              />
-              <ReportElement
-                topic={'카뎃'}
-                content={ReportStore.report.cadets.name}
-              />
-            </ReportInfoContainer>
-            <ReportRowSignature />
-            <ReportRowWrite />
-            <ReportRowFeedback />
-          </ReportContainer>
-          {ReportStore.report.status === '작성완료' ? (
-            <></>
-          ) : (
-            <ButtonContainer>
-              <DefualtButton
-                onClick={() => {
-                  saveTemporary();
-                }}
-              >
-                임시 저장
-              </DefualtButton>
-              <DefualtButton
-                onClick={() => {
-                  saveDone();
-                }}
-              >
-                제출
-              </DefualtButton>
-            </ButtonContainer>
-          )}
-        </Container>
+        <NoneDrag>
+          <Container component="main" maxWidth="lg">
+            <Title title={'보고서 작성'} />
+            <ReportContainer>
+              <ReportInfoContainer>
+                <ReportElement
+                  topic={'구분'}
+                  content={
+                    ReportStore.report.cadets.isCommon ? '공통과정' : '심화과정'
+                  }
+                />
+                <ReportElement topic={'날짜'} content={getDayToString()} />
+                <ReportElement topic={'시간'} content={getTimeToString()} />
+                <ReportFixableElement
+                  topic={'장소'}
+                  content={ReportStore.report.place}
+                />
+                <ReportElement
+                  topic={'멘토'}
+                  content={ReportStore.report.mentors.name}
+                />
+                <ReportElement
+                  topic={'카뎃'}
+                  content={ReportStore.report.cadets.name}
+                />
+              </ReportInfoContainer>
+              <ReportRowSignature />
+              <ReportRowWrite />
+              <ReportRowFeedback />
+            </ReportContainer>
+            {ReportStore.report.status === '작성완료' ? (
+              <></>
+            ) : (
+              <ButtonContainer>
+                <DefualtButton
+                  onClick={() => {
+                    saveTemporary();
+                  }}
+                >
+                  임시 저장
+                </DefualtButton>
+                <DefualtButton
+                  onClick={() => {
+                    saveDone();
+                  }}
+                >
+                  제출
+                </DefualtButton>
+              </ButtonContainer>
+            )}
+          </Container>
+        </NoneDrag>
       )}
     </>
   );
