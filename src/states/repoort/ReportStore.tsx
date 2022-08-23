@@ -133,8 +133,7 @@ class ReportStore {
         location.reload();
       })
       .catch(err => {
-        alert('제출 실패');
-        console.log(err);
+        alert(`${err?.response?.data?.message}`);
       });
   }
 
@@ -159,8 +158,7 @@ class ReportStore {
         location.reload();
       })
       .catch(err => {
-        alert('임시 저장 실패');
-        console.log(err);
+        alert(`${err?.response?.data?.message}`);
       });
   }
 
@@ -174,8 +172,8 @@ class ReportStore {
       .then(res => {
         this.report = res.data;
       })
-      .catch(() => {
-        alert('레포트 정보를 받아올 수 없습니다.');
+      .catch(err => {
+        alert(`${err?.response?.data?.message}`);
         window.location.href = '/';
       });
   }
