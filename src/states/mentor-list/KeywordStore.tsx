@@ -50,7 +50,7 @@ class KeywordStore {
   async keywordsInitializer(category: string): Promise<void> {
     try {
       const ret = await axiosInstance.get(`/categories/${category}/keywords`);
-      ret.data.map((e: string) => {
+      ret?.data?.map((e: string) => {
         this.keywords.push(new Keyword(e));
       });
     } catch (e) {

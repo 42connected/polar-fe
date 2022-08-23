@@ -59,14 +59,17 @@ class MentorStore {
       return qs.stringify(params);
     };
     const params = { mentorName: name, keywords: keywords };
-    try {
-      const ret = await axiosInstance.get(`/categories/${category}`, {
+    await axiosInstance
+      .get(`/categories/${category}`, {
         params,
+      })
+      .then(res => {
+        this.mentorsList = res.data;
+      })
+      .catch(() => {
+        alert('잘못된 카테고리 입니다. 멘토 정보를 불러오는데 실패했습니다.');
+        location.reload();
       });
-      this.mentorsList = ret.data;
-    } catch (e) {
-      console.log(e);
-    }
   }
 }
 
