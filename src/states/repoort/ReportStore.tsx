@@ -12,15 +12,9 @@ export interface Cadets {
 
 export interface MentoringLogs {
   id: string;
-  //  createdAt: Date;
   meetingAt: Date[];
   topic: string;
   content: string;
-  //  status: string;
-  //  rejectMessage: string;
-  //  requestTime1: Date[];
-  //  requestTime2: Date[];
-  //  requestTime3: Date[];
 }
 
 export interface Report {
@@ -36,11 +30,8 @@ export interface Report {
   feedback1: number;
   feedback2: number;
   feedback3: number;
-  //  money: number;
   status: string;
   mentoringLogs: MentoringLogs;
-  //  updatedAt: Date;
-  //  createdAt: Date;
 }
 
 export interface SaveParams {
@@ -120,7 +111,7 @@ class ReportStore {
     this.report.feedback3 = feedback3;
   }
 
-  async saveDone(reportId: string) {
+  async saveDone(reportId: string, token: string) {
     this.save.append('place', this.report.place);
     this.save.append('topic', this.report.topic);
     this.save.append('content', this.report.content);
@@ -131,21 +122,23 @@ class ReportStore {
     this.save.append('isDone', 'true');
     const data: FormData = this.save;
     this.save = new FormData();
-    try {
-      await axiosInstance.patch(`/reports/${reportId}`, data, {
+    await axiosInstance
+      .patch(`/reports/${reportId}`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: '',
+          Authorization: `bearer ${token}`,
         },
+      })
+      .then(() => {
+        location.reload();
+      })
+      .catch(err => {
+        alert('제출 실패');
+        console.log(err);
       });
-      location.reload();
-    } catch (e) {
-      console.log(e);
-      alert('제출 실패');
-    }
   }
 
-  async saveTemporary(reportId: string) {
+  async saveTemporary(reportId: string, token: string) {
     this.save.append('place', this.report.place);
     this.save.append('topic', this.report.topic);
     this.save.append('content', this.report.content);
@@ -155,31 +148,36 @@ class ReportStore {
     this.save.append('feedback3', this.report.feedback3.toString());
     const data: FormData = this.save;
     this.save = new FormData();
-    try {
-      await axiosInstance.patch(`/reports/${reportId}`, data, {
+    await axiosInstance
+      .patch(`/reports/${reportId}`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: '',
+          Authorization: `bearer ${token}`,
         },
+      })
+      .then(() => {
+        location.reload();
+      })
+      .catch(err => {
+        alert('임시 저장 실패');
+        console.log(err);
       });
-      location.reload();
-    } catch (e) {
-      console.log(e);
-      alert('임시 저장 실패');
-    }
   }
 
-  async ReportInitializer(reportId: string) {
-    try {
-      const ret = await axiosInstance.get(`/reports/${reportId}`, {
+  async ReportInitializer(reportId: string, token: string) {
+    await axiosInstance
+      .get(`/reports/${reportId}`, {
         headers: {
-          Authorization: '',
+          Authorization: `bearer ${token}`,
         },
+      })
+      .then(res => {
+        this.report = res.data;
+      })
+      .catch(() => {
+        alert('레포트 정보를 받아올 수 없습니다.');
+        window.location.href = '/';
       });
-      this.report = ret.data;
-    } catch (e) {
-      console.log(e);
-    }
   }
 }
 export default new ReportStore();

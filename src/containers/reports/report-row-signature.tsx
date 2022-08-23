@@ -421,7 +421,7 @@ const ReportRowSignature = observer(() => {
           <SignatureTitle>증빙사진</SignatureTitle>
         </SignatureTitleContainer>
         <UploadFileContainer>
-          {ReportStore.report.imageUrl.map((e, i) => (
+          {ReportStore?.report?.imageUrl?.map((e, i) => (
             <UploadFileBox src={e} key={i} />
           ))}
         </UploadFileContainer>

@@ -11,6 +11,7 @@ import defaultTheme from '../../styles/theme';
 import { useParams } from 'react-router-dom';
 import ReportStore from '../../states/repoort/ReportStore';
 import { observer } from 'mobx-react-lite';
+import AuthStore from '../../states/auth/AuthStore';
 
 const ReportContainer = styled.div`
   display: flex;
@@ -22,6 +23,10 @@ const ReportContainer = styled.div`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 `;
 
 const ReportInfoContainer = styled.div`
@@ -59,8 +64,9 @@ const ReportForm = observer(() => {
 
   useEffect(() => {
     async function Initialize() {
+      await AuthStore.Login();
       if (reportId) {
-        await ReportStore.ReportInitializer(reportId);
+        await ReportStore.ReportInitializer(reportId, AuthStore.jwt);
         setIsLoading(false);
       } else {
         console.log('레포트ID가 존재하지 않습니다');
@@ -107,7 +113,7 @@ const ReportForm = observer(() => {
 
   const saveTemporary = () => {
     if (reportId) {
-      ReportStore.saveTemporary(reportId);
+      ReportStore.saveTemporary(reportId, AuthStore.jwt);
     } else {
       console.log('레포트ID가 존재하지 않습니다');
     }
@@ -115,7 +121,7 @@ const ReportForm = observer(() => {
 
   const saveDone = () => {
     if (reportId) {
-      ReportStore.saveDone(reportId);
+      ReportStore.saveDone(reportId, AuthStore.jwt);
     } else {
       console.log('레포트ID가 존재하지 않습니다');
     }
