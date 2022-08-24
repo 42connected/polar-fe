@@ -88,7 +88,6 @@ export function Email(props: EmailProps) {
       setTime(true);
       await AuthStore.Login();
       await MentorStore.verifyEmail(emailVerify, AuthStore.jwt);
-      setTime(false);
     }
     vv();
   };
@@ -136,7 +135,6 @@ export function Email(props: EmailProps) {
         <Field>
           <Title>인증코드</Title>
           <TextInput
-            disabled={!isEdit}
             onChange={e => {
               setEmailVerify(e.target.value);
             }}
