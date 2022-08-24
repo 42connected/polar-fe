@@ -1,7 +1,7 @@
-import { CadetProps } from "./cadet-props.interface";
+import { CadetProps } from './cadet-props.interface';
 
 export interface CommentProps {
-    cadet: CadetProps;
-    comment: string;
-    createdAt: Date;
-  }
+  cadet: CadetProps;
+  comment: string;
+  createdAt: Date;
+}

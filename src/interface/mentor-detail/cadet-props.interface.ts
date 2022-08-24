@@ -1,4 +1,4 @@
-export interface CadetProps{
-    name: string;
-    profileImage: string;
-  }
+export interface CadetProps {
+  name: string;
+  profileImage: string;
+}
