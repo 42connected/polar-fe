@@ -145,6 +145,7 @@ class ReportStore {
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
+        this.deleteFormdataExceptImage();
       });
   }
 
@@ -170,6 +171,7 @@ class ReportStore {
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
+        this.deleteFormdataExceptImage();
       });
   }
 

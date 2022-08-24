@@ -66,6 +66,7 @@ export function ReportFixableElement(props: ReportFixableElementProps) {
                   setIsEdit(false);
                 }
               }}
+              maxLength={50}
             />
             <FixableIcon
               onClick={() => {
