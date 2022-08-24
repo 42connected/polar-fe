@@ -29,7 +29,8 @@ const dayScaleCell = ({ startDate, endDate, today }) => (
 
 class TimeTableMuiComponent extends React.PureComponent {
     constructor(props) {
-    super(props);
+      super(props);
+      console.log(props.appointments);
     this.state = {
         data: props.appointments,
     };

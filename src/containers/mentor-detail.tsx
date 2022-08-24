@@ -92,24 +92,32 @@ function MentorDetail() {
   const [isActiveMentorDetail, setIsActiveMentorDetail] = useState<boolean>(false);
   const [comments, setComments] = useState<CommentsProps[]>(mockComments);
   const [appointments, setAppointments] = useState<appointmentsInterface[]>()
-
+  
   //2018, 5, 25 화요일
 //const date2 = new Date('1995-12-17T03:24:00');
 // Sun Dec 17 1995 03:24:00 GMT...
 //2018-06-28
   // console.log(mockMentorAvailableTimeToArray);
-  const appointmentsData: appointmentsInterface[] = [];
-const aaaa = mockMentorAvailableTimeToArray.forEach((data:mentorAvailableTimeInterface[], index:number) => {
-  if (data.length !== 0) {
-    data.forEach(data2 => {
-      const day = (18 + index);
-      const startDate = new Date(2018, 6, day, data2.startHour, data2.startMinute);
-      const endDate = new Date(2018, 6, day, data2.endHour, data2.endMinute);
-      appointmentsData.push({ startDate, endDate });
+  const setMentorAvailableTimeData = () => {
+    const appointmentsData: appointmentsInterface[] = [];
+    mockMentorAvailableTimeToArray.forEach((data: mentorAvailableTimeInterface[], index: number) => {
+      if (data.length !== 0) {
+        data.forEach(data2 => {
+          const day = (18 + index);
+          const startDate = new Date(2018, 6, day, data2.startHour, data2.startMinute);
+          const endDate = new Date(2018, 6, day, data2.endHour, data2.endMinute);
+          appointmentsData.push({ startDate, endDate });
+        })
+      }
     })
+    return appointmentsData;
   }
-})
-  // console.log(appointmentsData);
+
+  useEffect(() => {
+    const appointmentsData = setMentorAvailableTimeData();
+    setAppointments(appointmentsData);
+  }, [])
+  console.log(appointments);
   const AddHashtag = mentor.tags?.map((tag) => {
     return '#' + tag + ' ';
   });
@@ -135,9 +143,7 @@ const aaaa = mockMentorAvailableTimeToArray.forEach((data:mentorAvailableTimeInt
 // 테이블 테그로 변경하기
 
   
-  useEffect(() => {
-    setAppointments(appointmentsData);
-  }, [])
+
   return (
     <MentorDetailTag>
         <h1>Mentor Detail</h1>
@@ -186,11 +192,11 @@ const aaaa = mockMentorAvailableTimeToArray.forEach((data:mentorAvailableTimeInt
           </MentorBody1Right1>
           <MentorBody1Right2>
             <MenuBox1>
-                <div>주제</div>
-                <div>상태</div>
+              <div>주제</div>
+              <div>상태</div>
               <div>일시</div>
             </MenuBox1>
-            {mentoringLogList}
+              {mentoringLogList}
             </MentorBody1Right2>
           </MentorBody1Right>
         </MentorBody1>
@@ -199,9 +205,9 @@ const aaaa = mockMentorAvailableTimeToArray.forEach((data:mentorAvailableTimeInt
             <div>가능시간</div>
             <div>업데이트 : {mentor.updatedAt.getTime()}</div>
           </MenuBox>
-          <MentorBody2>
+          <TimTableScroll>
             <TimeTableMuiComponent appointments={appointments}></TimeTableMuiComponent>
-          </MentorBody2>
+          </TimTableScroll>
         </MentorBody2>
         <MentorBody4>
           <MentorBody4Toggle onClick={()=>{setIsActiveMentorDetail((data) => !data)}}>
@@ -219,12 +225,18 @@ const aaaa = mockMentorAvailableTimeToArray.forEach((data:mentorAvailableTimeInt
         <MentorCommets>
           <MenuBox>댓글</MenuBox>
           <MentorCommetsContent>
-            </MentorCommetsContent>
+          </MentorCommetsContent>
         </MentorCommets>
       </MentorBody>
     </MentorDetailTag>
   );
 }
+
+const TimTableScroll = styled.div`
+  overflow-y: scroll;
+  height: 70rem;
+
+`
 
 const MenuBox2 = styled.div`
   display: grid;
@@ -420,7 +432,7 @@ const MenuBox = styled.div`
   font-weight: 900;
   div:last-child {
     color: ${theme.colors.fontGray};
-    margin-top: 0.5rem;
+    margin-top: 1.5rem;
     margin-bottom: 1rem;
     padding-left: 0.3rem;
     font-size: 1rem;
