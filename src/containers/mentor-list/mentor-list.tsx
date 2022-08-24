@@ -9,6 +9,16 @@ import KeywordStore from '../../states/mentor-list/KeywordStore';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
+const NoneDrag = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+`;
+
 const Title = styled.div`
   ${defaultTheme.fontSize.sizeExtraMedium};
   ${defaultTheme.font.sebangGothic};
@@ -81,59 +91,69 @@ const CardContainer = styled.div`
 const MentorList = observer(() => {
   const { category } = useParams<string>();
   const [search, setSearch] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     MentorStore.MentorsInitializer(category, [], search);
+    setIsLoading(false);
   }, []);
 
   return (
-    <Container component="main" maxWidth="lg">
-      <Title>{category}</Title>
-      <KeywordsBox>
-        <MentorKeywordList />
-      </KeywordsBox>
-      <Divider />
-      <SearchContainer>
-        <TextContainer>
-          <Text style={{ color: defaultTheme.colors.polarSimpleMain }}>
-            {MentorStore.mentorsList.mentors.length}{' '}
-          </Text>
-          <Text>명의 멘토님이 기다립니다.</Text>
-        </TextContainer>
-        <Search>
-          <SearchBox
-            placeholder={'멘토 이름, 멘토 인트라 아이디'}
-            onChange={e => {
-              setSearch(e.target.value);
-            }}
-            onKeyDown={e => {
-              if (e.key === 'Enter') {
-                MentorStore.clear();
-                MentorStore.MentorsInitializer(
-                  category,
-                  KeywordStore.selected,
-                  search,
+    <>
+      {isLoading ? (
+        <></>
+      ) : (
+        <NoneDrag>
+          <Container component="main" maxWidth="lg">
+            <Title>{category}</Title>
+            <KeywordsBox>
+              <MentorKeywordList />
+            </KeywordsBox>
+            <Divider />
+            <SearchContainer>
+              <TextContainer>
+                <Text style={{ color: defaultTheme.colors.polarSimpleMain }}>
+                  {MentorStore.mentorsList.mentors.length}{' '}
+                </Text>
+                <Text>명의 멘토님이 기다립니다.</Text>
+              </TextContainer>
+              <Search>
+                <SearchBox
+                  placeholder={'멘토 이름, 멘토 인트라 아이디'}
+                  onChange={e => {
+                    setSearch(e.target.value);
+                  }}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      MentorStore.clear();
+                      MentorStore.MentorsInitializer(
+                        category,
+                        KeywordStore.selected,
+                        search,
+                      );
+                    }
+                  }}
+                />
+              </Search>
+            </SearchContainer>
+            <CardContainer>
+              {MentorStore?.mentorsList?.mentors?.map((e, i) => {
+                return (
+                  <MentorCard
+                    key={i}
+                    name={e.mentor.name}
+                    tags={e.mentor.tags}
+                    profileImage={e.mentor.profileImage}
+                    introduction={e.mentor.introduction}
+                    intraId={e.mentor.intraId}
+                  />
                 );
-              }
-            }}
-          />
-        </Search>
-      </SearchContainer>
-      <CardContainer>
-        {MentorStore.mentorsList.mentors.map((e, i) => {
-          return (
-            <MentorCard
-              key={i}
-              name={e.mentor.name}
-              tags={e.mentor.tags}
-              profileImage={e.mentor.profileImage}
-              introduction={e.mentor.introduction}
-              intraId={e.mentor.intraId}
-            />
-          );
-        })}
-      </CardContainer>
-    </Container>
+              })}
+            </CardContainer>
+          </Container>
+        </NoneDrag>
+      )}
+    </>
   );
 });
 

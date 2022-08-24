@@ -104,7 +104,7 @@ export function MentorCard(props: CardProps) {
         <ProfileRight>
           <ProfileName>{props.name} 멘토</ProfileName>
           {props.tags ? (
-            props.tags.map((e, i) => {
+            props?.tags?.map((e, i) => {
               if (i < 3) {
                 return <ProfileTag key={i}>#{e}</ProfileTag>;
               }

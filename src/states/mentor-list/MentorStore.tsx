@@ -59,14 +59,17 @@ class MentorStore {
       return qs.stringify(params);
     };
     const params = { mentorName: name, keywords: keywords };
-    try {
-      const ret = await axiosInstance.get(`/categories/${category}`, {
+    await axiosInstance
+      .get(`/categories/${category}`, {
         params,
+      })
+      .then(res => {
+        this.mentorsList = res.data;
+      })
+      .catch(err => {
+        alert(`${err?.response?.data?.message}`);
+        location.reload();
       });
-      this.mentorsList = ret.data;
-    } catch (e) {
-      console.log(e);
-    }
   }
 }
 

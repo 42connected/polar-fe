@@ -68,7 +68,7 @@ const MentorKeywordList = observer(() => {
         >
           전체
         </Button>
-        {KeywordStore.keywords.slice(0, 3).map((e, i) => (
+        {KeywordStore?.keywords?.slice(0, 3)?.map((e, i) => (
           <MentorKeyword
             name={e.keyword}
             key={i}
@@ -89,9 +89,9 @@ const MentorKeywordList = observer(() => {
       </KeywordsLine>
       {isExpand ? (
         <KeywordsLine>
-          {KeywordStore.keywords
-            .slice(3, KeywordStore.keywords.length)
-            .map((e, i) => (
+          {KeywordStore?.keywords
+            ?.slice(3, KeywordStore.keywords.length)
+            ?.map((e, i) => (
               <MentorKeyword
                 name={e.keyword}
                 key={i + 3}

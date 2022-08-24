@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import KeywordStore, { Keyword } from '../../states/mentor-list/KeywordStore';
+import KeywordStore from '../../states/mentor-list/KeywordStore';
 import MentorStore from '../../states/mentor-list/MentorStore';
 import defaultTheme from '../../styles/theme';
 
@@ -11,7 +10,6 @@ const Container = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px 30px;
   width: 120px;
   height: 50px;
   margin: 10px 0px;
