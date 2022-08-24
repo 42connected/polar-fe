@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import defaultTheme from './theme';
 
 const GlobalStyle = createGlobalStyle`
   button{
@@ -8,6 +9,8 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     font-family: 'NanumGothic';
+    line-height: 1.6;
+    background-color: ${defaultTheme.colors.polarGray};
   }
   input {
     display: flex;
