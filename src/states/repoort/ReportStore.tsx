@@ -122,14 +122,32 @@ class ReportStore {
     this.save.delete('isDone');
   }
 
+  appendFormdataExceptImage() {
+    if (this.report.place) {
+      this.save.append('place', this.report.place);
+    }
+    if (this.report.topic) {
+      this.save.append('topic', this.report.topic);
+    }
+    if (this.report.content) {
+      this.save.append('content', this.report.content);
+    }
+    if (this.report.feedbackMessage) {
+      this.save.append('feedbackMessage', this.report.feedbackMessage);
+    }
+    if (this.report.feedback1) {
+      this.save.append('feedback1', this.report.feedback1.toString());
+    }
+    if (this.report.feedback2) {
+      this.save.append('feedback2', this.report.feedback2.toString());
+    }
+    if (this.report.feedback3) {
+      this.save.append('feedback3', this.report.feedback3.toString());
+    }
+  }
+
   async saveDone(reportId: string, token: string) {
-    this.save.append('place', this.report.place);
-    this.save.append('topic', this.report.topic);
-    this.save.append('content', this.report.content);
-    this.save.append('feedbackMessage', this.report.feedbackMessage);
-    this.save.append('feedback1', this.report.feedback1.toString());
-    this.save.append('feedback2', this.report.feedback2.toString());
-    this.save.append('feedback3', this.report.feedback3.toString());
+    this.appendFormdataExceptImage();
     this.save.append('isDone', 'true');
     await axiosInstance
       .patch(`/reports/${reportId}`, this.save, {
@@ -150,13 +168,7 @@ class ReportStore {
   }
 
   async saveTemporary(reportId: string, token: string) {
-    this.save.append('place', this.report.place);
-    this.save.append('topic', this.report.topic);
-    this.save.append('content', this.report.content);
-    this.save.append('feedbackMessage', this.report.feedbackMessage);
-    this.save.append('feedback1', this.report.feedback1.toString());
-    this.save.append('feedback2', this.report.feedback2.toString());
-    this.save.append('feedback3', this.report.feedback3.toString());
+    this.appendFormdataExceptImage();
     await axiosInstance
       .patch(`/reports/${reportId}`, this.save, {
         headers: {
@@ -177,20 +189,24 @@ class ReportStore {
 
   async createReport(mentoringLogId: string, token: string) {
     await axiosInstance
-      .post(`/reports/${mentoringLogId}`, {
-        headers: {
-          Authorization: `bearer ${token}`,
+      .post(
+        `/reports/${mentoringLogId}`,
+        {},
+        {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
         },
-      })
+      )
       .then(() => {
         location.reload();
       })
-      .catch(() => {
-        console.log('레포트 생성 실패');
+      .catch(err => {
+        alert(`${err?.response?.data?.message}`);
       });
   }
 
-  async ReportInitializer(reportId: string, token: string) {
+  async Initializer(reportId: string, token: string) {
     await axiosInstance
       .get(`/reports/${reportId}`, {
         headers: {
@@ -202,7 +218,6 @@ class ReportStore {
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
-        window.location.href = '/';
       });
   }
 }

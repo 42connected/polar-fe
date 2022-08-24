@@ -39,18 +39,10 @@ export function MentorKeyword(props: KeywordProps) {
       onClick={() => {
         if (!props.isClicked) {
           KeywordStore.pushSelected(props.name);
-          MentorsStore.MentorsInitializer(
-            category,
-            KeywordStore.selected,
-            undefined,
-          );
+          MentorsStore.Initializer(category, KeywordStore.selected, undefined);
         } else {
           KeywordStore.removeSelectedByKeyword(props.name);
-          MentorsStore.MentorsInitializer(
-            category,
-            KeywordStore.selected,
-            undefined,
-          );
+          MentorsStore.Initializer(category, KeywordStore.selected, undefined);
         }
       }}
       color={props.isClicked ? defaultTheme.colors.polarSimpleMain : 'gray'}

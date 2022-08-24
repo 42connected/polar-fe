@@ -76,7 +76,12 @@ const ReportRowWrite = observer(() => {
             }
             maxLength={150}
           />
-          <Count>{ReportStore.report.topic.length} / 150</Count>
+          <Count>
+            {ReportStore?.report?.topic?.length
+              ? ReportStore?.report?.topic?.length
+              : 0}{' '}
+            / 150
+          </Count>
         </ReportInputContainer>
         <ReportSummaryTitle>&#183; 내용</ReportSummaryTitle>
         <ReportInputContainer>
@@ -92,7 +97,12 @@ const ReportRowWrite = observer(() => {
             }
             maxLength={800}
           />
-          <Count>{ReportStore.report.content.length} / 800</Count>
+          <Count>
+            {ReportStore?.report?.content?.length
+              ? ReportStore?.report?.content?.length
+              : 0}{' '}
+            / 800
+          </Count>
         </ReportInputContainer>
         <ReportSummaryTitle>&#183; 교육생에게 남기는 말</ReportSummaryTitle>
         <ReportInputContainer>
@@ -108,7 +118,12 @@ const ReportRowWrite = observer(() => {
             }
             maxLength={800}
           />
-          <Count>{ReportStore.report.feedbackMessage.length} / 800</Count>
+          <Count>
+            {ReportStore?.report?.feedbackMessage?.length
+              ? ReportStore?.report?.feedbackMessage?.length
+              : 0}{' '}
+            / 800
+          </Count>
         </ReportInputContainer>
       </ReportRowContent>
     </ReportRowContainer>

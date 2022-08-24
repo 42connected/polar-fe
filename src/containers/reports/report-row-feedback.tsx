@@ -37,7 +37,9 @@ export function ReportRowFeedback() {
           1. 교육생이 궁금한 것을 잘 정리해 왔나?
           <Rating
             name="simple-controlled"
-            defaultValue={ReportStore.report.feedback1}
+            defaultValue={
+              ReportStore?.report?.feedback1 ? ReportStore.report.feedback1 : 5
+            }
             onChange={(event, newValue) => {
               if (newValue) {
                 ReportStore.setFeedback1(newValue);
@@ -54,7 +56,9 @@ export function ReportRowFeedback() {
           2. 교육생과 함께 한 시간이 만족스러웠나?
           <Rating
             name="simple-controlled"
-            defaultValue={ReportStore.report.feedback2}
+            defaultValue={
+              ReportStore?.report?.feedback2 ? ReportStore.report.feedback2 : 5
+            }
             onChange={(event, newValue) => {
               if (newValue) {
                 ReportStore.setFeedback2(newValue);
@@ -71,7 +75,9 @@ export function ReportRowFeedback() {
           3. 교육생이 전달한 내용을 잘 이해했나?
           <Rating
             name="simple-controlled"
-            defaultValue={ReportStore.report.feedback3}
+            defaultValue={
+              ReportStore?.report?.feedback3 ? ReportStore.report.feedback3 : 5
+            }
             onChange={(event, newValue) => {
               if (newValue) {
                 ReportStore.setFeedback3(newValue);

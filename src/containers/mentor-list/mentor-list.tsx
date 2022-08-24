@@ -94,7 +94,7 @@ const MentorList = observer(() => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    MentorsStore.MentorsInitializer(category, [], search);
+    MentorsStore.Initializer(category, [], search);
     setIsLoading(false);
   }, []);
 
@@ -126,7 +126,7 @@ const MentorList = observer(() => {
                   onKeyDown={e => {
                     if (e.key === 'Enter') {
                       MentorsStore.clear();
-                      MentorsStore.MentorsInitializer(
+                      MentorsStore.Initializer(
                         category,
                         KeywordStore.selected,
                         search,

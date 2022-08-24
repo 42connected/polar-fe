@@ -90,6 +90,7 @@ export interface TableRowProps {
   //  meetingTime: Date[];
   user: string;
   topic: string;
+  mentoringId: string;
   mentoringState: string;
   report: {
     id: string;
@@ -107,12 +108,13 @@ export function TableRow(props: TableRowProps) {
       <TableColumnTopic>{props.topic}</TableColumnTopic>
       <TableColumnTime>
         <Time>{getDayToString(props.meetingAt[START_TIME])}</Time>
-        <TimeWhile>({getTimeToString(props.meetingAt)})</TimeWhile>
+        <TimeWhile>{getTimeToString(props.meetingAt)}</TimeWhile>
       </TableColumnTime>
       <StatusButton status={props.mentoringState} />
       <ReportButton
         mentoringLogStatus={props.mentoringState}
-        reportId={props?.report?.id}
+        report={props?.report}
+        mentoringId={props?.mentoringId}
       />
     </TableColumnLine>
   );
