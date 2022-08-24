@@ -35,6 +35,10 @@ class AuthStore {
   }
 
   async Login() {
+    this.isLogin = true;
+    this.jwt =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0tZW5nZW5nIiwicm9sZSI6Im1lbnRvciIsImlhdCI6MTY2MTMwMjMwMiwiZXhwIjoxNjYxMzg4NzAyfQ.2BsQjXu4Pt0R9kjfjAR66pnKufQgaSRwTWGACpPyq10';
+    this.user = { intraId: 'm-engeng', role: USER_ROLES.MENTOR };
     //await axiosInstance
     //  .get(`/login`, { headers: { 'Access-Control-Allow-Origin': '*' } })
     //  .then(res => {

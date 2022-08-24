@@ -5,7 +5,7 @@ import defaultTheme from '../../styles/theme';
 import KeywordStore from '../../states/mentor-list/KeywordStore';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
-import MentorStore from '../../states/mentor-list/MentorStore';
+import MentorsStore from '../../states/mentor-list/MentorsStore';
 
 const Container = styled.div`
   display: flex;
@@ -59,7 +59,7 @@ const MentorKeywordList = observer(() => {
         <Button
           onClick={() => {
             KeywordStore.seletedClear();
-            MentorStore.MentorsInitializer(
+            MentorsStore.MentorsInitializer(
               category,
               KeywordStore.selected,
               undefined,

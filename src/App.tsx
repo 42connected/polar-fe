@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MentorList from './containers/mentor-list/mentor-list';
+import MyMentoringMentor from './containers/my-mentoring-mentor/my-mentoring-mentor';
+import NotFound from './containers/not-found/not-found';
 import ReportForm from './containers/reports/report-form';
 
 /*
@@ -19,6 +21,11 @@ function App() {
             path="/mentorings/reports/:reportId"
             element={<ReportForm />}
           />
+          <Route
+            path="/mentors/mentorings/:intraId"
+            element={<MyMentoringMentor />}
+          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </>
