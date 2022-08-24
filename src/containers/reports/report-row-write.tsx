@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import defaultTheme from '../../styles/theme';
 import ReportStore from '../../states/repoort/ReportStore';
 import { REPORT_STATE } from './report-form';
+import { observer } from 'mobx-react-lite';
 
 const ReportRowContentTitie = styled.div`
   ${defaultTheme.fontSize.sizeMedium};
@@ -25,7 +26,7 @@ const ReportSummaryTitle = styled.div`
 `;
 
 const ReportSummaryInput = styled.textarea`
-  width: 80%;
+  width: 100%;
   height: 100px;
   padding: 10px;
   background-color: #f6f6f6;
@@ -38,49 +39,80 @@ const ReportSummaryInput = styled.textarea`
   }
 `;
 
-export function ReportRowWrite() {
+const ReportInputContainer = styled.div`
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const Count = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: right;
+  margin: 5px;
+  align-items: center;
+  ${defaultTheme.fontSize.sizeSmall};
+  color: rgba(0, 0, 0, 0.5);
+`;
+
+const ReportRowWrite = observer(() => {
   return (
     <ReportRowContainer>
       <ReportRowTitle>보고서 작성</ReportRowTitle>
       <ReportRowContent>
         <ReportRowContentTitie>개요</ReportRowContentTitie>
         <ReportSummaryTitle>&#183; 주제</ReportSummaryTitle>
-        <ReportSummaryInput
-          defaultValue={ReportStore.report.topic}
-          onChange={e => {
-            ReportStore.setTopic(e.target.value);
-          }}
-          disabled={
-            ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
-              ? false
-              : true
-          }
-        />
+        <ReportInputContainer>
+          <ReportSummaryInput
+            defaultValue={ReportStore.report.topic}
+            onChange={e => {
+              ReportStore.setTopic(e.target.value);
+            }}
+            disabled={
+              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                ? false
+                : true
+            }
+            maxLength={150}
+          />
+          <Count>{ReportStore.report.topic.length} / 150</Count>
+        </ReportInputContainer>
         <ReportSummaryTitle>&#183; 내용</ReportSummaryTitle>
-        <ReportSummaryInput
-          defaultValue={ReportStore.report.content}
-          onChange={e => {
-            ReportStore.setContent(e.target.value);
-          }}
-          disabled={
-            ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
-              ? false
-              : true
-          }
-        />
+        <ReportInputContainer>
+          <ReportSummaryInput
+            defaultValue={ReportStore.report.content}
+            onChange={e => {
+              ReportStore.setContent(e.target.value);
+            }}
+            disabled={
+              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                ? false
+                : true
+            }
+            maxLength={5000}
+          />
+          <Count>{ReportStore.report.content.length} / 5000</Count>
+        </ReportInputContainer>
         <ReportSummaryTitle>&#183; 교육생에게 남기는 말</ReportSummaryTitle>
-        <ReportSummaryInput
-          defaultValue={ReportStore.report.feedbackMessage}
-          onChange={e => {
-            ReportStore.setFeedbackMessage(e.target.value);
-          }}
-          disabled={
-            ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
-              ? false
-              : true
-          }
-        />
+        <ReportInputContainer>
+          <ReportSummaryInput
+            defaultValue={ReportStore.report.feedbackMessage}
+            onChange={e => {
+              ReportStore.setFeedbackMessage(e.target.value);
+            }}
+            disabled={
+              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                ? false
+                : true
+            }
+            maxLength={3000}
+          />
+          <Count>{ReportStore.report.feedbackMessage.length} / 3000</Count>
+        </ReportInputContainer>
       </ReportRowContent>
     </ReportRowContainer>
   );
-}
+});
+
+export default ReportRowWrite;

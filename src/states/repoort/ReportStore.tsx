@@ -111,6 +111,17 @@ class ReportStore {
     this.report.feedback3 = feedback3;
   }
 
+  deleteFormdataExceptImage() {
+    this.save.delete('place');
+    this.save.delete('topic');
+    this.save.delete('content');
+    this.save.delete('feedbackMessage');
+    this.save.delete('feedback1');
+    this.save.delete('feedback2');
+    this.save.delete('feedback3');
+    this.save.delete('isDone');
+  }
+
   async saveDone(reportId: string, token: string) {
     this.save.append('place', this.report.place);
     this.save.append('topic', this.report.topic);
@@ -120,10 +131,8 @@ class ReportStore {
     this.save.append('feedback2', this.report.feedback2.toString());
     this.save.append('feedback3', this.report.feedback3.toString());
     this.save.append('isDone', 'true');
-    const data: FormData = this.save;
-    this.save = new FormData();
     await axiosInstance
-      .patch(`/reports/${reportId}`, data, {
+      .patch(`/reports/${reportId}`, this.save, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `bearer ${token}`,
@@ -131,6 +140,8 @@ class ReportStore {
       })
       .then(() => {
         location.reload();
+        this.save = new FormData();
+        this.deleteFormdataExceptImage();
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
@@ -145,10 +156,8 @@ class ReportStore {
     this.save.append('feedback1', this.report.feedback1.toString());
     this.save.append('feedback2', this.report.feedback2.toString());
     this.save.append('feedback3', this.report.feedback3.toString());
-    const data: FormData = this.save;
-    this.save = new FormData();
     await axiosInstance
-      .patch(`/reports/${reportId}`, data, {
+      .patch(`/reports/${reportId}`, this.save, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `bearer ${token}`,
@@ -156,6 +165,8 @@ class ReportStore {
       })
       .then(() => {
         location.reload();
+        this.save = new FormData();
+        this.deleteFormdataExceptImage();
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);

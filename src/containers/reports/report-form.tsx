@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import { Title } from './title';
 import { ReportElement } from './elements/report-element';
 import { ReportRowFeedback } from './report-row-feedback';
-import { ReportRowWrite } from './report-row-write';
+import ReportRowWrite from './report-row-write';
 import ReportRowSignature from './report-row-signature';
 import { ReportFixableElement } from './elements/report-fixable-element';
 import { useEffect, useState } from 'react';
