@@ -90,9 +90,9 @@ const ReportRowWrite = observer(() => {
                 ? false
                 : true
             }
-            maxLength={5000}
+            maxLength={800}
           />
-          <Count>{ReportStore.report.content.length} / 5000</Count>
+          <Count>{ReportStore.report.content.length} / 800</Count>
         </ReportInputContainer>
         <ReportSummaryTitle>&#183; 교육생에게 남기는 말</ReportSummaryTitle>
         <ReportInputContainer>
@@ -106,9 +106,9 @@ const ReportRowWrite = observer(() => {
                 ? false
                 : true
             }
-            maxLength={3000}
+            maxLength={800}
           />
-          <Count>{ReportStore.report.feedbackMessage.length} / 3000</Count>
+          <Count>{ReportStore.report.feedbackMessage.length} / 800</Count>
         </ReportInputContainer>
       </ReportRowContent>
     </ReportRowContainer>
