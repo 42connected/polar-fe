@@ -40,7 +40,7 @@ function MentorDetail() {
     },
     {
       cadet: mockCadet[1],
-      comment: "This is a comment by hkong",
+      comment: "This is a comment by hkong. This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.",
       createdAt: new Date()
     },
     {
@@ -207,11 +207,13 @@ function MentorDetail() {
   });
 
 
+  
   const mentoringLogList = mentoringLog.map((log) => {
+    const makeDate = `${log.meetingAt.getFullYear().toString().slice(-2)}/${log.meetingAt.getMonth()}/${log.meetingAt.getDay()}`
     return (<MenuBox2>
       <div>{log.topic}</div>
       <div>{log.state}</div>
-      <div>{log.meetingAt.getTime()}</div>
+      <div>{makeDate}</div>
     </MenuBox2>)
   }
   );
@@ -300,8 +302,8 @@ function MentorDetail() {
         </MentorBody1>
         <MentorBody2>
           <MenuBox>
-            <div>가능시간</div>
-            <div>업데이트 : {mentor.updatedAt.getTime()}</div>
+            <div>가능 시간</div>
+            <div>업데이트 : {`${mentor.updatedAt.getFullYear()}-${mentor.updatedAt.getMonth().toString().padStart(2,'0')}-${mentor.updatedAt.getDay().toString().padStart(2,'0')}`}</div>
           </MenuBox>
           <TimTableScroll>
             <TimeTableMuiComponent appointments={appointments}></TimeTableMuiComponent>
@@ -328,7 +330,7 @@ function MentorDetail() {
         <UserContent>
             <div>
                 <div>{comment?.cadet?.name}</div>
-                <div>{comment?.createdAt.getTime()}</div>
+                <div>{`${mentor.updatedAt.getFullYear()}.${mentor.updatedAt.getMonth().toString().padStart(2,'0')}.${mentor.updatedAt.getDay().toString().padStart(2,'0')}`}</div>
             </div>
             <div>{comment?.comment}</div>
         </UserContent>
@@ -345,18 +347,20 @@ function MentorDetail() {
 const UserContent = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    margin-left: 1rem;
+    justify-content: space-around;
+    margin-left: 1.5rem;
     div:first-child {
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       font-size: 1.5rem;
       font-weight: bold;
+      margin-bottom: 0.2rem;
       div:last-child{
         font-size: 1rem;
         padding-left: 0.7rem;
         color: ${props => props.theme.colors.grayThree};
         font-weight: normal;
+        margin-top: 0.1rem;
       }
     }
     div:last-child {
@@ -389,10 +393,12 @@ const MenuBox2 = styled.div`
   width: 100%;
   height: 3rem;
   box-sizing: border-box;
+  overflow-wrap: break-word;
   div {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
   }
 
   div:nth-child(2) {
@@ -459,15 +465,18 @@ const MentorBody1Right2 = styled.div`
 
 const MentorTags = styled.div`
   display: flex;
-  place-content: center;
+  justify-content: center;
   align-items: center;
+  text-align:center;
   color: ${theme.colors.polarSimpleMain};
 `
 
 const MentorIntroduction = styled.div`
   margin: 1.3rem;
-  ${theme.fontSize.sizeMedium};
+  ${theme.fontFrame.bodyMiddle};
   color: ${theme.colors.blackThree};
+  font-weight: 900;
+  word-spacing: 0.1rem;
 `
 
 const MentorBody1Right1 = styled.div`
@@ -496,6 +505,7 @@ const MentorHowToContent = styled.div`
 display: flex;
 flex-direction: column;
 position: relative;
+${theme.fontFrame.bodySmall}
   div {
     margin: 1.5rem;
     margin-bottom: 0;
@@ -507,13 +517,19 @@ position: relative;
   ol {
     margin-top: 0.5rem;
     padding-left: 3rem;
+    margin-bottom: 2rem;
   }
   li {
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.5rem;
     color: ${theme.colors.grayTwo};
+    letter-spacing: 0.1rem;
+    padding-top: 0.5rem;
+    margin-left:1rem;
   }
   footer {
     color: ${theme.colors.fontGray};
+    font-size: 1rem;
+    padding-left:2rem;
   }
 `
 
@@ -551,21 +567,22 @@ const MentorName = styled.div`
   display: flex;
   align-items: flex-end;
   div:first-child{
-    ${theme.fontFrame.titleMedium};
+    ${theme.fontFrame.titleLarge};
     font-family: ${theme.font.sebangGothic};
+    font-weight: 900;
   }
   div:last-child{
-    margin-left: 0.5rem;
+    margin-left: 1rem;
     ${theme.fontFrame.bodySmall};
-    font-weight: 900;
+    font-weight: bolder;
   }
   margin-bottom: 0.5rem;
 `
 
 const MentorBody = styled.div`
-  margin-left:5%;
+  margin-left:3%;
   margin-right:5%;
-  margin-top:1rem;
+  margin-top:5%;
 `
 
 const MenuBox = styled.div`
@@ -580,8 +597,9 @@ const MenuBox = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  ${theme.fontFrame.subTitleMiddle};
+  ${theme.fontFrame.titleSmall};
   font-weight: 900;
+  letter-spacing:0.1rem;
   div:last-child {
     color: ${theme.colors.fontGray};
     margin-top: 1.5rem;
