@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MentorList from './containers/mentor-list/mentor-list';
+import ReportForm from './containers/reports/report-form';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -14,6 +15,10 @@ function App() {
         <Routes>
           /* * ADD <Route /> here */
           <Route path="/mentor-lists/:category" element={<MentorList />} />
+          <Route
+            path="/mentorings/reports/:reportId"
+            element={<ReportForm />}
+          />
         </Routes>
       </Router>
     </>
