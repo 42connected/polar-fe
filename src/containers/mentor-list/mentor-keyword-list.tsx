@@ -49,7 +49,7 @@ const MentorKeywordList = observer(() => {
 
   useEffect(() => {
     if (category) {
-      KeywordStore.keywordsInitializer(category);
+      KeywordStore.Initializer(category);
     }
   }, []);
 
@@ -59,7 +59,7 @@ const MentorKeywordList = observer(() => {
         <Button
           onClick={() => {
             KeywordStore.seletedClear();
-            MentorsStore.MentorsInitializer(
+            MentorsStore.Initializer(
               category,
               KeywordStore.selected,
               undefined,

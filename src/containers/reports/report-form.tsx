@@ -106,7 +106,7 @@ const ReportForm = observer(() => {
     async function Initialize() {
       await AuthStore.Login();
       if (reportId) {
-        await ReportStore.ReportInitializer(reportId, AuthStore.jwt);
+        await ReportStore.Initializer(reportId, AuthStore.jwt);
         setIsLoading(false);
       } else {
         console.log('레포트ID가 존재하지 않습니다');

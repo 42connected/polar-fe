@@ -66,7 +66,6 @@ const MyMentoringMentor = observer(() => {
       await MentorStore.getMentor(intraId, AuthStore.jwt);
       await MentorLogStore.Initializer(intraId, AuthStore.jwt);
       for (let i = 0; i < LOGS_PER_PAGE - MentorLogStore.total; ++i) {
-        console.log('asd');
         setEmpty(o => [...o, 'a']);
       }
       setIsLoading(false);
@@ -93,6 +92,7 @@ const MyMentoringMentor = observer(() => {
                 <TableRow
                   key={i}
                   user={e.cadet.name}
+                  mentoringId={e.id}
                   topic={e.topic}
                   mentoringState={e.status}
                   report={e.report}

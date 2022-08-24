@@ -47,15 +47,17 @@ class KeywordStore {
     this.keywords = [];
   }
 
-  async keywordsInitializer(category: string): Promise<void> {
-    try {
-      const ret = await axiosInstance.get(`/categories/${category}/keywords`);
-      ret?.data?.map((e: string) => {
-        this.keywords.push(new Keyword(e));
+  async Initializer(category: string): Promise<void> {
+    await axiosInstance
+      .get(`/categories/${category}/keywords`)
+      .then(res =>
+        res?.data?.map((e: string) => {
+          this.keywords.push(new Keyword(e));
+        }),
+      )
+      .catch(err => {
+        alert(`${err?.response?.data?.message}`);
       });
-    } catch (e) {
-      console.log(e);
-    }
   }
 }
 

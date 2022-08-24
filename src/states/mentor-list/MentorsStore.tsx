@@ -43,7 +43,7 @@ class MentorsStore {
     this.mentorsList = { mentorCount: 0, mentors: [] };
   }
 
-  async MentorsInitializer(
+  async Initializer(
     category: string | undefined,
     keywords: string[],
     name: string | undefined,
