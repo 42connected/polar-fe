@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import MentorLogStore from '../../states/my-mentoring-mentor/MentorLogStore';
 import defaultTheme from '../../styles/theme';
 
 const Container = styled.div`
