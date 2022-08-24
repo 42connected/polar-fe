@@ -10,7 +10,6 @@ const Container = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px 30px;
   width: 120px;
   height: 50px;
   margin: 10px 0px;
