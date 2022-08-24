@@ -4,7 +4,7 @@ import defaultTheme from '../../styles/theme';
 import { MentorCard } from './mentor-card';
 import { useParams } from 'react-router-dom';
 import MentorKeywordList from './mentor-keyword-list';
-import MentorStore from '../../states/mentor-list/MentorStore';
+import MentorsStore from '../../states/mentor-list/MentorsStore';
 import KeywordStore from '../../states/mentor-list/KeywordStore';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
@@ -94,7 +94,7 @@ const MentorList = observer(() => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    MentorStore.MentorsInitializer(category, [], search);
+    MentorsStore.MentorsInitializer(category, [], search);
     setIsLoading(false);
   }, []);
 
@@ -113,7 +113,7 @@ const MentorList = observer(() => {
             <SearchContainer>
               <TextContainer>
                 <Text style={{ color: defaultTheme.colors.polarSimpleMain }}>
-                  {MentorStore.mentorsList.mentors.length}{' '}
+                  {MentorsStore.mentorsList.mentors.length}{' '}
                 </Text>
                 <Text>명의 멘토님이 기다립니다.</Text>
               </TextContainer>
@@ -125,8 +125,8 @@ const MentorList = observer(() => {
                   }}
                   onKeyDown={e => {
                     if (e.key === 'Enter') {
-                      MentorStore.clear();
-                      MentorStore.MentorsInitializer(
+                      MentorsStore.clear();
+                      MentorsStore.MentorsInitializer(
                         category,
                         KeywordStore.selected,
                         search,
@@ -137,7 +137,7 @@ const MentorList = observer(() => {
               </Search>
             </SearchContainer>
             <CardContainer>
-              {MentorStore?.mentorsList?.mentors?.map((e, i) => {
+              {MentorsStore?.mentorsList?.mentors?.map((e, i) => {
                 return (
                   <MentorCard
                     key={i}

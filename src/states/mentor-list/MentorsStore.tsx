@@ -28,7 +28,7 @@ export interface MentorSimpleInfo {
   introduction: string;
 }
 
-class MentorStore {
+class MentorsStore {
   mentorsList: MentorsList;
 
   constructor() {
@@ -73,4 +73,4 @@ class MentorStore {
   }
 }
 
-export default new MentorStore();
+export default new MentorsStore();

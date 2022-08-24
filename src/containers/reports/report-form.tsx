@@ -69,6 +69,35 @@ const DefualtButton = styled.button`
   }
 `;
 
+export const START_TIME = 0;
+export const END_TIME = 1;
+
+export const makeTimePair = (time: number) => {
+  if (time >= 0 && time < 10) {
+    const ret = time.toString();
+    return ret.padStart(2, '0');
+  }
+  return time.toString();
+};
+
+export const getDayToString = (meetingAt: Date): string => {
+  const date: string[] = ['월', '화', '수', '목', '금', '토', '일'];
+  const startTime: Date = new Date(meetingAt);
+
+  return `${startTime.getFullYear()}.${startTime.getMonth()}.${startTime.getDate()} (${
+    date[startTime.getDay()]
+  })`;
+};
+
+export const getTimeToString = (meetingAt: Date[]): string => {
+  const startTime: Date = new Date(meetingAt[START_TIME]);
+  const endTime: Date = new Date(meetingAt[END_TIME]);
+
+  return `${startTime.getHours()}:${makeTimePair(
+    startTime.getMinutes(),
+  )} ~ ${endTime.getHours()}:${makeTimePair(endTime.getMinutes())}`;
+};
+
 const ReportForm = observer(() => {
   const { reportId } = useParams<string>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -85,41 +114,6 @@ const ReportForm = observer(() => {
     }
     Initialize();
   }, []);
-
-  const START_TIME = 0;
-  const END_TIME = 1;
-
-  const makeTimePair = (time: number) => {
-    if (time >= 0 && time < 10) {
-      const ret = time.toString();
-      return ret.padStart(2, '0');
-    }
-    return time.toString();
-  };
-
-  const getDayToString = (): string => {
-    const date: string[] = ['월', '화', '수', '목', '금', '토', '일'];
-    const startTime: Date = new Date(
-      ReportStore.report.mentoringLogs.meetingAt[START_TIME],
-    );
-
-    return `${startTime.getFullYear()}.${startTime.getMonth()}.${startTime.getDate()} (${
-      date[startTime.getDay()]
-    })`;
-  };
-
-  const getTimeToString = (): string => {
-    const startTime: Date = new Date(
-      ReportStore.report.mentoringLogs.meetingAt[START_TIME],
-    );
-    const endTime: Date = new Date(
-      ReportStore.report.mentoringLogs.meetingAt[END_TIME],
-    );
-
-    return `${startTime.getHours()}:${makeTimePair(
-      startTime.getMinutes(),
-    )} ~ ${endTime.getHours()}:${makeTimePair(endTime.getMinutes())}`;
-  };
 
   const saveTemporary = () => {
     if (reportId) {
@@ -153,8 +147,18 @@ const ReportForm = observer(() => {
                     ReportStore.report.cadets.isCommon ? '공통과정' : '심화과정'
                   }
                 />
-                <ReportElement topic={'날짜'} content={getDayToString()} />
-                <ReportElement topic={'시간'} content={getTimeToString()} />
+                <ReportElement
+                  topic={'날짜'}
+                  content={getDayToString(
+                    ReportStore.report.mentoringLogs.meetingAt[START_TIME],
+                  )}
+                />
+                <ReportElement
+                  topic={'시간'}
+                  content={getTimeToString(
+                    ReportStore.report.mentoringLogs.meetingAt,
+                  )}
+                />
                 <ReportFixableElement
                   topic={'장소'}
                   content={ReportStore.report.place}

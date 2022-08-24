@@ -175,6 +175,21 @@ class ReportStore {
       });
   }
 
+  async createReport(mentoringLogId: string, token: string) {
+    await axiosInstance
+      .post(`/reports/${mentoringLogId}`, {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      })
+      .then(() => {
+        location.reload();
+      })
+      .catch(() => {
+        console.log('레포트 생성 실패');
+      });
+  }
+
   async ReportInitializer(reportId: string, token: string) {
     await axiosInstance
       .get(`/reports/${reportId}`, {
