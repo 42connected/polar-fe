@@ -1,3 +1,5 @@
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Icon } from "@mui/material";
 import { useEffect, useState } from "react";
 import { json } from "stream/consumers";
@@ -46,7 +48,7 @@ function MentorDetail() {
     duty: "gooood",
     profileImage: "https://cdn.intra.42.fr/users/seoyepar.jpg",
     availableTime: "available",
-    introduction: "introduction",
+    introduction: "# 가장큰 크기의 text로 변환<br/>##그다음 작은 크기위 text로 변환  ### 그다음 작은 크기의 text로 변환<br/>#### 그다음 작은 크기의 text로 변환<br/>##### 그다음 작은 크기의 text로 변환<br/>###### 그다음 작은 크기의 text로 변환",
     tags: ["tag1", "tag2", "tag3", "tag1", "tag2", "tag3", "tag1", "tag2", "tag3"],
     isActive: true,
     createdAt: new Date(),
@@ -209,19 +211,19 @@ function MentorDetail() {
             <TimeTableMuiComponent appointments={appointments}></TimeTableMuiComponent>
           </TimTableScroll>
         </MentorBody2>
-        <MentorBody4>
-          <MentorBody4Toggle onClick={()=>{setIsActiveMentorDetail((data) => !data)}}>
-            <Icon></Icon>
+        <MentorBody3>
+          <MentorBody3Toggle onClick={()=>{setIsActiveMentorDetail((data) => !data)}}>
+            <FontAwesomeIcon icon={faAngleDown} size={'2x'} />
             <div>멘토 상세 소개 보기</div>
-          </MentorBody4Toggle>
+          </MentorBody3Toggle>
           {isActiveMentorDetail ?
-            <div>
+            <>
               <MenuBox>멘토정보</MenuBox>
               <div>
                 {mentor.introduction}
               </div>
-            </div> : null}
-        </MentorBody4>
+            </> : null}
+        </MentorBody3>
         <MentorCommets>
           <MenuBox>댓글</MenuBox>
           <MentorCommetsContent>
@@ -263,11 +265,19 @@ const MentorCommetsContent = styled.div`
 const MentorCommets = styled.div`
 `
 
-const MentorBody4Toggle = styled.div`
+const MentorBody3Toggle = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 1rem;
+  div {
+    ${theme.fontFrame.subTitleMiddle};
+    margin-left: 1rem;
+  }
+
 `
 
-const MentorBody4 = styled.div`
-
+const MentorBody3 = styled.div`
+  margin-top: 10%;
 `
 
 const MenuBoxHead = styled.div`
@@ -433,10 +443,11 @@ const MenuBox = styled.div`
   div:last-child {
     color: ${theme.colors.fontGray};
     margin-top: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     padding-left: 0.3rem;
     font-size: 1rem;
   }
+  padding-bottom:0.5rem;
 `
 const MentorDetailTag = styled.div`
   font-family: ${theme.font.nanumGothic};
