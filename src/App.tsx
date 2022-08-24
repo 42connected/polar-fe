@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MentorDetail from './containers/mentor-detail';
+import MentorDetail from './containers/mentor-detail/mentor-detail';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
