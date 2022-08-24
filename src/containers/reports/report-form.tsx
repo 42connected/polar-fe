@@ -13,6 +13,11 @@ import ReportStore from '../../states/repoort/ReportStore';
 import { observer } from 'mobx-react-lite';
 import AuthStore from '../../states/auth/AuthStore';
 
+export const REPORT_STATE = {
+  EDIT_POSSIBLE: '작성중',
+  EDIT_IMPOSSIBLE: '작성완료',
+};
+
 const NoneDrag = styled.div`
   display: flex;
   width: 100%;
@@ -167,7 +172,7 @@ const ReportForm = observer(() => {
               <ReportRowWrite />
               <ReportRowFeedback />
             </ReportContainer>
-            {ReportStore.report.status === '작성완료' ? (
+            {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE ? (
               <></>
             ) : (
               <ButtonContainer>

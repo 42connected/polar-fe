@@ -6,6 +6,7 @@ import {
 import styled from '@emotion/styled';
 import defaultTheme from '../../styles/theme';
 import ReportStore from '../../states/repoort/ReportStore';
+import { REPORT_STATE } from './report-form';
 
 const ReportRowContentTitie = styled.div`
   ${defaultTheme.fontSize.sizeMedium};
@@ -49,6 +50,11 @@ export function ReportRowWrite() {
           onChange={e => {
             ReportStore.setTopic(e.target.value);
           }}
+          disabled={
+            ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+              ? false
+              : true
+          }
         />
         <ReportSummaryTitle>&#183; 내용</ReportSummaryTitle>
         <ReportSummaryInput
@@ -56,6 +62,11 @@ export function ReportRowWrite() {
           onChange={e => {
             ReportStore.setContent(e.target.value);
           }}
+          disabled={
+            ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+              ? false
+              : true
+          }
         />
         <ReportSummaryTitle>&#183; 교육생에게 남기는 말</ReportSummaryTitle>
         <ReportSummaryInput
@@ -63,6 +74,11 @@ export function ReportRowWrite() {
           onChange={e => {
             ReportStore.setFeedbackMessage(e.target.value);
           }}
+          disabled={
+            ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+              ? false
+              : true
+          }
         />
       </ReportRowContent>
     </ReportRowContainer>

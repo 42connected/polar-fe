@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import defaultTheme from '../../styles/theme';
 import ReportStore from '../../states/repoort/ReportStore';
 import { observer } from 'mobx-react-lite';
+import { REPORT_STATE } from './report-form';
 
 const Left = styled.div`
   ${defaultTheme.fontSize.sizeSmall};
@@ -352,7 +353,11 @@ const ReportRowSignature = observer(() => {
         ) : (
           <></>
         )}
-        <Button onClick={uploadImg}>가져오기</Button>
+        {ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ? (
+          <>
+            <Button onClick={uploadImg}>가져오기</Button>
+          </>
+        ) : null}
       </>
     );
   };
@@ -362,68 +367,80 @@ const ReportRowSignature = observer(() => {
       <Left>
         <SignatureTitleContainer>
           <SignatureTitle>서명란</SignatureTitle>
-          <FixableIcon
-            onClick={() => {
-              if (!signatureConfirm) {
-                clearCanvas();
-              } else {
-                alert('확인 상태에서는 서명을 초기화 할 수 없습니다');
-              }
-            }}
-          >
-            <FontAwesomeIcon icon={faRotateRight} />
-          </FixableIcon>
-        </SignatureTitleContainer>
-        <CanvasContainer>
-          <canvas ref={canvasRef} />
-        </CanvasContainer>
-        <ButtonRow>
-          {signatureConfirm ? (
-            <>
-              <Button
-                onClick={() => {
-                  setSignatureConfirm(false);
-                  if (!canvasRef.current) {
-                    return;
-                  }
-                  const canvas: HTMLCanvasElement = canvasRef.current;
-                  canvas.addEventListener('mousedown', startPaint);
-                  canvas.addEventListener('mousemove', paint);
-                  canvas.addEventListener('mouseup', stopPaint);
-                  canvas.addEventListener('mouseleave', stopPaint);
-                }}
-              >
-                취소
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                onClick={() => {
-                  saveCanvasImg();
-                  setSignatureConfirm(true);
-                  if (!canvasRef.current) {
-                    return;
-                  }
-                  const canvas: HTMLCanvasElement = canvasRef.current;
-                  canvas.removeEventListener('mousedown', startPaint);
-                  canvas.removeEventListener('mousemove', paint);
-                  canvas.removeEventListener('mouseup', stopPaint);
-                  canvas.removeEventListener('mouseleave', stopPaint);
-                }}
-              >
-                확인
-              </Button>
-            </>
+          {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE ? null : (
+            <FixableIcon
+              onClick={() => {
+                if (!signatureConfirm) {
+                  clearCanvas();
+                } else {
+                  alert('확인 상태에서는 서명을 초기화 할 수 없습니다');
+                }
+              }}
+            >
+              <FontAwesomeIcon icon={faRotateRight} />
+            </FixableIcon>
           )}
-        </ButtonRow>
+        </SignatureTitleContainer>
+        {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE ? (
+          <>
+            <UploadFileBox src={ReportStore.report.signatureUrl} />
+          </>
+        ) : (
+          <>
+            <CanvasContainer>
+              <canvas ref={canvasRef} />
+            </CanvasContainer>
+            <ButtonRow>
+              {signatureConfirm ? (
+                <>
+                  <Button
+                    onClick={() => {
+                      setSignatureConfirm(false);
+                      if (!canvasRef.current) {
+                        return;
+                      }
+                      const canvas: HTMLCanvasElement = canvasRef.current;
+                      canvas.addEventListener('mousedown', startPaint);
+                      canvas.addEventListener('mousemove', paint);
+                      canvas.addEventListener('mouseup', stopPaint);
+                      canvas.addEventListener('mouseleave', stopPaint);
+                    }}
+                  >
+                    취소
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={() => {
+                      saveCanvasImg();
+                      setSignatureConfirm(true);
+                      if (!canvasRef.current) {
+                        return;
+                      }
+                      const canvas: HTMLCanvasElement = canvasRef.current;
+                      canvas.removeEventListener('mousedown', startPaint);
+                      canvas.removeEventListener('mousemove', paint);
+                      canvas.removeEventListener('mouseup', stopPaint);
+                      canvas.removeEventListener('mouseleave', stopPaint);
+                    }}
+                  >
+                    확인
+                  </Button>
+                </>
+              )}
+            </ButtonRow>
+          </>
+        )}
         <SignatureTitleContainer>
           <SignatureTitle>증빙사진</SignatureTitle>
         </SignatureTitleContainer>
         <UploadFileContainer>
-          {ReportStore?.report?.imageUrl?.map((e, i) => (
-            <UploadFileBox src={e} key={i} />
-          ))}
+          {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE
+            ? ReportStore?.report?.imageUrl?.map((e, i) => (
+                <UploadFileBox src={e} key={i} />
+              ))
+            : null}
         </UploadFileContainer>
         {uploadImage.map((e, i) => (
           <UploadFile key={i}>
@@ -433,7 +450,7 @@ const ReportRowSignature = observer(() => {
           </UploadFile>
         ))}
         <ButtonRow>{UploadMentoringImg()}</ButtonRow>
-        <br />* 업로드 시 기존 파일이 삭제됩니다.
+        <br />* 제출 시 업로드 된 파일만 최종 적용됩니다.
       </Left>
 
       <Right>

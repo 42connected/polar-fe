@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import { Rating } from '@mui/material';
 import defaultTheme from '../../styles/theme';
 import ReportStore from '../../states/repoort/ReportStore';
+import { REPORT_STATE } from './report-form';
 
 const ReportRowContentTitie = styled.div`
   width: 100%;
@@ -42,6 +43,11 @@ export function ReportRowFeedback() {
                 ReportStore.setFeedback1(newValue);
               }
             }}
+            readOnly={
+              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                ? false
+                : true
+            }
           />
         </ReportFeedbackRow>
         <ReportFeedbackRow>
@@ -54,6 +60,11 @@ export function ReportRowFeedback() {
                 ReportStore.setFeedback2(newValue);
               }
             }}
+            readOnly={
+              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                ? false
+                : true
+            }
           />
         </ReportFeedbackRow>
         <ReportFeedbackRow>
@@ -66,6 +77,11 @@ export function ReportRowFeedback() {
                 ReportStore.setFeedback3(newValue);
               }
             }}
+            readOnly={
+              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                ? false
+                : true
+            }
           />
         </ReportFeedbackRow>
       </ReportRowContent>

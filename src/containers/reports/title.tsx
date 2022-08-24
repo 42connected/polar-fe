@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import ReportStore from '../../states/repoort/ReportStore';
 import defaultTheme from '../../styles/theme';
+import { REPORT_STATE } from './report-form';
 
 const PageTitle = styled.div`
   ${defaultTheme.font.sebangGothic};
@@ -20,7 +21,7 @@ export function Title(props: TitleProps) {
     <>
       <PageTitle>
         {props.title}
-        {ReportStore.report.status === '작성완료' ? (
+        {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE ? (
           <> (작성 완료됨, 수정불가)</>
         ) : (
           <></>

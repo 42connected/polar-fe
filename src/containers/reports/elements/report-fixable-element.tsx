@@ -5,6 +5,7 @@ import { faPencil, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import defaultTheme from '../../../styles/theme';
 import ReportStore from '../../../states/repoort/ReportStore';
+import { REPORT_STATE } from '../report-form';
 
 const FixableElement = styled.div`
   display: flex;
@@ -77,13 +78,16 @@ export function ReportFixableElement(props: ReportFixableElementProps) {
         ) : (
           <>
             <Content>{props.content ? props.content : '(입력 필요)'}</Content>
-            <FixableIcon
-              onClick={() => {
-                setIsEdit(true);
-              }}
-            >
-              <FontAwesomeIcon icon={faPencil} />
-            </FixableIcon>
+            {ReportStore.report.status ===
+            REPORT_STATE.EDIT_IMPOSSIBLE ? null : (
+              <FixableIcon
+                onClick={() => {
+                  setIsEdit(true);
+                }}
+              >
+                <FontAwesomeIcon icon={faPencil} />
+              </FixableIcon>
+            )}
           </>
         )}
       </FixableElement>
