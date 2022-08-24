@@ -1,7 +1,10 @@
 import { Icon } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { json } from "stream/consumers";
 import styled from "styled-components";
-import Button1 from "../components/button1";
+import Button from "../components/button";
+import TimeTableMuiComponent from "../components/mentor-detail/mui-table";
+import { getMentorDetail } from "../context/mentor-detail/mentor-detail-axios";
 import MentorDetailProps from "../interface/mentor-detail/mentor-detail.interface";
 import theme from '../styles/theme';
 import { MentoringLogProps } from "./mentoringLogProps";
@@ -50,7 +53,6 @@ function MentorDetail() {
     updatedAt: new Date(),
     markdownContent: "markdownContent",
   }
-
   const mockMentoringLog: MentoringLogProps[] = [
     {
       topic: "nestjs 프로젝트",
@@ -68,22 +70,57 @@ function MentorDetail() {
       meetingAt: new Date(),
     },
   ]
-  
 
+  interface mentorAvailableTimeInterface {
+    startHour?: number;
+    startMinute?: number;
+    endHour?: number;
+    endMinute?: number;
+  }
+
+  const mockMentorAvailableTime = '[[],[{"startHour":6,"startMinute":0,"endHour":10,"endMinute":0},{"startHour":10,"startMinute":0,"endHour":11,"endMinute":0}],[],[],[{"startHour":6,"startMinute":30,"endHour":9,"endMinute":0}],[],[{"startHour":6,"startMinute":30,"endHour":9,"endMinute":0}]]'
+  const mockMentorAvailableTimeToArray = JSON.parse(mockMentorAvailableTime)
+
+  interface appointmentsInterface{
+    startDate: Date;
+    endDate: Date;
+}
+
+  
   const [mentor, setMentor] = useState<MentorDetailProps>(mockMentor);
   const [mentoringLog, setMentoringLog] = useState<MentoringLogProps[]>(mockMentoringLog);
   const [isActiveMentorDetail, setIsActiveMentorDetail] = useState<boolean>(false);
   const [comments, setComments] = useState<CommentsProps[]>(mockComments);
+  const [appointments, setAppointments] = useState<appointmentsInterface[]>()
+
+  //2018, 5, 25 화요일
+//const date2 = new Date('1995-12-17T03:24:00');
+// Sun Dec 17 1995 03:24:00 GMT...
+//2018-06-28
+  // console.log(mockMentorAvailableTimeToArray);
+  const appointmentsData: appointmentsInterface[] = [];
+const aaaa = mockMentorAvailableTimeToArray.forEach((data:mentorAvailableTimeInterface[], index:number) => {
+  if (data.length !== 0) {
+    data.forEach(data2 => {
+      const day = (18 + index);
+      const startDate = new Date(2018, 6, day, data2.startHour, data2.startMinute);
+      const endDate = new Date(2018, 6, day, data2.endHour, data2.endMinute);
+      appointmentsData.push({ startDate, endDate });
+    })
+  }
+})
+  // console.log(appointmentsData);
   const AddHashtag = mentor.tags?.map((tag) => {
     return '#' + tag + ' ';
   });
 
+
   const mentoringLogList = mentoringLog.map((log) => {
-    return (<>
+    return (<MenuBox2>
       <div>{log.topic}</div>
       <div>{log.state}</div>
       <div>{log.meetingAt.getTime()}</div>
-    </>)
+    </MenuBox2>)
   }
   );
 
@@ -96,8 +133,13 @@ function MentorDetail() {
   // }
 
 // 테이블 테그로 변경하기
+
+  
+  useEffect(() => {
+    setAppointments(appointmentsData);
+  }, [])
   return (
-    <div>
+    <MentorDetailTag>
         <h1>Mentor Detail</h1>
       <MentorHeader>
          <MentorInfo>
@@ -107,10 +149,10 @@ function MentorDetail() {
               <div>{mentor.name} 멘토</div>
               <div>{mentor.intraId}</div>
             </MentorName>
-            <Button1 backgroundColor={theme.colors.polarBackground} color={theme.colors.polarSimpleMain} width="12rem" height="2rem">멘토링 {mentor.isActive ? "가능" : "불가능"}</Button1>
+            <Button fontSize={theme.fontFrame.subTitleSmall} borderWidth="1px" text={`멘토링 ${mentor.isActive ? "가능" : "불가능"}`} backgroundColor={theme.colors.polarBackground} color={theme.colors.polarSimpleMain} width="12rem" height="2rem"></Button>
           </MentorInfoContent>
         </MentorInfo>
-        <Button1  width="21rem" height="6rem" background-color={theme.colors.polarSimpleMain} color={theme.colors.backgoundWhite}>멘토링 신청하기</Button1>
+        <Button text="멘토링 신청하기"  width="21rem" height="6rem" background-color={theme.colors.polarSimpleMain} color={theme.colors.backgoundWhite}></Button>
       </MentorHeader>
       <MentorBody>
         <MentorBody1>
@@ -136,6 +178,7 @@ function MentorDetail() {
             <footer>*  48시간 이내에 만남 상태 확정 또는 취소 되지 않으면 자동취소</footer>
           </MentorHowToContent>
           </MentorBody1Left>
+          <MentorBody1Right>
           <MentorBody1Right1>
             <MenuBox>멘토 소개</MenuBox>
             <MentorIntroduction>{mentor.introduction}</MentorIntroduction>
@@ -143,16 +186,22 @@ function MentorDetail() {
           </MentorBody1Right1>
           <MentorBody1Right2>
             <MenuBox1>
-              {/* <MenuBoxHead> */}
                 <div>주제</div>
                 <div>상태</div>
               <div>일시</div>
-              {/* </MenuBoxHead> */}
             </MenuBox1>
-          </MentorBody1Right2>
+            {mentoringLogList}
+            </MentorBody1Right2>
+          </MentorBody1Right>
         </MentorBody1>
         <MentorBody2>
-          <MenuBox>가능시간</MenuBox>
+          <MenuBox>
+            <div>가능시간</div>
+            <div>업데이트 : {mentor.updatedAt.getTime()}</div>
+          </MenuBox>
+          <MentorBody2>
+            <TimeTableMuiComponent appointments={appointments}></TimeTableMuiComponent>
+          </MentorBody2>
         </MentorBody2>
         <MentorBody4>
           <MentorBody4Toggle onClick={()=>{setIsActiveMentorDetail((data) => !data)}}>
@@ -173,9 +222,28 @@ function MentorDetail() {
             </MentorCommetsContent>
         </MentorCommets>
       </MentorBody>
-    </div>
+    </MentorDetailTag>
   );
 }
+
+const MenuBox2 = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  border-bottom: 1px solid ${theme.colors.blackThree};
+  width: 100%;
+  height: 3rem;
+  box-sizing: border-box;
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  div:nth-child(2) {
+    color: ${theme.colors.polarSimpleMain};
+  }
+  `
 
 const MentorCommetsContent = styled.div`
 `
@@ -196,15 +264,40 @@ const MenuBoxHead = styled.div`
 const MentorBody2 = styled.div`
   margin-top: 10%;
 `
+
+const MenuBox1 = styled.div`
+  border-top: 2px solid ${props => props.theme.colors.blackThree};
+  border-bottom: 1px solid ${props => props.theme.colors.blackThree};
+  width: 100%;
+  height: 3rem;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`
+
+const MentorBody1Right = styled.div`
+display:flex;
+flex-direction:column;
+justify-content:flex-start;
+grid-area: right;
+
+`
 const MentorBody1Right2 = styled.div`
-  grid-area: right2;
   display: flex;
+  flex-direction: column;
   `
 
 const MentorTags = styled.div`
   display: flex;
   place-content: center;
   align-items: center;
+  color: ${theme.colors.polarSimpleMain};
 `
 
 const MentorIntroduction = styled.div`
@@ -214,9 +307,9 @@ const MentorIntroduction = styled.div`
 `
 
 const MentorBody1Right1 = styled.div`
-  grid-area: right1;
   display: flex;
   flex-direction: column;
+  margin-bottom: 10%;
 `
 
 const MentorBody1 = styled.div`
@@ -224,12 +317,13 @@ const MentorBody1 = styled.div`
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(5, 1fr);
   grid-template-areas:
-    "left left left right1 right1"
-    "left left left right1 right1"
-    "left left left right1 right1"
-    "left left left right2 right2"
-    "left left left right2 right2";
+    "left left left right right"
+    "left left left right right"
+    "left left left right right"
+    "left left left right right"
+    "left left left right right";
   grid-gap: 1rem;
+  ${theme.fontSize.sizeSmall};
 `
 
 
@@ -293,11 +387,13 @@ const MentorName = styled.div`
   display: flex;
   align-items: flex-end;
   div:first-child{
-    font-size: 2.3rem;
+    ${theme.fontFrame.titleMedium};
+    font-family: ${theme.font.sebangGothic};
   }
   div:last-child{
     margin-left: 0.5rem;
-    font-size: 1.5rem;
+    ${theme.fontFrame.bodySmall};
+    font-weight: 900;
   }
   margin-bottom: 0.5rem;
 `
@@ -312,26 +408,27 @@ const MenuBox = styled.div`
   border-top: 2px solid ${props => props.theme.colors.blackThree};
   border-bottom: 1px solid ${props => props.theme.colors.blackThree};
   width: 100%;
-  height: 3rem;
+  /* height: 3rem; */
   box-sizing: border-box;
-  padding-left: 0.5rem;
+  padding-left: 1rem;
+  padding-top: 1.3rem;
   display: flex;
-  align-items: center;
-`
-const MenuBox1 = styled.div`
-  border-top: 2px solid ${props => props.theme.colors.blackThree};
-  border-bottom: 1px solid ${props => props.theme.colors.blackThree};
-  width: 100%;
-  height: 3rem;
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(1, 1fr);
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  ${theme.fontFrame.subTitleMiddle};
+  font-weight: 900;
+  div:last-child {
+    color: ${theme.colors.fontGray};
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    padding-left: 0.3rem;
+    font-size: 1rem;
   }
 `
+const MentorDetailTag = styled.div`
+  font-family: ${theme.font.nanumGothic};
+`
+
 
 export default MentorDetail;
