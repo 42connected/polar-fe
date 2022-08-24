@@ -11,31 +11,41 @@ import MentorDetailProps from "../../interface/mentor-detail/mentor-detail.inter
 import theme from '../../styles/theme';
 import { MentoringLogProps } from "../../interface/mentor-detail/mentoringLogProps";
 import MarkdownRender from "./markdownRender";
+import CommentComponent from "../../components/mentor-detail/comment";
+import { CadetProps } from "../../interface/mentor-detail/cadet-props.interface";
+import { CommentProps } from "../../interface/mentor-detail/comment-props.interface";
 
 function MentorDetail() {
-  interface CadetProps{
-    name: string;
-    profileImage: string;
-  }
 
-  interface CommentsProps {
-    cadet: CadetProps;
-    comment: string;
-    createdAt: Date;
+  const mockCadet: CadetProps[] = [
+{
+    name: "seoyepar",
+    profileImage: "https://cdn.intra.42.fr/users/seoyepar.jpg"
   }
-  const mockCadet: CadetProps = {
-    name: "John Doe",
-    profileImage: "http://placehold.it/50x50"
-  }
-  const mockComments: CommentsProps[] = [
+    ,
     {
-      cadet: mockCadet,
-      comment: "This is a comment",
+      name: "hkong",
+      profileImage: "https://cdn.intra.42.fr/users/hkong.jpg"
+    },
+    {
+      name: "jokang",
+      profileImage: "https://cdn.intra.42.fr/users/jokang.jpg"
+    }
+]
+  const mockComments: CommentProps[] = [
+    {
+      cadet: mockCadet[0],
+      comment: "This is a comment by seoyepar",
       createdAt: new Date()
     },
     {
-      cadet: mockCadet,
-      comment: "This is a comment",
+      cadet: mockCadet[1],
+      comment: "This is a comment by hkong",
+      createdAt: new Date()
+    },
+    {
+      cadet: mockCadet[2],
+      comment: "This is a comment by jokang",
       createdAt: new Date()
     }
   ]
@@ -161,7 +171,7 @@ function MentorDetail() {
   const [mentor, setMentor] = useState<MentorDetailProps>(mockMentor);
   const [mentoringLog, setMentoringLog] = useState<MentoringLogProps[]>(mockMentoringLog);
   const [isActiveMentorDetail, setIsActiveMentorDetail] = useState<boolean>(false);
-  const [comments, setComments] = useState<CommentsProps[]>(mockComments);
+  const [comments, setComments] = useState<CommentProps[]>(mockComments);
   const [appointments, setAppointments] = useState<appointmentsInterface[]>(appointmentsTest);
   
   //2018, 5, 25 화요일
@@ -215,8 +225,23 @@ function MentorDetail() {
   // }
 
 // 테이블 테그로 변경하기
-
   
+  const MakeCommentsTags = ({comments} : any) => {
+    comments.map((comment:CommentProps) => {
+      return( <Comment>
+        <img src={comment?.cadet?.profileImage} />
+        <div>
+            <div>
+                <div>{comment?.cadet?.name}</div>
+                <div>{comment?.createdAt.getTime()}</div>
+            </div>
+            <div>{comment?.comment}</div>
+        </div>
+    </Comment>)
+    }
+    );
+  }
+
   return (
     <MentorDetailTag>
         <h1>Mentor Detail</h1>
@@ -297,12 +322,58 @@ function MentorDetail() {
         <MentorCommets>
           <MenuBox>댓글</MenuBox>
           <MentorCommetsContent>
+            {comments.map((comment:CommentProps) => {
+      return( <Comment>
+        <img src={comment?.cadet?.profileImage} />
+        <UserContent>
+            <div>
+                <div>{comment?.cadet?.name}</div>
+                <div>{comment?.createdAt.getTime()}</div>
+            </div>
+            <div>{comment?.comment}</div>
+        </UserContent>
+    </Comment>)
+    }
+    )}
           </MentorCommetsContent>
         </MentorCommets>
       </MentorBody>
     </MentorDetailTag>
   );
 }
+
+const UserContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin-left: 1rem;
+    div:first-child {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      div:last-child{
+        font-size: 1rem;
+        padding-left: 0.7rem;
+        color: ${props => props.theme.colors.grayThree};
+        font-weight: normal;
+      }
+    }
+    div:last-child {
+      ${props => props.theme.fontFrame.subTitleMiddle};
+      font-weight: normal;
+    }
+`
+
+const Comment = styled.div`
+    display: flex;
+    margin: 2rem;
+    img {
+      width: 5rem;
+      height: 5rem;
+      border-radius: 50%;
+    }
+`
 
 const TimTableScroll = styled.div`
   overflow-y: scroll;
@@ -314,7 +385,7 @@ const MenuBox2 = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(1, 1fr);
-  border-bottom: 1px solid ${theme.colors.blackThree};
+  border-bottom: 1px solid ${theme.colors.grayFive};
   width: 100%;
   height: 3rem;
   box-sizing: border-box;
@@ -360,7 +431,7 @@ const MentorBody2 = styled.div`
 
 const MenuBox1 = styled.div`
   border-top: 2px solid ${props => props.theme.colors.blackThree};
-  border-bottom: 1px solid ${props => props.theme.colors.blackThree};
+  border-bottom: 1px solid ${props => props.theme.colors.grayFive};
   width: 100%;
   height: 3rem;
   box-sizing: border-box;
@@ -499,7 +570,7 @@ const MentorBody = styled.div`
 
 const MenuBox = styled.div`
   border-top: 2px solid ${props => props.theme.colors.blackThree};
-  border-bottom: 1px solid ${props => props.theme.colors.blackThree};
+  border-bottom: 1px solid ${props => props.theme.colors.grayFive};
   width: 100%;
   /* height: 3rem; */
   box-sizing: border-box;
