@@ -562,6 +562,8 @@ const MentorInfoContent = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 1.6rem;
+  word-break: break-word;
+
 `
 const MentorName = styled.div`
   display: flex;
