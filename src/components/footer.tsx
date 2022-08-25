@@ -32,7 +32,7 @@ const GithubButton = styled.button`
   margin-left: 7.5rem;
   margin-top: -2rem;
   background-color: transparent;
-  color: ${theme.colors.blackThree};
+  color: ${theme.colors.backgoundWhite};
   border: none;
 `;
 const githubClick = () => {

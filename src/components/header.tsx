@@ -6,9 +6,8 @@ import theme from '../styles/theme';
 
 const HeaderStyle = styled.header`
   position: relative;
-  transform: translateY(100%);
+  transform: translateY(0%);
   top: 0;
-  margin-top: -8rem;
   z-index: 10;
   width: 100%;
   height: 5rem;
