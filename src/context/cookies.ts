@@ -6,11 +6,11 @@ export const setCookie = (_: any, value: string, option?: any) => {
   cookies.set('accessToken', value, { ...option });
 };
 
-export const getCookie = (_: any) => {
+export const getCookie = () => {
   return cookies.get('accessToken');
 };
 
-export const removeCookie = (_: any) => {
+export const removeCookie = () => {
   cookies.remove('accessToken');
 };
 

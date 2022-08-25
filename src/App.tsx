@@ -12,6 +12,7 @@ import Header from './components/header';
 import Mainpage from './containers/mainpages/mainpage';
 import Applypage from './containers/cardetApplys/applypage';
 import ReportDetail from './containers/reportDetails/reportDetail';
+import MentorDetail from './containers/mentor-detail/mentor-detail';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -41,6 +42,7 @@ const App = observer(() => {
           <Route path="applypage" element={<Applypage />}></Route>
           <Route path="reportdetails" element={<ReportDetail />}></Route>
           <Route path="*" element={<NotFound />} />
+          <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
         </Routes>
         <Footer />
       </Router>
