@@ -31,6 +31,7 @@ const MentorKeywordList = observer(() => {
     }
     return () => {
       KeywordStore.clear();
+      KeywordStore.seletedClear();
     };
   }, []);
 
