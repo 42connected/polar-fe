@@ -20,6 +20,7 @@ function App() {
   return (
     <>
       <Router basename={'/'}>
+        <Header />
         <Routes>
           /* * ADD <Route /> here */
           <Route path="/cadets/mentorings" element={<CadetMentornig />} />
@@ -37,7 +38,6 @@ function App() {
           <Route path="reportdetails" element={<ReportDetail />}></Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <Header />
         <Footer />
       </Router>
     </>
