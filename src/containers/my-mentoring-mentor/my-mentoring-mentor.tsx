@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import AuthStore from '../../states/auth/AuthStore';
 import { Email } from './email';
 import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
+import { Modal } from './modal/modal';
 
 const NoneDrag = styled.div`
   width: 100%;
@@ -75,6 +76,7 @@ const MyMentoringMentor = observer(() => {
 
   return (
     <NoneDrag>
+      {/*<Modal isWait={true} />*/}
       <Top>
         <Container component="main" maxWidth="lg">
           <InfoContainer>

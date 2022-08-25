@@ -13,6 +13,7 @@ import Mainpage from './containers/mainpages/mainpage';
 import Applypage from './containers/cardetApplys/applypage';
 import ReportDetail from './containers/reportDetails/reportDetail';
 import MentorDetail from './containers/mentor-detail/mentor-detail';
+import { Loading } from './components/loading';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
