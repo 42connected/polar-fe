@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Loading } from './components/loading';
 import MentorList from './containers/mentor-list/mentor-list';
 import MyMentoringMentor from './containers/my-mentoring-mentor/my-mentoring-mentor';
 import NotFound from './containers/not-found/not-found';
@@ -12,6 +11,7 @@ import Mainpage from './containers/mainpages/mainpage';
 import Applypage from './containers/cardetApplys/applypage';
 import ReportDetail from './containers/reportDetails/reportDetail';
 import MentorDetail from './containers/mentor-detail/mentor-detail';
+import { Loading } from './components/loading';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
