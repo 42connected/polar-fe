@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { MentoringLogs } from '../containers/cadet-mentoring/cadet-mentoring';
+import { MentoringLog } from '../interfaces/cadet-mentoring/mentoring-log.interface';
 import defaultTheme from '../styles/theme';
 
 const Container = styled.div`
@@ -140,10 +140,10 @@ const getColor = (status: string): string => {
 };
 
 interface CardProps {
-  log: MentoringLogs;
+  log: MentoringLog;
 }
 
-const stringToDate = (log: MentoringLogs): void => {
+const stringToDate = (log: MentoringLog): void => {
   log.createdAt = new Date(log.createdAt);
   if (log.meta.meetingAt) {
     log.meta.meetingAt[0] = new Date(log.meta.meetingAt[0]);
