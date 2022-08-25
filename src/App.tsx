@@ -19,6 +19,7 @@ function App() {
   return (
     <>
       <Router basename={'/'}>
+        <Header />
         <Routes>
           /* * ADD <Route /> here */
           <Route path="/mentor-lists/:category" element={<MentorList />} />
@@ -35,7 +36,6 @@ function App() {
           <Route path="reportdetails" element={<ReportDetail />}></Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <Header />
         <Footer />
       </Router>
     </>

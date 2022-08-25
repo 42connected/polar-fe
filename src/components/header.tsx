@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled, { StyledComponent } from 'styled-components';
 import logo from '../assets/image/logo/logo.png';
 import theme from '../styles/theme';
 
 const HeaderStyle = styled.header`
-  position: fixed;
+  position: relative;
+  transform: translateY(100%);
   top: 0;
+  margin-top: -8rem;
+  z-index: 10;
   width: 100%;
-  padding: 1.5rem;
+  height: 5rem;
+  padding-top: 2rem;
   background-color: ${theme.colors.backgoundWhite};
   box-shadow: ${theme.shadow.defaultShadow};
 `;
 const LogoButton = styled.button`
   cursor: pointer;
-  font-size: 2.5rem;
+  font-size: 3rem;
   border: none;
   background-color: transparent;
   float: left;
+  margin-left: 3rem;
 `;
 const MypageButton = styled.button`
   cursor: pointer;
@@ -47,37 +53,30 @@ const LoginButton = styled.button`
   border-radius: 10px;
 `;
 
-const topbarClick = () => {
-  document.location.replace('http://localhost:3001/');
-};
-const suggestionClick = () => {
-  document.location.replace('http://localhost:3002/');
-};
-const mypageClick = () => {
-  document.location.replace('http://localhost:3003/');
-};
 const imagestyle = {
   height: '3rem',
   width: '3rem',
 };
 
 const Header = () => {
-  const [login, setlogin] = useState(false);
-  const loginClick = () => {
-    if (login === false) document.location.replace('http://localhost:3004/');
-    else {
-    }
-  };
   return (
     <HeaderStyle>
       <div className="header">
-        <LogoButton onClick={topbarClick}>
-          <img src={logo} style={imagestyle} className="App-logo" />
-          polar
-        </LogoButton>
-        <LoginButton onClick={loginClick}>로그인</LoginButton>
-        <MypageButton onClick={mypageClick}>마이페이지</MypageButton>
-        <SuggestionButton onClick={suggestionClick}>건의사항</SuggestionButton>
+        <Link to="/">
+          <LogoButton>
+            <img src={logo} style={imagestyle} className="App-logo" />
+            polar
+          </LogoButton>
+        </Link>
+        <Link to="/login">
+          <LoginButton>로그인</LoginButton>
+        </Link>
+        <Link to="/mypage">
+          <MypageButton>마이페이지</MypageButton>
+        </Link>
+        <Link to="/suggestion">
+          <SuggestionButton>건의사항</SuggestionButton>
+        </Link>
       </div>
     </HeaderStyle>
   );
