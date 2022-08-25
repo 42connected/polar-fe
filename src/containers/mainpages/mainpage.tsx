@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import theme from '../../styles/theme';
 import img from '../../assets/image/logo/phone.png';
 import { keywordsPro } from './mainpage-getkeyword';
@@ -11,9 +11,12 @@ import {
   faBezierCurve,
   faBrain,
   faBuildingUser,
+  faCode,
   faFlagCheckered,
+  faGraduationCap,
   faLaptopCode,
   faLightbulb,
+  faMemory,
   faSitemap,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -21,19 +24,15 @@ export const MainContainer = styled.div`
   background-color: ${theme.colors.polarBackground};
   left: 0;
   ${theme.fontSize.sizeExtraSmall};
-  ${theme.font.nanumGothic};
-  display: grid;
+  ${theme.font.sebangGothic};
   height: 100%;
   width: 100%;
+  display: grid;
   grid-template-rows: 200px 200px 200px;
-  grid-template-columns: repeat(2, minmax(200px, auto));
-  grid-template-areas:
-    'img title'
-    'img icon1'
-    'img icon2';
+  grid-template-columns: repeat(2, minmax(400px, auto));
   text-align: center;
   justify-content: center;
-  grid-column-gap: 25rem;
+  grid-column-gap: 20rem;
   transition: all 0.25s ease-in-out;
   border-radius: 10px;
 `;
@@ -45,14 +44,14 @@ const MainImageStyle = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  grid-area: img;
   grid-column-start: 1;
   grid-row-start: 1;
   grid-row-end: 4;
 `;
 
 const TitleStyle = styled.div`
-  text-decoration-line: underline;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
   font-size: 3.5rem;
   margin-top: 14rem;
   align-items: center;
@@ -60,42 +59,38 @@ const TitleStyle = styled.div`
   text-align: center;
   grid-column-start: 2;
   grid-row-start: 1;
-  grid-area: title;
 `;
 
-const IconImageStyle = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  mix-blend-mode: multiply;
-  padding-top: 6.5rem;
-  background-color: transparent;
-`;
-const KeywordStyle1 = styled.div`
-  grid-area: icon1;
+const ClickContainer = styled.div`
+  display: grid;
+  grid-template-columns: 100px 100px 100px 100px;
+  grid-template-rows: 100px;
   text-align: center;
-  grid-column-start: 2;
-  grid-row-start: 2;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  ${theme.font.sebangGothic};
-  font-size: 2.3rem;
-  background-color: transparent;
-  color: ${theme.fontColor.titleColor};
+  justify-content: center;
+  align-items: center;
+  transition: all 0.25s ease-in-out;
+  margin-top: 5rem;
 `;
-const KeywordStyle2 = styled.div`
-  grid-area: icon2;
-  text-align: center;
-  grid-column-start: 2;
-  grid-row-start: 3;
+
+const IconImageStyle = styled.div<{ colStart: number; rowStart: number }>`
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  ${theme.font.sebangGothic};
+  grid-column-start: colStart;
+  grid-row-start: rowStart;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
   font-size: 2.3rem;
-  background-color: transparent;
+`;
+const KeywordStyle = styled.div<{ colStart: number; rowStart: number }>`
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  grid-column-start: colStart;
+  grid-row-start: rowStart;
+  ${theme.font.sebangGothic};
   color: ${theme.fontColor.titleColor};
+  font-size: 2.3rem;
 `;
 const imagestyle1 = {
   height: '40rem',
@@ -149,7 +144,7 @@ const Mainpage = () => {
           <TitleStyle>
             나에게 꼭 맞는 <MainBlueBody> 멘토 </MainBlueBody> 선택하기
           </TitleStyle>
-          <KeywordStyle1>
+          <ClickContainer>
             {keyWords?.map((words: { name: string }, index: number) => {
               const link = '/mentor-lists/' + words.name;
               const image = [
@@ -162,36 +157,40 @@ const Mainpage = () => {
                 return (
                   <div>
                     <Link to={link}>
-                      <IconImageStyle>
+                      <IconImageStyle colStart={index} rowStart={1}>
                         <IconButton>
-                          <FontAwesomeIcon icon={image[index]} size="4x" />
+                          <FontAwesomeIcon icon={image[index]} size="3x" />
                         </IconButton>
                       </IconImageStyle>
                     </Link>
-                    {words.name}
+                    <KeywordStyle colStart={index} rowStart={2}>
+                      {words.name}
+                    </KeywordStyle>
                   </div>
                 );
             })}
-          </KeywordStyle1>
-          <KeywordStyle2>
+          </ClickContainer>
+          <ClickContainer>
             {keyWords?.map((words: { name: string }, index: number) => {
               const link = '/mentor-lists/' + words.name;
-              const image = [faLaptopCode, faSitemap, faBrain, faBezierCurve];
+              const image = [faCode, faSitemap, faLaptopCode, faGraduationCap];
               if (index >= 4)
                 return (
                   <div>
                     <Link to={link}>
-                      <IconImageStyle>
+                      <IconImageStyle colStart={index - 4} rowStart={1}>
                         <IconButton>
-                          <FontAwesomeIcon icon={image[index - 4]} size="4x" />
+                          <FontAwesomeIcon icon={image[index - 4]} size="3x" />
                         </IconButton>
                       </IconImageStyle>
                     </Link>
-                    {words.name}
+                    <KeywordStyle colStart={index - 4} rowStart={2}>
+                      {words.name}
+                    </KeywordStyle>
                   </div>
                 );
             })}
-          </KeywordStyle2>
+          </ClickContainer>
         </MainContainer>
       )}
       ;
