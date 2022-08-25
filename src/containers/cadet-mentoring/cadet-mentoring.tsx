@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { MentorCard } from '../../components/mentoring-log-card';
 import { axiosInstance } from '../../context/axios-interface';
 import { Header } from './header';
+import LoadingStore from '../../states/loading/LoadingStore';
 
 const NoneDrag = styled.div`
   display: flex;
@@ -45,19 +46,27 @@ export interface MentoringLogs {
   };
 }
 
+export interface MentoringInfo {
+  username: string;
+  resumeUrl: string;
+  mentorings: MentoringLogs[];
+}
+
 const CadetMentornig = observer(() => {
-  const [logs, setLogs] = useState([]);
+  const [logs, setLogs] = useState<MentoringLogs[]>([]);
+  const [url, setUrl] = useState<string>('');
 
   const getKeywords = async () => {
+    LoadingStore.on();
     try {
-      console.log('useEffect');
       const save = await axiosInstance.get('/cadets/mentorings', {
         headers: {
           Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NjU5NzNiMy1hMjBmLTQ4NDAtOGY2Yy02NTAxOTAwNTgyNTgiLCJ1c2VybmFtZSI6Im5ha2tpbSIsInJvbGUiOiJjYWRldCIsImlhdCI6MTY2MTM5OTU0OCwiZXhwIjoxNjYxNDg1OTQ4fQ.ZDyEoejOtcUFvTf6VY7F20FWOw-Ld5UQZq0lkXreJlE`,
         },
       });
-      console.log(save.data);
       setLogs(save.data.mentorings);
+      setUrl(save.data.resumeUrl);
+      LoadingStore.off();
     } catch (e) {
       console.log(e);
       return e;
@@ -71,7 +80,7 @@ const CadetMentornig = observer(() => {
   return (
     <>
       <NoneDrag>
-        <Header url="https://asdfasdfasdfwqlefhkjashdf,mabskjhfgakljsfbgkjadhbfaehrfkhearblidgb;k"></Header>
+        <Header url={url} setUrl={setUrl}></Header>
         <MentorCards>
           {logs.map(log => {
             return <MentorCard log={log}></MentorCard>;

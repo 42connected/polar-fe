@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import defaultTheme from '../../styles/theme';
-import { faCheck, faPencil } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faPencil, faX } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import { axiosInstance } from '../../context/axios-interface';
 
 const Container = styled.div`
   display: flex;
@@ -40,6 +41,13 @@ const TextInput = styled.input`
   text-overflow: ellipsis;
 `;
 
+const DoubleButton = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 40px;
+`;
+
 const MentorName = styled.div`
   ${defaultTheme.font.sebangGothic};
   ${defaultTheme.fontSize.sizeExtraMedium};
@@ -48,13 +56,29 @@ const MentorName = styled.div`
 
 export interface ResumeProps {
   url: string;
+  setUrl: any;
 }
 
 export function Header(props: ResumeProps) {
   const [isEdit, setIsEdit] = useState<boolean>(false);
+  // const [url, setUrl] = useState<string>(props.url);
 
   const save = () => {
-    console.log('click');
+    const { url: resumeUrl } = props;
+    try {
+      axiosInstance.post(
+        '/cadets',
+        { resumeUrl },
+        {
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NjU5NzNiMy1hMjBmLTQ4NDAtOGY2Yy02NTAxOTAwNTgyNTgiLCJ1c2VybmFtZSI6Im5ha2tpbSIsInJvbGUiOiJjYWRldCIsImlhdCI6MTY2MTM5OTU0OCwiZXhwIjoxNjYxNDg1OTQ4fQ.ZDyEoejOtcUFvTf6VY7F20FWOw-Ld5UQZq0lkXreJlE`,
+          },
+        },
+      );
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
     setIsEdit(!isEdit);
   };
 
@@ -64,19 +88,31 @@ export function Header(props: ResumeProps) {
       <Resume>
         <span>이력서</span>
         <TextInput
+          className="resumeUrl"
           value={props.url}
           disabled={!isEdit}
           onChange={e => {
-            // setEmail(e.target.value);
+            props.setUrl(e.target.value);
           }}
           onKeyDown={e => {
             if (e.key === 'Enter') {
-              //   authenticate();
+              save();
+              setIsEdit(!isEdit);
             }
           }}
         />
         {isEdit ? (
-          <FontAwesomeIcon icon={faCheck} onClick={() => save()} />
+          <>
+            <DoubleButton>
+              <FontAwesomeIcon
+                icon={faX}
+                onClick={() => {
+                  setIsEdit(!isEdit);
+                }}
+              />
+              <FontAwesomeIcon icon={faCheck} onClick={() => save()} />
+            </DoubleButton>
+          </>
         ) : (
           <FontAwesomeIcon icon={faPencil} onClick={() => setIsEdit(!isEdit)} />
         )}
