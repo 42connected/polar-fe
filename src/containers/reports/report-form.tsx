@@ -6,7 +6,7 @@ import { ReportRowFeedback } from './report-row-feedback';
 import ReportRowWrite from './report-row-write';
 import ReportRowSignature from './report-row-signature';
 import { ReportFixableElement } from './elements/report-fixable-element';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import defaultTheme from '../../styles/theme';
 import { useParams } from 'react-router-dom';
 import ReportStore from '../../states/repoort/ReportStore';
@@ -100,14 +100,12 @@ export const getTimeToString = (meetingAt: Date[]): string => {
 
 const ReportForm = observer(() => {
   const { reportId } = useParams<string>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function Initialize() {
       await AuthStore.Login();
       if (reportId) {
         await ReportStore.Initializer(reportId, AuthStore.jwt);
-        setIsLoading(false);
       } else {
         console.log('레포트ID가 존재하지 않습니다');
       }
@@ -132,74 +130,68 @@ const ReportForm = observer(() => {
   };
 
   return (
-    <>
-      {isLoading ? (
-        <></>
-      ) : (
-        <NoneDrag>
-          <Container component="main" maxWidth="lg">
-            <Title title={'보고서 작성'} />
-            <ReportContainer>
-              <ReportInfoContainer>
-                <ReportElement
-                  topic={'구분'}
-                  content={
-                    ReportStore.report.cadets.isCommon ? '공통과정' : '심화과정'
-                  }
-                />
-                <ReportElement
-                  topic={'날짜'}
-                  content={getDayToString(
-                    ReportStore.report.mentoringLogs.meetingAt[START_TIME],
-                  )}
-                />
-                <ReportElement
-                  topic={'시간'}
-                  content={getTimeToString(
-                    ReportStore.report.mentoringLogs.meetingAt,
-                  )}
-                />
-                <ReportFixableElement
-                  topic={'장소'}
-                  content={ReportStore.report.place}
-                />
-                <ReportElement
-                  topic={'멘토'}
-                  content={ReportStore.report.mentors.name}
-                />
-                <ReportElement
-                  topic={'카뎃'}
-                  content={ReportStore.report.cadets.name}
-                />
-              </ReportInfoContainer>
-              <ReportRowSignature />
-              <ReportRowWrite />
-              <ReportRowFeedback />
-            </ReportContainer>
-            {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE ? (
-              <></>
-            ) : (
-              <ButtonContainer>
-                <DefualtButton
-                  onClick={() => {
-                    saveTemporary();
-                  }}
-                >
-                  임시 저장
-                </DefualtButton>
-                <DefualtButton
-                  onClick={() => {
-                    saveDone();
-                  }}
-                >
-                  제출
-                </DefualtButton>
-              </ButtonContainer>
-            )}
-          </Container>
-        </NoneDrag>
-      )}
-    </>
+    <NoneDrag>
+      <Container component="main" maxWidth="lg">
+        <Title title={'보고서 작성'} />
+        <ReportContainer>
+          <ReportInfoContainer>
+            <ReportElement
+              topic={'구분'}
+              content={
+                ReportStore.report.cadets.isCommon ? '공통과정' : '심화과정'
+              }
+            />
+            <ReportElement
+              topic={'날짜'}
+              content={getDayToString(
+                ReportStore.report.mentoringLogs.meetingAt[START_TIME],
+              )}
+            />
+            <ReportElement
+              topic={'시간'}
+              content={getTimeToString(
+                ReportStore.report.mentoringLogs.meetingAt,
+              )}
+            />
+            <ReportFixableElement
+              topic={'장소'}
+              content={ReportStore.report.place}
+            />
+            <ReportElement
+              topic={'멘토'}
+              content={ReportStore.report.mentors.name}
+            />
+            <ReportElement
+              topic={'카뎃'}
+              content={ReportStore.report.cadets.name}
+            />
+          </ReportInfoContainer>
+          <ReportRowSignature />
+          <ReportRowWrite />
+          <ReportRowFeedback />
+        </ReportContainer>
+        {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE ? (
+          <></>
+        ) : (
+          <ButtonContainer>
+            <DefualtButton
+              onClick={() => {
+                saveTemporary();
+              }}
+            >
+              임시 저장
+            </DefualtButton>
+            <DefualtButton
+              onClick={() => {
+                saveDone();
+              }}
+            >
+              제출
+            </DefualtButton>
+          </ButtonContainer>
+        )}
+      </Container>
+    </NoneDrag>
   );
 });
 

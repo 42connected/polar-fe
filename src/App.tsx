@@ -1,8 +1,11 @@
+import { observer } from 'mobx-react-lite';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Loading } from './components/loading';
 import MentorList from './containers/mentor-list/mentor-list';
 import MyMentoringMentor from './containers/my-mentoring-mentor/my-mentoring-mentor';
 import NotFound from './containers/not-found/not-found';
 import ReportForm from './containers/reports/report-form';
+import LoadingStore from './states/loading/LoadingStore';
 import Footer from './components/footer';
 import Header from './components/header';
 import Mainpage from './containers/mainpages/mainpage';
@@ -16,12 +19,13 @@ import MentorDetail from './containers/mentor-detail/mentor-detail';
  *
  * {{BASE_URL}}/경로로 해당 컴포넌트 접근 가능
  */
-function App() {
+const App = observer(() => {
   return (
     <>
+      {LoadingStore.isLoding ? <Loading /> : null}
       <Router basename={'/'}>
-        <Routes >
-          <Route path='/mentor-detail/:intraId' element={<MentorDetail/>} />
+        <Header />
+        <Routes>
           /* * ADD <Route /> here */
           <Route path="/mentor-lists/:category" element={<MentorList />} />
           <Route
@@ -37,11 +41,10 @@ function App() {
           <Route path="reportdetails" element={<ReportDetail />}></Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <Header />
         <Footer />
       </Router>
     </>
   );
-}
+});
 
 export default App;

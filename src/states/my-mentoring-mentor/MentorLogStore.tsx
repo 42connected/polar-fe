@@ -1,5 +1,6 @@
 import { makeObservable, observable } from 'mobx';
 import { axiosInstance } from '../../context/axios-interface';
+import LoadingStore from '../loading/LoadingStore';
 
 export interface MentoringLogs {
   id: string;
@@ -41,6 +42,7 @@ class MentorLogStore {
   }
 
   async Initializer(mentorIntraId: string, token: string) {
+    LoadingStore.on();
     await axiosInstance
       .get(`/mentors/mentorings?take=15&page=1`, {
         headers: {
@@ -54,6 +56,7 @@ class MentorLogStore {
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
       });
+    LoadingStore.off();
   }
 }
 
