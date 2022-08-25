@@ -50,8 +50,8 @@ const KeywordStyle = styled.div`
   color: ${theme.fontColor.titleColor};
 `;
 const imagestyle1 = {
-  height: '80rem',
-  width: '40rem',
+  height: '60rem',
+  width: '30rem',
 };
 const imagestyle2 = {
   height: '8rem',
@@ -100,10 +100,10 @@ const Mainpage = () => {
     const { i } = props;
     {
       keyWords?.map((words: { name: string }, index: number) => {
-        if (index === i) return;
-        document.location.replace(
-          'http://localhost:3000/mentor-lists/' + words.name,
-        );
+        if (index === i)
+          document.location.replace(
+            'http://localhost:3000/mentor-lists/' + words.name,
+          );
       });
     }
   };
