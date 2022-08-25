@@ -6,13 +6,19 @@ const FooterStyle = styled.footer`
   position: relative;
   transform: translateY(100%);
   bottom: 0;
-  width: 100%;
+  width: 101%;
   height: 12rem;
   padding-top: 1rem;
   font-size: 1.3rem;
   ${theme.font.sebangGothic};
   color: ${theme.colors.backgoundWhite};
 `;
+/*
+const Wrapper = styled.div`
+  height: auto;
+  min-height: 100%;
+`;
+*/
 const FooterBody = styled.footer`
   text-align: center;
 `;
@@ -69,5 +75,4 @@ const Footer = () => {
     </FooterStyle>
   );
 };
-
 export default Footer;
