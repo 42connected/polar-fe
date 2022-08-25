@@ -4,6 +4,7 @@ import defaultTheme from '../../styles/theme';
 import { faCheck, faPencil, faX } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { axiosInstance } from '../../context/axios-interface';
+import { ResumeProps } from '../../interfaces/cadet-mentoring/resume-props.interface';
 
 const Container = styled.div`
   display: flex;
@@ -54,14 +55,8 @@ const MentorName = styled.div`
   margin-bottom: 5px;
 `;
 
-export interface ResumeProps {
-  url: string;
-  setUrl: any;
-}
-
 export function Header(props: ResumeProps) {
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  // const [url, setUrl] = useState<string>(props.url);
 
   const save = () => {
     const { url: resumeUrl } = props;

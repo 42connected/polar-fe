@@ -5,6 +5,7 @@ import { MentorCard } from '../../components/mentoring-log-card';
 import { axiosInstance } from '../../context/axios-interface';
 import { Header } from './header';
 import LoadingStore from '../../states/loading/LoadingStore';
+import { MentoringLog } from '../../interfaces/cadet-mentoring/mentoring-log.interface';
 
 const NoneDrag = styled.div`
   display: flex;
@@ -28,32 +29,8 @@ const MentorCards = styled.div`
   margin: 20px 0;
 `;
 
-export interface MentoringLogs {
-  id: string;
-  createdAt: Date;
-  mentor: {
-    intraId: string;
-    name: string;
-  };
-  topic: string;
-  status: string;
-  meta: {
-    isCommon: boolean;
-    content: string;
-    requestTime: (Date[] | null)[];
-    meetingAt: Date[];
-    rejectMessage: string;
-  };
-}
-
-export interface MentoringInfo {
-  username: string;
-  resumeUrl: string;
-  mentorings: MentoringLogs[];
-}
-
 const CadetMentornig = observer(() => {
-  const [logs, setLogs] = useState<MentoringLogs[]>([]);
+  const [logs, setLogs] = useState<MentoringLog[]>([]);
   const [url, setUrl] = useState<string>('');
 
   const getKeywords = async () => {
