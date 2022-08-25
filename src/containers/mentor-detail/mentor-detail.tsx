@@ -169,7 +169,7 @@ function MentorDetail() {
     },
   ];
 
-  const [mentor, setMentor] = useState<MentorDetailProps | any>(mockMentor);
+  const [mentor, setMentor] = useState<MentorDetailProps | null>(null);
   const [mentoringLog, setMentoringLog] =
     useState<MentoringLogProps[]>(mockMentoringLog);
   const [isActiveMentorDetail, setIsActiveMentorDetail] =
@@ -219,17 +219,17 @@ function MentorDetail() {
   const getMentorDetailData = async (accessToken: string) => {
     return await getMentorDetailWithParams(accessToken, params.intraId);
   };
-
   useEffect(() => {
-    const accessToken = getCookie();
-    const mentorData = getMentorDetailData(accessToken);
-    const appointmentsData = setMentorAvailableTimeData();
-    setAppointments(appointmentsData);
-    if (!mentorData.tags) {
-      mentorData.tags = [];
-    }
-
-    setMentor(mentorData);
+    // const accessToken = getCookie();
+    // const mentorDataPromise = getMentorDetailData(accessToken);
+    // const appointmentsData = setMentorAvailableTimeData();
+    // setAppointments(appointmentsData);
+    // console.log(mentorDataPromise);
+    // const mentorData = mentorDataPromise;
+    // if (!mentorData.tags) {
+    //   mentorData.tags = [];
+    // }
+    // setMentor(mentorData);
   }, []);
 
   const AddHashtag = mentor?.tags?.map(tag => {
@@ -272,16 +272,16 @@ function MentorDetail() {
       <h1>Mentor Detail</h1>
       <MentorHeader>
         <MentorInfo>
-          <MentorImage src={mentor.profileImage} />
+          <MentorImage src={mentor?.profileImage} />
           <MentorInfoContent>
             <MentorName>
-              <div>{mentor.name} 멘토</div>
-              <div>{mentor.intraId}</div>
+              <div>{mentor?.name} 멘토</div>
+              <div>{mentor?.intraId}</div>
             </MentorName>
             <Button
               fontSize={theme.fontFrame.subTitleSmall}
               borderWidth="1px"
-              text={`멘토링 ${mentor.isActive ? '가능' : '불가능'}`}
+              text={`멘토링 ${mentor?.isActive ? '가능' : '불가능'}`}
               backgroundColor={theme.colors.polarBackground}
               color={theme.colors.polarSimpleMain}
               width="12rem"
@@ -330,7 +330,7 @@ function MentorDetail() {
           <MentorBody1Right>
             <MentorBody1Right1>
               <MenuBox>멘토 소개</MenuBox>
-              <MentorIntroduction>{mentor.introduction}</MentorIntroduction>
+              <MentorIntroduction>{mentor?.introduction}</MentorIntroduction>
               <MentorTags>{AddHashtag}</MentorTags>
             </MentorBody1Right1>
             <MentorBody1Right2>
@@ -348,18 +348,18 @@ function MentorDetail() {
             <div>가능 시간</div>
             <div>
               업데이트 :
-              {mentor.updatedAt
-                ? `${mentor.updatedAt.getFullYear()}-${mentor.updatedAt
+              {mentor?.updatedAt
+                ? `${mentor?.updatedAt.getFullYear()}-${mentor?.updatedAt
                     .getMonth()
                     .toString()
-                    .padStart(2, '0')}-${mentor.updatedAt
+                    .padStart(2, '0')}-${mentor?.updatedAt
                     .getDay()
                     .toString()
                     .padStart(2, '0')}`
-                : `${mentor.createdAt.getFullYear()}-${mentor.createdAt
+                : `${mentor?.createdAt.getFullYear()}-${mentor?.createdAt
                     .getMonth()
                     .toString()
-                    .padStart(2, '0')}-${mentor.createdAt
+                    .padStart(2, '0')}-${mentor?.createdAt
                     .getDay()
                     .toString()
                     .padStart(2, '0')}`}
@@ -387,7 +387,7 @@ function MentorDetail() {
           {isActiveMentorDetail ? (
             <>
               <MenuBox>멘토정보</MenuBox>
-              <MarkdownRender markdown={mentor.markdownContent} />
+              <MarkdownRender markdown={mentor?.markdownContent} />
             </>
           ) : null}
         </MentorBody3>
@@ -401,8 +401,8 @@ function MentorDetail() {
                   <UserContent>
                     <div>
                       <div>{comment?.cadet?.name}</div>
-                      {mentor.updatedAt ? (
-                        <div>{`${mentor.updatedAt?.getFullYear()}.${mentor.updatedAt
+                      {mentor?.updatedAt ? (
+                        <div>{`${mentor?.updatedAt?.getFullYear()}.${mentor?.updatedAt
                           .getMonth()
                           .toString()
                           .padStart(2, '0')}.${mentor.updatedAt

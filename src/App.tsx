@@ -40,6 +40,7 @@ const App = observer(() => {
           <Route path="applypage" element={<Applypage />}></Route>
           <Route path="reportdetails" element={<ReportDetail />}></Route>
           <Route path="*" element={<NotFound />} />
+          <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
         </Routes>
         <Footer />
       </Router>

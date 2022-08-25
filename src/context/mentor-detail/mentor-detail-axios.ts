@@ -10,6 +10,6 @@ export const getMentorDetailWithParams = async (
     'Authorization'
   ] = `Bearer ${accessToken}`;
 
-  const { data } = await axiosInstance.get(`/mentors/${param}`);
-  return data;
+  const response = await axiosInstance.get(`/mentors/${param}`);
+  return response;
 };
