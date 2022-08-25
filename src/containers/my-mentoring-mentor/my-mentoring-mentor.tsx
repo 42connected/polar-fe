@@ -76,7 +76,7 @@ const MyMentoringMentor = observer(() => {
 
   return (
     <NoneDrag>
-      <Modal isWait={true} />
+      {/*<Modal isWait={true} />*/}
       <Top>
         <Container component="main" maxWidth="lg">
           <InfoContainer>

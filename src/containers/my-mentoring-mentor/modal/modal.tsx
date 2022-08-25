@@ -63,9 +63,9 @@ export function Modal(props: ModalProps) {
           title={'멘토링 신청 세부사항'}
           status={'확정'}
           button1={'거절'}
-          button1bg={defaultTheme.colors.polarGray}
+          button1bg={'gray'}
           button2={'나가기'}
-          button2bg={'gray'}
+          button2bg={defaultTheme.colors.polarSimpleMain}
           button1fn={() => {
             console.log('3');
           }}
