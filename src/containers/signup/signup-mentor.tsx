@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FormControlLabel, FormGroup, Switch, Typography } from '@mui/material';
+import { Switch } from '@mui/material';
 import axios from 'axios';
 import defaultTheme from '../../styles/theme';
 import singupImage from '../../assets/signup/signup.png';
@@ -8,7 +8,7 @@ import { useRef, useState } from 'react';
 import Columns from '../../components/signup/getColumns';
 import React from 'react';
 import LoadingStore from '../../states/loading/LoadingStore';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 // 로그인 페이지들 외부랑 리다이렉션 연결하기 -> 제출 성공 팝업창 수정
 // 이메일 등록됐을 떄 처리하기
@@ -414,8 +414,7 @@ const SignUpMentor = () => {
     console.log('rows!');
     console.log(rows);
 
-    const maxLoadingTime = 3;
-    LoadingStore.on(maxLoadingTime);
+    LoadingStore.on();
 
     if (!(await validateRows(rows))) {
       alert('가능시간에 빈 칸이 있습니다');
@@ -458,7 +457,7 @@ const SignUpMentor = () => {
       );
 
       if (response.status === 200) {
-        //alert('제출에 성공하셨습니다');
+        alert('제출에 성공하셨습니다');
 
         setIsRedirection(true);
       } else {
@@ -510,8 +509,7 @@ const SignUpMentor = () => {
     setIsMailFail(false);
 
     try {
-      const maxLoadingTime = 2;
-      LoadingStore.on(maxLoadingTime);
+      LoadingStore.on();
 
       axios.defaults.headers.common[
         'Authorization'
@@ -546,8 +544,7 @@ const SignUpMentor = () => {
     setIsCodeFail(false);
 
     try {
-      const maxLoadingTime = 2;
-      LoadingStore.on(maxLoadingTime);
+      LoadingStore.on();
 
       axios.defaults.headers.common[
         'Authorization'
