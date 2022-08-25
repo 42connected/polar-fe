@@ -3,6 +3,11 @@ import MentorList from './containers/mentor-list/mentor-list';
 import MyMentoringMentor from './containers/my-mentoring-mentor/my-mentoring-mentor';
 import NotFound from './containers/not-found/not-found';
 import ReportForm from './containers/reports/report-form';
+import Footer from './components/footer';
+import Header from './components/header';
+import Mainpage from './containers/mainpages/mainpage';
+import Applypage from './containers/cardetApplys/applypage';
+import ReportDetail from './containers/reportDetails/reportDetail';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -25,8 +30,13 @@ function App() {
             path="/mentors/mentorings/:intraId"
             element={<MyMentoringMentor />}
           />
+          <Route path="" element={<Mainpage />}></Route>
+          <Route path="applypage" element={<Applypage />}></Route>
+          <Route path="reportdetails" element={<ReportDetail />}></Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Header />
+        <Footer />
       </Router>
     </>
   );
