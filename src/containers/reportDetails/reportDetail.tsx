@@ -49,7 +49,8 @@ import {
 } from './report-styled';
 
 const ReportpageStyle = styled.div`
-  margin-left: 30rem;
+  background-color: ${theme.colors.backgoundWhite};
+  margin-left: 40rem;
   width: 60vw;
   height: 130vw;
 `;
@@ -85,6 +86,7 @@ const ButtonBody = styled.section`
 
 const PrintButton = styled.button`
   cursor: pointer;
+  z-index: 1;
   margin-right: 3rem;
   font-size: 1.8rem;
   align-items: center;
