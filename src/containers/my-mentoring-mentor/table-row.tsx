@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import MentorLogStore from '../../states/my-mentoring-mentor/MentorLogStore';
 import defaultTheme from '../../styles/theme';
 import {
   getDayToString,
@@ -44,6 +43,7 @@ const TableColumnTopic = styled.div`
   justify-content: left;
   align-items: center;
   padding-left: 30px;
+  text-decoration: underline;
 `;
 
 const TableColumnTime = styled.div`
@@ -51,24 +51,6 @@ const TableColumnTime = styled.div`
   ${defaultTheme.fontSize.sizeExtraSmall};
   display: flex;
   width: 30%;
-  justify-content: center;
-  align-items: center;
-`;
-
-const TableColumnState = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeExtraSmall};
-  display: flex;
-  width: 10%;
-  justify-content: center;
-  align-items: center;
-`;
-
-const TableColumnReport = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeExtraSmall};
-  display: flex;
-  width: 10%;
   justify-content: center;
   align-items: center;
 `;

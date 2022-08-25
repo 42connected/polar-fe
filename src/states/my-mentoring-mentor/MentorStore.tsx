@@ -1,5 +1,7 @@
-import { makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { axiosInstance } from '../../context/axios-interface';
+import LoadingStore from '../loading/LoadingStore';
+
 export interface Mentor {
   id: string;
   intraId: string;
@@ -21,17 +23,24 @@ export interface Mentor {
   //  reports: Reports[];
   //  mentoringLogs: MentoringLogs[];
 }
+
 class MentorStore {
   mentor: Mentor;
 
   constructor() {
     makeObservable(this, {
       mentor: observable,
+      setEmail: action.bound,
     });
     this.mentor = { id: '', intraId: '', email: '' };
   }
 
+  setEmail(email: string) {
+    this.mentor.email = email;
+  }
+
   async verifyEmail(code: string, token: string) {
+    LoadingStore.on();
     await axiosInstance
       .post(
         `/email-verifications/${code}`,
@@ -43,14 +52,17 @@ class MentorStore {
         },
       )
       .then(() => {
+        alert('이메일 변경 완료');
         location.reload();
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
       });
+    LoadingStore.off();
   }
 
   async changeEmail(email: string, token: string) {
+    LoadingStore.on();
     await axiosInstance
       .post(
         `/email-verifications`,
@@ -68,9 +80,11 @@ class MentorStore {
         alert(`${err?.response?.data?.message}`);
         location.reload();
       });
+    LoadingStore.off();
   }
 
   async getMentor(intraId: string, token: string) {
+    LoadingStore.on();
     await axiosInstance
       .get(`/mentors/${intraId}`, {
         headers: {
@@ -85,6 +99,7 @@ class MentorStore {
         alert(`${err?.response?.data?.message}`);
         return false;
       });
+    LoadingStore.off();
   }
 }
 

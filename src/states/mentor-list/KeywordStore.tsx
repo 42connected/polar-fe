@@ -1,5 +1,6 @@
 import { makeObservable, observable, action } from 'mobx';
 import { axiosInstance } from '../../context/axios-interface';
+import LoadingStore from '../loading/LoadingStore';
 
 export class Keyword {
   keyword: string;
@@ -21,6 +22,7 @@ class KeywordStore {
       keywords: observable,
       selected: observable,
       pushSelected: action,
+      removeSelectedByKeyword: action,
       seletedClear: action,
       clear: action,
     });
@@ -47,7 +49,8 @@ class KeywordStore {
     this.keywords = [];
   }
 
-  async Initializer(category: string): Promise<void> {
+  async Initializer(category: string) {
+    LoadingStore.on();
     await axiosInstance
       .get(`/categories/${category}/keywords`)
       .then(res =>
@@ -58,6 +61,7 @@ class KeywordStore {
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
       });
+    LoadingStore.off();
   }
 }
 

@@ -4,15 +4,14 @@ import KeywordStore from '../../states/mentor-list/KeywordStore';
 import MentorsStore from '../../states/mentor-list/MentorsStore';
 import defaultTheme from '../../styles/theme';
 
-const Container = styled.button`
+export const KeywordButton = styled.button`
   ${defaultTheme.font.sebangGothic};
   ${defaultTheme.fontSize.sizeExtraSmall};
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 120px;
   height: 50px;
-  margin: 10px 0px;
+  margin: 10px 5px;
   border-radius: 30px;
   border: none;
   text-align: center;
@@ -35,7 +34,7 @@ export function MentorKeyword(props: KeywordProps) {
   const { category } = useParams();
 
   return (
-    <Container
+    <KeywordButton
       onClick={() => {
         if (!props.isClicked) {
           KeywordStore.pushSelected(props.name);
@@ -48,6 +47,6 @@ export function MentorKeyword(props: KeywordProps) {
       color={props.isClicked ? defaultTheme.colors.polarSimpleMain : 'gray'}
     >
       {props.name}
-    </Container>
+    </KeywordButton>
   );
 }
