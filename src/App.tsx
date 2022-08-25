@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import CadetMentornig from './containers/cadet-mentoring/cadet-mentoring';
 import MentorList from './containers/mentor-list/mentor-list';
 import ReportForm from './containers/reports/report-form';
 
@@ -19,6 +20,7 @@ function App() {
             path="/mentorings/reports/:reportId"
             element={<ReportForm />}
           />
+          <Route path="/cadets/mentorings" element={<CadetMentornig />} />
         </Routes>
       </Router>
     </>
