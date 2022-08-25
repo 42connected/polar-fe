@@ -54,61 +54,60 @@ const InfoContainer = styled.div`
 
 const MyMentoringMentor = observer(() => {
   const { intraId } = useParams<string>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [empty, setEmpty] = useState<string[]>([]);
 
   useEffect(() => {
-    async function Initialize() {
+    async function initialize() {
       if (!intraId) {
         return;
       }
       await AuthStore.Login();
       await MentorStore.getMentor(intraId, AuthStore.jwt);
       await MentorLogStore.Initializer(intraId, AuthStore.jwt);
+
+      // FIXME: 수정
       for (let i = 0; i < LOGS_PER_PAGE - MentorLogStore.total; ++i) {
         setEmpty(o => [...o, 'a']);
       }
-      setIsLoading(false);
     }
-    Initialize();
+    initialize();
   }, []);
 
   return (
-    <>
-      {isLoading ? null : (
-        <NoneDrag>
-          <Top>
-            <Container component="main" maxWidth="lg">
-              <InfoContainer>
-                <InfoTitle>{MentorStore?.mentor?.intraId}의 멘토링</InfoTitle>
-                <Email email={MentorStore?.mentor?.email} />
-              </InfoContainer>
-            </Container>
-          </Top>
-          <Bottom>
-            <Container component="main" maxWidth="lg">
-              <TableTitle />
-              {MentorLogStore.logs.map((e, i) => (
-                <TableRow
-                  key={i}
-                  user={e.cadet.name}
-                  mentoringId={e.id}
-                  topic={e.topic}
-                  mentoringState={e.status}
-                  report={e.report}
-                  createdAt={e.createdAt}
-                  meetingAt={e.meetingAt}
-                />
-              ))}
-              {empty.map((e, i) => (
-                <TableColumnLine key={i} />
-              ))}
-            </Container>
-          </Bottom>
-          <PageButton />
-        </NoneDrag>
-      )}
-    </>
+    <NoneDrag>
+      <Top>
+        <Container component="main" maxWidth="lg">
+          <InfoContainer>
+            <InfoTitle>{MentorStore?.mentor?.intraId}의 멘토링</InfoTitle>
+            <Email
+              email={MentorStore?.mentor?.email}
+              setEmail={MentorStore?.setEmail}
+            />
+          </InfoContainer>
+        </Container>
+      </Top>
+      <Bottom>
+        <Container component="main" maxWidth="lg">
+          <TableTitle />
+          {MentorLogStore.logs.map((e, i) => (
+            <TableRow
+              key={i}
+              user={e.cadet.name}
+              mentoringId={e.id}
+              topic={e.topic}
+              mentoringState={e.status}
+              report={e.report}
+              createdAt={e.createdAt}
+              meetingAt={e.meetingAt}
+            />
+          ))}
+          {empty.map((e, i) => (
+            <TableColumnLine key={i} />
+          ))}
+        </Container>
+      </Bottom>
+      <PageButton />
+    </NoneDrag>
   );
 });
 

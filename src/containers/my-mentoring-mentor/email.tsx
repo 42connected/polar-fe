@@ -63,33 +63,27 @@ const DoubleButton = styled.div`
 
 export interface EmailProps {
   email: string;
+  setEmail: (email: string) => void;
 }
 
 export function Email(props: EmailProps) {
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>(props.email);
   const [time, setTime] = useState<boolean>(false);
   const [emailVerify, setEmailVerify] = useState<string>('');
 
-  const authenticate = () => {
-    async function vv() {
-      setTime(true);
-      await AuthStore.Login();
-      await MentorStore.changeEmail(email, AuthStore.jwt);
-      console.log(() => {
-        setTime(false);
-      }, 1000 * 180);
-    }
-    vv();
+  const authenticate = async () => {
+    await AuthStore.Login();
+    await MentorStore.changeEmail(props.email, AuthStore.jwt);
+    setTime(true);
+    console.log(() => {
+      setTime(false);
+    }, 1000 * 180);
   };
 
-  const verify = () => {
-    async function vv() {
-      setTime(true);
-      await AuthStore.Login();
-      await MentorStore.verifyEmail(emailVerify, AuthStore.jwt);
-    }
-    vv();
+  const verify = async () => {
+    setTime(true);
+    await AuthStore.Login();
+    await MentorStore.verifyEmail(emailVerify, AuthStore.jwt);
   };
 
   return (
@@ -97,15 +91,10 @@ export function Email(props: EmailProps) {
       <Field>
         <Title>Email</Title>
         <TextInput
-          value={email}
+          value={props.email}
           disabled={!isEdit}
           onChange={e => {
-            setEmail(e.target.value);
-          }}
-          onKeyDown={e => {
-            if (e.key === 'Enter') {
-              authenticate();
-            }
+            props.setEmail(e.target.value);
           }}
         />
         {isEdit ? (
@@ -115,7 +104,6 @@ export function Email(props: EmailProps) {
                 icon={faX}
                 onClick={() => {
                   setIsEdit(!isEdit);
-                  setEmail(MentorStore?.mentor?.email);
                 }}
               />
               <FontAwesomeIcon
@@ -131,7 +119,7 @@ export function Email(props: EmailProps) {
           <FontAwesomeIcon icon={faPencil} onClick={() => setIsEdit(!isEdit)} />
         )}
       </Field>
-      {time ? (
+      {time && (
         <Field>
           <Title>인증코드</Title>
           <TextInput
@@ -139,14 +127,9 @@ export function Email(props: EmailProps) {
               setEmailVerify(e.target.value);
             }}
           />
-          <FontAwesomeIcon
-            icon={faCheck}
-            onClick={() => {
-              verify();
-            }}
-          />
+          <FontAwesomeIcon icon={faCheck} onClick={verify} />
         </Field>
-      ) : null}
+      )}
     </Container>
   );
 }

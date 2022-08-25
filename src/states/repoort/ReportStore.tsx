@@ -1,5 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 import { axiosInstance } from '../../context/axios-interface';
+import LoadingStore from '../loading/LoadingStore';
 
 export interface Mentors {
   name: string;
@@ -149,6 +150,7 @@ class ReportStore {
   async saveDone(reportId: string, token: string) {
     this.appendFormdataExceptImage();
     this.save.append('isDone', 'true');
+    LoadingStore.on();
     await axiosInstance
       .patch(`/reports/${reportId}`, this.save, {
         headers: {
@@ -157,18 +159,20 @@ class ReportStore {
         },
       })
       .then(() => {
-        location.reload();
         this.save = new FormData();
         this.deleteFormdataExceptImage();
+        location.reload();
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
         this.deleteFormdataExceptImage();
       });
+    LoadingStore.off();
   }
 
   async saveTemporary(reportId: string, token: string) {
     this.appendFormdataExceptImage();
+    LoadingStore.on();
     await axiosInstance
       .patch(`/reports/${reportId}`, this.save, {
         headers: {
@@ -177,17 +181,19 @@ class ReportStore {
         },
       })
       .then(() => {
-        location.reload();
         this.save = new FormData();
         this.deleteFormdataExceptImage();
+        location.reload();
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
         this.deleteFormdataExceptImage();
       });
+    LoadingStore.off();
   }
 
   async createReport(mentoringLogId: string, token: string) {
+    LoadingStore.on();
     await axiosInstance
       .post(
         `/reports/${mentoringLogId}`,
@@ -204,9 +210,11 @@ class ReportStore {
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
       });
+    LoadingStore.off();
   }
 
   async Initializer(reportId: string, token: string) {
+    LoadingStore.on();
     await axiosInstance
       .get(`/reports/${reportId}`, {
         headers: {
@@ -219,6 +227,7 @@ class ReportStore {
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
       });
+    LoadingStore.off();
   }
 }
 export default new ReportStore();
