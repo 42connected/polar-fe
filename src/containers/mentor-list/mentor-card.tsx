@@ -5,7 +5,7 @@ import defaultProfile from '../../assets/image/defaultProfileImage.png';
 
 const Container = styled.div`
   display: flex;
-  width: 80%;
+  width: 300px;
   height: 300px;
   flex-direction: column;
   align-items: center;
@@ -58,6 +58,7 @@ const Introduce = styled.div`
   align-items: center;
   text-align: center;
   margin: 30px 0px;
+  word-break: break-all;
 `;
 
 const Button = styled.button`
@@ -94,6 +95,15 @@ export interface CardProps {
   introduction: string;
 }
 
+function sliceIntroduction(str: string) {
+  const MAX_VIEW = 100;
+
+  if (str.length > MAX_VIEW) {
+    return `${str.slice(0, MAX_VIEW)}...`;
+  }
+  return str;
+}
+
 export function MentorCard(props: CardProps) {
   return (
     <Container>
@@ -118,7 +128,9 @@ export function MentorCard(props: CardProps) {
         </ProfileRight>
       </InfoContainer>
       <Introduce>
-        {props.introduction ? props.introduction : '프로필을 작성중입니다. ✍🏼'}
+        {props.introduction
+          ? `${sliceIntroduction(props.introduction)}`
+          : '프로필을 작성중입니다. ✍🏼'}
       </Introduce>
       <ProfileLink to={'/mentor-detail/' + props.intraId}>
         <Button

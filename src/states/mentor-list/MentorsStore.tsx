@@ -28,7 +28,7 @@ export interface MentorSimpleInfo {
   introduction: string;
 }
 
-class MentorStore {
+class MentorsStore {
   mentorsList: MentorsList;
 
   constructor() {
@@ -43,7 +43,7 @@ class MentorStore {
     this.mentorsList = { mentorCount: 0, mentors: [] };
   }
 
-  async MentorsInitializer(
+  async Initializer(
     category: string | undefined,
     keywords: string[],
     name: string | undefined,
@@ -73,4 +73,4 @@ class MentorStore {
   }
 }
 
-export default new MentorStore();
+export default new MentorsStore();
