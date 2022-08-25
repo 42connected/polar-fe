@@ -1,8 +1,15 @@
+import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
 import { axiosInstance } from '../axios-interface';
 
-export const getMentorDetail = async (accessToken: string) => {
+export const getMentorDetailWithParams = async (
+  accessToken: string,
+  param: any,
+) => {
   console.log('getMentorDetail');
-  axiosInstance.defaults.headers.common['Authorization'] = accessToken;
-  const response = await axiosInstance.get(`/mentor/detail`);
-  return response.data;
+  axiosInstance.defaults.headers.common[
+    'Authorization'
+  ] = `Bearer ${accessToken}`;
+
+  const { data } = await axiosInstance.get(`/mentors/${param}`);
+  return data;
 };

@@ -1,12 +1,10 @@
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Icon } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { json } from 'stream/consumers';
 import styled from 'styled-components';
 import Button from '../../components/button';
 import TimeTableMuiComponent from '../../components/mentor-detail/mui-table';
-import { getMentorDetail } from '../../context/mentor-detail/mentor-detail-axios';
+import { getMentorDetailWithParams } from '../../context/mentor-detail/mentor-detail-axios';
 import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
 import theme from '../../styles/theme';
 import { MentoringLogProps } from '../../interface/mentor-detail/mentoringLogProps';
@@ -17,6 +15,8 @@ import { CommentProps } from '../../interface/mentor-detail/comment-props.interf
 import ReportSummaryInputComponent from '../../components/report-summery-input';
 import { mentorAvailableTimeInterface } from '../../interface/mentor-detail/mentor-available-time.interface';
 import { appointmentsInterface } from '../../interface/mentor-detail/appointments.interface';
+import { getCookie } from '../../context/cookies';
+import { useParams } from 'react-router-dom';
 
 function MentorDetail() {
   const mockCadet: CadetProps[] = [
@@ -169,7 +169,7 @@ function MentorDetail() {
     },
   ];
 
-  const [mentor, setMentor] = useState<MentorDetailProps>(mockMentor);
+  const [mentor, setMentor] = useState<MentorDetailProps | any>(mockMentor);
   const [mentoringLog, setMentoringLog] =
     useState<MentoringLogProps[]>(mockMentoringLog);
   const [isActiveMentorDetail, setIsActiveMentorDetail] =
@@ -214,12 +214,25 @@ function MentorDetail() {
     );
     return appointmentsData;
   };
+  const params = useParams();
+
+  const getMentorDetailData = async (accessToken: string) => {
+    return await getMentorDetailWithParams(accessToken, params.intraId);
+  };
 
   useEffect(() => {
+    const accessToken = getCookie();
+    const mentorData = getMentorDetailData(accessToken);
     const appointmentsData = setMentorAvailableTimeData();
     setAppointments(appointmentsData);
+    if (!mentorData.tags) {
+      mentorData.tags = [];
+    }
+
+    setMentor(mentorData);
   }, []);
-  const AddHashtag = mentor.tags?.map(tag => {
+
+  const AddHashtag = mentor?.tags?.map(tag => {
     return '#' + tag + ' ';
   });
 
@@ -334,14 +347,22 @@ function MentorDetail() {
           <MenuBox>
             <div>가능 시간</div>
             <div>
-              업데이트 :{' '}
-              {`${mentor.updatedAt.getFullYear()}-${mentor.updatedAt
-                .getMonth()
-                .toString()
-                .padStart(2, '0')}-${mentor.updatedAt
-                .getDay()
-                .toString()
-                .padStart(2, '0')}`}
+              업데이트 :
+              {mentor.updatedAt
+                ? `${mentor.updatedAt.getFullYear()}-${mentor.updatedAt
+                    .getMonth()
+                    .toString()
+                    .padStart(2, '0')}-${mentor.updatedAt
+                    .getDay()
+                    .toString()
+                    .padStart(2, '0')}`
+                : `${mentor.createdAt.getFullYear()}-${mentor.createdAt
+                    .getMonth()
+                    .toString()
+                    .padStart(2, '0')}-${mentor.createdAt
+                    .getDay()
+                    .toString()
+                    .padStart(2, '0')}`}
             </div>
           </MenuBox>
           <TimTableScroll>
@@ -380,13 +401,15 @@ function MentorDetail() {
                   <UserContent>
                     <div>
                       <div>{comment?.cadet?.name}</div>
-                      <div>{`${mentor.updatedAt.getFullYear()}.${mentor.updatedAt
-                        .getMonth()
-                        .toString()
-                        .padStart(2, '0')}.${mentor.updatedAt
-                        .getDay()
-                        .toString()
-                        .padStart(2, '0')}`}</div>
+                      {mentor.updatedAt ? (
+                        <div>{`${mentor.updatedAt?.getFullYear()}.${mentor.updatedAt
+                          .getMonth()
+                          .toString()
+                          .padStart(2, '0')}.${mentor.updatedAt
+                          .getDay()
+                          .toString()
+                          .padStart(2, '0')}`}</div>
+                      ) : null}
                     </div>
                     <div>{comment?.comment}</div>
                   </UserContent>
