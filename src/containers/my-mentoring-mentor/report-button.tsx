@@ -47,7 +47,8 @@ export function ReportButton(props: ReportButtonProps) {
   useEffect(() => {
     if (
       props.mentoringLogStatus === '대기중' ||
-      props.mentoringLogStatus === '확정'
+      props.mentoringLogStatus === '확정' ||
+      props.mentoringLogStatus === '취소'
     ) {
       setStatus(REPORT_BUTTON_STATUS.WRITE_IMPOSSIBLE);
     } else if (props.mentoringLogStatus === '완료') {

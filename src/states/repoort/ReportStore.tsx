@@ -204,8 +204,10 @@ class ReportStore {
           },
         },
       )
-      .then(() => {
-        location.reload();
+      .then(res => {
+        res.data;
+        document.location.href = `/mentorings/reports/${res.data}`;
+        //location.reload();
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
