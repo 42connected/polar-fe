@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { observer } from 'mobx-react-lite';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Loading } from './components/loading';
+import MentorList from './containers/mentor-list/mentor-list';
+import MyMentoringMentor from './containers/my-mentoring-mentor/my-mentoring-mentor';
+import NotFound from './containers/not-found/not-found';
+import ReportForm from './containers/reports/report-form';
+import LoadingStore from './states/loading/LoadingStore';
+import Footer from './components/footer';
+import Header from './components/header';
+import Mainpage from './containers/mainpages/mainpage';
+import Applypage from './containers/cardetApplys/applypage';
+import ReportDetail from './containers/reportDetails/reportDetail';
 
-function App() {
+/*
+ * <Route path='/경로' element={<컴포넌트 />}
+ * ex) <Route path="*" element={<NotFound />} />
+ *
+ * {{BASE_URL}}/경로로 해당 컴포넌트 접근 가능
+ */
+const App = observer(() => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {LoadingStore.isLoding ? <Loading /> : null}
+      <Router basename={'/'}>
+        <Header />
+        <Routes>
+          /* * ADD <Route /> here */
+          <Route path="/mentor-lists/:category" element={<MentorList />} />
+          <Route
+            path="/mentorings/reports/:reportId"
+            element={<ReportForm />}
+          />
+          <Route
+            path="/mentors/mentorings/:intraId"
+            element={<MyMentoringMentor />}
+          />
+          <Route path="" element={<Mainpage />}></Route>
+          <Route path="applypage" element={<Applypage />}></Route>
+          <Route path="reportdetails" element={<ReportDetail />}></Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <Footer />
+      </Router>
+    </>
   );
-}
+});
 
 export default App;
