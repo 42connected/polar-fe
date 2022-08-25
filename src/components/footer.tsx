@@ -4,7 +4,7 @@ import github from '../assets/image/keywordIcon/develop.png';
 
 const FooterStyle = styled.footer`
   position: relative;
-  transform: translateY(100%);
+  transform: translateY(0%);
   bottom: 0;
   width: 101%;
   height: 12rem;
@@ -13,12 +13,6 @@ const FooterStyle = styled.footer`
   ${theme.font.sebangGothic};
   color: ${theme.colors.backgoundWhite};
 `;
-/*
-const Wrapper = styled.div`
-  height: auto;
-  min-height: 100%;
-`;
-*/
 const FooterBody = styled.footer`
   text-align: center;
 `;

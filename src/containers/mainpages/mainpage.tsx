@@ -26,7 +26,7 @@ const MainContainer = styled.div`
   left: 0;
   ${theme.fontSize.sizeExtraSmall};
   ${theme.font.sebangGothic};
-  height: 100%;
+  height: 80vh;
   width: 100%;
   display: grid;
   grid-template-rows: 200px 150px 200px;
@@ -41,6 +41,7 @@ const MainContainer = styled.div`
   transition: all 0.25s ease-in-out;
   border-radius: 10px;
 `;
+
 const MainContainer2 = styled.div`
   background-color: ${theme.colors.polarBackground};
   left: 0;
@@ -303,7 +304,6 @@ const Mainpage = () => {
         </div>
       )}
       ;
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
     </div>
   );
 };
