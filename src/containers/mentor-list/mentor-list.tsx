@@ -24,7 +24,7 @@ const Title = styled.div`
   ${defaultTheme.font.sebangGothic};
   display: flex;
   justify-content: center;
-  padding: 20px 0px 20px 30px;
+  padding: 20px 0px;
   margin: 50px 0px;
   font-weight: bold;
 `;
@@ -38,7 +38,7 @@ const KeywordsBox = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-  margin: 3%;
+  margin: 3% 0px;
 `;
 
 const SearchContainer = styled.div`

@@ -29,6 +29,9 @@ const MentorKeywordList = observer(() => {
     if (category) {
       KeywordStore.Initializer(category);
     }
+    return () => {
+      KeywordStore.clear();
+    };
   }, []);
 
   return (
