@@ -2,6 +2,7 @@ import axios from 'axios';
 import { action, makeObservable, observable } from 'mobx';
 import qs from 'qs';
 import { axiosInstance } from '../../context/axios-interface';
+import LoadingStore from '../loading/LoadingStore';
 
 export interface Categories {
   id: string;
@@ -28,7 +29,7 @@ export interface MentorSimpleInfo {
   introduction: string;
 }
 
-class MentorStore {
+class MentorsStore {
   mentorsList: MentorsList;
 
   constructor() {
@@ -43,7 +44,7 @@ class MentorStore {
     this.mentorsList = { mentorCount: 0, mentors: [] };
   }
 
-  async MentorsInitializer(
+  async Initializer(
     category: string | undefined,
     keywords: string[],
     name: string | undefined,
@@ -59,15 +60,20 @@ class MentorStore {
       return qs.stringify(params);
     };
     const params = { mentorName: name, keywords: keywords };
-    try {
-      const ret = await axiosInstance.get(`/categories/${category}`, {
+    LoadingStore.on();
+    await axiosInstance
+      .get(`/categories/${category}`, {
         params,
+      })
+      .then(res => {
+        this.mentorsList = res.data;
+      })
+      .catch(err => {
+        alert(`${err?.response?.data?.message}`);
+        document.location.href = '/mentor-lists/개발';
       });
-      this.mentorsList = ret.data;
-    } catch (e) {
-      console.log(e);
-    }
+    LoadingStore.off();
   }
 }
 
-export default new MentorStore();
+export default new MentorsStore();

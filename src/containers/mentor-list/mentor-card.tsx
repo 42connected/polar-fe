@@ -5,12 +5,9 @@ import defaultProfile from '../../assets/image/defaultProfileImage.png';
 
 const Container = styled.div`
   display: flex;
-  width: 80%;
-  height: 300px;
   flex-direction: column;
   align-items: center;
-  margin: 25px;
-  padding: 30px 10px;
+  padding: 50px 0px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: white;
   border-radius: 10px;
@@ -20,15 +17,14 @@ const Container = styled.div`
 
 const InfoContainer = styled.div`
   display: flex;
-  width: 100%;
-  justify-content: center;
+  width: 70%;
+  justify-content: space-around;
 `;
 
 const ProfileImg = styled.img`
   width: 90px;
   height: 90px;
   border-radius: 100%;
-  margin-right: 20px;
 `;
 
 const ProfileRight = styled.div`
@@ -40,6 +36,7 @@ const ProfileName = styled.div`
   ${defaultTheme.font.sebangGothic};
   ${defaultTheme.fontSize.sizeExtraSmall};
   margin-bottom: 5px;
+  font-weight: bold;
 `;
 
 const ProfileTag = styled.div`
@@ -58,6 +55,14 @@ const Introduce = styled.div`
   align-items: center;
   text-align: center;
   margin: 30px 0px;
+  word-break: break-all;
+`;
+
+const ButtonWrapper = styled(Link)`
+  display: flex;
+  justify-content: center;
+  width: 70%;
+  text-decoration: none;
 `;
 
 const Button = styled.button`
@@ -71,19 +76,14 @@ const Button = styled.button`
   text-decoration: none;
   height: 55px;
   color: #ffffff;
-  padding: 7% 20%;
+  width: 70%;
+  justify-content: center;
   &:hover {
     opacity: 0.8;
   }
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-`;
-
-const ProfileLink = styled(Link)`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  text-decoration: none;
+  font-weight: bold;
 `;
 
 export interface CardProps {
@@ -92,6 +92,15 @@ export interface CardProps {
   tags: string[] | null;
   profileImage: string;
   introduction: string;
+}
+
+function sliceIntroduction(str: string) {
+  const MAX_VIEW = 100;
+
+  if (str.length > MAX_VIEW) {
+    return `${str.slice(0, MAX_VIEW)}...`;
+  }
+  return str;
 }
 
 export function MentorCard(props: CardProps) {
@@ -104,9 +113,9 @@ export function MentorCard(props: CardProps) {
         <ProfileRight>
           <ProfileName>{props.name} 멘토</ProfileName>
           {props.tags ? (
-            props.tags.map((e, i) => {
+            props?.tags?.map((e, i) => {
               if (i < 3) {
-                return <ProfileTag key={i}>#{e}</ProfileTag>;
+                return <ProfileTag key={i}>#{e.slice(0, 5)}</ProfileTag>;
               }
               if (i === 3) {
                 return <ProfileTag key={i}>....</ProfileTag>;
@@ -118,15 +127,17 @@ export function MentorCard(props: CardProps) {
         </ProfileRight>
       </InfoContainer>
       <Introduce>
-        {props.introduction ? props.introduction : '프로필을 작성중입니다. ✍🏼'}
+        {props.introduction
+          ? `${sliceIntroduction(props.introduction)}`
+          : '프로필을 작성중입니다. ✍🏼'}
       </Introduce>
-      <ProfileLink to={'/mentor-detail/' + props.intraId}>
+      <ButtonWrapper to={'/mentor-detail/' + props.intraId}>
         <Button
           style={{ backgroundColor: defaultTheme.colors.polarBrightMain }}
         >
           자세히 보기
         </Button>
-      </ProfileLink>
+      </ButtonWrapper>
     </Container>
   );
 }

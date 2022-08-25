@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
-import { MentorKeyword } from './mentor-keyword';
+import { KeywordButton, MentorKeyword } from './mentor-keyword';
 import { useEffect, useState } from 'react';
 import defaultTheme from '../../styles/theme';
 import KeywordStore from '../../states/mentor-list/KeywordStore';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
-import MentorStore from '../../states/mentor-list/MentorStore';
+import MentorsStore from '../../states/mentor-list/MentorsStore';
 
 const Container = styled.div`
   display: flex;
@@ -17,91 +17,62 @@ const Container = styled.div`
 const KeywordsLine = styled.div`
   display: grid;
   width: 80%;
-  grid-template-columns: repeat(5, 1fr);
-`;
-
-const Button = styled.button`
-  ${defaultTheme.font.sebangGothic};
-  ${defaultTheme.fontSize.sizeExtraSmall};
-  display: flex;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 130px));
   justify-content: center;
-  align-items: center;
-  padding: 5px 30px;
-  width: 120px;
-  height: 50px;
-  margin: 10px 0px;
-  border-radius: 30px;
-  border: none;
-  text-align: center;
-  text-decoration: none;
-  background-color: ${defaultTheme.colors.polarSimpleMain};
-  color: #ffffff;
-  &:hover {
-    opacity: 0.8;
-  }
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
-    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 `;
 
 const MentorKeywordList = observer(() => {
   const { category } = useParams();
-  const [isExpand, setIsExpand] = useState(false);
+  const [isExpand, setIsExpand] = useState(true);
 
   useEffect(() => {
     if (category) {
-      KeywordStore.keywordsInitializer(category);
+      KeywordStore.Initializer(category);
     }
+    return () => {
+      KeywordStore.clear();
+      KeywordStore.seletedClear();
+    };
   }, []);
 
   return (
     <Container>
       <KeywordsLine>
-        <Button
+        <KeywordButton
           onClick={() => {
             KeywordStore.seletedClear();
-            MentorStore.MentorsInitializer(
+            MentorsStore.Initializer(
               category,
               KeywordStore.selected,
               undefined,
             );
           }}
+          color={defaultTheme.colors.polarBrightMain}
         >
           전체
-        </Button>
-        {KeywordStore.keywords.slice(0, 3).map((e, i) => (
-          <MentorKeyword
-            name={e.keyword}
-            key={i}
-            isClicked={KeywordStore.selected.indexOf(e.keyword) !== -1}
-          />
-        ))}
-        {KeywordStore.keywords.length > 3 ? (
-          <Button
+        </KeywordButton>
+        {KeywordStore.keywords.length > 3 && (
+          <KeywordButton
             onClick={() => {
               setIsExpand(!isExpand);
             }}
+            color={defaultTheme.colors.polarBrightMain}
           >
-            더보기
-          </Button>
-        ) : (
-          <></>
+            {isExpand ? '숨기기' : '펼치기'}
+          </KeywordButton>
         )}
-      </KeywordsLine>
-      {isExpand ? (
-        <KeywordsLine>
-          {KeywordStore.keywords
-            .slice(3, KeywordStore.keywords.length)
-            .map((e, i) => (
+        {isExpand && (
+          <>
+            {KeywordStore?.keywords?.map((e, i) => (
               <MentorKeyword
                 name={e.keyword}
                 key={i + 3}
                 isClicked={KeywordStore.selected.indexOf(e.keyword) !== -1}
               />
             ))}
-        </KeywordsLine>
-      ) : (
-        <></>
-      )}
+          </>
+        )}
+      </KeywordsLine>
     </Container>
   );
 });

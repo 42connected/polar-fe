@@ -1,20 +1,17 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import KeywordStore, { Keyword } from '../../states/mentor-list/KeywordStore';
-import MentorStore from '../../states/mentor-list/MentorStore';
+import KeywordStore from '../../states/mentor-list/KeywordStore';
+import MentorsStore from '../../states/mentor-list/MentorsStore';
 import defaultTheme from '../../styles/theme';
 
-const Container = styled.button`
+export const KeywordButton = styled.button`
   ${defaultTheme.font.sebangGothic};
   ${defaultTheme.fontSize.sizeExtraSmall};
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px 30px;
-  width: 120px;
   height: 50px;
-  margin: 10px 0px;
+  margin: 10px 5px;
   border-radius: 30px;
   border: none;
   text-align: center;
@@ -37,27 +34,19 @@ export function MentorKeyword(props: KeywordProps) {
   const { category } = useParams();
 
   return (
-    <Container
+    <KeywordButton
       onClick={() => {
         if (!props.isClicked) {
           KeywordStore.pushSelected(props.name);
-          MentorStore.MentorsInitializer(
-            category,
-            KeywordStore.selected,
-            undefined,
-          );
+          MentorsStore.Initializer(category, KeywordStore.selected, undefined);
         } else {
           KeywordStore.removeSelectedByKeyword(props.name);
-          MentorStore.MentorsInitializer(
-            category,
-            KeywordStore.selected,
-            undefined,
-          );
+          MentorsStore.Initializer(category, KeywordStore.selected, undefined);
         }
       }}
       color={props.isClicked ? defaultTheme.colors.polarSimpleMain : 'gray'}
     >
       {props.name}
-    </Container>
+    </KeywordButton>
   );
 }
