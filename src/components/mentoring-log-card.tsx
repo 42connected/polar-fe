@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { MentoringLogs } from '../containers/cadet-mentoring/cadet-mentoring';
 import defaultTheme from '../styles/theme';
 
 const Container = styled.div`
@@ -139,41 +139,50 @@ const getColor = (status: string): string => {
   }
 };
 
-export interface CardProps {
-  mentorName: string;
-  createdAt: Date;
-  meetingAt: Date[];
-  topic: string;
-  status: string;
-
-  requestTime: (Date[] | null)[];
-  content: string;
+interface CardProps {
+  log: MentoringLogs;
 }
 
+const stringToDate = (log: MentoringLogs): void => {
+  log.createdAt = new Date(log.createdAt);
+  if (log.meta.meetingAt) {
+    log.meta.meetingAt[0] = new Date(log.meta.meetingAt[0]);
+    log.meta.meetingAt[1] = new Date(log.meta.meetingAt[1]);
+  }
+  log.meta.requestTime[0] = [];
+  log.meta.requestTime[1] = log.meta.requestTime[1]
+    ? [
+        new Date(log.meta.requestTime[1][0]),
+        new Date(log.meta.requestTime[1][1]),
+      ]
+    : null;
+  log.meta.requestTime[2] = log.meta.requestTime[2]
+    ? [
+        new Date(log.meta.requestTime[2][0]),
+        new Date(log.meta.requestTime[2][1]),
+      ]
+    : null;
+};
+
 export function MentorCard(props: CardProps) {
-  const [modalVisible, setModalVisible] = useState(false);
-  const openModal = () => {
-    setModalVisible(true);
-  };
-  const closeModal = () => {
-    setModalVisible(false);
-  };
+  const log = props.log;
+  stringToDate(log);
   return (
     <Container>
       <Header>
         <LeftData>
-          <MentorName>{props.mentorName} 멘토님</MentorName>
-          <RequestTime>요청 | {formatDate(props.createdAt)}</RequestTime>
-          <MeetingAt>만남 | {getMeetingAt(props.meetingAt)}</MeetingAt>
+          <MentorName>{log.mentor.name} 멘토님</MentorName>
+          <RequestTime>요청 | {formatDate(log.createdAt)}</RequestTime>
+          <MeetingAt>만남 | {getMeetingAt(log.meta.meetingAt)}</MeetingAt>
         </LeftData>
-        <RightData style={{ backgroundColor: getColor(props.status) }}>
-          <Status>{props.status}</Status>
+        <RightData style={{ backgroundColor: getColor(log.status) }}>
+          <Status>{log.status}</Status>
         </RightData>
       </Header>
-      <Topic>{props.topic}</Topic>
+      <Topic>{log.topic}</Topic>
       <Bottom>
         <div></div>
-        <DetailsButton onClick={openModal}>전체보기 &gt;</DetailsButton>
+        <DetailsButton>전체보기 &gt;</DetailsButton>
       </Bottom>
     </Container>
   );

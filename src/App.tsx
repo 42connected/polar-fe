@@ -22,6 +22,7 @@ function App() {
       <Router basename={'/'}>
         <Routes>
           /* * ADD <Route /> here */
+          <Route path="/cadets/mentorings" element={<CadetMentornig />} />
           <Route path="/mentor-lists/:category" element={<MentorList />} />
           <Route
             path="/mentorings/reports/:reportId"
@@ -35,7 +36,6 @@ function App() {
           <Route path="applypage" element={<Applypage />}></Route>
           <Route path="reportdetails" element={<ReportDetail />}></Route>
           <Route path="*" element={<NotFound />} />
-          <Route path="/cadets/mentorings" element={<CadetMentornig />} />
         </Routes>
         <Header />
         <Footer />

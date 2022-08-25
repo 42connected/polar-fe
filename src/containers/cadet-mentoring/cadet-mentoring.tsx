@@ -1,19 +1,9 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import ReportStore from '../../states/repoort/ReportStore';
 import { observer } from 'mobx-react-lite';
-import AuthStore from '../../states/auth/AuthStore';
 import { MentorCard } from '../../components/mentoring-log-card';
-import axios from 'axios';
 import { axiosInstance } from '../../context/axios-interface';
 import { Header } from './header';
-import { Modal } from '../../components/modal';
-
-export const REPORT_STATE = {
-  EDIT_POSSIBLE: '작성중',
-  EDIT_IMPOSSIBLE: '작성완료',
-};
 
 const NoneDrag = styled.div`
   display: flex;
@@ -37,116 +27,56 @@ const MentorCards = styled.div`
   margin: 20px 0;
 `;
 
+export interface MentoringLogs {
+  id: string;
+  createdAt: Date;
+  mentor: {
+    intraId: string;
+    name: string;
+  };
+  topic: string;
+  status: string;
+  meta: {
+    isCommon: boolean;
+    content: string;
+    requestTime: (Date[] | null)[];
+    meetingAt: Date[];
+    rejectMessage: string;
+  };
+}
+
 const CadetMentornig = observer(() => {
-  const { reportId } = useParams<string>();
-  //   let mentorCards;
-  axiosInstance
-    .get('/cadets/mentorings')
-    .then(res => {
-      console.log('asdf', res);
-      // mentorCards = logs.map(log => (
-      // 	<MentorCard
-      // 	  mentorName={log.mentorName}
-      // 	  createdAt={log.createdAt}
-      // 	  meetingAt={log.meetingAt}
-      // 	  topic={log.topic}
-      // 	></MentorCard>
-      //   ));
-    })
-    .catch(err => console.log(err));
-  const logs = [
-    {
-      mentorName: '김나경',
-      createdAt: new Date('2022-08-24T05:56:07.188Z'),
-      meetingAt: [
-        new Date('2022-08-18T10:00:00.000Z'),
-        new Date('2022-08-18T11:30:00.000Z'),
-      ],
-      status: '취소',
-      requestTime: [
-        [
-          new Date('2022-08-18T10:00:00.000Z'),
-          new Date('2022-08-18T11:30:00.000Z'),
-        ],
-        null,
-        null,
-      ],
-      content: '내용임',
-      topic:
-        '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
-    },
-    {
-      mentorName: '김나경',
-      createdAt: new Date('2022-08-24T05:56:07.188Z'),
-      meetingAt: [
-        new Date('2022-08-18T10:00:00.000Z'),
-        new Date('2022-08-18T11:30:00.000Z'),
-      ],
-      status: '취소',
-      requestTime: [
-        [
-          new Date('2022-08-18T10:00:00.000Z'),
-          new Date('2022-08-18T11:30:00.000Z'),
-        ],
-        null,
-        null,
-      ],
-      content: '내용임',
-      topic:
-        '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
-    },
-    {
-      mentorName: '김나경',
-      createdAt: new Date('2022-08-24T05:56:07.188Z'),
-      meetingAt: [
-        new Date('2022-08-18T10:00:00.000Z'),
-        new Date('2022-08-18T11:30:00.000Z'),
-      ],
-      status: '취소',
-      requestTime: [
-        [
-          new Date('2022-08-18T10:00:00.000Z'),
-          new Date('2022-08-18T11:30:00.000Z'),
-        ],
-        null,
-        null,
-      ],
-      content: '내용임',
-      topic:
-        '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
-    },
-  ];
+  const [logs, setLogs] = useState([]);
 
-  const mentorCards = logs.map(log => (
-    <MentorCard
-      mentorName={log.mentorName}
-      createdAt={log.createdAt}
-      meetingAt={log.meetingAt}
-      topic={log.topic}
-      status={log.status}
-      requestTime={log.requestTime}
-      content={log.content}
-    />
-  ));
+  const getKeywords = async () => {
+    try {
+      console.log('useEffect');
+      const save = await axiosInstance.get('/cadets/mentorings', {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NjU5NzNiMy1hMjBmLTQ4NDAtOGY2Yy02NTAxOTAwNTgyNTgiLCJ1c2VybmFtZSI6Im5ha2tpbSIsInJvbGUiOiJjYWRldCIsImlhdCI6MTY2MTM5OTU0OCwiZXhwIjoxNjYxNDg1OTQ4fQ.ZDyEoejOtcUFvTf6VY7F20FWOw-Ld5UQZq0lkXreJlE`,
+        },
+      });
+      console.log(save.data);
+      setLogs(save.data.mentorings);
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  };
 
-  // if (mentorCards.length % 2 === 1) {
-  //   mentorCards.push(<div style={{ width: 430, margin: 30, height: 0 }}></div>);
-  // }
-
-  //   let [logs] = useState(null);
   useEffect(() => {
-    axios({
-      url: 'https://polar42-be-dev.herokuapp.com/api/v1/cadets/mentorings',
-      method: 'get',
-    }).then(res => console.log(res));
+    getKeywords();
   }, []);
 
   return (
     <>
       <NoneDrag>
         <Header url="https://asdfasdfasdfwqlefhkjashdf,mabskjhfgakljsfbgkjadhbfaehrfkhearblidgb;k"></Header>
-        <MentorCards>{mentorCards}</MentorCards>
-        <Modal visible={true} child={<div>hi</div>}></Modal>
+        <MentorCards>
+          {logs.map(log => {
+            return <MentorCard log={log}></MentorCard>;
+          })}
+        </MentorCards>
       </NoneDrag>
     </>
   );
