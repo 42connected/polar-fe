@@ -7,6 +7,15 @@ import addButtonImage from '../../assets/signup/addButton.png';
 import { useRef, useState } from 'react';
 import Columns from '../../components/signup/getColumns';
 import React from 'react';
+import LoadingStore from '../../states/loading/LoadingStore';
+import { Link, Navigate } from 'react-router-dom';
+
+// 로그인 페이지들 외부랑 리다이렉션 연결하기 -> 제출 성공 팝업창 수정
+// 이메일 등록됐을 떄 처리하기
+// Css처리
+// 코드 리팩토링
+
+// 상태관리와 리다이렉션 경로 수정
 
 export const Containers = styled.div`
   display: grid;
@@ -238,6 +247,7 @@ enum AvailableTimeError {
 }
 
 const SignUpMentor = () => {
+  const [isRedirection, setIsRedirection] = useState<boolean>(false);
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [slackId, setSlackId] = useState<string>('');
@@ -295,6 +305,19 @@ const SignUpMentor = () => {
   const onSlackChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSlackId(event.target.value);
   };
+
+  async function validateRows(rows: IRows[]): Promise<boolean> {
+    const invaild_data = -1;
+
+    for (let i = 0; i < rows.length; i++) {
+      for (let j = 0; j < rows[i].date.length; j++) {
+        if (rows[i].date[j] === invaild_data) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 
   async function validateAvailableTime(
     time: IAvailableDate[][],
@@ -370,7 +393,7 @@ const SignUpMentor = () => {
     return true;
   }
 
-  async function joinMentor(rows: IRows[]) {
+  async function joinMentorServer(rows: IRows[]) {
     if (!name) {
       alert('이름을 입력하세요');
       return;
@@ -389,8 +412,16 @@ const SignUpMentor = () => {
     console.log(name);
     console.log(isCodeSucess);
     console.log('rows!');
+    console.log(rows);
 
-    //-1일 때 상태점검
+    const maxLoadingTime = 3;
+    LoadingStore.on(maxLoadingTime);
+
+    if (!(await validateRows(rows))) {
+      alert('가능시간에 빈 칸이 있습니다');
+      LoadingStore.off();
+      return;
+    }
 
     const availableTime: IAvailableDate[][] = await getAvailableTime(rows);
     console.log(availableTime);
@@ -403,9 +434,11 @@ const SignUpMentor = () => {
 
     if (resultVaildation === AvailableTimeError.INPUT_ERROR) {
       alert('가능시간은 시작 시간으로부터 1시간 이상이어야 합니다');
+      LoadingStore.off();
       return;
     } else if (resultVaildation === AvailableTimeError.OVERLAP_ERROR) {
       alert('선택하신 가능시간 간에 중복이 있습니다');
+      LoadingStore.off();
       return;
     }
 
@@ -414,7 +447,6 @@ const SignUpMentor = () => {
         'Authorization'
       ] = `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRyYUlkIjoibS1lbmdlbmciLCJyb2xlIjoibWVudG9yIiwiaWF0IjoxNjYxNDA0NTQ4LCJleHAiOjE2NjE0OTA5NDh9.QFc0Vd_W9kT-CUfCzUanwEEcFUMgb9jss3Mde0MqX9A`;
 
-      //409
       const response = await axios.patch(
         'https://polar42-be-dev.herokuapp.com/api/v1/mentors/join',
         {
@@ -424,12 +456,21 @@ const SignUpMentor = () => {
           isActive: checked,
         },
       );
-      console.log(response);
+
+      if (response.status === 200) {
+        //alert('제출에 성공하셨습니다');
+
+        setIsRedirection(true);
+      } else {
+        alert('제출에 실패하셨습니다');
+      }
     } catch (err) {
       console.error(err);
+    } finally {
+      LoadingStore.off();
     }
 
-    //상태코드에 따라서 팝업 띄우기
+    //MentorStore. ==> 이메일 인증이 완료된 경우 처리하기
   }
 
   interface IAvailableDate {
@@ -469,6 +510,9 @@ const SignUpMentor = () => {
     setIsMailFail(false);
 
     try {
+      const maxLoadingTime = 2;
+      LoadingStore.on(maxLoadingTime);
+
       axios.defaults.headers.common[
         'Authorization'
       ] = `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRyYUlkIjoibS1lbmdlbmciLCJyb2xlIjoibWVudG9yIiwiaWF0IjoxNjYxNDA0NTQ4LCJleHAiOjE2NjE0OTA5NDh9.QFc0Vd_W9kT-CUfCzUanwEEcFUMgb9jss3Mde0MqX9A`;
@@ -487,6 +531,8 @@ const SignUpMentor = () => {
       }
     } catch (err) {
       setIsMailFail(true);
+    } finally {
+      LoadingStore.off();
     }
   }
 
@@ -500,11 +546,13 @@ const SignUpMentor = () => {
     setIsCodeFail(false);
 
     try {
+      const maxLoadingTime = 2;
+      LoadingStore.on(maxLoadingTime);
+
       axios.defaults.headers.common[
         'Authorization'
       ] = `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRyYUlkIjoibS1lbmdlbmciLCJyb2xlIjoibWVudG9yIiwiaWF0IjoxNjYxNDA0NTQ4LCJleHAiOjE2NjE0OTA5NDh9.QFc0Vd_W9kT-CUfCzUanwEEcFUMgb9jss3Mde0MqX9A`;
 
-      //409
       const response = await axios.post(
         `https://polar42-be-dev.herokuapp.com/api/v1/email-verifications/${code}`,
         {
@@ -521,6 +569,8 @@ const SignUpMentor = () => {
       }
     } catch (err) {
       setIsCodeFail(true);
+    } finally {
+      LoadingStore.off();
     }
   }
 
@@ -611,9 +661,10 @@ const SignUpMentor = () => {
             marginLeft: '25rem',
             marginTop: '10rem',
           }}
-          onClick={() => joinMentor(rows)}
+          onClick={() => joinMentorServer(rows)}
         >
           제출
+          {isRedirection && <Navigate to="/" />}
         </Button>
       </div>
     </Containers>

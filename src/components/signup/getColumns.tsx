@@ -98,7 +98,6 @@ function Columns(props: ColumnsProps) {
         alt="delete-button-image"
         onClick={() => props.onRemove(props.id)}
       />
-      <div>{props.id}</div>
     </TimeTableContainer>
   );
 }
