@@ -31,6 +31,10 @@ class MentorStore {
     makeObservable(this, {
       mentor: observable,
       setEmail: action.bound,
+      verifyEmail: action.bound,
+      changeEmail: action.bound,
+      clearMentor: action.bound,
+      getMentor: action.bound,
     });
     this.mentor = { id: '', intraId: '', email: '' };
   }
@@ -81,6 +85,10 @@ class MentorStore {
         location.reload();
       });
     LoadingStore.off();
+  }
+
+  clearMentor() {
+    this.mentor = { id: '', intraId: '', email: '' };
   }
 
   async getMentor(intraId: string, token: string) {

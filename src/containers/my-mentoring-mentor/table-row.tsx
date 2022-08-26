@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { MentoringLogs } from '../../states/my-mentoring-mentor/MentorLogStore';
 import defaultTheme from '../../styles/theme';
 import {
   getDayToString,
@@ -80,6 +81,9 @@ export interface TableRowProps {
   };
   createdAt: Date;
   meetingAt: Date[];
+  log: MentoringLogs;
+  setApplyModal: (b: boolean) => void;
+  setLog: (l: MentoringLogs) => void;
 }
 
 export function TableRow(props: TableRowProps) {
@@ -87,7 +91,14 @@ export function TableRow(props: TableRowProps) {
     <TableColumnLine>
       <TableColumnDate>{getDayToString(props.createdAt)}</TableColumnDate>
       <TableColumnUser>{props.user}</TableColumnUser>
-      <TableColumnTopic>{props.topic}</TableColumnTopic>
+      <TableColumnTopic
+        onClick={() => {
+          props.setLog(props.log);
+          props.setApplyModal(true);
+        }}
+      >
+        {props.topic}
+      </TableColumnTopic>
       <TableColumnTime>
         <Time>{getDayToString(props.meetingAt[START_TIME])}</Time>
         <TimeWhile>{getTimeToString(props.meetingAt)}</TimeWhile>

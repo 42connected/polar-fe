@@ -26,9 +26,10 @@ export function StatusButton(props: ReportButtonProps) {
   const [underLine, setUnderLine] = useState<boolean>(false);
 
   useEffect(() => {
-    if (props.status === MENTORING_STATUS.WAIT) {
-      setUnderLine(true);
-    } else if (props.status === MENTORING_STATUS.CONFIRM) {
+    if (
+      props.status === MENTORING_STATUS.WAIT ||
+      props.status === MENTORING_STATUS.CONFIRM
+    ) {
       setUnderLine(true);
     }
   }, []);
