@@ -14,7 +14,13 @@ import AuthStore from '../../states/auth/AuthStore';
 import { Email } from './email';
 import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
 import { ApplyModal } from './modal/modal';
-import { Pagination, PaginationItem } from '@mui/material';
+import {
+  createTheme,
+  Pagination,
+  PaginationItem,
+  ThemeProvider,
+} from '@mui/material';
+import theme from '../../styles/theme';
 
 const NoneDrag = styled.div`
   width: 100%;
@@ -63,6 +69,22 @@ const PaginationContainer = styled.div`
   background-color: white;
   padding: 20px 0px;
 `;
+
+const muiTheme = createTheme({
+  palette: {
+    primary: {
+      main: theme.colors.polarSimpleMain,
+    },
+    secondary: {
+      main: theme.colors.polarBrightMain,
+    },
+  },
+  typography: {
+    fontFamily: theme.font.sebangGothic,
+    fontSize: 20,
+    fontWeightLight: 700,
+  },
+});
 
 const INITIAL_PAGE = '1';
 
@@ -140,18 +162,21 @@ const MyMentoringMentor = observer(() => {
         </Container>
       </Bottom>
       <PaginationContainer>
-        <Pagination
-          page={parseInt(pageNumber || INITIAL_PAGE)}
-          count={Math.trunc(MentorLogStore.total / LOGS_PER_PAGE) + 1}
-          renderItem={item => (
-            <PaginationItem
-              component={Link}
-              to={`/mentors/mentorings/${intraId}${`?page=${item.page}`}`}
-              {...item}
-            />
-          )}
-          size="large"
-        />
+        <ThemeProvider theme={muiTheme}>
+          <Pagination
+            page={parseInt(pageNumber || INITIAL_PAGE)}
+            count={Math.trunc(MentorLogStore.total / LOGS_PER_PAGE) + 1}
+            renderItem={item => (
+              <PaginationItem
+                component={Link}
+                to={`/mentors/mentorings/${intraId}${`?page=${item.page}`}`}
+                {...item}
+              />
+            )}
+            size="large"
+            color="primary"
+          />
+        </ThemeProvider>
       </PaginationContainer>
     </NoneDrag>
   );
