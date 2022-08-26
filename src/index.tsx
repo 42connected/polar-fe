@@ -5,6 +5,7 @@ import './assets/font/font.css';
 import { ThemeProvider } from 'styled-components';
 import defaultTheme from './styles/theme';
 import App from './App';
+import './index.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

@@ -83,6 +83,9 @@ export const makeTimePair = (time: number) => {
 export const getDayToString = (meetingAt: Date): string => {
   const date: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const startTime: Date = new Date(meetingAt);
+  if (startTime.toString().indexOf('Invalid Date') > -1) {
+    return '-';
+  }
 
   return `${startTime.getFullYear()}.${startTime.getMonth()}.${startTime.getDate()} (${
     date[startTime.getDay()]
@@ -92,6 +95,13 @@ export const getDayToString = (meetingAt: Date): string => {
 export const getTimeToString = (meetingAt: Date[]): string => {
   const startTime: Date = new Date(meetingAt[START_TIME]);
   const endTime: Date = new Date(meetingAt[END_TIME]);
+
+  if (
+    startTime.toString().indexOf('Invalid Date') > -1 ||
+    endTime.toString().indexOf('Invalid Date') > -1
+  ) {
+    return '';
+  }
 
   return `${startTime.getHours()}:${makeTimePair(
     startTime.getMinutes(),

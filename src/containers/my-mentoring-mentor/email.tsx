@@ -12,7 +12,6 @@ const Container = styled.div`
   width: 100%;
   justify-content: center;
   align-items: left;
-  height: 100px;
 `;
 
 const Title = styled.div`
