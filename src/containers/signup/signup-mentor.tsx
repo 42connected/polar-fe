@@ -11,10 +11,12 @@ import LoadingStore from '../../states/loading/LoadingStore';
 import { Navigate } from 'react-router-dom';
 import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
 import AuthStore from '../../states/auth/AuthStore';
+import theme from '../../styles/theme';
 
 // 코드 쪼개기
 // Css처리
-// console log 삭제, 토큰 삭제 -> 토큰 얻어오는거 하드 코딩에서 수정
+// + 버튼 여러개 눌렀을 때 로직 재확인
+//  -> 지금 가능 시간이 많아질수록 여러 번 클릭해야 함
 // 상태관리와 리다이렉션 경로 수정
 // 홈에서 뒤로가기했을 때 sign에 들어갈 수 있는지 체크 -> 지금은 가능
 // cadets/join
@@ -24,15 +26,31 @@ export const Containers = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
-  gird-gap: 2000px;
+  gird-gap: 20px;
   background: white;
+`;
+
+export const RequiredWrapper = styled.div`
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 100px;
+  padding-top: 4rem;
+`;
+
+export const OptionWrapper = styled.div`
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 100px;
+  margin-right: 5rem;
 `;
 
 export const HeadLetters = styled.h1`
   ${defaultTheme.font.sebangGothic};
   font-size: 2.5rem;
   font-weight: 400;
-  padding-left: 100px;
+  padding-left: 10rem;
   padding-bottom: 20px;
   border-bottom: 1px solid;
 `;
@@ -46,7 +64,6 @@ const NameTitle = styled.h2`
   font-weight: 400;
   font-size: 2rem;
   ${defaultTheme.font.sebangGothic};
-  display: flex;
   padding-left: 20px;
   padding-bottom: 5px;
 `;
@@ -58,14 +75,6 @@ export const NameInput = styled.input`
   align: center;
   margin-left: 20px;
   margin-bottom: 10px;
-`;
-
-const EamilTitle = styled.h2`
-  font-size: ${defaultTheme.fontFrame.titleSmall};
-  font: ${defaultTheme.font.sebangGothic};
-  display: flex;
-  padding-left: 20px;
-  padding-bottom: 5px;
 `;
 
 export const EmailInput = styled.input`
@@ -88,20 +97,12 @@ export const CertificationSendingButton = styled.button`
   cursor: pointer;
   font-size: 27px;
   border-radius: 20px;
-  position: absolute;
+  position: absolute
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
   line-height: 18px;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-`;
-
-const CertificationCodeTitle = styled.h3`
-  font-size: ${defaultTheme.fontFrame.titleSmall};
-  font: ${defaultTheme.font.sebangGothic};
-  display: flex;
-  padding-left: 20px;
-  padding-bottom: 5px;
 `;
 
 const CertificationCodeTitleInput = styled.input`
@@ -133,7 +134,6 @@ const CertificationSucessButton = styled.button`
 `;
 
 const Button = styled.button`
-  display: flex;
   justify-content: center;
   margin-left: 70px;
   width: 138.19px;
@@ -145,7 +145,6 @@ const Button = styled.button`
   cursor: pointer;
   font-size: 27px;
   border-radius: 20px;
-  position: absolute;
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
@@ -155,6 +154,7 @@ const Button = styled.button`
 
 export const TimeTableContainer = styled.ul`
   display: grid;
+  justify-content: right;
   grid-template-columns: 18% 8rem 8rem 5% 8rem 8rem 3%;
   grid-template-rows: 4rem;
   grid-gap: 4px;
@@ -204,9 +204,11 @@ export const BodyBigFont = styled.p`
 export const ToggleContainer = styled.p`
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 1px;
   gap: 5rem;
-  margin-right: 8rem;
-  margin-bottom: 4rem;
+  margin-top: 0rem;
+  padding-top; 0rem;
 `;
 
 const BodySmallFont = styled.p`
@@ -268,10 +270,10 @@ const SignUpMentor = () => {
     },
   ]);
 
-  useEffect(() => {
-    AuthStore.Login();
-    MentorStore.getMentor(AuthStore.user.intraId, AuthStore.jwt);
-  }, []);
+  // useEffect(() => {
+  //   AuthStore.Login();
+  //   MentorStore.getMentor(AuthStore.user.intraId, AuthStore.jwt);
+  // }, []);
 
   const nextId = useRef(1);
 
@@ -576,7 +578,7 @@ const SignUpMentor = () => {
 
   return (
     <Containers>
-      <div style={{ paddingBottom: '100px' }}>
+      <RequiredWrapper>
         <HeadLetters>필수 정보 입력</HeadLetters>
         <SingupImage src={singupImage} alt="singup-image" />
 
@@ -629,20 +631,29 @@ const SignUpMentor = () => {
             </div>
           )}
         </>
-      </div>
-      <div>
-        <HeadLetters>멘토링 가능 시간</HeadLetters>
+      </RequiredWrapper>
+      <OptionWrapper>
+        <HeadLetters style={{ paddingLeft: '17rem' }}>
+          멘토링 가능 시간
+        </HeadLetters>
         <ToggleContainer>
           <NameTitle>멘토링 가능/불가</NameTitle>
           <Switch
             checked={checked}
             onChange={handleChange}
             inputProps={{ 'aria-label': 'controlled' }}
-            sx={{ mt: 1.4, mr: -6 }}
+            sx={{ mb: 1, mr: -6 }}
           />
-          <BodySmallFont style={{ paddingTop: '4px' }}>가능</BodySmallFont>
+          <BodySmallFont style={{ paddingBottom: '6px' }}>가능</BodySmallFont>
         </ToggleContainer>
-        <NameTitle style={{ paddingLeft: '1rem', marginBottom: '0rem' }}>
+        <NameTitle
+          style={{
+            paddingLeft: '1rem',
+            marginBottom: '0rem',
+            height: '0rem',
+            paddingBottom: '0rem',
+          }}
+        >
           시간
         </NameTitle>
         <TimeTableContainer style={{ marginTop: '0rem' }}>
@@ -671,7 +682,7 @@ const SignUpMentor = () => {
         />
         <Button
           style={{
-            paddingBottom: '0px',
+            marginBottom: '5rem',
             marginLeft: '25rem',
             marginTop: '10rem',
           }}
@@ -680,7 +691,7 @@ const SignUpMentor = () => {
           제출
           {isRedirection && <Navigate to="/" />}
         </Button>
-      </div>
+      </OptionWrapper>
     </Containers>
   );
 };
