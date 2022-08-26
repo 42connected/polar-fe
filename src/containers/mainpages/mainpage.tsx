@@ -45,7 +45,7 @@ const MainContainer2 = styled.div`
   left: 0;
   ${theme.fontSize.sizeSmall};
   ${theme.font.sebangGothic};
-  height: 120vh;
+  height: 130vh;
   width: 100%;
   display: grid;
   grid-template-rows: 500px 200px 150px 150px;
@@ -58,7 +58,6 @@ const MainContainer2 = styled.div`
   justify-content: center;
   transition: all 0.25s ease-in-out;
   border-radius: 10px;
-  ${theme.fontSize.sizeMedium};
 `;
 
 const MainImageStyle = styled.div`
@@ -79,7 +78,30 @@ const MainImageStyle = styled.div`
   transition: all 0.25s ease-in-out;
 `;
 
+const MainImageStyle2 = styled.div`
+  box-sizing: border-box;
+  background-color: ${theme.colors.backgoundWhite};
+  border-radius: 20%;
+  height: 40rem;
+  width: 45rem;
+  grid-auto-flow: dense;
+  margin-top: 10rem;
+  padding-top: 10rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  grid-area: img;
+  display: grid;
+  grid-template-rows: 200px 100px;
+  transition: all 0.25s ease-in-out;
+`;
+
 const ImageGrid1 = styled.div`
+  line-height: 4rem;
+  grid-row-start: 1;
+`;
+
+const MoImageGrid1 = styled.div`
   line-height: 4rem;
   grid-row-start: 1;
 `;
@@ -97,8 +119,18 @@ const ImageStyle = styled.span`
   display: flex;
 `;
 
+const MoImageStyle = styled.span`
+  display: flex;
+  font-size: 1rem;
+  margin-top: 2rem;
+`;
+
 const ImageStyle2 = styled.span`
   margin-left: 1rem;
+`;
+
+const MoImageStyle2 = styled.span`
+  margin-left: 0.5rem;
 `;
 
 const ClickedSwapButton = styled.button`
@@ -130,11 +162,30 @@ const TextUnder = styled.div`
   ${theme.fontSize.sizeExtraMedium};
 `;
 
+const TextUnder2 = styled.div`
+  box-sizing: border-box;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid ${theme.colors.polarSimpleMain};
+  text-underline-offset: 1rem;
+  ${theme.fontSize.sizeExtraSmall};
+`;
+
 const TitleStyle = styled.div`
   box-sizing: border-box;
   border-bottom: 1px solid black;
   font-size: 3.5rem;
   margin-top: 17rem;
+  padding-bottom: 5.5rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  grid-area: title;
+`;
+
+const TitleStyle2 = styled.div`
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  font-size: 3.5rem;
   padding-bottom: 5.5rem;
   align-items: center;
   justify-content: center;
@@ -201,9 +252,14 @@ const Mainpage = () => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const [isMobile, setIsMobile] = useState(false);
   const [text, setText] = useState(
     <div>
-      <TextUnder>이용안내 - 카뎃</TextUnder>
+      {isMobile ? (
+        <TextUnder2>이용안내 - 카뎃</TextUnder2>
+      ) : (
+        <TextUnder>이용안내 - 카뎃</TextUnder>
+      )}
       <br />
       1.멘토의 멘토링 상태 확인하고 멘토링 신청 버튼 클릭
       <br />
@@ -217,7 +273,6 @@ const Mainpage = () => {
     </div>,
   );
   const [isleft, setIsLeft] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
   const textSwap1 = () => {
     return (
       setText(
@@ -288,7 +343,7 @@ const Mainpage = () => {
         <div>
           <MainContainer>
             <MainImageStyle>
-              <ImageGrid1>{text}</ImageGrid1>
+              <MoImageGrid1>{text}</MoImageGrid1>
               <ImageGrid2>
                 {isleft ? (
                   <div>
@@ -376,32 +431,32 @@ const Mainpage = () => {
       ) : (
         <div>
           <MainContainer2>
-            <MainImageStyle>
+            <MainImageStyle2>
               <ImageGrid1>{text}</ImageGrid1>
               <ImageGrid2>
                 {isleft ? (
                   <div>
-                    <ImageStyle>
+                    <MoImageStyle>
                       <ClickedSwapButton
                         onClick={textSwap1}
                       ></ClickedSwapButton>
-                      <ImageStyle2></ImageStyle2>
+                      <MoImageStyle2></MoImageStyle2>
                       <SwapButton onClick={textSwap2}></SwapButton>
-                    </ImageStyle>
+                    </MoImageStyle>
                   </div>
                 ) : (
                   <div>
-                    <ImageStyle>
+                    <MoImageStyle>
                       <SwapButton onClick={textSwap1}></SwapButton>
-                      <ImageStyle2></ImageStyle2>
+                      <MoImageStyle2></MoImageStyle2>
                       <ClickedSwapButton
                         onClick={textSwap2}
                       ></ClickedSwapButton>
-                    </ImageStyle>
+                    </MoImageStyle>
                   </div>
                 )}
               </ImageGrid2>
-            </MainImageStyle>
+            </MainImageStyle2>
             <TitleStyle>
               나에게 꼭 맞는 <MainBlueBody> 멘토 </MainBlueBody> 선택하기
             </TitleStyle>

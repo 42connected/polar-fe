@@ -9,7 +9,7 @@ const HeaderStyle = styled.header`
   transform: translateY(0%);
   top: 0;
   z-index: 10;
-  width: 101%;
+  width: 100%;
   height: 5rem;
   padding-top: 2rem;
   background-color: ${theme.colors.backgoundWhite};
