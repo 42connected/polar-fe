@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import theme from '../../styles/theme';
 //import img from '../../assets/image/logo/phone.png';
-import { keywordsPro } from './mainpage-getkeyword';
+import { keywordsPro } from './mainPageGetkeyword';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '../../context/axios-interface';
 import { Link } from 'react-router-dom';
@@ -63,7 +63,7 @@ const MainContainer2 = styled.div`
 const MainImageStyle = styled.div`
   box-sizing: border-box;
   background-color: ${theme.colors.backgoundWhite};
-  border-radius: 20%;
+  border-radius: 10%;
   height: 40rem;
   width: 60rem;
   grid-auto-flow: dense;
@@ -81,7 +81,7 @@ const MainImageStyle = styled.div`
 const MainImageStyle2 = styled.div`
   box-sizing: border-box;
   background-color: ${theme.colors.backgoundWhite};
-  border-radius: 20%;
+  border-radius: 10%;
   height: 40rem;
   width: 45rem;
   grid-auto-flow: dense;
@@ -245,7 +245,7 @@ const IconButton = styled.button`
   border: none;
 `;
 
-const Mainpage = () => {
+const MainPage = () => {
   const [isLoading, setLoading] = useState(false);
   const [keyWords, setKeywords] = useState<keywordsPro[] | null>(null);
   const [windowSize, setWindowSize] = useState({
@@ -382,7 +382,7 @@ const Mainpage = () => {
                 ];
                 if (index < 4)
                   return (
-                    <div>
+                    <div key={index}>
                       <Link to={link}>
                         <IconImageStyle colStart={index} rowStart={1}>
                           <IconButton>
@@ -408,7 +408,7 @@ const Mainpage = () => {
                 ];
                 if (index >= 4)
                   return (
-                    <div>
+                    <div key={index}>
                       <Link to={link}>
                         <IconImageStyle colStart={index - 4} rowStart={1}>
                           <IconButton>
@@ -471,7 +471,7 @@ const Mainpage = () => {
                 ];
                 if (index < 4)
                   return (
-                    <div>
+                    <div key={index}>
                       <Link to={link}>
                         <IconImageStyle colStart={index} rowStart={1}>
                           <IconButton>
@@ -497,7 +497,7 @@ const Mainpage = () => {
                 ];
                 if (index >= 4)
                   return (
-                    <div>
+                    <div key={index}>
                       <Link to={link}>
                         <IconImageStyle colStart={index - 4} rowStart={1}>
                           <IconButton>
@@ -523,4 +523,4 @@ const Mainpage = () => {
   );
 };
 
-export default Mainpage;
+export default MainPage;
