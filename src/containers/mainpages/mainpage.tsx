@@ -24,7 +24,7 @@ const MainContainer = styled.div`
   left: 0;
   ${theme.fontSize.sizeExtraSmall};
   ${theme.font.sebangGothic};
-  height: 80vh;
+  height: 74vh;
   width: 100%;
   display: grid;
   grid-template-rows: 200px 150px 200px;
@@ -130,16 +130,12 @@ const TextUnder = styled.div`
   ${theme.fontSize.sizeExtraMedium};
 `;
 
-const TextStyle = styled.div`
-  margin-top: 1rem;
-  ${theme.fontSize.sizeMedium};
-`;
-
 const TitleStyle = styled.div`
   box-sizing: border-box;
   border-bottom: 1px solid black;
   font-size: 3.5rem;
-  margin-top: 15rem;
+  margin-top: 17rem;
+  padding-bottom: 5.5rem;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -168,6 +164,7 @@ const IconImageStyle = styled.div<{ colStart: number; rowStart: number }>`
   justify-content: center;
   align-items: center;
   font-size: 2.3rem;
+  margin-top: 2rem;
 `;
 const KeywordStyle = styled.div<{ colStart: number; rowStart: number }>`
   display: flex;
