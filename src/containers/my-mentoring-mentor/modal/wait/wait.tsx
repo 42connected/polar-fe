@@ -43,12 +43,18 @@ export interface WaitProps {
   isRejectSetter: (p: boolean) => void;
   rejectReason: string;
   rejectReasonSetter: (input: string) => void;
+  selectedTimeIndex: string;
+  setSelectedTimeIndex: (s: string) => void;
 }
 
 export function Wait(props: WaitProps) {
   return (
     <Container>
-      {selectTime(props?.requestTime)}
+      {selectTime(
+        props?.requestTime,
+        props?.selectedTimeIndex,
+        props?.setSelectedTimeIndex,
+      )}
       <ModalInfoElement
         title={'멘토링 구분'}
         titleColor={'black'}

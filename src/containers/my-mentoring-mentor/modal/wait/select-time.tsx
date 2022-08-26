@@ -29,29 +29,29 @@ export const Container = styled.div`
   ${defaultTheme.fontSize.sizeSmall};
 `;
 
-export const selectTime = (requestTime: Date[][]) => {
+export const selectTime = (
+  requestTime: Date[][],
+  selectedTimeIndex: string,
+  setSelectedTimeIndex: (s: string) => void,
+) => {
   if (!requestTime) {
     return;
   }
-  const [time, setTime] = useState<string>('');
 
   const handleChange = (event: SelectChangeEvent) => {
-    setTime(event.target.value);
+    setSelectedTimeIndex(event.target.value);
   };
 
   const times = requestTime
     .filter(e => e?.length > 0)
     .map(e => `${getDayToString(e[0])} ${getTimeToString(e)}`);
 
-  console.log(requestTime);
-  console.log('time@@@@@@@@@@@@@@@@', times);
-
   return (
     <Container>
       <Title>멘토링 시간</Title>
       {times?.length !== 0 ? (
         <FormControl variant="standard" sx={{ minWidth: 200 }}>
-          <Select value={time} onChange={handleChange}>
+          <Select value={selectedTimeIndex} onChange={handleChange}>
             {times
               .filter(e => e)
               .map((e, i) => (

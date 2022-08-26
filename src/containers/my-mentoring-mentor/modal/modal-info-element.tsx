@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
 import defaultTheme from '../../../styles/theme';
 
 export const Title = styled.div`

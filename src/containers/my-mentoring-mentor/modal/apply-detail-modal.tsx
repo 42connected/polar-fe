@@ -38,7 +38,6 @@ const StatusBox = styled.div`
   padding: 0px 5px;
   margin-left: 20px;
   height: min-content;
-  background-color: ${defaultTheme.colors.polarBrightMain};
   border-radius: 10px;
 `;
 
@@ -68,8 +67,6 @@ const XButton = styled.div`
   margin-top: 20px;
 `;
 
-//const ConfirmTime = () => {};
-
 export interface ApplyDetailModalProps {
   id: string;
   status: string;
@@ -80,12 +77,10 @@ export interface ApplyDetailModalProps {
   button1: {
     content: string;
     bg: string;
-    //do: () => void;
   };
   button2: {
     content: string;
     bg: string;
-    //do: () => void;
   };
   cadet: {
     name: string;
@@ -96,11 +91,17 @@ export interface ApplyDetailModalProps {
   setApplyModal: (b: boolean) => void;
 }
 
+export const MENTORING_STATUS = {
+  CANCLE: '취소',
+  WAITING: '대기중',
+  CONFIRM: '확정',
+  DONE: '완료',
+};
+
 export function ApplyDetailModal(props: ApplyDetailModalProps) {
   const [isReject, setIsReject] = useState<boolean>(false);
   const [rejectReason, setRejectReason] = useState<string>('');
-  //useEffect(() => {
-  //},[])
+  const [selectedTimeIndex, setSelectedTimeIndex] = useState<string>('');
 
   return (
     <Box>
@@ -114,7 +115,18 @@ export function ApplyDetailModal(props: ApplyDetailModalProps) {
       </XButton>
       <ModalHeader>
         <PageTitle>멘토링 신청 세부사항</PageTitle>
-        <StatusBox>{props.status}</StatusBox>
+        <StatusBox
+          style={{
+            backgroundColor:
+              props.status === MENTORING_STATUS.CANCLE
+                ? defaultTheme.colors.Red
+                : props.status === MENTORING_STATUS.DONE
+                ? defaultTheme.colors.polarSimpleMain
+                : defaultTheme.colors.polarBrightMain,
+          }}
+        >
+          {props.status}
+        </StatusBox>
       </ModalHeader>
       <ModalBody>
         {props.status === '대기중' ? (
@@ -127,6 +139,8 @@ export function ApplyDetailModal(props: ApplyDetailModalProps) {
             isRejectSetter={setIsReject}
             rejectReason={rejectReason}
             rejectReasonSetter={setRejectReason}
+            selectedTimeIndex={selectedTimeIndex}
+            setSelectedTimeIndex={setSelectedTimeIndex}
           />
         ) : (
           <Confirm
@@ -147,6 +161,7 @@ export function ApplyDetailModal(props: ApplyDetailModalProps) {
         isReject={isReject}
         setIsReject={setIsReject}
         rejectReason={rejectReason}
+        selectedTime={props.requestTime[parseInt(selectedTimeIndex)]}
       />
     </Box>
   );

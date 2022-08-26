@@ -1,4 +1,7 @@
 import styled from '@emotion/styled';
+import { axiosInstance } from '../../../context/axios-interface';
+import AuthStore from '../../../states/auth/AuthStore';
+import LoadingStore from '../../../states/loading/LoadingStore';
 import defaultTheme from '../../../styles/theme';
 
 const ModalFooterContainer = styled.div`
@@ -25,20 +28,84 @@ const Button = styled.div`
   }
 `;
 
-interface ModalFooter {
+const rejectMentoring = async (
+  mentoringLogId: string,
+  rejectMessage: string,
+  token: string,
+) => {
+  LoadingStore.on();
+  await axiosInstance
+    .patch(
+      `/mentoring-logs/reject`,
+      {
+        mentoringLogId: mentoringLogId,
+        rejectMessage: rejectMessage,
+      },
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      },
+    )
+    .then(() => {
+      alert('거절 요청 성공');
+      location.reload();
+    })
+    .catch(err => {
+      alert(`${err?.response?.data?.message}`);
+    });
+  LoadingStore.off();
+};
+
+const approveMentoring = async (
+  mentoringLogId: string,
+  selectedAt: Date[],
+  token: string,
+) => {
+  LoadingStore.on();
+  await axiosInstance
+    .patch(
+      `/mentoring-logs/approve`,
+      {
+        mentoringLogId: mentoringLogId,
+        meetingAt: selectedAt,
+      },
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      },
+    )
+    .then(() => {
+      alert('수락 요청 성공');
+      location.reload();
+    })
+    .catch(err => {
+      alert(`${err?.response?.data?.message}`);
+    });
+  LoadingStore.off();
+};
+
+interface ModalFooterProps {
   id: string;
   status: string;
   isReject: boolean;
   setIsReject: (b: boolean) => void;
   rejectReason: string;
+  selectedTime: Date[];
 }
 
-export function ModalFooter(props: ModalFooter) {
+export function ModalFooter(props: ModalFooterProps) {
   if (props.status === '대기중') {
     if (props.isReject) {
       return (
         <ModalFooterContainer>
-          <Button style={{ backgroundColor: defaultTheme.colors.Red }}>
+          <Button
+            style={{ backgroundColor: defaultTheme.colors.Red }}
+            onClick={() => {
+              rejectMentoring(props.id, props.rejectReason, AuthStore.jwt);
+            }}
+          >
             거절
           </Button>
           <Button
@@ -56,6 +123,9 @@ export function ModalFooter(props: ModalFooter) {
       <ModalFooterContainer>
         <Button
           style={{ backgroundColor: defaultTheme.colors.polarSimpleMain }}
+          onClick={() => {
+            approveMentoring(props.id, props.selectedTime, AuthStore.jwt);
+          }}
         >
           수락
         </Button>
@@ -73,7 +143,12 @@ export function ModalFooter(props: ModalFooter) {
     if (props.isReject) {
       return (
         <ModalFooterContainer>
-          <Button style={{ backgroundColor: defaultTheme.colors.Red }}>
+          <Button
+            style={{ backgroundColor: defaultTheme.colors.Red }}
+            onClick={() => {
+              rejectMentoring(props.id, props.rejectReason, AuthStore.jwt);
+            }}
+          >
             거절
           </Button>
           <Button
@@ -89,7 +164,14 @@ export function ModalFooter(props: ModalFooter) {
     }
     return (
       <ModalFooterContainer>
-        <Button style={{ backgroundColor: 'gray' }}>거절</Button>
+        <Button
+          style={{ backgroundColor: 'gray' }}
+          onClick={() => {
+            props.setIsReject(true);
+          }}
+        >
+          거절
+        </Button>
       </ModalFooterContainer>
     );
   }

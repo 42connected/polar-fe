@@ -142,7 +142,7 @@ const MyMentoringMentor = observer(() => {
       <PaginationContainer>
         <Pagination
           page={parseInt(pageNumber || INITIAL_PAGE)}
-          count={Math.trunc(MentorLogStore.total / LOGS_PER_PAGE)}
+          count={Math.trunc(MentorLogStore.total / LOGS_PER_PAGE) + 1}
           renderItem={item => (
             <PaginationItem
               component={Link}
