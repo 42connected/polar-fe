@@ -1,27 +1,34 @@
 import styled from '@emotion/styled';
 import { Switch } from '@mui/material';
-import axios from 'axios';
+import axios, { Axios, AxiosError } from 'axios';
 import defaultTheme from '../../styles/theme';
 import singupImage from '../../assets/signup/signup.png';
 import addButtonImage from '../../assets/signup/addButton.png';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import Columns from '../../components/signup/getColumns';
 import React from 'react';
 import LoadingStore from '../../states/loading/LoadingStore';
 import { Navigate } from 'react-router-dom';
+import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
+import { axiosInstance } from '../../context/axios-interface';
+import AuthStore from '../../states/auth/AuthStore';
 
-// 로그인 페이지들 외부랑 리다이렉션 연결하기 -> 제출 성공 팝업창 수정
-// 이메일 등록됐을 떄 처리하기
+// 코드 쪼개기
 // Css처리
-// 코드 리팩토링
-
+// console log 삭제, 토큰 삭제 -> 토큰 얻어오는거 하드 코딩에서 수정
+// 이메일 등록 됐을 때 검증 로직 추가
+//   -> 멘토에 이메일이 세팅된 것과 현재 등록하려는 이메일이 같은 지
+//   -> 다른 멘토의 등록된 이메일을 넣어도 지금은 이메일 검증없이 가능
+//   -> 409(conflict)과 더불어서
 // 상태관리와 리다이렉션 경로 수정
+// 홈에서 뒤로가기했을 때 sign에 들어갈 수 있는지 체크 -> 지금은 가능
 
 export const Containers = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   gird-gap: 2000px;
+  background: white;
 `;
 
 export const HeadLetters = styled.h1`
@@ -253,6 +260,8 @@ const SignUpMentor = () => {
   const [slackId, setSlackId] = useState<string>('');
   const [isMailSucess, setIsMailSucesss] = useState(false);
   const [isMailFail, setIsMailFail] = useState(false);
+  const [alreadyRegistered, setAlreadyRegistered] = useState<boolean>(false);
+  const [mailOverlaped, setMailOverlaped] = useState<boolean>(false);
   const [checked, setChecked] = useState(true);
   const [code, setCode] = useState<string>('');
   const [isCodeSucess, setIsCodeSucesss] = useState(false);
@@ -263,6 +272,11 @@ const SignUpMentor = () => {
       date: [0, 0, 0, 0, 0],
     },
   ]);
+
+  useEffect(() => {
+    AuthStore.Login();
+    MentorStore.getMentor(AuthStore.user.intraId, AuthStore.jwt);
+  }, []);
 
   const nextId = useRef(1);
 
@@ -404,7 +418,7 @@ const SignUpMentor = () => {
       return;
     }
 
-    if (!isCodeSucess) {
+    if (!alreadyRegistered && !isCodeSucess) {
       alert('e-mail 인증을 완료해주세요');
       return;
     }
@@ -423,12 +437,14 @@ const SignUpMentor = () => {
     }
 
     const availableTime: IAvailableDate[][] = await getAvailableTime(rows);
+    console.log('availTime');
     console.log(availableTime);
 
     const resultVaildation: AvailableTimeError = await validateAvailableTime(
       availableTime,
     );
 
+    console.log('resultVail');
     console.log(resultVaildation);
 
     if (resultVaildation === AvailableTimeError.INPUT_ERROR) {
@@ -507,15 +523,20 @@ const SignUpMentor = () => {
 
     setIsMailSucesss(false);
     setIsMailFail(false);
+    setAlreadyRegistered(false);
+    setMailOverlaped(false);
 
+    console.log('AuthStore');
+    console.log(AuthStore.jwt);
+
+    let response = null;
     try {
       LoadingStore.on();
 
-      axios.defaults.headers.common[
-        'Authorization'
-      ] = `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRyYUlkIjoibS1lbmdlbmciLCJyb2xlIjoibWVudG9yIiwiaWF0IjoxNjYxNDA0NTQ4LCJleHAiOjE2NjE0OTA5NDh9.QFc0Vd_W9kT-CUfCzUanwEEcFUMgb9jss3Mde0MqX9A`;
+      const token = `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRyYUlkIjoibS1lbmdlbmciLCJyb2xlIjoibWVudG9yIiwiaWF0IjoxNjYxNDA0NTQ4LCJleHAiOjE2NjE0OTA5NDh9.QFc0Vd_W9kT-CUfCzUanwEEcFUMgb9jss3Mde0MqX9A`;
+      axios.defaults.headers.common['Authorization'] = token;
 
-      const response = await axios.post(
+      response = await axios.post(
         'https://polar42-be-dev.herokuapp.com/api/v1/email-verifications',
         {
           email: email,
@@ -527,8 +548,39 @@ const SignUpMentor = () => {
       } else {
         setIsMailFail(true);
       }
-    } catch (err) {
-      setIsMailFail(true);
+    } catch (error: any) {
+      if (MentorStore.mentor.email === email) {
+        console.log(MentorStore.mentor.email);
+        setAlreadyRegistered(true);
+      } else if (error.response.status === 409) {
+        setMailOverlaped(true);
+      } else {
+        setIsMailFail(true);
+      }
+
+      // await axiosInstance
+      //   .get(`/login`, { headers: { 'Access-Control-Allow-Origin': '*' } })
+      //   .then(res => {
+      //     console.log(res);
+      //   })
+      //   .catch(() => {
+      //     alert('Login Error');
+      //   });
+
+      // if (response.status === 409) {
+      //   console.log(response.status);
+      //   setAlreadyRegistered(true);
+      //   console.log('HERE!');
+
+      // try {
+      //   const loginResponse = await axios.get(
+      //     'https://polar42-be-dev.herokuapp.com/api/v1/login',
+      //   );
+
+      //   console.log(loginResponse);
+      // } catch {
+      //   console.error('로그인 실패');
+      // }
     } finally {
       LoadingStore.off();
     }
@@ -576,6 +628,7 @@ const SignUpMentor = () => {
       <div>
         <HeadLetters>필수 정보 입력</HeadLetters>
         <SingupImage src={singupImage} alt="singup-image" />
+
         <div style={{ paddingBottom: '5px' }}>
           <NameTitle>본인 이름</NameTitle>
           <NameInput
@@ -584,6 +637,7 @@ const SignUpMentor = () => {
             maxLength={10}
           ></NameInput>
         </div>
+
         <div style={{ paddingBottom: '5px' }}>
           <NameTitle>슬랙 ID</NameTitle>
           <NameInput
@@ -592,26 +646,38 @@ const SignUpMentor = () => {
             maxLength={100}
           ></NameInput>
         </div>
-        <div style={{ paddingBottom: '5px' }}>
-          <NameTitle>e-mail</NameTitle>
-          <EmailInput maxLength={100} onChange={onEmailChange} />
-        </div>
-        <div style={{ paddingBottom: '30px' }}>
-          <CertificationSendingButton onClick={() => SendEmail(email)}>
-            인증
-          </CertificationSendingButton>
-          <>{isMailSucess && <p>메일 전송 완료했습니다</p>}</>
-          <>{isMailFail && <p>메일 전송 실패했습니다</p>}</>
-        </div>
-        <NameTitle>인증코드</NameTitle>
-        <CertificationCodeTitleInput maxLength={10} onChange={onCodeChange} />
-        <CertificationSucessButton onClick={() => certificateEmail(code)}>
-          확인
-        </CertificationSucessButton>
-        <>{isCodeSucess && <p>인증에 완료했습니다</p>}</>
-        <>{isCodeFail && <p>인증에 실패했습니다</p>}</>
-        {/* <CertificationSucessLetter></CertificationSucessButtonLetter>
-      <CertificationSendingLetter></CertificationSendingButtonLetter> */}
+        <>{alreadyRegistered && <p>이미 이메일이 등록되었습니다</p>}</>
+        <>
+          {!alreadyRegistered && (
+            <div>
+              <div style={{ paddingBottom: '5px' }}>
+                <NameTitle>e-mail</NameTitle>
+                <EmailInput maxLength={100} onChange={onEmailChange} />
+              </div>
+
+              <div style={{ paddingBottom: '30px' }}>
+                <CertificationSendingButton onClick={() => SendEmail(email)}>
+                  인증
+                </CertificationSendingButton>
+                <>{isMailSucess && <p>메일 전송 완료했습니다</p>}</>
+                <>{isMailFail && <p>메일 전송 실패했습니다</p>}</>
+                <>{mailOverlaped && <p>사용 불가능한 이메일입니다</p>}</>
+              </div>
+              <NameTitle>인증코드</NameTitle>
+              <CertificationCodeTitleInput
+                maxLength={10}
+                onChange={onCodeChange}
+              />
+              <CertificationSucessButton onClick={() => certificateEmail(code)}>
+                확인
+              </CertificationSucessButton>
+              <>{isCodeSucess && <p>인증에 완료했습니다</p>}</>
+              <>{isCodeFail && <p>인증에 실패했습니다</p>}</>
+              {/* <CertificationSucessLetter></CertificationSucessButtonLetter>
+        <CertificationSendingLetter></CertificationSendingButtonLetter> */}
+            </div>
+          )}
+        </>
       </div>
       <div>
         <HeadLetters>멘토링 가능 시간</HeadLetters>
@@ -667,48 +733,5 @@ const SignUpMentor = () => {
     </Containers>
   );
 };
-
-/*
-grid-template-columns: repeat(3, 12px);
-grid-template-rows: repeat(3, auto);
-*/
-
-/*
-import * as React from 'react';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-
-export default function SwitchLabels() {
-  return (
-    <FormGroup>
-      <FormControlLabel control={<Switch defaultChecked />} label="Label" />
-      <FormControlLabel disabled control={<Switch />} label="Disabled" />
-    </FormGroup>
-  );
-}
-
-
-import * as React from 'react';
-import Switch from '@mui/material/Switch';
-
-export default function ControlledSwitches() {
-  const [checked, setChecked] = React.useState(true);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
-
-  return (
-    <Switch
-      checked={checked}
-      onChange={handleChange}
-      inputProps={{ 'aria-label': 'controlled' }}
-    />
-  );
-}
-
-
-*/
 
 export default SignUpMentor;
