@@ -81,7 +81,7 @@ export function Wait(props: WaitProps) {
             ? `${props?.cadet?.resumeUrl.slice(0, 30)}...`
             : '링크 없음'
         }
-        link={props?.cadet?.resumeUrl}
+        link={props?.cadet?.resumeUrl ? props?.cadet?.resumeUrl : ''}
       />
       <ModalInfoElement
         title={'멘토링 주제'}

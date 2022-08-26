@@ -68,13 +68,23 @@ export function Confirm(props: ConfirmProps) {
         title={'카뎃 이름'}
         titleColor={'black'}
         content={props?.cadet?.name}
-        link={props?.cadet?.resumeUrl}
+        link={''}
       />
       <ModalInfoElement
         title={'카뎃 Intra ID'}
         titleColor={'black'}
         content={props?.cadet?.intraId}
-        link={props?.cadet?.resumeUrl}
+        link={''}
+      />
+      <ModalInfoElement
+        title={'카뎃 이력서'}
+        titleColor={'black'}
+        content={
+          props?.cadet?.resumeUrl
+            ? `${props?.cadet?.resumeUrl.slice(0, 30)}...`
+            : '링크 없음'
+        }
+        link={props?.cadet?.resumeUrl ? props?.cadet?.resumeUrl : ''}
       />
       <ModalInfoElement
         title={'멘토링 주제'}

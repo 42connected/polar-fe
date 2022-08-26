@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import defaultTheme from '../../styles/theme';
 import { TableTitle } from './table-title';
-import { TableColumnLine, TableRow } from './table-row';
+import { TableRow } from './table-row';
 import MentorLogStore, {
   LOGS_PER_PAGE,
   MentoringLogs,
