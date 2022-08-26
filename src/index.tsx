@@ -7,6 +7,7 @@ import './assets/font/font.css';
 import { ThemeProvider } from 'styled-components';
 import defaultTheme from './styles/theme';
 import App from './App';
+import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
