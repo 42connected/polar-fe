@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client';
-import GlobalStyle from './styles/globalStyle';
+import GlobalStyle from './styles/GlobalStyle';
 import reportWebVitals from './reportWebVitals';
 import './assets/font/font.css';
 import { ThemeProvider } from 'styled-components';
