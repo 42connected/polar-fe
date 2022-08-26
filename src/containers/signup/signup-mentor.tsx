@@ -17,6 +17,8 @@ import AuthStore from '../../states/auth/AuthStore';
 // console log 삭제, 토큰 삭제 -> 토큰 얻어오는거 하드 코딩에서 수정
 // 상태관리와 리다이렉션 경로 수정
 // 홈에서 뒤로가기했을 때 sign에 들어갈 수 있는지 체크 -> 지금은 가능
+// cadets/join
+// mentors/join
 
 export const Containers = styled.div`
   display: grid;
@@ -225,8 +227,6 @@ interface IRows {
 }
 
 function AddColumns(props: AddColumnsProps) {
-  console.log(props.rows);
-  props.rows.forEach(row => console.log(row));
   return (
     <>
       {props.rows.map(rows => (
@@ -295,7 +295,6 @@ const SignUpMentor = () => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.checked);
     setChecked(event.target.checked);
   };
 
@@ -418,11 +417,6 @@ const SignUpMentor = () => {
       return;
     }
 
-    console.log(name);
-    console.log(isCodeSucess);
-    console.log('rows!');
-    console.log(rows);
-
     LoadingStore.on();
 
     if (!(await validateRows(rows))) {
@@ -432,15 +426,10 @@ const SignUpMentor = () => {
     }
 
     const availableTime: IAvailableDate[][] = await getAvailableTime(rows);
-    console.log('availTime');
-    console.log(availableTime);
 
     const resultVaildation: AvailableTimeError = await validateAvailableTime(
       availableTime,
     );
-
-    console.log('resultVail');
-    console.log(resultVaildation);
 
     if (resultVaildation === AvailableTimeError.INPUT_ERROR) {
       alert('가능시간은 시작 시간으로부터 1시간 이상이어야 합니다');
@@ -479,8 +468,6 @@ const SignUpMentor = () => {
     } finally {
       LoadingStore.off();
     }
-
-    //MentorStore. ==> 이메일 인증이 완료된 경우 처리하기
   }
 
   interface IAvailableDate {
@@ -521,17 +508,13 @@ const SignUpMentor = () => {
     setAlreadyRegistered(false);
     setMailOverlaped(false);
 
-    console.log('AuthStore');
-    console.log(AuthStore.jwt);
-
-    let response = null;
     try {
       LoadingStore.on();
       axios.defaults.headers.common[
         'Authorization'
       ] = `bearer ${AuthStore.jwt}`;
 
-      response = await axios.post(
+      const response = await axios.post(
         'https://polar42-be-dev.herokuapp.com/api/v1/email-verifications',
         {
           email: email,
@@ -578,8 +561,6 @@ const SignUpMentor = () => {
           code: code,
         },
       );
-
-      console.log(response);
 
       if (response.status === 201) {
         setIsCodeSucesss(true);
