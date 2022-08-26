@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
 import theme from '../../styles/theme';
-//import img from '../../assets/image/logo/phone.png';
-import { keywordsPro } from './mainpage-getkeyword';
+import { keywordsPro } from './mainPageGetkeyword';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '../../context/axios-interface';
 import { Link } from 'react-router-dom';
@@ -22,21 +21,23 @@ import img from '../../assets/image/logo/desc.png';
 const MainContainer = styled.div`
   background-color: ${theme.colors.polarBackground};
   left: 0;
-  ${theme.fontSize.sizeExtraSmall};
+  ${theme.fontSize.sizeMedium};
   ${theme.font.sebangGothic};
   height: 74vh;
   width: 100%;
   display: grid;
-  grid-template-rows: 200px 150px 200px;
-  grid-template-columns: repeat(2, minmax(400px, auto));
+  grid-template-rows: 130px 130px 130px;
+  grid-template-columns: 600px auto;
   transition: all 0.25s ease-in-out;
   grid-template-areas:
-    'img title'
-    'img icon1'
-    'img icon2';
+    'title img'
+    'icon1 img'
+    'icon2 img';
   text-align: center;
   justify-content: center;
-  grid-column-gap: 18rem;
+  align-items: center;
+  align-content: center;
+  grid-column-gap: 14rem;
   border-radius: 10px;
 `;
 
@@ -45,10 +46,10 @@ const MainContainer2 = styled.div`
   left: 0;
   ${theme.fontSize.sizeSmall};
   ${theme.font.sebangGothic};
-  height: 130vh;
+  height: 135vh;
   width: 100%;
   display: grid;
-  grid-template-rows: 500px 200px 150px 150px;
+  grid-template-rows: 500px 150px 150px 150px;
   grid-template-areas:
     'img'
     'title'
@@ -63,11 +64,10 @@ const MainContainer2 = styled.div`
 const MainImageStyle = styled.div`
   box-sizing: border-box;
   background-color: ${theme.colors.backgoundWhite};
-  border-radius: 20%;
+  border-radius: 10%;
   height: 40rem;
   width: 60rem;
   grid-auto-flow: dense;
-  margin-top: 15rem;
   align-items: center;
   justify-content: center;
   padding-top: 3rem;
@@ -81,9 +81,9 @@ const MainImageStyle = styled.div`
 const MainImageStyle2 = styled.div`
   box-sizing: border-box;
   background-color: ${theme.colors.backgoundWhite};
-  border-radius: 20%;
+  border-radius: 10%;
   height: 40rem;
-  width: 45rem;
+  width: 47rem;
   grid-auto-flow: dense;
   margin-top: 10rem;
   padding-top: 10rem;
@@ -173,9 +173,8 @@ const TextUnder2 = styled.div`
 const TitleStyle = styled.div`
   box-sizing: border-box;
   border-bottom: 1px solid black;
-  font-size: 3.5rem;
-  margin-top: 17rem;
-  padding-bottom: 5.5rem;
+  font-size: 4.5rem;
+  margin-top: -2rem;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -185,11 +184,10 @@ const TitleStyle = styled.div`
 const TitleStyle2 = styled.div`
   box-sizing: border-box;
   border-bottom: 1px solid black;
+  padding-bottom: 3rem;
   font-size: 3.5rem;
-  padding-bottom: 5.5rem;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  margin-top: 9.5rem;
+  bottom: 0;
   grid-area: title;
 `;
 
@@ -201,8 +199,7 @@ const ClickContainer = styled.div`
   text-align: center;
   justify-content: center;
   align-items: center;
-  margin-top: 5rem;
-  grid-row-gap: 0;
+  grid-column-gap: 2rem;
 `;
 
 const IconImageStyle = styled.div<{ colStart: number; rowStart: number }>`
@@ -215,8 +212,21 @@ const IconImageStyle = styled.div<{ colStart: number; rowStart: number }>`
   justify-content: center;
   align-items: center;
   font-size: 2.3rem;
-  margin-top: 2rem;
 `;
+
+const IconImageStyle2 = styled.div<{ colStart: number; rowStart: number }>`
+  display: flex;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: 5rem;
+  grid-column-start: colStart;
+  grid-row-start: rowStart;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.3rem;
+`;
+
 const KeywordStyle = styled.div<{ colStart: number; rowStart: number }>`
   display: flex;
   text-align: center;
@@ -228,10 +238,18 @@ const KeywordStyle = styled.div<{ colStart: number; rowStart: number }>`
   color: ${theme.fontColor.titleColor};
   font-size: 2.3rem;
 `;
-const imagestyle1 = {
-  height: '40rem',
-  width: '60rem',
-};
+
+const KeywordStyle2 = styled.div<{ colStart: number; rowStart: number }>`
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  grid-column-start: colStart;
+  grid-row-start: rowStart;
+  ${theme.font.sebangGothic};
+  color: ${theme.fontColor.titleColor};
+  font-size: 1.8rem;
+`;
 
 const MainBlueBody = styled.span`
   color: ${theme.fontColor.blueColor};
@@ -245,7 +263,7 @@ const IconButton = styled.button`
   border: none;
 `;
 
-const Mainpage = () => {
+const MainPage = () => {
   const [isLoading, setLoading] = useState(false);
   const [keyWords, setKeywords] = useState<keywordsPro[] | null>(null);
   const [windowSize, setWindowSize] = useState({
@@ -369,7 +387,8 @@ const Mainpage = () => {
               </ImageGrid2>
             </MainImageStyle>
             <TitleStyle>
-              나에게 꼭 맞는 <MainBlueBody> 멘토 </MainBlueBody> 선택하기
+              나에게 꼭 맞는
+              <MainBlueBody> 멘토</MainBlueBody> 선택하기
             </TitleStyle>
             <ClickContainer>
               {keyWords?.map((words: { name: string }, index: number) => {
@@ -382,7 +401,7 @@ const Mainpage = () => {
                 ];
                 if (index < 4)
                   return (
-                    <div>
+                    <div key={index}>
                       <Link to={link}>
                         <IconImageStyle colStart={index} rowStart={1}>
                           <IconButton>
@@ -408,7 +427,7 @@ const Mainpage = () => {
                 ];
                 if (index >= 4)
                   return (
-                    <div>
+                    <div key={index}>
                       <Link to={link}>
                         <IconImageStyle colStart={index - 4} rowStart={1}>
                           <IconButton>
@@ -457,9 +476,9 @@ const Mainpage = () => {
                 )}
               </ImageGrid2>
             </MainImageStyle2>
-            <TitleStyle>
+            <TitleStyle2>
               나에게 꼭 맞는 <MainBlueBody> 멘토 </MainBlueBody> 선택하기
-            </TitleStyle>
+            </TitleStyle2>
             <ClickContainer>
               {keyWords?.map((words: { name: string }, index: number) => {
                 const link = '/mentor-lists/' + words.name;
@@ -471,17 +490,17 @@ const Mainpage = () => {
                 ];
                 if (index < 4)
                   return (
-                    <div>
+                    <div key={index}>
                       <Link to={link}>
-                        <IconImageStyle colStart={index} rowStart={1}>
+                        <IconImageStyle2 colStart={index} rowStart={1}>
                           <IconButton>
                             <FontAwesomeIcon icon={image[index]} size="3x" />
                           </IconButton>
-                        </IconImageStyle>
+                        </IconImageStyle2>
                       </Link>
-                      <KeywordStyle colStart={index} rowStart={2}>
+                      <KeywordStyle2 colStart={index} rowStart={2}>
                         {words.name}
-                      </KeywordStyle>
+                      </KeywordStyle2>
                     </div>
                   );
               })}
@@ -497,20 +516,20 @@ const Mainpage = () => {
                 ];
                 if (index >= 4)
                   return (
-                    <div>
+                    <div key={index}>
                       <Link to={link}>
-                        <IconImageStyle colStart={index - 4} rowStart={1}>
+                        <IconImageStyle2 colStart={index - 4} rowStart={1}>
                           <IconButton>
                             <FontAwesomeIcon
                               icon={image[index - 4]}
                               size="3x"
                             />
                           </IconButton>
-                        </IconImageStyle>
+                        </IconImageStyle2>
                       </Link>
-                      <KeywordStyle colStart={index - 4} rowStart={2}>
+                      <KeywordStyle2 colStart={index - 4} rowStart={2}>
                         {words.name}
-                      </KeywordStyle>
+                      </KeywordStyle2>
                     </div>
                   );
               })}
@@ -523,4 +542,4 @@ const Mainpage = () => {
   );
 };
 
-export default Mainpage;
+export default MainPage;

@@ -7,9 +7,9 @@ import ReportForm from './containers/reports/report-form';
 import LoadingStore from './states/loading/LoadingStore';
 import Footer from './components/footer';
 import Header from './components/header';
-import Mainpage from './containers/mainpages/mainpage';
-import Applypage from './containers/cardetApplys/applypage';
-import ReportDetail from './containers/reportDetails/reportDetail';
+import MainPage from './containers/main-page/main-page';
+import ApplyPage from './containers/apply-page/apply-page';
+import ReportDetail from './containers/report-detail/report-detail';
 import MentorDetail from './containers/mentor-detail/mentor-detail';
 import { Loading } from './components/loading';
 
@@ -36,9 +36,9 @@ const App = observer(() => {
             path="/mentors/mentorings/:intraId"
             element={<MyMentoringMentor />}
           />
-          <Route path="" element={<Mainpage />}></Route>
-          <Route path="applypage" element={<Applypage />}></Route>
-          <Route path="reportdetails" element={<ReportDetail />}></Route>
+          <Route path="" element={<MainPage />} />
+          <Route path="apply-page" element={<ApplyPage />} />
+          <Route path="report-details" element={<ReportDetail />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
         </Routes>
