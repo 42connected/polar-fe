@@ -1,25 +1,20 @@
 import styled from '@emotion/styled';
 import { Switch } from '@mui/material';
-import axios, { Axios, AxiosError } from 'axios';
+import axios from 'axios';
 import defaultTheme from '../../styles/theme';
 import singupImage from '../../assets/signup/signup.png';
 import addButtonImage from '../../assets/signup/addButton.png';
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Columns from '../../components/signup/getColumns';
 import React from 'react';
 import LoadingStore from '../../states/loading/LoadingStore';
 import { Navigate } from 'react-router-dom';
 import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
-import { axiosInstance } from '../../context/axios-interface';
 import AuthStore from '../../states/auth/AuthStore';
 
 // 코드 쪼개기
 // Css처리
 // console log 삭제, 토큰 삭제 -> 토큰 얻어오는거 하드 코딩에서 수정
-// 이메일 등록 됐을 때 검증 로직 추가
-//   -> 멘토에 이메일이 세팅된 것과 현재 등록하려는 이메일이 같은 지
-//   -> 다른 멘토의 등록된 이메일을 넣어도 지금은 이메일 검증없이 가능
-//   -> 409(conflict)과 더불어서
 // 상태관리와 리다이렉션 경로 수정
 // 홈에서 뒤로가기했을 때 sign에 들어갈 수 있는지 체크 -> 지금은 가능
 
@@ -460,7 +455,7 @@ const SignUpMentor = () => {
     try {
       axios.defaults.headers.common[
         'Authorization'
-      ] = `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRyYUlkIjoibS1lbmdlbmciLCJyb2xlIjoibWVudG9yIiwiaWF0IjoxNjYxNDA0NTQ4LCJleHAiOjE2NjE0OTA5NDh9.QFc0Vd_W9kT-CUfCzUanwEEcFUMgb9jss3Mde0MqX9A`;
+      ] = `bearer ${AuthStore.jwt}`;
 
       const response = await axios.patch(
         'https://polar42-be-dev.herokuapp.com/api/v1/mentors/join',
@@ -532,9 +527,9 @@ const SignUpMentor = () => {
     let response = null;
     try {
       LoadingStore.on();
-
-      const token = `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRyYUlkIjoibS1lbmdlbmciLCJyb2xlIjoibWVudG9yIiwiaWF0IjoxNjYxNDA0NTQ4LCJleHAiOjE2NjE0OTA5NDh9.QFc0Vd_W9kT-CUfCzUanwEEcFUMgb9jss3Mde0MqX9A`;
-      axios.defaults.headers.common['Authorization'] = token;
+      axios.defaults.headers.common[
+        'Authorization'
+      ] = `bearer ${AuthStore.jwt}`;
 
       response = await axios.post(
         'https://polar42-be-dev.herokuapp.com/api/v1/email-verifications',
@@ -550,37 +545,12 @@ const SignUpMentor = () => {
       }
     } catch (error: any) {
       if (MentorStore.mentor.email === email) {
-        console.log(MentorStore.mentor.email);
         setAlreadyRegistered(true);
       } else if (error.response.status === 409) {
         setMailOverlaped(true);
       } else {
         setIsMailFail(true);
       }
-
-      // await axiosInstance
-      //   .get(`/login`, { headers: { 'Access-Control-Allow-Origin': '*' } })
-      //   .then(res => {
-      //     console.log(res);
-      //   })
-      //   .catch(() => {
-      //     alert('Login Error');
-      //   });
-
-      // if (response.status === 409) {
-      //   console.log(response.status);
-      //   setAlreadyRegistered(true);
-      //   console.log('HERE!');
-
-      // try {
-      //   const loginResponse = await axios.get(
-      //     'https://polar42-be-dev.herokuapp.com/api/v1/login',
-      //   );
-
-      //   console.log(loginResponse);
-      // } catch {
-      //   console.error('로그인 실패');
-      // }
     } finally {
       LoadingStore.off();
     }
@@ -600,7 +570,7 @@ const SignUpMentor = () => {
 
       axios.defaults.headers.common[
         'Authorization'
-      ] = `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRyYUlkIjoibS1lbmdlbmciLCJyb2xlIjoibWVudG9yIiwiaWF0IjoxNjYxNDA0NTQ4LCJleHAiOjE2NjE0OTA5NDh9.QFc0Vd_W9kT-CUfCzUanwEEcFUMgb9jss3Mde0MqX9A`;
+      ] = `bearer ${AuthStore.jwt}`;
 
       const response = await axios.post(
         `https://polar42-be-dev.herokuapp.com/api/v1/email-verifications/${code}`,
@@ -625,7 +595,7 @@ const SignUpMentor = () => {
 
   return (
     <Containers>
-      <div>
+      <div style={{ paddingBottom: '100px' }}>
         <HeadLetters>필수 정보 입력</HeadLetters>
         <SingupImage src={singupImage} alt="singup-image" />
 
