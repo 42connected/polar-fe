@@ -4,7 +4,7 @@ import github from '../assets/image/keywordIcon/develop.png';
 
 const FooterStyle = styled.footer`
   position: relative;
-  transform: translateY(100%);
+  transform: translateY(0%);
   bottom: 0;
   width: 100%;
   height: 12rem;
@@ -69,5 +69,4 @@ const Footer = () => {
     </FooterStyle>
   );
 };
-
 export default Footer;
