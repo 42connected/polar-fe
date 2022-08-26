@@ -4,37 +4,6 @@ import { MentoringLogs } from '../../../states/my-mentoring-mentor/MentorLogStor
 import defaultTheme from '../../../styles/theme';
 import { ApplyDetailModal } from './apply-detail-modal';
 
-const move = keyframes`
-	//단계 별로 변화를 주는 코드
-	0%{
-    	top: 20px;
-        left: 20px;
-        background:green;
-    }
-
-    30%{
-    	top: 50px;
-        background:orange;
-    }
-
-    50%{
-    	top: 100px;
-        opacity: 0;
-        left: 200px;
-    }
-
-    70%{
-    	top: 150px;
-        background: blue;
-    }
-
-    100%{
-    	top: 20px;
-        background: green;
-        opacity: 1;
-    }
-`;
-
 const Fade = keyframes`
   0% {
    opacity: 0;
