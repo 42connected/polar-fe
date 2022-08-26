@@ -1,5 +1,4 @@
 import { Autocomplete, listSubheaderClasses, TextField } from '@mui/material';
-import { validate } from 'class-validator';
 import React from 'react';
 
 export interface SelectListProps {
