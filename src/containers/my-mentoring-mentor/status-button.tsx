@@ -11,10 +11,6 @@ const StatusColumn = styled.div`
   align-items: center;
 `;
 
-export interface ReportButtonProps {
-  status: string;
-}
-
 const MENTORING_STATUS = {
   WAIT: '대기중',
   CONFIRM: '확정',
@@ -22,20 +18,15 @@ const MENTORING_STATUS = {
   CANCLE: '취소',
 };
 
+export interface ReportButtonProps {
+  status: string;
+}
+
 export function StatusButton(props: ReportButtonProps) {
-  const [underLine, setUnderLine] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (props.status === MENTORING_STATUS.WAIT) {
-      setUnderLine(true);
-    } else if (props.status === MENTORING_STATUS.CONFIRM) {
-      setUnderLine(true);
-    }
-  }, []);
-
   return (
     <>
-      {underLine ? (
+      {props.status === MENTORING_STATUS.WAIT ||
+      props.status === MENTORING_STATUS.CONFIRM ? (
         <StatusColumn
           style={{
             color: defaultTheme.colors.polarSimpleMain,

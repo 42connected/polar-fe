@@ -4,7 +4,7 @@ import github from '../assets/image/keywordIcon/develop.png';
 
 const FooterStyle = styled.footer`
   position: relative;
-  transform: translateY(100%);
+  transform: translateY(0%);
   bottom: 0;
   width: 100%;
   height: 12rem;
@@ -32,7 +32,7 @@ const GithubButton = styled.button`
   margin-left: 7.5rem;
   margin-top: -2rem;
   background-color: transparent;
-  color: ${theme.colors.blackThree};
+  color: ${theme.colors.backgoundWhite};
   border: none;
 `;
 const githubClick = () => {
@@ -69,5 +69,4 @@ const Footer = () => {
     </FooterStyle>
   );
 };
-
 export default Footer;

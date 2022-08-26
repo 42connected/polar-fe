@@ -220,7 +220,7 @@ const ModalView = styled.div.attrs(props => ({
   color: #4000c7;
 `;
 
-const Applypage = () => {
+const ApplyPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const openModal = () => {
@@ -271,4 +271,4 @@ const Applypage = () => {
   );
 };
 
-export default Applypage;
+export default ApplyPage;

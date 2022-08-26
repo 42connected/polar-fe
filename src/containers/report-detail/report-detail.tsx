@@ -46,10 +46,12 @@ import {
   ImgLogo2,
   ImgLogo3,
   ImgLogo4,
-} from './report-styled';
+} from './reportStyled';
+import AuthStore from '../../states/auth/AuthStore';
 
 const ReportpageStyle = styled.div`
-  margin-left: 30rem;
+  background-color: ${theme.colors.backgoundWhite};
+  margin-left: 40rem;
   width: 60vw;
   height: 130vw;
 `;
@@ -85,6 +87,7 @@ const ButtonBody = styled.section`
 
 const PrintButton = styled.button`
   cursor: pointer;
+  z-index: 1;
   margin-right: 3rem;
   font-size: 1.8rem;
   align-items: center;
@@ -224,8 +227,7 @@ const ReportDetail = () => {
         'reports/3072b2af-4326-45fc-94f1-99636dab90ed',
         {
           headers: {
-            Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0tZW5nZW5nIiwicm9sZSI6ImJvY2FsIiwiaWF0IjoxNjYxMzM1ODQwLCJleHAiOjE2NjE0MjIyNDB9.nyiDjHVnQUsWsehCiKXRhk9B4RYz5hkaHghPK4L34RM',
+            Authorization: `Bearer ${AuthStore.jwt}`,
           },
         },
       );
@@ -238,6 +240,7 @@ const ReportDetail = () => {
     }
   };
   useEffect(() => {
+    AuthStore.Login();
     getReports();
 
     return;

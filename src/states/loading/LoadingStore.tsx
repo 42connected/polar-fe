@@ -18,6 +18,7 @@ class LoadingStore {
       this.isLoding = false;
     }, 1000 * timeoutSec);
   }
+
   off() {
     this.isLoding = false;
   }
