@@ -130,29 +130,26 @@ const ReportForm = observer(() => {
 
   useEffect(() => {
     async function Initialize() {
-      if (reportId) {
-        await ReportStore.Initializer(reportId, AuthStore.getAccessToken());
-      } else {
-        console.log('레포트ID가 존재하지 않습니다');
+      if (!reportId) {
+        return;
       }
+      await ReportStore.Initializer(reportId, AuthStore.getAccessToken());
     }
     Initialize();
   }, []);
 
   const saveTemporary = () => {
-    if (reportId) {
-      ReportStore.saveTemporary(reportId, AuthStore.getAccessToken());
-    } else {
-      console.log('레포트ID가 존재하지 않습니다');
+    if (!reportId) {
+      return;
     }
+    ReportStore.saveTemporary(reportId, AuthStore.getAccessToken());
   };
 
   const saveDone = () => {
-    if (reportId) {
-      ReportStore.saveDone(reportId, AuthStore.getAccessToken());
-    } else {
-      console.log('레포트ID가 존재하지 않습니다');
+    if (!reportId) {
+      return;
     }
+    ReportStore.saveDone(reportId, AuthStore.getAccessToken());
   };
 
   return (

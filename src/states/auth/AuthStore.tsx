@@ -36,11 +36,9 @@ class AuthStore {
    * 로그아웃, 토큰 및 AuthStore 값 초기화
    */
   async Logout() {
-    console.log('asdasd');
     removeCookie(TOKEN_LIST.ACCESS_TOKEN, DEFAULT_COOKIE_OPTION);
     removeCookie(TOKEN_LIST.INTRA_ID, DEFAULT_COOKIE_OPTION);
     removeCookie(TOKEN_LIST.USER_ROLE), DEFAULT_COOKIE_OPTION;
-    console.log(getCookie(TOKEN_LIST.ACCESS_TOKEN));
   }
 
   /**

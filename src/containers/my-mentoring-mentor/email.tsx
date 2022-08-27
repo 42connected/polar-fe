@@ -88,11 +88,12 @@ export function Email(props: EmailProps) {
   const [emailVerify, setEmailVerify] = useState<string>('');
 
   const authenticate = async () => {
+    const MINUTE_TO_SEC = 1000 * 60;
     await MentorStore.changeEmail(props.email, AuthStore.getAccessToken());
     setTime(true);
-    console.log(() => {
+    setTimeout(() => {
       setTime(false);
-    }, 1000 * 180);
+    }, MINUTE_TO_SEC * 3);
   };
 
   const verify = async () => {
