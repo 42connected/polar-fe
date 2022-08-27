@@ -60,6 +60,23 @@ const DoubleButton = styled.div`
   width: 50px;
 `;
 
+/**
+ * 긴 정보를 담고 있는 문자열을 원하는 크기로 자른 후 문자열 맨 마지막 위치에
+ * ... 을 추가함
+ * @param str 자를 문자열
+ * @param maxLength 자를 위치
+ * @returns 잘린 문자열
+ */
+export function sliceMoreInfoStr(str: string, maxLength: number) {
+  if (!str) {
+    return '';
+  }
+  if (str.length > maxLength) {
+    return `${str.slice(0, maxLength)}...`;
+  }
+  return str;
+}
+
 export interface EmailProps {
   email: string;
   setEmail: (email: string) => void;
@@ -71,8 +88,7 @@ export function Email(props: EmailProps) {
   const [emailVerify, setEmailVerify] = useState<string>('');
 
   const authenticate = async () => {
-    await AuthStore.Login();
-    await MentorStore.changeEmail(props.email, AuthStore.jwt);
+    await MentorStore.changeEmail(props.email, AuthStore.getAccessToken());
     setTime(true);
     console.log(() => {
       setTime(false);
@@ -81,8 +97,7 @@ export function Email(props: EmailProps) {
 
   const verify = async () => {
     setTime(true);
-    await AuthStore.Login();
-    await MentorStore.verifyEmail(emailVerify, AuthStore.jwt);
+    await MentorStore.verifyEmail(emailVerify, AuthStore.getAccessToken());
   };
 
   return (
@@ -90,7 +105,7 @@ export function Email(props: EmailProps) {
       <Field>
         <Title>Email</Title>
         <TextInput
-          value={props.email}
+          value={isEdit ? props.email : sliceMoreInfoStr(props.email, 23)}
           disabled={!isEdit}
           onChange={e => {
             props.setEmail(e.target.value);
