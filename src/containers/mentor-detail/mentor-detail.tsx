@@ -102,11 +102,11 @@ function MentorDetail() {
   };
   const getParams = useParams();
 
+  const accessToken = getCookie();
+  const config = {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  };
   useEffect(() => {
-    const accessToken = getCookie();
-    const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    };
     const params = {
       page: 1,
       take: 1,
