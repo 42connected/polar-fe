@@ -103,6 +103,10 @@ export function ModalFooter(props: ModalFooterProps) {
           <Button
             style={{ backgroundColor: defaultTheme.colors.Red }}
             onClick={() => {
+              if (props?.rejectReason?.length < 1) {
+                alert('취소 사유를 입력해주세요');
+                return;
+              }
               rejectMentoring(props.id, props.rejectReason, AuthStore.jwt);
             }}
           >
@@ -124,6 +128,10 @@ export function ModalFooter(props: ModalFooterProps) {
         <Button
           style={{ backgroundColor: defaultTheme.colors.polarSimpleMain }}
           onClick={() => {
+            if (!props?.selectedTime) {
+              alert('멘토링 가능한 시간을 선택해주세요');
+              return;
+            }
             approveMentoring(props.id, props.selectedTime, AuthStore.jwt);
           }}
         >
@@ -146,6 +154,10 @@ export function ModalFooter(props: ModalFooterProps) {
           <Button
             style={{ backgroundColor: defaultTheme.colors.Red }}
             onClick={() => {
+              if (props?.rejectReason?.length < 1) {
+                alert('취소 사유를 입력해주세요');
+                return;
+              }
               rejectMentoring(props.id, props.rejectReason, AuthStore.jwt);
             }}
           >
