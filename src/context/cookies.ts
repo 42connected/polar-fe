@@ -3,6 +3,12 @@ import { Cookies } from 'react-cookie';
 const cookies = new Cookies();
 
 /**
+ * 하루를 초로 환산
+ * 60 * 60 * 24
+ */
+const DAY_TO_SECOND = 86400;
+
+/**
  * 쿠키 이름 리스트
  */
 export const TOKEN_LIST = {
@@ -15,20 +21,22 @@ export const TOKEN_LIST = {
  * 쿠키 옵션
  */
 export interface COOKIE_OPTION {
-  Expires?: Date;
-  'max-age'?: number;
-  domain?: string;
   path?: string;
+  expires?: Date;
+  maxAge?: number;
+  domain?: string;
   secure?: boolean;
-  samesite?: string;
   httpOnly?: boolean;
+  sameSite?: boolean | 'none' | 'lax' | 'strict';
+  encode?: (value: string) => string;
 }
 
 /**
  * 쿠키 기본 설정
  */
-export const DEFAULT_COOKIE_OPTION = {
+export const DEFAULT_COOKIE_OPTION: COOKIE_OPTION = {
   path: '/',
+  maxAge: DAY_TO_SECOND,
 };
 
 /**
