@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { InputCounter } from '../../../../components/input-counter';
 import defaultTheme from '../../../../styles/theme';
 import { ModalInfoElement } from '../modal-info-element';
 import { constTime } from './const-time';
@@ -10,32 +11,6 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   padding: 20px 0px;
-  /*background-color: ${defaultTheme.colors.polarBrightMain};*/
-`;
-
-const Input = styled.textarea`
-  width: 80%;
-  height: 100px;
-  padding: 10px;
-  background-color: #f6f6f6;
-  border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  vertical-align: top;
-  resize: none;
-  &:focus {
-    outline: none;
-  }
-  background-color: ${defaultTheme.colors.polarGray};
-`;
-
-export const Count = styled.div`
-  display: flex;
-  width: 80%;
-  justify-content: right;
-  margin: 5px;
-  align-items: center;
-  ${defaultTheme.fontSize.sizeSmall};
-  color: rgba(0, 0, 0, 0.5);
 `;
 
 export interface ConfirmProps {
@@ -99,18 +74,14 @@ export function Confirm(props: ConfirmProps) {
         link={''}
       />
       {props.isReject ? (
-        <>
-          <Input
-            onChange={e => {
-              props.rejectReasonSetter(e.target.value);
-            }}
-            value={props.rejectReason}
-            maxLength={250}
-          />
-          <Count>{props.rejectReason.length} / 250</Count>
-        </>
+        <InputCounter
+          setter={props.rejectReasonSetter}
+          value={props.rejectReason}
+          maxLength={250}
+          disabled={false}
+        />
       ) : (
-        <Input disabled={true} value={props.content} />
+        <InputCounter value={props.content} disabled={true} />
       )}
     </Container>
   );

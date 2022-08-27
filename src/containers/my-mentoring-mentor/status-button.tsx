@@ -29,7 +29,6 @@ export function StatusButton(props: ReportButtonProps) {
         <StatusColumn
           style={{
             color: defaultTheme.colors.polarSimpleMain,
-            textDecoration: 'underline',
             fontWeight: 'bold',
           }}
         >

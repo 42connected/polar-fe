@@ -3,15 +3,17 @@ import Container from '@mui/material/Container';
 import { Title } from './title';
 import { ReportElement } from './elements/report-element';
 import { ReportRowFeedback } from './report-row-feedback';
-import ReportRowWrite from './report-row-write';
 import ReportRowSignature from './report-row-signature';
 import { ReportFixableElement } from './elements/report-fixable-element';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import defaultTheme from '../../styles/theme';
 import { useParams } from 'react-router-dom';
-import ReportStore from '../../states/repoort/ReportStore';
+import ReportStore, {
+  ReportSaveFormdata,
+} from '../../states/repoort/ReportStore';
 import { observer } from 'mobx-react-lite';
 import AuthStore from '../../states/auth/AuthStore';
+import { ReportRowWrite } from './report-row-write';
 
 export const REPORT_STATE = {
   EDIT_POSSIBLE: '작성중',
@@ -67,6 +69,7 @@ const DefualtButton = styled.button`
   &:hover {
     opacity: 0.8;
   }
+  cursor: pointer;
 `;
 
 export const START_TIME = 0;
@@ -127,6 +130,13 @@ export const getTimeToString = (meetingAt: Date[]): string => {
 
 const ReportForm = observer(() => {
   const { reportId } = useParams<string>();
+  const [topic, setTopic] = useState<string>('');
+  const [content, setContent] = useState<string>('');
+  const [feedbackMessage, setFeedbackMessage] = useState<string>('');
+  const [feedback1, setFeedback1] = useState<number>(5);
+  const [feedback2, setFeedback2] = useState<number>(5);
+  const [feedback3, setFeedback3] = useState<number>(5);
+  const [place, setPlace] = useState<string>('');
 
   useEffect(() => {
     async function Initialize() {
@@ -134,22 +144,27 @@ const ReportForm = observer(() => {
         return;
       }
       await ReportStore.Initializer(reportId, AuthStore.getAccessToken());
+      setTopic(ReportStore?.report?.topic);
+      setContent(ReportStore?.report?.content);
+      setFeedbackMessage(ReportStore?.report?.feedbackMessage);
+      setFeedback1(ReportStore?.report?.feedback1);
+      setFeedback2(ReportStore?.report?.feedback2);
+      setFeedback3(ReportStore?.report?.feedback3);
+      setPlace(ReportStore?.report?.place);
     }
     Initialize();
   }, []);
 
-  const saveTemporary = () => {
-    if (!reportId) {
-      return;
-    }
-    ReportStore.saveTemporary(reportId, AuthStore.getAccessToken());
-  };
-
-  const saveDone = () => {
-    if (!reportId) {
-      return;
-    }
-    ReportStore.saveDone(reportId, AuthStore.getAccessToken());
+  const getSaveFormdate = (): ReportSaveFormdata => {
+    return {
+      place: place,
+      topic: topic,
+      content: content,
+      feedbackMessage: feedbackMessage,
+      feedback1: feedback1,
+      feedback2: feedback2,
+      feedback3: feedback3,
+    };
   };
 
   return (
@@ -178,7 +193,12 @@ const ReportForm = observer(() => {
             />
             <ReportFixableElement
               topic={'장소'}
-              content={ReportStore.report.place}
+              content={place}
+              contentSetter={setPlace}
+              isEditPossible={
+                ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+              }
+              maxLength={50}
             />
             <ReportElement
               topic={'멘토'}
@@ -190,23 +210,56 @@ const ReportForm = observer(() => {
             />
           </ReportInfoContainer>
           <ReportRowSignature />
-          <ReportRowWrite />
-          <ReportRowFeedback />
+          <ReportRowWrite
+            status={ReportStore.report.status}
+            topic={topic}
+            setTopic={setTopic}
+            content={content}
+            setContent={setContent}
+            feedbackMessage={feedbackMessage}
+            setFeedbackMessage={setFeedbackMessage}
+            isEditPossible={
+              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+            }
+          />
+          <ReportRowFeedback
+            feedback1={feedback1}
+            setFeedback1={setFeedback1}
+            feedback2={feedback2}
+            setFeedback2={setFeedback2}
+            feedback3={feedback3}
+            setFeedback3={setFeedback3}
+            isEditPossible={
+              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+            }
+          />
         </ReportContainer>
-        {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE ? (
-          <></>
-        ) : (
+        {ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE && (
           <ButtonContainer>
             <DefualtButton
               onClick={() => {
-                saveTemporary();
+                if (!reportId) {
+                  return;
+                }
+                ReportStore.saveTemporary(
+                  reportId,
+                  AuthStore.getAccessToken(),
+                  getSaveFormdate(),
+                );
               }}
             >
               임시 저장
             </DefualtButton>
             <DefualtButton
               onClick={() => {
-                saveDone();
+                if (!reportId) {
+                  return;
+                }
+                ReportStore.saveDone(
+                  reportId,
+                  AuthStore.getAccessToken(),
+                  getSaveFormdate(),
+                );
               }}
             >
               제출

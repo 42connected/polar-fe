@@ -44,7 +44,7 @@ const TableColumnTopic = styled.div`
   justify-content: left;
   align-items: center;
   padding-left: 30px;
-  text-decoration: underline;
+  cursor: pointer;
 `;
 
 const TableColumnTime = styled.div`

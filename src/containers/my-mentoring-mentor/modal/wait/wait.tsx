@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
+import { InputCounter } from '../../../../components/input-counter';
 import defaultTheme from '../../../../styles/theme';
-import { Count } from '../confirm/confirm';
 import { ModalInfoElement } from '../modal-info-element';
 import { selectTime } from './select-time';
 
@@ -11,22 +11,6 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   padding: 20px 0px;
-  /*background-color: ${defaultTheme.colors.polarBrightMain};*/
-`;
-
-const Input = styled.textarea`
-  width: 80%;
-  height: 100px;
-  padding: 10px;
-  background-color: #f6f6f6;
-  border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  vertical-align: top;
-  resize: none;
-  &:focus {
-    outline: none;
-  }
-  background-color: ${defaultTheme.colors.polarGray};
 `;
 
 export interface WaitProps {
@@ -96,18 +80,14 @@ export function Wait(props: WaitProps) {
         link={''}
       />
       {props.isReject ? (
-        <>
-          <Input
-            onChange={e => {
-              props.rejectReasonSetter(e.target.value);
-            }}
-            value={props.rejectReason}
-            maxLength={250}
-          />
-          <Count>{props.rejectReason.length} / 250</Count>
-        </>
+        <InputCounter
+          setter={props.rejectReasonSetter}
+          value={props.rejectReason}
+          maxLength={250}
+          disabled={false}
+        />
       ) : (
-        <Input disabled={true} value={props.content} />
+        <InputCounter value={props.content} disabled={true} />
       )}
     </Container>
   );

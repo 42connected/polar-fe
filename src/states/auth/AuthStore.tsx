@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable } from 'mobx';
 import {
   DEFAULT_COOKIE_OPTION,
   getCookie,
@@ -39,6 +39,7 @@ class AuthStore {
     removeCookie(TOKEN_LIST.ACCESS_TOKEN, DEFAULT_COOKIE_OPTION);
     removeCookie(TOKEN_LIST.INTRA_ID, DEFAULT_COOKIE_OPTION);
     removeCookie(TOKEN_LIST.USER_ROLE), DEFAULT_COOKIE_OPTION;
+    location.reload();
   }
 
   /**
@@ -46,8 +47,9 @@ class AuthStore {
    */
   async Login() {
     setCookie(TOKEN_LIST.ACCESS_TOKEN, 'token', DEFAULT_COOKIE_OPTION);
-    setCookie(TOKEN_LIST.INTRA_ID, 'intraid', DEFAULT_COOKIE_OPTION);
-    setCookie(TOKEN_LIST.USER_ROLE, 'role', DEFAULT_COOKIE_OPTION);
+    setCookie(TOKEN_LIST.INTRA_ID, 'intraID', DEFAULT_COOKIE_OPTION);
+    setCookie(TOKEN_LIST.USER_ROLE, USER_ROLES.MENTOR, DEFAULT_COOKIE_OPTION);
+    location.reload();
   }
 
   /**

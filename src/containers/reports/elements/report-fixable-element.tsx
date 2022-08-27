@@ -4,8 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import defaultTheme from '../../../styles/theme';
-import ReportStore from '../../../states/repoort/ReportStore';
-import { REPORT_STATE } from '../report-form';
 
 const FixableElement = styled.div`
   display: flex;
@@ -27,6 +25,7 @@ const FixableIcon = styled.div`
   &:hover {
     color: gray;
   }
+  cursor: pointer;
 `;
 
 const EditContentInput = styled.input`
@@ -45,6 +44,9 @@ const EditContentInput = styled.input`
 export interface ReportFixableElementProps {
   topic: string;
   content: string | undefined;
+  contentSetter: (s: string) => void;
+  isEditPossible: boolean;
+  maxLength: number;
 }
 
 export function ReportFixableElement(props: ReportFixableElementProps) {
@@ -58,7 +60,7 @@ export function ReportFixableElement(props: ReportFixableElementProps) {
           <>
             <EditContentInput
               onChange={e => {
-                ReportStore.setPlace(e.target.value);
+                props.contentSetter(e.target.value);
               }}
               value={props.content || ''}
               onKeyDown={e => {
@@ -66,7 +68,7 @@ export function ReportFixableElement(props: ReportFixableElementProps) {
                   setIsEdit(false);
                 }
               }}
-              maxLength={50}
+              maxLength={props.maxLength}
             />
             <FixableIcon
               onClick={() => {
@@ -79,8 +81,7 @@ export function ReportFixableElement(props: ReportFixableElementProps) {
         ) : (
           <>
             <Content>{props.content ? props.content : '(입력 필요)'}</Content>
-            {ReportStore.report.status ===
-            REPORT_STATE.EDIT_IMPOSSIBLE ? null : (
+            {props.isEditPossible && (
               <FixableIcon
                 onClick={() => {
                   setIsEdit(true);

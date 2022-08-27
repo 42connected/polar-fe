@@ -24,6 +24,7 @@ const LinkContainer = styled.div`
   color: ${defaultTheme.colors.polarSimpleMain};
   font-weight: bold;
   text-decoration: underline;
+  cursor: pointer;
 `;
 
 export interface ReportButtonProps {

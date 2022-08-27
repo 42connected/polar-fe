@@ -120,6 +120,7 @@ export function Email(props: EmailProps) {
                 onClick={() => {
                   setIsEdit(!isEdit);
                 }}
+                style={{ cursor: 'pointer' }}
               />
               <FontAwesomeIcon
                 icon={faCheck}
@@ -127,11 +128,16 @@ export function Email(props: EmailProps) {
                   authenticate();
                   setIsEdit(false);
                 }}
+                style={{ cursor: 'pointer' }}
               />
             </DoubleButton>
           </>
         ) : (
-          <FontAwesomeIcon icon={faPencil} onClick={() => setIsEdit(!isEdit)} />
+          <FontAwesomeIcon
+            icon={faPencil}
+            onClick={() => setIsEdit(!isEdit)}
+            style={{ cursor: 'pointer' }}
+          />
         )}
       </Field>
       {time && (
@@ -142,7 +148,11 @@ export function Email(props: EmailProps) {
               setEmailVerify(e.target.value);
             }}
           />
-          <FontAwesomeIcon icon={faCheck} onClick={verify} />
+          <FontAwesomeIcon
+            icon={faCheck}
+            onClick={verify}
+            style={{ cursor: 'pointer' }}
+          />
         </Field>
       )}
     </Container>

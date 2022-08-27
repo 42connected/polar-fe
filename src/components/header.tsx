@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled, { StyledComponent } from 'styled-components';
+import styled from 'styled-components';
 import logo from '../assets/image/logo/logo.png';
 import AuthStore from '../states/auth/AuthStore';
 import theme from '../styles/theme';
@@ -73,7 +72,6 @@ const Header = () => {
           <LoginButton
             onClick={() => {
               AuthStore.Logout();
-              location.reload();
             }}
           >
             로그아웃
@@ -82,7 +80,6 @@ const Header = () => {
           <LoginButton
             onClick={() => {
               AuthStore.Login();
-              location.reload();
             }}
           >
             로그인

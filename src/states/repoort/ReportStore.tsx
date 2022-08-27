@@ -1,6 +1,16 @@
-import { action, makeObservable, observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { axiosInstance } from '../../context/axios-interface';
 import LoadingStore from '../loading/LoadingStore';
+
+export interface ReportSaveFormdata {
+  place?: string;
+  topic?: string;
+  content?: string;
+  feedbackMessage?: string;
+  feedback1?: number;
+  feedback2?: number;
+  feedback3?: number;
+}
 
 export interface Mentors {
   name: string;
@@ -35,17 +45,6 @@ export interface Report {
   mentoringLogs: MentoringLogs;
 }
 
-export interface SaveParams {
-  place?: string;
-  topic?: string;
-  content?: string;
-  feedbackMessage?: string;
-  feedback1?: number;
-  feedback2?: number;
-  feedback3?: number;
-  isDone?: boolean;
-}
-
 class ReportStore {
   report: Report;
   save;
@@ -54,13 +53,6 @@ class ReportStore {
     makeObservable(this, {
       report: observable,
       save: observable,
-      setPlace: action,
-      setTopic: action,
-      setContent: action,
-      setFeedbackMessage: action,
-      setFeedback1: action,
-      setFeedback2: action,
-      setFeedback3: action,
     });
     this.report = {
       id: '',
@@ -84,34 +76,6 @@ class ReportStore {
     this.save = new FormData();
   }
 
-  setPlace(place: string) {
-    this.report.place = place;
-  }
-
-  setTopic(topic: string) {
-    this.report.topic = topic;
-  }
-
-  setContent(content: string) {
-    this.report.content = content;
-  }
-
-  setFeedbackMessage(feedbackMessage: string) {
-    this.report.feedbackMessage = feedbackMessage;
-  }
-
-  setFeedback1(feedback1: number) {
-    this.report.feedback1 = feedback1;
-  }
-
-  setFeedback2(feedback2: number) {
-    this.report.feedback2 = feedback2;
-  }
-
-  setFeedback3(feedback3: number) {
-    this.report.feedback3 = feedback3;
-  }
-
   deleteFormdataExceptImage() {
     this.save.delete('place');
     this.save.delete('topic');
@@ -123,32 +87,32 @@ class ReportStore {
     this.save.delete('isDone');
   }
 
-  appendFormdataExceptImage() {
-    if (this.report.place) {
-      this.save.append('place', this.report.place);
+  appendFormdataExceptImage(data: ReportSaveFormdata) {
+    if (data.place) {
+      this.save.append('place', data.place);
     }
-    if (this.report.topic) {
-      this.save.append('topic', this.report.topic);
+    if (data.topic) {
+      this.save.append('topic', data.topic);
     }
-    if (this.report.content) {
-      this.save.append('content', this.report.content);
+    if (data.content) {
+      this.save.append('content', data.content);
     }
-    if (this.report.feedbackMessage) {
-      this.save.append('feedbackMessage', this.report.feedbackMessage);
+    if (data.feedbackMessage) {
+      this.save.append('feedbackMessage', data.feedbackMessage);
     }
-    if (this.report.feedback1) {
-      this.save.append('feedback1', this.report.feedback1.toString());
+    if (data.feedback1) {
+      this.save.append('feedback1', data.feedback1.toString());
     }
-    if (this.report.feedback2) {
-      this.save.append('feedback2', this.report.feedback2.toString());
+    if (data.feedback2) {
+      this.save.append('feedback2', data.feedback2.toString());
     }
-    if (this.report.feedback3) {
-      this.save.append('feedback3', this.report.feedback3.toString());
+    if (data.feedback3) {
+      this.save.append('feedback3', data.feedback3.toString());
     }
   }
 
-  async saveDone(reportId: string, token: string) {
-    this.appendFormdataExceptImage();
+  async saveDone(reportId: string, token: string, data: ReportSaveFormdata) {
+    this.appendFormdataExceptImage(data);
     this.save.append('isDone', 'true');
     LoadingStore.on();
     await axiosInstance
@@ -170,8 +134,12 @@ class ReportStore {
     LoadingStore.off();
   }
 
-  async saveTemporary(reportId: string, token: string) {
-    this.appendFormdataExceptImage();
+  async saveTemporary(
+    reportId: string,
+    token: string,
+    data: ReportSaveFormdata,
+  ) {
+    this.appendFormdataExceptImage(data);
     LoadingStore.on();
     await axiosInstance
       .patch(`/reports/${reportId}`, this.save, {
@@ -207,7 +175,6 @@ class ReportStore {
       .then(res => {
         res.data;
         document.location.href = `/mentorings/reports/${res.data}`;
-        //location.reload();
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);

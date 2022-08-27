@@ -6,8 +6,6 @@ import {
 import styled from '@emotion/styled';
 import { Rating } from '@mui/material';
 import defaultTheme from '../../styles/theme';
-import ReportStore from '../../states/repoort/ReportStore';
-import { REPORT_STATE } from './report-form';
 
 const ReportRowContentTitie = styled.div`
   width: 100%;
@@ -27,7 +25,17 @@ const ReportFeedbackRow = styled.div`
   align-items: center;
 `;
 
-export function ReportRowFeedback() {
+interface ReportRowFeedbackProps {
+  feedback1: number;
+  setFeedback1: (n: number) => void;
+  feedback2: number;
+  setFeedback2: (n: number) => void;
+  feedback3: number;
+  setFeedback3: (n: number) => void;
+  isEditPossible: boolean;
+}
+
+export function ReportRowFeedback(props: ReportRowFeedbackProps) {
   return (
     <ReportRowContainer>
       <ReportRowTitle>피드백</ReportRowTitle>
@@ -37,57 +45,42 @@ export function ReportRowFeedback() {
           1. 교육생이 궁금한 것을 잘 정리해 왔나?
           <Rating
             name="simple-controlled"
-            defaultValue={
-              ReportStore?.report?.feedback1 ? ReportStore.report.feedback1 : 5
-            }
+            defaultValue={5}
+            value={props.feedback1}
             onChange={(event, newValue) => {
               if (newValue) {
-                ReportStore.setFeedback1(newValue);
+                props.setFeedback1(newValue);
               }
             }}
-            readOnly={
-              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
-                ? false
-                : true
-            }
+            readOnly={!props.isEditPossible}
           />
         </ReportFeedbackRow>
         <ReportFeedbackRow>
           2. 교육생과 함께 한 시간이 만족스러웠나?
           <Rating
             name="simple-controlled"
-            defaultValue={
-              ReportStore?.report?.feedback2 ? ReportStore.report.feedback2 : 5
-            }
+            defaultValue={5}
+            value={props.feedback2}
             onChange={(event, newValue) => {
               if (newValue) {
-                ReportStore.setFeedback2(newValue);
+                props.setFeedback2(newValue);
               }
             }}
-            readOnly={
-              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
-                ? false
-                : true
-            }
+            readOnly={!props.isEditPossible}
           />
         </ReportFeedbackRow>
         <ReportFeedbackRow>
           3. 교육생이 전달한 내용을 잘 이해했나?
           <Rating
             name="simple-controlled"
-            defaultValue={
-              ReportStore?.report?.feedback3 ? ReportStore.report.feedback3 : 5
-            }
+            defaultValue={5}
+            value={props.feedback3}
             onChange={(event, newValue) => {
               if (newValue) {
-                ReportStore.setFeedback3(newValue);
+                props.setFeedback3(newValue);
               }
             }}
-            readOnly={
-              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
-                ? false
-                : true
-            }
+            readOnly={!props.isEditPossible}
           />
         </ReportFeedbackRow>
       </ReportRowContent>
