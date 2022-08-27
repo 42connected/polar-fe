@@ -72,6 +72,11 @@ const DefualtButton = styled.button`
 export const START_TIME = 0;
 export const END_TIME = 1;
 
+/**
+ * 0 이상 10 미만의 숫자를 2자리 수로 만듦
+ * @param time Any number
+ * @returns 00, 01, 02... 09
+ */
 export const makeTimePair = (time: number) => {
   if (time >= 0 && time < 10) {
     const ret = time.toString();
@@ -80,6 +85,12 @@ export const makeTimePair = (time: number) => {
   return time.toString();
 };
 
+/**
+ * Date 변수를 스트링으로 변환
+ * - Date 형식이 아닌 변수는 - 리턴
+ * @param meetingAt :Date
+ * @returns "2022.08.19 (화)"
+ */
 export const getDayToString = (meetingAt: Date): string => {
   const date: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const startTime: Date = new Date(meetingAt);
@@ -92,6 +103,12 @@ export const getDayToString = (meetingAt: Date): string => {
   })`;
 };
 
+/**
+ * Date[2] 배열의 시간 간격을 리턴
+ * - Date 형식이 아닌 변수는 빈 문자열 리턴
+ * @param meetingAt :Date
+ * @returns "14:00 ~ 15:00"
+ */
 export const getTimeToString = (meetingAt: Date[]): string => {
   const startTime: Date = new Date(meetingAt[START_TIME]);
   const endTime: Date = new Date(meetingAt[END_TIME]);
@@ -113,9 +130,8 @@ const ReportForm = observer(() => {
 
   useEffect(() => {
     async function Initialize() {
-      await AuthStore.Login();
       if (reportId) {
-        await ReportStore.Initializer(reportId, AuthStore.jwt);
+        await ReportStore.Initializer(reportId, AuthStore.getAccessToken());
       } else {
         console.log('레포트ID가 존재하지 않습니다');
       }
@@ -125,7 +141,7 @@ const ReportForm = observer(() => {
 
   const saveTemporary = () => {
     if (reportId) {
-      ReportStore.saveTemporary(reportId, AuthStore.jwt);
+      ReportStore.saveTemporary(reportId, AuthStore.getAccessToken());
     } else {
       console.log('레포트ID가 존재하지 않습니다');
     }
@@ -133,7 +149,7 @@ const ReportForm = observer(() => {
 
   const saveDone = () => {
     if (reportId) {
-      ReportStore.saveDone(reportId, AuthStore.jwt);
+      ReportStore.saveDone(reportId, AuthStore.getAccessToken());
     } else {
       console.log('레포트ID가 존재하지 않습니다');
     }

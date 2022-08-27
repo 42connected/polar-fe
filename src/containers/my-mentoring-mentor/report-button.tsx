@@ -76,9 +76,10 @@ export function ReportButton(props: ReportButtonProps) {
     return (
       <LinkContainer
         onClick={async () => {
-          // FIXME: AuthStore ...
-          await AuthStore.Login();
-          await ReportStore.createReport(props.mentoringId, AuthStore.jwt);
+          await ReportStore.createReport(
+            props.mentoringId,
+            AuthStore.getAccessToken(),
+          );
         }}
       >
         {status}

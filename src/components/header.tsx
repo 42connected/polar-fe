@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { StyledComponent } from 'styled-components';
 import logo from '../assets/image/logo/logo.png';
+import AuthStore from '../states/auth/AuthStore';
 import theme from '../styles/theme';
 
 const HeaderStyle = styled.header`
@@ -15,6 +16,7 @@ const HeaderStyle = styled.header`
   background-color: ${theme.colors.backgoundWhite};
   box-shadow: ${theme.shadow.defaultShadow};
 `;
+
 const LogoButton = styled.button`
   cursor: pointer;
   font-size: 3rem;
@@ -67,9 +69,25 @@ const Header = () => {
             polar
           </LogoButton>
         </Link>
-        <Link to="/login">
-          <LoginButton>로그인</LoginButton>
-        </Link>
+        {AuthStore.getAccessToken() ? (
+          <LoginButton
+            onClick={() => {
+              AuthStore.Logout();
+              location.reload();
+            }}
+          >
+            로그아웃
+          </LoginButton>
+        ) : (
+          <LoginButton
+            onClick={() => {
+              AuthStore.Login();
+              location.reload();
+            }}
+          >
+            로그인
+          </LoginButton>
+        )}
         <Link to="/mypage">
           <MypageButton>마이페이지</MypageButton>
         </Link>

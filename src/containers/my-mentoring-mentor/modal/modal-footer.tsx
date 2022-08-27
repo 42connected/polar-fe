@@ -107,7 +107,11 @@ export function ModalFooter(props: ModalFooterProps) {
                 alert('취소 사유를 입력해주세요');
                 return;
               }
-              rejectMentoring(props.id, props.rejectReason, AuthStore.jwt);
+              rejectMentoring(
+                props.id,
+                props.rejectReason,
+                AuthStore.getAccessToken(),
+              );
             }}
           >
             거절
@@ -132,7 +136,11 @@ export function ModalFooter(props: ModalFooterProps) {
               alert('멘토링 가능한 시간을 선택해주세요');
               return;
             }
-            approveMentoring(props.id, props.selectedTime, AuthStore.jwt);
+            approveMentoring(
+              props.id,
+              props.selectedTime,
+              AuthStore.getAccessToken(),
+            );
           }}
         >
           수락
@@ -158,7 +166,11 @@ export function ModalFooter(props: ModalFooterProps) {
                 alert('취소 사유를 입력해주세요');
                 return;
               }
-              rejectMentoring(props.id, props.rejectReason, AuthStore.jwt);
+              rejectMentoring(
+                props.id,
+                props.rejectReason,
+                AuthStore.getAccessToken(),
+              );
             }}
           >
             거절

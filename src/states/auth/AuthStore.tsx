@@ -1,5 +1,11 @@
-import { makeObservable, observable } from 'mobx';
-import { axiosInstance } from '../../context/axios-interface';
+import { action, makeObservable, observable } from 'mobx';
+import {
+  DEFAULT_COOKIE_OPTION,
+  getCookie,
+  removeCookie,
+  setCookie,
+  TOKEN_LIST,
+} from '../../context/cookies';
 
 export interface User {
   intraId: string;
@@ -12,46 +18,59 @@ export const USER_ROLES = {
   BOCAL: 'bocal',
 };
 
+/**
+ * TODO: NEED REFACTOR
+ */
 class AuthStore {
-  isLogin: boolean;
-  jwt: string;
-  user: User;
-
   constructor() {
     makeObservable(this, {
-      isLogin: observable,
-      jwt: observable,
-      user: observable,
+      Login: action,
+      Logout: action,
+      getAccessToken: action,
+      getUserIntraId: action,
+      getUserRole: action,
     });
-    this.isLogin = false;
-    this.jwt = '';
-    this.user = { intraId: '', role: '' };
   }
 
+  /**
+   * 로그아웃, 토큰 및 AuthStore 값 초기화
+   */
   async Logout() {
-    this.isLogin = false;
-    this.jwt = '';
-    this.user = { intraId: '', role: '' };
+    console.log('asdasd');
+    removeCookie(TOKEN_LIST.ACCESS_TOKEN, DEFAULT_COOKIE_OPTION);
+    removeCookie(TOKEN_LIST.INTRA_ID, DEFAULT_COOKIE_OPTION);
+    removeCookie(TOKEN_LIST.USER_ROLE), DEFAULT_COOKIE_OPTION;
+    console.log(getCookie(TOKEN_LIST.ACCESS_TOKEN));
   }
 
+  /**
+   * 로그인, 토큰 및 AuthStore 값 설정
+   */
   async Login() {
-    this.isLogin = true;
-    this.jwt =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0tZW5nZW5nIiwicm9sZSI6ImJvY2FsIiwiaWF0IjoxNjYxNDc5MDUwLCJleHAiOjE2NjE1NjU0NTB9.Wt5HCn7vQoKOChVFxiNKgoAlfiBcCQPCYfIxFmjg1cA';
-    this.user = { intraId: 'm-engeng', role: USER_ROLES.MENTOR };
-    //await axiosInstance
-    //  .get(`/login`, { headers: { 'Access-Control-Allow-Origin': '*' } })
-    //  .then(res => {
-    //    this.jwt = res.data.jwt;
-    //    this.user = res.data.user;
-    //    this.isLogin = true;
-    //  })
-    //  .catch(() => {
-    //    alert('Login Error');
-    //  });
-    //console.log(this.jwt);
-    //console.log(this.user);
-    //console.log(this.isLogin);
+    setCookie(TOKEN_LIST.ACCESS_TOKEN, 'token', DEFAULT_COOKIE_OPTION);
+    setCookie(TOKEN_LIST.INTRA_ID, 'intraid', DEFAULT_COOKIE_OPTION);
+    setCookie(TOKEN_LIST.USER_ROLE, 'role', DEFAULT_COOKIE_OPTION);
+  }
+
+  /**
+   * @returns 쿠키에 저장된 Access Token을 가져옴, 없으면 undefined
+   */
+  getAccessToken() {
+    return getCookie(TOKEN_LIST.ACCESS_TOKEN);
+  }
+
+  /**
+   * @returns (쿠키)로그인 된 유저의 인트라 아이디를 가져옴, 없으면 undefined
+   */
+  getUserIntraId() {
+    return getCookie(TOKEN_LIST.INTRA_ID);
+  }
+
+  /**
+   * @returns (쿠키)로그인 된 유저의 ROLE을 가져옴, 없으면 undefined
+   */
+  getUserRole() {
+    return getCookie(TOKEN_LIST.USER_ROLE);
   }
 }
 
