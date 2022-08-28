@@ -24,10 +24,11 @@ import theme from '../../styles/theme';
 
 export const Containers = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  gird-gap: 20px;
   background: white;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  grid-column-gap: 10rem;
+  justify-items: center;
 `;
 
 export const RequiredWrapper = styled.div`
@@ -36,14 +37,17 @@ export const RequiredWrapper = styled.div`
   justify-content: center;
   padding-bottom: 100px;
   padding-top: 4rem;
+  width: 400px;
 `;
 
 export const OptionWrapper = styled.div`
-  display: grid;
+  padding-top: 4rem;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   padding-bottom: 100px;
-  margin-right: 5rem;
+  margin-top: 3rem;
+  margin-right: 0rem;
+  width: 500px;
 `;
 
 export const HeadLetters = styled.h1`
@@ -68,13 +72,25 @@ const NameTitle = styled.h2`
   padding-bottom: 5px;
 `;
 
-export const NameInput = styled.input`
+export const InfoInput = styled.input`
   width: 27rem;
   height: 3rem;
   border-radius: 20px;
   align: center;
   margin-left: 20px;
   margin-bottom: 10px;
+  padding-left: 3rem;
+  background: ${theme.colors.polarBackground}; 
+  border:none;
+  border-right:0px;
+  border-top:0px;
+  boder-left:0px;
+  boder-bottom:0px;"
+  fontSize: 19;
+  ${theme.font.sebangGothic}; 
+  ${theme.fontWeight.weightSmall}; 
+  ${theme.fontSize.sizeExtraSmall}; 
+}
 `;
 
 export const EmailInput = styled.input`
@@ -84,48 +100,27 @@ export const EmailInput = styled.input`
   align: center;
   margin-left: 20px;
   margin-bottom: 10px;
+  border:none;
+  border-right:0px;
+  border-top:0px;
+  boder-left:0px;
+  boder-bottom:0px;"
 `;
 
 export const CertificationSendingButton = styled.button`
-  margin-left: 210px;
+  margin-left: 240px;
   width: 70.19px;
   height: 35.11px;
-  background: ${defaultTheme.fontColor.grayColor};
+  justify-content: center;
+  background: ${defaultTheme.colors.polarSimpleMain};
   color: WHITE;
-  padding: 1rem;
+  padding-top: 1rem;
+  padding-right: 0.8rem;
   border: none;
   cursor: pointer;
   font-size: 27px;
   border-radius: 20px;
   position: absolute
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 18px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-`;
-
-const CertificationCodeTitleInput = styled.input`
-  width: 27rem;
-  height: 3rem;
-  border-radius: 20px;
-  align: center;
-  margin-left: 20px;
-  margin-bottom: 10px;
-`;
-
-const CertificationSucessButton = styled.button`
-  margin-left: 210px;
-  width: 70.19px;
-  height: 35.11px;
-  background: ${defaultTheme.fontColor.grayColor};
-  color: WHITE;
-  padding: 1rem;
-  border: none;
-  cursor: pointer;
-  font-size: 27px;
-  border-radius: 20px;
-  position: absolute;
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
@@ -159,6 +154,7 @@ export const TimeTableContainer = styled.ul`
   grid-template-rows: 4rem;
   grid-gap: 4px;
   list-style-type: none;
+  margin-right: 2rem;
 `;
 
 const ColumnDays = styled.li`
@@ -207,8 +203,10 @@ export const ToggleContainer = styled.p`
   align-items: center;
   height: 1px;
   gap: 5rem;
-  margin-top: 0rem;
-  padding-top; 0rem;
+  margin-top: 10rem;
+  padding-top; 10rem;
+  margin-bottom: 8rem;
+  padding-bottom; 8rem;
 `;
 
 const BodySmallFont = styled.p`
@@ -270,10 +268,10 @@ const SignUpMentor = () => {
     },
   ]);
 
-  // useEffect(() => {
-  //   AuthStore.Login();
-  //   MentorStore.getMentor(AuthStore.user.intraId, AuthStore.jwt);
-  // }, []);
+  useEffect(() => {
+    AuthStore.Login();
+    MentorStore.getMentor(AuthStore.user.intraId, AuthStore.jwt);
+  }, []);
 
   const nextId = useRef(1);
 
@@ -584,20 +582,23 @@ const SignUpMentor = () => {
 
         <div style={{ paddingBottom: '5px' }}>
           <NameTitle>본인 이름</NameTitle>
-          <NameInput
+          <InfoInput
             type="text"
             onChange={onNameChange}
+            placeholder="보고서 작성 등에 사용됩니다."
             maxLength={10}
-          ></NameInput>
+          ></InfoInput>
         </div>
 
         <div style={{ paddingBottom: '5px' }}>
           <NameTitle>슬랙 ID</NameTitle>
-          <NameInput
+          <InfoInput
             type="text"
             onChange={onSlackChange}
             maxLength={100}
-          ></NameInput>
+            placeholder="카뎃과의 연락에 사용됩니다."
+            color="blue"
+          ></InfoInput>
         </div>
         <>{alreadyRegistered && <p>이미 이메일이 등록되었습니다</p>}</>
         <>
@@ -605,10 +606,14 @@ const SignUpMentor = () => {
             <div>
               <div style={{ paddingBottom: '5px' }}>
                 <NameTitle>e-mail</NameTitle>
-                <EmailInput maxLength={100} onChange={onEmailChange} />
+                <InfoInput
+                  maxLength={100}
+                  onChange={onEmailChange}
+                  placeholder="멘토링 안내 메일이 전송됩니다."
+                />
               </div>
 
-              <div style={{ paddingBottom: '30px' }}>
+              <div style={{ paddingBottom: '0px', marginBottom: '0px' }}>
                 <CertificationSendingButton onClick={() => SendEmail(email)}>
                   인증
                 </CertificationSendingButton>
@@ -616,24 +621,27 @@ const SignUpMentor = () => {
                 <>{isMailFail && <p>메일 전송 실패했습니다</p>}</>
                 <>{mailOverlaped && <p>사용 불가능한 이메일입니다</p>}</>
               </div>
-              <NameTitle>인증코드</NameTitle>
-              <CertificationCodeTitleInput
+              <NameTitle style={{ paddingTop: '0px', marginTop: '0px' }}>
+                인증코드
+              </NameTitle>
+              <InfoInput
                 maxLength={10}
                 onChange={onCodeChange}
+                placeholder="인증코드를 입력해주세요."
               />
-              <CertificationSucessButton onClick={() => certificateEmail(code)}>
+              <CertificationSendingButton
+                onClick={() => certificateEmail(code)}
+              >
                 확인
-              </CertificationSucessButton>
+              </CertificationSendingButton>
               <>{isCodeSucess && <p>인증에 완료했습니다</p>}</>
               <>{isCodeFail && <p>인증에 실패했습니다</p>}</>
-              {/* <CertificationSucessLetter></CertificationSucessButtonLetter>
-        <CertificationSendingLetter></CertificationSendingButtonLetter> */}
             </div>
           )}
         </>
       </RequiredWrapper>
       <OptionWrapper>
-        <HeadLetters style={{ paddingLeft: '17rem' }}>
+        <HeadLetters style={{ paddingLeft: '16rem' }}>
           멘토링 가능 시간
         </HeadLetters>
         <ToggleContainer>
@@ -649,9 +657,7 @@ const SignUpMentor = () => {
         <NameTitle
           style={{
             paddingLeft: '1rem',
-            marginBottom: '0rem',
             height: '0rem',
-            paddingBottom: '0rem',
           }}
         >
           시간
@@ -677,13 +683,13 @@ const SignUpMentor = () => {
         <AddButtonImage
           src={addButtonImage}
           alt="add-button-image"
-          style={{ paddingLeft: '30.7rem' }}
+          style={{ paddingLeft: '27.7rem' }}
           onClick={onRowCreate}
         />
         <Button
           style={{
             marginBottom: '5rem',
-            marginLeft: '25rem',
+            marginLeft: '20rem',
             marginTop: '10rem',
           }}
           onClick={() => joinMentorServer(rows)}
