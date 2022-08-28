@@ -27,6 +27,7 @@ const LogoButton = styled.button`
   float: left;
   margin-left: 3rem;
 `;
+
 const MypageButton = styled.button`
   cursor: pointer;
   padding-right: 2rem;
@@ -37,6 +38,7 @@ const MypageButton = styled.button`
   margin-top: 0.4rem;
   background-color: transparent;
 `;
+
 const SuggestionButton = styled.button`
   cursor: pointer;
   padding-right: 2rem;
@@ -46,6 +48,7 @@ const SuggestionButton = styled.button`
   margin-top: 0.4rem;
   background-color: transparent;
 `;
+
 const LoginButton = styled.button`
   cursor: pointer;
   margin-right: 3rem;
@@ -102,13 +105,24 @@ const Header = () => {
           </LogoButton>
         </Link>
         {AuthStore.getAccessToken() ? (
-          <LoginButton
-            onClick={() => {
-              AuthStore.Logout();
-            }}
-          >
-            로그아웃
-          </LoginButton>
+          <>
+            <LoginButton
+              onClick={() => {
+                AuthStore.Logout();
+              }}
+            >
+              로그아웃
+            </LoginButton>
+            <Link
+              to={
+                AuthStore.getUserRole() === USER_ROLES.MENTOR
+                  ? `/mentors/mentorings/${AuthStore.getUserIntraId()}`
+                  : `/cadets/mentorings/${AuthStore.getUserIntraId()}`
+              }
+            >
+              <MypageButton>마이페이지</MypageButton>
+            </Link>
+          </>
         ) : (
           <LoginButton
             onClick={() => {

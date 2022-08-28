@@ -63,9 +63,9 @@ const MentorKeywordList = observer(() => {
           <>
             {KeywordStore?.keywords?.map((e, i) => (
               <MentorKeyword
-                name={e.keyword}
+                name={e}
                 key={i + 3}
-                isClicked={KeywordStore.selected.indexOf(e.keyword) !== -1}
+                isClicked={KeywordStore.selected.indexOf(e) !== -1}
               />
             ))}
           </>

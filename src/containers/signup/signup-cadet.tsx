@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import axios from 'axios';
-import { request } from 'http';
 import defaultTheme from '../../styles/theme';
 import singupImage from '../../assets/signup/signup.png';
 
