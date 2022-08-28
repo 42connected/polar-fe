@@ -14,6 +14,7 @@ import ReportDetail from './containers/report-detail/report-detail';
 import MentorDetail from './containers/mentor-detail/mentor-detail';
 import { Loading } from './components/loading';
 import { Login } from './containers/login/login';
+import SignUpCadet from './containers/signup/signup-cadet';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -44,6 +45,7 @@ const App = observer(() => {
           <Route path="*" element={<NotFound />} />
           <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
           <Route path="/mentors/join" element={<SignUpMentor />} />
+          <Route path="/cadets/join" element={<SignUpCadet />} />
         </Routes>
         <Footer />
       </Router>
