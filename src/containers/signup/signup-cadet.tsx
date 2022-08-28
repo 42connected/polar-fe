@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import axios from 'axios';
 import defaultTheme from '../../styles/theme';
 import singupImage from '../../assets/signup/signup.png';
+import AuthStore from '../../states/auth/AuthStore';
 
 // const UserMainImg = styled.img.attrs({
 //   src: `${singupImage}`,
@@ -79,10 +80,10 @@ async function onButtonSubmit() {
   try {
     axios.defaults.headers.common[
       'Authorization'
-    ] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NTFlYjU4Mi1kYjAwLTRmNWUtOTcwNy1hOGU5NjBhMmMzODgiLCJ1c2VybmFtZSI6Impva2FuZyIsInJvbGUiOiJjYWRldCIsImlhdCI6MTY2MTE0MDg5MywiZXhwIjoxNjYxMjI3MjkzfQ.JXg3AGXgDq4TXsPT1TQGHfek0i7Th6Jvj3LqvokoA7c`;
+    ] = `bearer ${AuthStore.getAccessToken()}`;
 
     const response = await axios.patch(
-      'ttps://polar42-be-dev.herokuapp.com/api/v1/cadets/join',
+      `${process.env.REACT_APP_BASE_BACKEND_URL}/cadets/join`,
       {
         name: '강주현',
       },
