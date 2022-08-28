@@ -125,7 +125,7 @@ const Header = () => {
             로그인
           </LoginButton>
         )}
-        {AuthStore.getUserRole() === 'cardet' ? (
+        {AuthStore.getUserRole() === 'cadet' ? (
           <div>
             <a href={`${process.env.REACT_APP_BASE_FORM_URL}`} target="_blank">
               <SuggestionButton>건의사항</SuggestionButton>
