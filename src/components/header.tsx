@@ -17,16 +17,20 @@ const HeaderStyle = styled.header`
 `;
 
 const LogoButton = styled.button`
+  margin-top: -0.5rem;
   cursor: pointer;
   font-size: 3rem;
+  letter-spacing: 0.1rem;
   border: none;
+  color: ${theme.fontColor.blueColor};
+  font-weight: 600;
   background-color: transparent;
   float: left;
   margin-left: 3rem;
 `;
 const MypageButton = styled.button`
   cursor: pointer;
-  padding-right: 1.5rem;
+  padding-right: 2rem;
   font-size: 1.8rem;
   float: right;
   border: none;
@@ -36,7 +40,7 @@ const MypageButton = styled.button`
 `;
 const SuggestionButton = styled.button`
   cursor: pointer;
-  padding-right: 1rem;
+  padding-right: 2rem;
   font-size: 1.8rem;
   float: right;
   border: none;
@@ -51,14 +55,41 @@ const LoginButton = styled.button`
   background-color: transparent;
   margin-top: 0.2rem;
   border-radius: 10px;
+  border-style: solid;
+`;
+
+const MyMentoringButton = styled.button`
+  cursor: pointer;
+  padding-right: 2rem;
+  font-size: 1.8rem;
+  float: right;
+  border: none;
+  margin: 10;
+  margin-top: 0.4rem;
+  background-color: transparent;
+`;
+
+const DataRoomButton = styled.button`
+  cursor: pointer;
+  padding-right: 2rem;
+  font-size: 1.8rem;
+  float: right;
+  border: none;
+  margin: 10;
+  margin-top: 0.4rem;
+  background-color: transparent;
 `;
 
 const imagestyle = {
-  height: '3rem',
-  width: '3rem',
+  height: '4rem',
+  width: '4rem',
 };
 
 const Header = () => {
+  let links: string;
+  AuthStore.getUserRole()
+    ? (links = '/mentor-detail/' + AuthStore.getUserIntraId())
+    : '';
   return (
     <HeaderStyle>
       <div className="header">
@@ -85,12 +116,37 @@ const Header = () => {
             로그인
           </LoginButton>
         )}
-        <Link to="/mypage">
-          <MypageButton>마이페이지</MypageButton>
-        </Link>
-        <Link to="/suggestion">
-          <SuggestionButton>건의사항</SuggestionButton>
-        </Link>
+        {AuthStore.getUserRole() === 'cardet' ? (
+          <div>
+            <Link to="/suggestion">
+              <SuggestionButton>건의사항</SuggestionButton>
+            </Link>
+            <Link to="/mypage">
+              <MypageButton>마이페이지</MypageButton>
+            </Link>{' '}
+          </div>
+        ) : AuthStore.getUserRole() === 'mentor' ? (
+          <div>
+            <Link to="/suggestion">
+              <SuggestionButton>건의사항</SuggestionButton>
+            </Link>
+            <Link to="/mentors/mentorings/">
+              <MyMentoringButton>나의 멘토링</MyMentoringButton>
+            </Link>
+            <Link to="/mentor-detail">
+              <MypageButton>마이페이지</MypageButton>
+            </Link>{' '}
+          </div>
+        ) : (
+          <div>
+            <Link to="/suggestion">
+              <SuggestionButton>건의사항</SuggestionButton>
+            </Link>
+            <Link to="/mypage">
+              <DataRoomButton>데이터룸</DataRoomButton>
+            </Link>{' '}
+          </div>
+        )}
       </div>
     </HeaderStyle>
   );
