@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../assets/image/logo/logo.png';
-import AuthStore from '../states/auth/AuthStore';
+import AuthStore, { USER_ROLES } from '../states/auth/AuthStore';
 import theme from '../styles/theme';
 
 const HeaderStyle = styled.header`
   position: relative;
-  transform: translateY(0%);
   top: 0;
   z-index: 10;
   width: 100%;
@@ -56,6 +55,7 @@ const LoginButton = styled.button`
   margin-top: 0.2rem;
   border-radius: 10px;
   border-style: solid;
+  color: ${theme.colors.blackOne};
 `;
 
 const MyMentoringButton = styled.button`
@@ -86,9 +86,11 @@ const imagestyle = {
 };
 
 const Header = () => {
-  let links: string;
+  let mdlinks = '/mentor-detail/';
+  let mlinks = '/mentors/mentorings/';
   AuthStore.getUserRole()
-    ? (links = '/mentor-detail/' + AuthStore.getUserIntraId())
+    ? ((mdlinks = '/mentor-detail/' + AuthStore.getUserIntraId()),
+      (mlinks = '/mentors/mentorings/' + AuthStore.getUserIntraId()))
     : '';
   return (
     <HeaderStyle>
@@ -118,33 +120,33 @@ const Header = () => {
         )}
         {AuthStore.getUserRole() === 'cardet' ? (
           <div>
-            <Link to="/suggestion">
+            <a href={`${process.env.REACT_APP_BASE_FORM_URL}`} target="_blank">
               <SuggestionButton>건의사항</SuggestionButton>
-            </Link>
+            </a>
             <Link to="/mypage">
               <MypageButton>마이페이지</MypageButton>
-            </Link>{' '}
+            </Link>
           </div>
         ) : AuthStore.getUserRole() === 'mentor' ? (
           <div>
-            <Link to="/suggestion">
+            <a href={`${process.env.REACT_APP_BASE_FORM_URL}`} target="_blank">
               <SuggestionButton>건의사항</SuggestionButton>
-            </Link>
-            <Link to="/mentors/mentorings/">
+            </a>
+            <Link to={mlinks}>
               <MyMentoringButton>나의 멘토링</MyMentoringButton>
             </Link>
-            <Link to="/mentor-detail">
+            <Link to={mdlinks}>
               <MypageButton>마이페이지</MypageButton>
-            </Link>{' '}
+            </Link>
           </div>
         ) : (
           <div>
-            <Link to="/suggestion">
+            <a href={`${process.env.REACT_APP_BASE_FORM_URL}`} target="_blank">
               <SuggestionButton>건의사항</SuggestionButton>
-            </Link>
-            <Link to="/mypage">
+            </a>
+            <Link to="/data-room">
               <DataRoomButton>데이터룸</DataRoomButton>
-            </Link>{' '}
+            </Link>
           </div>
         )}
       </div>
