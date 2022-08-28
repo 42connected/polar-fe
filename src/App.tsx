@@ -14,6 +14,7 @@ import ApplyPage from './containers/apply-page/apply-page';
 import ReportDetail from './containers/report-detail/report-detail';
 import MentorDetail from './containers/mentor-detail/mentor-detail';
 import { Loading } from './components/loading';
+import { Login } from './containers/login/login';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -38,6 +39,7 @@ const App = observer(() => {
             element={<MyMentoringMentor />}
           />
           <Route path="" element={<MainPage />} />
+          <Route path="login" element={<Login />} />
           <Route path="apply-page" element={<ApplyPage />} />
           <Route path="report-details" element={<ReportDetail />} />
           <Route path="*" element={<NotFound />} />

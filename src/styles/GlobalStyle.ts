@@ -12,7 +12,6 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100%;
     font-family: 'NanumGothic';
     line-height: 1.6;
-    background-color: ${defaultTheme.colors.polarGray};
   }
   input {
     display: flex;

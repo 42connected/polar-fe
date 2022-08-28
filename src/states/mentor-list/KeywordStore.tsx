@@ -2,19 +2,8 @@ import { makeObservable, observable, action } from 'mobx';
 import { axiosInstance } from '../../context/axios-interface';
 import LoadingStore from '../loading/LoadingStore';
 
-export class Keyword {
-  keyword: string;
-
-  constructor(keyword: string) {
-    makeObservable(this, {
-      keyword: observable,
-    });
-    this.keyword = keyword;
-  }
-}
-
 class KeywordStore {
-  keywords: Keyword[];
+  keywords: string[];
   selected: string[];
 
   constructor() {
@@ -25,6 +14,7 @@ class KeywordStore {
       removeSelectedByKeyword: action,
       seletedClear: action,
       clear: action,
+      Initializer: action,
     });
     this.keywords = [];
     this.selected = [];
@@ -55,7 +45,7 @@ class KeywordStore {
       .get(`/categories/${category}/keywords`)
       .then(res =>
         res?.data?.map((e: string) => {
-          this.keywords.push(new Keyword(e));
+          this.keywords.push(e);
         }),
       )
       .catch(err => {
