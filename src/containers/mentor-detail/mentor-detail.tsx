@@ -7,7 +7,7 @@ import Button from '../../components/button';
 import TimeTableMuiComponent from '../../components/mentor-detail/mui-table';
 import ReportSummaryInputComponent from '../../components/report-summery-input';
 import { axiosInstance } from '../../context/axios-interface';
-import { getCookie } from '../../context/cookies';
+import { getCookie, TOKEN_LIST } from '../../context/cookies';
 import { appointmentsInterface } from '../../interface/mentor-detail/appointments.interface';
 import { CommentProps } from '../../interface/mentor-detail/comment-props.interface';
 import { CommentsWithPageProps } from '../../interface/mentor-detail/comments-with-page.interface';
@@ -100,7 +100,7 @@ function MentorDetail() {
   };
   const getParams = useParams();
 
-  const accessToken = getCookie();
+  const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
   const config = {
     headers: { Authorization: `Bearer ${accessToken}` },
   };
