@@ -8,7 +8,7 @@ export const ReportContainer = styled.span`
   ${theme.fontSize.sizeExtraSmall};
   ${theme.font.nanumGothic};
   display: grid;
-  height: 230%;
+  height: 230vh;
   width: 100%;
   grid-template-rows: 10.7rem 5.8rem 0.6rem 4rem 0.6rem 3.9rem 4.1rem 5.3rem 0.6rem 8rem 24rem 26rem 11rem 10.7rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem 9.5rem;
   grid-template-columns: 7rem 8.5rem 5.5rem 17rem 5.7rem 7rem 18rem;
@@ -40,6 +40,7 @@ export const ReportContainer = styled.span`
   transition: all 0.25s ease-in-out;
   border-radius: 10px;
   margin-left: -2rem;
+  background-color: ${theme.colors.backgoundWhite};
 `;
 
 export const ImgLogo1 = styled.section`
@@ -94,7 +95,6 @@ export const Title = styled.section`
   grid-column-end: 7;
   grid-row-start: 2;
   border: 1px solid black;
-  border-bottom: 0px;
   height: 6.15rem;
   width: 56.8rem;
   text-align: center;
@@ -109,9 +109,12 @@ export const NoneValue1 = styled.section`
   grid-column-end: 7;
   grid-row-start: 3;
   border: 1px solid black;
+  border-top: 0px;
   height: 1rem;
   width: 56.8rem;
   text-align: center;
+  align-content: center;
+  justify-content: center;
 `;
 export const NoneValue2 = styled.section`
   background-color: ${theme.colors.backgoundWhite};
@@ -428,7 +431,8 @@ export const ContentTitle2 = styled.section`
   border-left: 1px solid black;
   grid-column-start: 3;
   grid-row-start: 11;
-  height: 24.5rem;
+  height: 24.6rem;
+  margin-top: -0.15rem;
   width: 5.5rem;
   text-align: center;
   padding-top: 10rem;
@@ -473,6 +477,8 @@ export const ContentBody2 = styled.section`
   box-sizing: border-box;
   border: 1px solid black;
   border-top: 0px;
+  border-bottom: 0px;
+  margin-top: -0.1rem;
   grid-column-start: 4;
   grid-row-start: 11;
   height: 24.5rem;
@@ -495,7 +501,7 @@ export const ContentBody3 = styled.section`
   width: 42.5rem;
   text-align: left;
   padding-top: 1.3rem;
-  margin-left: -0.5rem;
+  margin-left: -0.55rem;
   padding-left: 1rem;
 `;
 

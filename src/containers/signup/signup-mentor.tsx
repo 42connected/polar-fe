@@ -446,7 +446,7 @@ const SignUpMentor = () => {
       ] = `bearer ${AuthStore.getAccessToken()}`;
 
       const response = await axios.patch(
-        'https://polar42-be-dev.herokuapp.com/api/v1/mentors/join',
+        `${process.env.REACT_APP_BASE_BACKEND_URL}/mentors/join`,
         {
           name: name,
           slackId: slackId,
@@ -514,7 +514,7 @@ const SignUpMentor = () => {
       ] = `bearer ${AuthStore.getAccessToken()}`;
 
       const response = await axios.post(
-        'https://polar42-be-dev.herokuapp.com/api/v1/email-verifications',
+        `${process.env.REACT_APP_BASE_BACKEND_URL}/email-verifications`,
         {
           email: email,
         },
@@ -555,7 +555,7 @@ const SignUpMentor = () => {
       ] = `bearer ${AuthStore.getAccessToken()}`;
 
       const response = await axios.post(
-        `https://polar42-be-dev.herokuapp.com/api/v1/email-verifications/${code}`,
+        `${process.env.REACT_APP_BASE_BACKEND_URL}/email-verifications/${code}`,
         {
           code: code,
         },

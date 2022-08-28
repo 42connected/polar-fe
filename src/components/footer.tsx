@@ -4,7 +4,6 @@ import github from '../assets/image/keywordIcon/develop.png';
 
 const FooterStyle = styled.footer`
   position: relative;
-  transform: translateY(0%);
   bottom: 0;
   width: 100%;
   height: 12rem;
@@ -15,6 +14,7 @@ const FooterStyle = styled.footer`
 `;
 const FooterBody = styled.footer`
   text-align: center;
+  margin-top: -0.5rem;
 `;
 const FooterLastBody = styled.footer`
   text-align: center;
@@ -22,7 +22,7 @@ const FooterLastBody = styled.footer`
   margin-left: -2rem;
 `;
 const FooterLeftBody = styled.footer`
-  padding-top: 3rem;
+  padding-top: 2.5rem;
   margin-left: 4.5rem;
   text-align: left;
 `;
