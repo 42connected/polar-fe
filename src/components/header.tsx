@@ -91,6 +91,10 @@ const imagestyle = {
 const Header = () => {
   let mdlinks = '/mentor-detail/';
   let mlinks = '/mentors/mentorings/';
+
+  const AlertDetail = () => {
+    return alert('카뎃배포는 다음주입니다! 조금만 기다려주세요:)'), null;
+  };
   AuthStore.getUserRole()
     ? ((mdlinks = '/mentor-detail/' + AuthStore.getUserIntraId()),
       (mlinks = '/mentors/mentorings/' + AuthStore.getUserIntraId()))
