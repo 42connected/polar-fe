@@ -22,7 +22,6 @@ export function Login() {
   const code = params.get('code');
 
   useEffect(() => {
-    //LoadingStore.on();
     axios
       .get(`${process.env.REACT_APP_BASE_LOGIN_CALLBACK_URL}?code=${code}`)
       .then(res => {
@@ -46,7 +45,6 @@ export function Login() {
       .catch(err => {
         alert(err);
       });
-    //LoadingStore.off();
   });
 
   return (
