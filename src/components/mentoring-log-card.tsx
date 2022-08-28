@@ -1,20 +1,18 @@
 import styled from '@emotion/styled';
+import { Box, Modal, Typography } from '@mui/material';
+import { useState } from 'react';
 import { MentoringLog } from '../interfaces/cadet-mentoring/mentoring-log.interface';
 import defaultTheme from '../styles/theme';
 
 const Container = styled.div`
   display: flex;
-  /* width: 370px; */
-  /* width: 100%; */
-
   flex-direction: column;
   align-items: center;
-  padding: 15px 25px;
+  padding: 15px 25px 10px 25px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: white;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
-    rgba(0, 0, 0, 0.06) 0px 1px 10px 0px;
+    rgba(0, 0, 0, 0.06) 0px 1px 5px 0px;
 `;
 
 const MentorName = styled.div`
@@ -75,7 +73,7 @@ const Topic = styled.div`
   padding: 10px;
   ${defaultTheme.font.nanumGothic};
   ${defaultTheme.fontSize.sizeSmall};
-  background-color: ${defaultTheme.colors.graySix};
+  background-color: #eaeaea;
   border-radius: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -99,7 +97,10 @@ const formatDate = (date: Date): string => {
 };
 
 const getDurationTime = (meetingAt: Date[]): string => {
-  return '1시간 00분';
+  const hour = meetingAt[1].getHours() - meetingAt[0].getHours();
+  let minute = meetingAt[1].getMinutes() - meetingAt[0].getMinutes();
+  minute = minute > 0 ? minute : -minute;
+  return `${hour}시간 ${minute.toString().padStart(2, '0')}분`;
 };
 
 const getMeetingAt = (meetingAt: Date[]): string => {
@@ -164,26 +165,43 @@ const stringToDate = (log: MentoringLog): void => {
     : null;
 };
 
+const style = {
+  position: 'absolute' as const,
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  height: 500,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
+
 export function MentorCard(props: CardProps) {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const log = props.log;
   stringToDate(log);
   return (
-    <Container>
-      <Header>
-        <LeftData>
-          <MentorName>{log.mentor.name} 멘토님</MentorName>
-          <RequestTime>요청 | {formatDate(log.createdAt)}</RequestTime>
-          <MeetingAt>만남 | {getMeetingAt(log.meta.meetingAt)}</MeetingAt>
-        </LeftData>
-        <RightData style={{ backgroundColor: getColor(log.status) }}>
-          <Status>{log.status}</Status>
-        </RightData>
-      </Header>
-      <Topic>{log.topic}</Topic>
-      <Bottom>
-        <div></div>
-        <DetailsButton>전체보기 &gt;</DetailsButton>
-      </Bottom>
-    </Container>
+    <>
+      <Container>
+        <Header>
+          <LeftData>
+            <MentorName>{log.mentor.name} 멘토님</MentorName>
+            <RequestTime>요청 | {formatDate(log.createdAt)}</RequestTime>
+            <MeetingAt>만남 | {getMeetingAt(log.meta.meetingAt)}</MeetingAt>
+          </LeftData>
+          <RightData style={{ backgroundColor: getColor(log.status) }}>
+            <Status>{log.status}</Status>
+          </RightData>
+        </Header>
+        <Topic>{log.topic}</Topic>
+        <Bottom>
+          <div></div>
+          <DetailsButton onClick={handleOpen}>전체보기 &gt;</DetailsButton>
+        </Bottom>
+      </Container>
+    </>
   );
 }

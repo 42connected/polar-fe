@@ -10,19 +10,19 @@ import { MentoringLog } from '../../interfaces/cadet-mentoring/mentoring-log.int
 const NoneDrag = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
+  /* height: min-content; */
   flex-direction: column;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   align-items: center;
-  background-color: white;
 `;
 
 const MentorCards = styled.div`
   display: grid;
   width: 90%;
+  height: 100%;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(350px, 380px));
   gap: 20px;
@@ -56,12 +56,13 @@ const CadetMentornig = observer(() => {
 
   return (
     <>
+      {/* <Modal isWait={true} /> */}
       <NoneDrag>
         <Header url={url} setUrl={setUrl}></Header>
         <MentorCards>
-          {logs.map(log => {
+          {/* {logs.map(log => {
             return <MentorCard log={log}></MentorCard>;
-          })}
+          })} */}
         </MentorCards>
       </NoneDrag>
     </>
