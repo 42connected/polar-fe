@@ -463,7 +463,7 @@ const SignUpMentor = () => {
         alert('제출에 실패하셨습니다');
       }
     } catch (err) {
-      console.error(err);
+      alert('제출에 실패하셨습니다');
     } finally {
       LoadingStore.off();
     }
@@ -511,7 +511,7 @@ const SignUpMentor = () => {
       LoadingStore.on();
       axios.defaults.headers.common[
         'Authorization'
-      ] = `bearer ${AuthStore.getAccessToken}`;
+      ] = `bearer ${AuthStore.getAccessToken()}`;
 
       const response = await axios.post(
         'https://polar42-be-dev.herokuapp.com/api/v1/email-verifications',
@@ -528,7 +528,7 @@ const SignUpMentor = () => {
     } catch (error: any) {
       if (MentorStore.mentor.email === email) {
         setAlreadyRegistered(true);
-      } else if (error.response.status === 409) {
+      } else if (error.response && error.response.status === 409) {
         setMailOverlaped(true);
       } else {
         setIsMailFail(true);
