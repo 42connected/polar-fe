@@ -1,4 +1,5 @@
 import { action, makeObservable } from 'mobx';
+import { axiosInstance } from '../../context/axios-interface';
 import {
   DEFAULT_COOKIE_OPTION,
   getCookie,
@@ -45,12 +46,24 @@ class AuthStore {
   /**
    * 로그인, 토큰 및 AuthStore 값 설정
    */
-  async Login() {
-    setCookie(TOKEN_LIST.ACCESS_TOKEN, 'token', DEFAULT_COOKIE_OPTION);
-    setCookie(TOKEN_LIST.INTRA_ID, 'intraID', DEFAULT_COOKIE_OPTION);
-    setCookie(TOKEN_LIST.USER_ROLE, USER_ROLES.MENTOR, DEFAULT_COOKIE_OPTION);
-    location.reload();
+  Login() {
+    axiosInstance
+      .get('login')
+      .then(res => {
+        document.location.href = res.data;
+      })
+      .catch(err => alert(err));
   }
+
+  /**
+   * 테스트용 Login Mock function
+   */
+  //Login() {
+  //  setCookie(TOKEN_LIST.ACCESS_TOKEN, '', DEFAULT_COOKIE_OPTION);
+  //  setCookie(TOKEN_LIST.INTRA_ID, '', DEFAULT_COOKIE_OPTION);
+  //  setCookie(TOKEN_LIST.USER_ROLE, '', DEFAULT_COOKIE_OPTION);
+  //  location.reload();
+  //}
 
   /**
    * @returns 쿠키에 저장된 Access Token을 가져옴, 없으면 undefined
