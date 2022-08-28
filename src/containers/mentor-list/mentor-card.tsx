@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import defaultTheme from '../../styles/theme';
 import defaultProfile from '../../assets/image/defaultProfileImage.png';
+import { sliceMoreInfoStr } from '../my-mentoring-mentor/email';
 
 const Container = styled.div`
   display: flex;
@@ -84,6 +85,7 @@ const Button = styled.button`
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   font-weight: bold;
+  cursor: pointer;
 `;
 
 export interface CardProps {
@@ -92,15 +94,6 @@ export interface CardProps {
   tags: string[] | null;
   profileImage: string;
   introduction: string;
-}
-
-function sliceIntroduction(str: string) {
-  const MAX_VIEW = 100;
-
-  if (str.length > MAX_VIEW) {
-    return `${str.slice(0, MAX_VIEW)}...`;
-  }
-  return str;
 }
 
 export function MentorCard(props: CardProps) {
@@ -128,7 +121,7 @@ export function MentorCard(props: CardProps) {
       </InfoContainer>
       <Introduce>
         {props.introduction
-          ? `${sliceIntroduction(props.introduction)}`
+          ? `${sliceMoreInfoStr(props.introduction, 100)}`
           : '프로필을 작성중입니다. ✍🏼'}
       </Introduce>
       <ButtonWrapper to={'/mentor-detail/' + props.intraId}>

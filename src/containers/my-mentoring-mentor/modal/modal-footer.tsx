@@ -103,7 +103,15 @@ export function ModalFooter(props: ModalFooterProps) {
           <Button
             style={{ backgroundColor: defaultTheme.colors.Red }}
             onClick={() => {
-              rejectMentoring(props.id, props.rejectReason, AuthStore.jwt);
+              if (props?.rejectReason?.length < 1) {
+                alert('취소 사유를 입력해주세요');
+                return;
+              }
+              rejectMentoring(
+                props.id,
+                props.rejectReason,
+                AuthStore.getAccessToken(),
+              );
             }}
           >
             거절
@@ -124,7 +132,15 @@ export function ModalFooter(props: ModalFooterProps) {
         <Button
           style={{ backgroundColor: defaultTheme.colors.polarSimpleMain }}
           onClick={() => {
-            approveMentoring(props.id, props.selectedTime, AuthStore.jwt);
+            if (!props?.selectedTime) {
+              alert('멘토링 가능한 시간을 선택해주세요');
+              return;
+            }
+            approveMentoring(
+              props.id,
+              props.selectedTime,
+              AuthStore.getAccessToken(),
+            );
           }}
         >
           수락
@@ -146,7 +162,15 @@ export function ModalFooter(props: ModalFooterProps) {
           <Button
             style={{ backgroundColor: defaultTheme.colors.Red }}
             onClick={() => {
-              rejectMentoring(props.id, props.rejectReason, AuthStore.jwt);
+              if (props?.rejectReason?.length < 1) {
+                alert('취소 사유를 입력해주세요');
+                return;
+              }
+              rejectMentoring(
+                props.id,
+                props.rejectReason,
+                AuthStore.getAccessToken(),
+              );
             }}
           >
             거절
