@@ -261,7 +261,7 @@ const ReportDetail = () => {
       setLoading(true);
       const save = await axiosInstance.get(`/reports/${reportId}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `bearer ${token}`,
         },
       });
       const tmp: reportsPro = save.data;
