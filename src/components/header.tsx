@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../assets/image/logo/logo.png';
-import AuthStore from '../states/auth/AuthStore';
+import AuthStore, { USER_ROLES } from '../states/auth/AuthStore';
 import theme from '../styles/theme';
 
 const HeaderStyle = styled.header`
@@ -24,6 +24,7 @@ const LogoButton = styled.button`
   float: left;
   margin-left: 3rem;
 `;
+
 const MypageButton = styled.button`
   cursor: pointer;
   padding-right: 1.5rem;
@@ -34,6 +35,7 @@ const MypageButton = styled.button`
   margin-top: 0.4rem;
   background-color: transparent;
 `;
+
 const SuggestionButton = styled.button`
   cursor: pointer;
   padding-right: 1rem;
@@ -43,6 +45,7 @@ const SuggestionButton = styled.button`
   margin-top: 0.4rem;
   background-color: transparent;
 `;
+
 const LoginButton = styled.button`
   cursor: pointer;
   margin-right: 3rem;
@@ -69,13 +72,24 @@ const Header = () => {
           </LogoButton>
         </Link>
         {AuthStore.getAccessToken() ? (
-          <LoginButton
-            onClick={() => {
-              AuthStore.Logout();
-            }}
-          >
-            로그아웃
-          </LoginButton>
+          <>
+            <LoginButton
+              onClick={() => {
+                AuthStore.Logout();
+              }}
+            >
+              로그아웃
+            </LoginButton>
+            <Link
+              to={
+                AuthStore.getUserRole() === USER_ROLES.MENTOR
+                  ? `/mentors/mentorings/${AuthStore.getUserIntraId()}`
+                  : `/cadets/mentorings/${AuthStore.getUserIntraId()}`
+              }
+            >
+              <MypageButton>마이페이지</MypageButton>
+            </Link>
+          </>
         ) : (
           <LoginButton
             onClick={() => {
@@ -85,12 +99,9 @@ const Header = () => {
             로그인
           </LoginButton>
         )}
-        <Link to="/mypage">
-          <MypageButton>마이페이지</MypageButton>
-        </Link>
-        <Link to="/suggestion">
+        <a href={`${process.env.REACT_APP_BASE_FORM_URL}`} target="_blank">
           <SuggestionButton>건의사항</SuggestionButton>
-        </Link>
+        </a>
       </div>
     </HeaderStyle>
   );
