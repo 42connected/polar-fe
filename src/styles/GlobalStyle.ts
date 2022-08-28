@@ -8,9 +8,10 @@ const GlobalStyle = createGlobalStyle`
     outline: none;
   }
   body {
+    height:100%;
+    min-height: 100%;
     font-family: 'NanumGothic';
     line-height: 1.6;
-    background-color: ${defaultTheme.colors.polarGray};
   }
   input {
     display: flex;

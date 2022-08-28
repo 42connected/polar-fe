@@ -1,17 +1,20 @@
 import { observer } from 'mobx-react-lite';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Loading } from './components/loading';
 import MentorList from './containers/mentor-list/mentor-list';
+import SignUpMentor from './containers/signup/signup-mentor';
 import MyMentoringMentor from './containers/my-mentoring-mentor/my-mentoring-mentor';
 import NotFound from './containers/not-found/not-found';
 import ReportForm from './containers/reports/report-form';
 import LoadingStore from './states/loading/LoadingStore';
 import Footer from './components/footer';
 import Header from './components/header';
-import Mainpage from './containers/mainpages/mainpage';
-import Applypage from './containers/cardetApplys/applypage';
-import ReportDetail from './containers/reportDetails/reportDetail';
+import MainPage from './containers/main-page/main-page';
+import ApplyPage from './containers/apply-page/apply-page';
+import ReportDetail from './containers/report-detail/report-detail';
 import MentorDetail from './containers/mentor-detail/mentor-detail';
+import { Loading } from './components/loading';
+import { Login } from './containers/login/login';
+import SignUpCadet from './containers/signup/signup-cadet';
 import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
 
 /*
@@ -29,7 +32,6 @@ const App = observer(() => {
         <ScrollToTop />
         <Header />
         <Routes>
-          /* * ADD <Route /> here */
           <Route path="/mentor-lists/:category" element={<MentorList />} />
           <Route
             path="/mentorings/reports/:reportId"
@@ -39,11 +41,14 @@ const App = observer(() => {
             path="/mentors/mentorings/:intraId"
             element={<MyMentoringMentor />}
           />
-          <Route path="" element={<Mainpage />}></Route>
-          <Route path="applypage" element={<Applypage />}></Route>
-          <Route path="reportdetails" element={<ReportDetail />}></Route>
+          <Route path="" element={<MainPage />} />
+          <Route path="login" element={<Login />} />
+          <Route path="apply-page" element={<ApplyPage />} />
+          <Route path="report-details" element={<ReportDetail />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
+          <Route path="/mentors/join" element={<SignUpMentor />} />
+          <Route path="/cadets/join" element={<SignUpCadet />} />
         </Routes>
         <Footer />
       </Router>

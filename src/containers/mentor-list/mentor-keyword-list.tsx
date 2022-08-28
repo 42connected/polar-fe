@@ -51,23 +51,21 @@ const MentorKeywordList = observer(() => {
         >
           전체
         </KeywordButton>
-        {KeywordStore.keywords.length > 3 && (
-          <KeywordButton
-            onClick={() => {
-              setIsExpand(!isExpand);
-            }}
-            color={defaultTheme.colors.polarBrightMain}
-          >
-            {isExpand ? '숨기기' : '펼치기'}
-          </KeywordButton>
-        )}
+        <KeywordButton
+          onClick={() => {
+            setIsExpand(!isExpand);
+          }}
+          color={defaultTheme.colors.polarBrightMain}
+        >
+          {isExpand ? '숨기기' : '펼치기'}
+        </KeywordButton>
         {isExpand && (
           <>
             {KeywordStore?.keywords?.map((e, i) => (
               <MentorKeyword
-                name={e.keyword}
+                name={e}
                 key={i + 3}
-                isClicked={KeywordStore.selected.indexOf(e.keyword) !== -1}
+                isClicked={KeywordStore.selected.indexOf(e) !== -1}
               />
             ))}
           </>

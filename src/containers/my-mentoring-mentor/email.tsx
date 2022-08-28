@@ -12,7 +12,6 @@ const Container = styled.div`
   width: 100%;
   justify-content: center;
   align-items: left;
-  height: 100px;
 `;
 
 const Title = styled.div`
@@ -61,6 +60,23 @@ const DoubleButton = styled.div`
   width: 50px;
 `;
 
+/**
+ * 긴 정보를 담고 있는 문자열을 원하는 크기로 자른 후 문자열 맨 마지막 위치에
+ * ... 을 추가함
+ * @param str 자를 문자열
+ * @param maxLength 자를 위치
+ * @returns 잘린 문자열
+ */
+export function sliceMoreInfoStr(str: string, maxLength: number) {
+  if (!str) {
+    return '';
+  }
+  if (str.length > maxLength) {
+    return `${str.slice(0, maxLength)}...`;
+  }
+  return str;
+}
+
 export interface EmailProps {
   email: string;
   setEmail: (email: string) => void;
@@ -72,18 +88,17 @@ export function Email(props: EmailProps) {
   const [emailVerify, setEmailVerify] = useState<string>('');
 
   const authenticate = async () => {
-    await AuthStore.Login();
-    await MentorStore.changeEmail(props.email, AuthStore.jwt);
+    const MINUTE_TO_SEC = 1000 * 60;
+    await MentorStore.changeEmail(props.email, AuthStore.getAccessToken());
     setTime(true);
-    console.log(() => {
+    setTimeout(() => {
       setTime(false);
-    }, 1000 * 180);
+    }, MINUTE_TO_SEC * 3);
   };
 
   const verify = async () => {
     setTime(true);
-    await AuthStore.Login();
-    await MentorStore.verifyEmail(emailVerify, AuthStore.jwt);
+    await MentorStore.verifyEmail(emailVerify, AuthStore.getAccessToken());
   };
 
   return (
@@ -91,7 +106,7 @@ export function Email(props: EmailProps) {
       <Field>
         <Title>Email</Title>
         <TextInput
-          value={props.email}
+          value={isEdit ? props.email : sliceMoreInfoStr(props.email, 23)}
           disabled={!isEdit}
           onChange={e => {
             props.setEmail(e.target.value);
@@ -105,6 +120,7 @@ export function Email(props: EmailProps) {
                 onClick={() => {
                   setIsEdit(!isEdit);
                 }}
+                style={{ cursor: 'pointer' }}
               />
               <FontAwesomeIcon
                 icon={faCheck}
@@ -112,11 +128,16 @@ export function Email(props: EmailProps) {
                   authenticate();
                   setIsEdit(false);
                 }}
+                style={{ cursor: 'pointer' }}
               />
             </DoubleButton>
           </>
         ) : (
-          <FontAwesomeIcon icon={faPencil} onClick={() => setIsEdit(!isEdit)} />
+          <FontAwesomeIcon
+            icon={faPencil}
+            onClick={() => setIsEdit(!isEdit)}
+            style={{ cursor: 'pointer' }}
+          />
         )}
       </Field>
       {time && (
@@ -127,7 +148,11 @@ export function Email(props: EmailProps) {
               setEmailVerify(e.target.value);
             }}
           />
-          <FontAwesomeIcon icon={faCheck} onClick={verify} />
+          <FontAwesomeIcon
+            icon={faCheck}
+            onClick={verify}
+            style={{ cursor: 'pointer' }}
+          />
         </Field>
       )}
     </Container>

@@ -46,12 +46,27 @@ import {
   ImgLogo2,
   ImgLogo3,
   ImgLogo4,
-} from './report-styled';
+} from './reportStyled';
+import AuthStore from '../../states/auth/AuthStore';
+import { useParams } from 'react-router-dom';
+import Alert from '@mui/material/Alert/Alert';
+import { width } from '@mui/system';
+import { debounce } from '@mui/material';
 
 const ReportpageStyle = styled.div`
-  margin-left: 30rem;
-  width: 60vw;
+  background-color: ${theme.colors.backgoundWhite};
+  margin-left: 40rem;
+  width: 100%;
   height: 130vw;
+  margin-left: 0;
+`;
+
+const ReportpageStyle2 = styled.div`
+  background-color: ${theme.colors.backgoundWhite};
+  margin-left: 40rem;
+  width: 100%;
+  height: 260vw;
+  margin-left: 0;
 `;
 
 const imagestyle1 = {
@@ -74,18 +89,18 @@ const ImgBody = styled.section`
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding-top: 13rem;
+  padding-top: 5rem;
 `;
 
 const ButtonBody = styled.section`
   display: flex;
-  justify-content: right;
+  justify-content: center;
   align-items: center;
 `;
 
 const PrintButton = styled.button`
   cursor: pointer;
-  margin-right: 3rem;
+  z-index: 1;
   font-size: 1.8rem;
   align-items: center;
   justify-content: center;
@@ -93,6 +108,7 @@ const PrintButton = styled.button`
   border-radius: 10px;
   width: 15rem;
   height: 4rem;
+  box-shadow: ${theme.shadow.buttonShadow};
 `;
 
 const SimpleComponent = (props: {
@@ -118,7 +134,7 @@ const SimpleComponent = (props: {
         </DateBox>
         <SubTitle8>시간</SubTitle8>
         <TimeBox>
-          {(reportdata?.mentoringLogs.meetingAt[0] + '').substring(11, 16)} ~{' '}
+          {(reportdata?.mentoringLogs.meetingAt[0] + '').substring(11, 16)}
           {(reportdata?.mentoringLogs.meetingAt[1] + '').substring(11, 16)}
         </TimeBox>
         <SubTitle3>장소</SubTitle3>
@@ -213,22 +229,41 @@ const SimpleComponent = (props: {
   );
 };
 
+const AlertDetail = (flag: boolean) => {
+  return flag
+    ? (alert('유효하지 않은 접근입니다.'), null)
+    : (alert('로그인이 필요합니다.'), null);
+};
+
 const ReportDetail = () => {
   const componentRef = useRef(null);
   const [isLoading, setLoading] = useState(false);
   const [reportdata, setreportdata] = useState<reportsPro | null>(null);
+  const { reportId } = useParams<string>();
+  const [token, setToken] = useState<string>('');
+  const [role, setRole] = useState<string>('');
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+  const [isMobile, setIsMobile] = useState(false);
+  const handleResize = debounce(() => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+    if (window.innerWidth < 1667) setIsMobile(true);
+    else setIsMobile(false);
+  }, 10);
+
   const getReports = async () => {
     try {
       setLoading(true);
-      const save = await axiosInstance.get(
-        'reports/3072b2af-4326-45fc-94f1-99636dab90ed',
-        {
-          headers: {
-            Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0tZW5nZW5nIiwicm9sZSI6ImJvY2FsIiwiaWF0IjoxNjYxMzM1ODQwLCJleHAiOjE2NjE0MjIyNDB9.nyiDjHVnQUsWsehCiKXRhk9B4RYz5hkaHghPK4L34RM',
-          },
+      const save = await axiosInstance.get(`/reports/${reportId}`, {
+        headers: {
+          Authorization: `bearer ${token}`,
         },
-      );
+      });
       const tmp: reportsPro = save.data;
       setreportdata(tmp);
       setLoading(false);
@@ -238,31 +273,59 @@ const ReportDetail = () => {
     }
   };
   useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    setToken(AuthStore.getAccessToken());
+    setRole(AuthStore.getUserRole());
     getReports();
-
-    return;
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return (
     <div className="reportpage">
-      {isLoading ? (
-        <div className="loader">
-          <span className="loader__text">Loading...</span>
-        </div>
+      {token ? (
+        role == 'mentor' ? (
+          isMobile ? (
+            <ReportpageStyle2>
+              <ImgBody>
+                <SimpleComponent
+                  printRef={componentRef}
+                  reportdata={reportdata}
+                />
+              </ImgBody>
+              <ReactToPrint
+                content={() => componentRef.current}
+                trigger={() => (
+                  <ButtonBody>
+                    <PrintButton>출력</PrintButton>
+                  </ButtonBody>
+                )}
+              />
+            </ReportpageStyle2>
+          ) : (
+            <ReportpageStyle>
+              <ImgBody>
+                <SimpleComponent
+                  printRef={componentRef}
+                  reportdata={reportdata}
+                />
+              </ImgBody>
+              <ReactToPrint
+                content={() => componentRef.current}
+                trigger={() => (
+                  <ButtonBody>
+                    <PrintButton>출력</PrintButton>
+                  </ButtonBody>
+                )}
+              />
+            </ReportpageStyle>
+          )
+        ) : (
+          <div>{AlertDetail(true)}</div>
+        )
       ) : (
-        <ReportpageStyle>
-          <ImgBody>
-            <SimpleComponent printRef={componentRef} reportdata={reportdata} />
-          </ImgBody>
-          <ReactToPrint
-            content={() => componentRef.current}
-            trigger={() => (
-              <ButtonBody>
-                <PrintButton>출력</PrintButton>
-              </ButtonBody>
-            )}
-          />
-        </ReportpageStyle>
+        <div>{AlertDetail(false)}</div>
       )}
     </div>
   );

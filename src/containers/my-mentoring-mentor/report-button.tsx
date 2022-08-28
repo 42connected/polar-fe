@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import AuthStore from '../../states/auth/AuthStore';
 import ReportStore from '../../states/repoort/ReportStore';
 import defaultTheme from '../../styles/theme';
+import { MENTORING_STATUS } from './modal/apply-detail-modal';
 
 const TableColumnReport = styled.div`
   ${defaultTheme.font.nanumGothic};
@@ -23,6 +24,7 @@ const LinkContainer = styled.div`
   color: ${defaultTheme.colors.polarSimpleMain};
   font-weight: bold;
   text-decoration: underline;
+  cursor: pointer;
 `;
 
 export interface ReportButtonProps {
@@ -46,17 +48,15 @@ export function ReportButton(props: ReportButtonProps) {
 
   useEffect(() => {
     if (
-      props.mentoringLogStatus === '대기중' ||
-      props.mentoringLogStatus === '확정'
+      props.mentoringLogStatus === MENTORING_STATUS.WAITING ||
+      props.mentoringLogStatus === MENTORING_STATUS.CONFIRM ||
+      props.mentoringLogStatus === MENTORING_STATUS.CANCLE
     ) {
       setStatus(REPORT_BUTTON_STATUS.WRITE_IMPOSSIBLE);
-    } else if (props.mentoringLogStatus === '완료') {
+    } else if (props.mentoringLogStatus === MENTORING_STATUS.DONE) {
       if (props?.report?.id) {
-        if (props?.report?.status === '작성완료') {
-          setStatus(REPORT_BUTTON_STATUS.DONE);
-        } else {
-          setStatus(REPORT_BUTTON_STATUS.WRITING);
-        }
+        // DONE, WRITING...
+        setStatus(props?.report?.status);
       } else {
         setStatus(REPORT_BUTTON_STATUS.WRITE_NEED);
       }
@@ -77,9 +77,10 @@ export function ReportButton(props: ReportButtonProps) {
     return (
       <LinkContainer
         onClick={async () => {
-          // FIXME: AuthStore ...
-          await AuthStore.Login();
-          await ReportStore.createReport(props.mentoringId, AuthStore.jwt);
+          await ReportStore.createReport(
+            props.mentoringId,
+            AuthStore.getAccessToken(),
+          );
         }}
       >
         {status}

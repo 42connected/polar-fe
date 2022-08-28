@@ -4,7 +4,6 @@ import github from '../assets/image/keywordIcon/develop.png';
 
 const FooterStyle = styled.footer`
   position: relative;
-  transform: translateY(100%);
   bottom: 0;
   width: 100%;
   height: 12rem;
@@ -15,6 +14,7 @@ const FooterStyle = styled.footer`
 `;
 const FooterBody = styled.footer`
   text-align: center;
+  margin-top: -0.5rem;
 `;
 const FooterLastBody = styled.footer`
   text-align: center;
@@ -22,7 +22,7 @@ const FooterLastBody = styled.footer`
   margin-left: -2rem;
 `;
 const FooterLeftBody = styled.footer`
-  padding-top: 3rem;
+  padding-top: 2.5rem;
   margin-left: 4.5rem;
   text-align: left;
 `;
@@ -32,9 +32,16 @@ const GithubButton = styled.button`
   margin-left: 7.5rem;
   margin-top: -2rem;
   background-color: transparent;
-  color: ${theme.colors.blackThree};
+  color: ${theme.colors.backgoundWhite};
   border: none;
 `;
+
+const Atag = styled.a`
+  font-weight: bold;
+  text-decoration: none;
+  color: ${theme.colors.backgoundWhite};
+`;
+
 const githubClick = () => {
   document.location.replace('https://github.com/42connected');
 };
@@ -63,11 +70,11 @@ const Footer = () => {
         </FooterBody>
         <FooterBody>문의 polarpolar@42seoul.co.kr</FooterBody>
         <FooterLastBody>
-          copyright 2022 polar All rights reserved.
+          Logo Designed by
+          <Atag href="https://www.freepik.com/"> Freepik</Atag>
         </FooterLastBody>
       </div>
     </FooterStyle>
   );
 };
-
 export default Footer;

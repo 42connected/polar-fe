@@ -36,6 +36,7 @@ class MentorsStore {
     makeObservable(this, {
       mentorsList: observable,
       clear: action,
+      Initializer: action,
     });
     this.mentorsList = { mentorCount: 0, mentors: [] };
   }
@@ -50,7 +51,6 @@ class MentorsStore {
     name: string | undefined,
   ) {
     if (!category) {
-      console.log('Category is undefined');
       return;
     }
     if (name === '') {

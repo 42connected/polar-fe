@@ -1,18 +1,26 @@
 import styled from '@emotion/styled';
 import { Container } from '@mui/system';
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import defaultTheme from '../../styles/theme';
 import { TableTitle } from './table-title';
-import { TableColumnLine, TableRow } from './table-row';
-import { PageButton } from './page-button';
+import { TableRow } from './table-row';
 import MentorLogStore, {
   LOGS_PER_PAGE,
+  MentoringLogs,
 } from '../../states/my-mentoring-mentor/MentorLogStore';
 import { useEffect, useState } from 'react';
 import AuthStore from '../../states/auth/AuthStore';
 import { Email } from './email';
 import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
+import { ApplyModal } from './modal/modal';
+import {
+  createTheme,
+  Pagination,
+  PaginationItem,
+  ThemeProvider,
+} from '@mui/material';
+import theme from '../../styles/theme';
 
 const NoneDrag = styled.div`
   width: 100%;
@@ -35,7 +43,7 @@ const InfoTitle = styled.div`
   ${defaultTheme.font.sebangGothic};
   ${defaultTheme.fontSize.sizeMedium};
   font-weight: bold;
-  margin: 10px 0px;
+  margin-bottom: 10px;
 `;
 
 const Bottom = styled.div`
@@ -52,30 +60,67 @@ const InfoContainer = styled.div`
   align-items: left;
 `;
 
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  ${defaultTheme.font.nanumGothic};
+  background-color: white;
+  padding: 20px 0px;
+`;
+
+const muiTheme = createTheme({
+  palette: {
+    primary: {
+      main: theme.colors.polarSimpleMain,
+    },
+    secondary: {
+      main: theme.colors.polarBrightMain,
+    },
+  },
+  typography: {
+    fontFamily: theme.font.sebangGothic,
+    fontSize: 20,
+    fontWeightLight: 700,
+  },
+});
+
+const INITIAL_PAGE = '1';
+
 const MyMentoringMentor = observer(() => {
+  const [params, setParams] = useSearchParams();
+  const pageNumber = params.get('page');
   const { intraId } = useParams<string>();
-  const [empty, setEmpty] = useState<string[]>([]);
+  const [log, setLog] = useState<MentoringLogs>();
+  const [applyModal, setApplyModal] = useState<boolean>(false);
 
   useEffect(() => {
-    async function initialize() {
-      if (!intraId) {
-        return;
-      }
-      await AuthStore.Login();
-      await MentorStore.getMentor(intraId, AuthStore.jwt);
-      await MentorLogStore.Initializer(intraId, AuthStore.jwt);
+    MentorLogStore.Initializer(
+      AuthStore.getAccessToken(),
+      parseInt(pageNumber || INITIAL_PAGE),
+    );
+  }, [pageNumber]);
 
-      // FIXME: 수정
-      for (let i = 0; i < LOGS_PER_PAGE - MentorLogStore.total; ++i) {
-        setEmpty(o => [...o, 'a']);
-      }
+  useEffect(() => {
+    if (!intraId) {
+      return;
     }
-    initialize();
+    MentorStore.getMentor(intraId);
+    return () => {
+      MentorStore.clearMentor();
+      MentorLogStore.clearLogs();
+    };
   }, []);
 
   return (
     <NoneDrag>
       <Top>
+        <ApplyModal
+          log={log}
+          applyModal={applyModal}
+          setApplyModal={setApplyModal}
+        />
         <Container component="main" maxWidth="lg">
           <InfoContainer>
             <InfoTitle>{MentorStore?.mentor?.intraId}의 멘토링</InfoTitle>
@@ -99,14 +144,30 @@ const MyMentoringMentor = observer(() => {
               report={e.report}
               createdAt={e.createdAt}
               meetingAt={e.meetingAt}
+              log={e}
+              setApplyModal={setApplyModal}
+              setLog={setLog}
             />
-          ))}
-          {empty.map((e, i) => (
-            <TableColumnLine key={i} />
           ))}
         </Container>
       </Bottom>
-      <PageButton />
+      <PaginationContainer>
+        <ThemeProvider theme={muiTheme}>
+          <Pagination
+            page={parseInt(pageNumber || INITIAL_PAGE)}
+            count={Math.trunc(MentorLogStore.total / LOGS_PER_PAGE) + 1}
+            renderItem={item => (
+              <PaginationItem
+                component={Link}
+                to={`/mentors/mentorings/${intraId}${`?page=${item.page}`}`}
+                {...item}
+              />
+            )}
+            size="large"
+            color="primary"
+          />
+        </ThemeProvider>
+      </PaginationContainer>
     </NoneDrag>
   );
 });

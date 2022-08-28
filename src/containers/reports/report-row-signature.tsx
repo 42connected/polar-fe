@@ -88,6 +88,7 @@ const Button = styled.button`
   &:hover {
     background-color: #f6f6f6;
   }
+  cursor: pointer;
 `;
 
 const Right = styled.div`
@@ -145,6 +146,7 @@ interface Coordinate {
   y: number;
 }
 
+// TODO: REFACTOR
 const ReportRowSignature = observer(() => {
   const [signatureConfirm, setSignatureConfirm] = useState(false);
   const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(
