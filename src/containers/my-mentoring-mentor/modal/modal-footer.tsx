@@ -26,6 +26,7 @@ const Button = styled.div`
   &:hover {
     opacity: 0.8;
   }
+  cursor: pointer;
 `;
 
 const rejectMentoring = async (
