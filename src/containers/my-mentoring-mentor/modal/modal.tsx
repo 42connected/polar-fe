@@ -1,9 +1,44 @@
+import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { MentoringLogs } from '../../../states/my-mentoring-mentor/MentorLogStore';
 import defaultTheme from '../../../styles/theme';
-import { ModalBox } from './box';
-import { Confirm } from './status/confirm';
-import { Wait } from './status/wait';
+import { ApplyDetailModal } from './apply-detail-modal';
+
+const Fade = keyframes`
+  0% {
+   opacity: 0;
+  }
+  10% {
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 0.4;
+  }
+  50% {
+   opacity: 0.5;
+  }
+  60% {
+    opacity: 0.6;
+  }
+  70% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.9;
+  }
+  100% {
+   opacity: 1;
+  }
+ `;
 
 export const Background = styled.div`
   display: flex;
@@ -24,64 +59,48 @@ export const Background = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  animation: ${Fade} 0.3s;
 `;
 
-interface ModalProps {
-  isWait: boolean;
+export interface ApplyDetailModalContainerProps {
+  log: MentoringLogs | undefined;
+  applyModal: boolean;
+  setApplyModal: (b: boolean) => void;
 }
 
-export function Modal(props: ModalProps) {
-  const [input, setInput] = useState<string>('');
-
+export function ApplyModal(props: ApplyDetailModalContainerProps) {
   return (
-    <Background>
-      {props.isWait ? (
-        <ModalBox
-          title={'멘토링 신청 세부사항'}
-          status={'대기중'}
-          button1={'수락'}
-          button1bg={defaultTheme.colors.polarSimpleMain}
-          button2={'거절'}
-          button2bg={'gray'}
-          button1fn={() => {
-            console.log('1');
-          }}
-          button2fn={() => {
-            console.log('2');
-          }}
-          innerbox={Wait}
-          innerboxProps={{
-            cadetName: '공현솔',
-            cadetIntraId: 'hkong',
-            cadetIsCommon: true,
-            mentoringTopic: 'Nestjs 프로젝트 조언',
-          }}
-          setter={setInput}
-        />
-      ) : (
-        <ModalBox
-          title={'멘토링 신청 세부사항'}
-          status={'확정'}
-          button1={'거절'}
-          button1bg={'gray'}
-          button2={'나가기'}
-          button2bg={defaultTheme.colors.polarSimpleMain}
-          button1fn={() => {
-            console.log('3');
-          }}
-          button2fn={() => {
-            console.log('4');
-          }}
-          innerbox={Confirm}
-          innerboxProps={{
-            cadetName: '공현솔',
-            cadetIntraId: 'hkong',
-            cadetIsCommon: true,
-            mentoringTopic: 'Nestjs 프로젝트 조언',
-          }}
-          setter={setInput}
-        />
+    <>
+      {props.log && (
+        <>
+          {props.applyModal && (
+            <Background>
+              <ApplyDetailModal
+                id={props?.log?.id}
+                status={props?.log?.status}
+                content={props?.log?.meta?.content}
+                mentoringTopic={props?.log?.topic}
+                meetingAt={props?.log?.meetingAt}
+                requestTime={props?.log?.meta?.requestTime}
+                button1={{
+                  content: `${
+                    props?.log?.status === '대기중' ? '수락' : '거절'
+                  }`,
+                  bg: `${defaultTheme.colors.polarSimpleMain}`,
+                }}
+                button2={{
+                  content: `${
+                    props?.log?.status === '대기중' ? '거절' : '나가기'
+                  }`,
+                  bg: 'gray',
+                }}
+                cadet={props?.log?.cadet}
+                setApplyModal={props.setApplyModal}
+              />
+            </Background>
+          )}
+        </>
       )}
-    </Background>
+    </>
   );
 }

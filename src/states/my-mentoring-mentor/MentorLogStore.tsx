@@ -1,4 +1,4 @@
-import { makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { axiosInstance } from '../../context/axios-interface';
 import LoadingStore from '../loading/LoadingStore';
 
@@ -10,6 +10,7 @@ export interface MentoringLogs {
     name: string;
     intraId: string;
     resumeUrl: string;
+    isCommon: boolean;
   };
   topic: string;
   status: string;
@@ -18,7 +19,7 @@ export interface MentoringLogs {
     status: string;
   };
   meta: {
-    requestTime: Date[][2];
+    requestTime: Date[][];
     isCommon: boolean;
     rejectMessage: string;
     content: string;
@@ -35,16 +36,24 @@ class MentorLogStore {
   constructor() {
     makeObservable(this, {
       logs: observable,
+      Initializer: action,
+      clearLogs: action,
     });
     this.logs = [];
     this.total = 0;
     this.curPage = 0;
   }
 
-  async Initializer(mentorIntraId: string, token: string) {
+  clearLogs() {
+    this.logs = [];
+    this.total = 0;
+    this.curPage = 0;
+  }
+
+  async Initializer(token: string, page: number) {
     LoadingStore.on();
     await axiosInstance
-      .get(`/mentors/mentorings?take=15&page=1`, {
+      .get(`/mentors/mentorings?take=15&page=${page}`, {
         headers: {
           Authorization: `bearer ${token}`,
         },

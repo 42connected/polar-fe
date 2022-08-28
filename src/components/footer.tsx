@@ -3,6 +3,9 @@ import theme from '../styles/theme';
 import github from '../assets/image/keywordIcon/develop.png';
 
 const FooterStyle = styled.footer`
+  position: relative;
+  transform: translateY(0%);
+  bottom: 0;
   width: 100%;
   height: 12rem;
   padding-top: 1rem;
@@ -32,6 +35,13 @@ const GithubButton = styled.button`
   color: ${theme.colors.backgoundWhite};
   border: none;
 `;
+
+const Atag = styled.a`
+  font-weight: bold;
+  text-decoration: none;
+  color: ${theme.colors.backgoundWhite};
+`;
+
 const githubClick = () => {
   document.location.replace('https://github.com/42connected');
 };
@@ -60,11 +70,11 @@ const Footer = () => {
         </FooterBody>
         <FooterBody>문의 polarpolar@42seoul.co.kr</FooterBody>
         <FooterLastBody>
-          copyright 2022 polar All rights reserved.
+          Logo Designed by
+          <Atag href="https://www.freepik.com/"> Freepik</Atag>
         </FooterLastBody>
       </div>
     </FooterStyle>
   );
 };
-
 export default Footer;

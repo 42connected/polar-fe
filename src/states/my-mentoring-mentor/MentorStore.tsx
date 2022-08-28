@@ -31,6 +31,10 @@ class MentorStore {
     makeObservable(this, {
       mentor: observable,
       setEmail: action.bound,
+      verifyEmail: action.bound,
+      changeEmail: action.bound,
+      clearMentor: action.bound,
+      getMentor: action.bound,
     });
     this.mentor = { id: '', intraId: '', email: '' };
   }
@@ -83,21 +87,20 @@ class MentorStore {
     LoadingStore.off();
   }
 
-  async getMentor(intraId: string, token: string) {
+  clearMentor() {
+    this.mentor = { id: '', intraId: '', email: '' };
+  }
+
+  async getMentor(intraId: string) {
     LoadingStore.on();
     await axiosInstance
-      .get(`/mentors/${intraId}`, {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      })
+      .get(`/mentors/${intraId}`)
       .then(res => {
         this.mentor = res.data;
         return true;
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
-        return false;
       });
     LoadingStore.off();
   }
