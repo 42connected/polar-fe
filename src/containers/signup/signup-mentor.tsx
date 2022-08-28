@@ -13,15 +13,6 @@ import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
 import AuthStore from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
 
-// 코드 쪼개기
-// Css처리
-// + 버튼 여러개 눌렀을 때 로직 재확인
-//  -> 지금 가능 시간이 많아질수록 여러 번 클릭해야 함
-// 상태관리와 리다이렉션 경로 수정
-// 홈에서 뒤로가기했을 때 sign에 들어갈 수 있는지 체크 -> 지금은 가능
-// cadets/join
-// mentors/join
-
 export const Containers = styled.div`
   display: grid;
   background: white;
@@ -213,6 +204,15 @@ const BodySmallFont = styled.p`
   font-size: 1.8rem;
   font-family: NanumGothic;
   font-weight: 400;
+`;
+
+const ResultMessage = styled.p`
+  font-family: NanumGothic;
+  font-weight: 400;
+  font-size: 1.4rem;
+  padding-top: 0rem;
+  margin-top: 0rem;
+  padding-left: 1.6rem;
 `;
 
 interface AddColumnsProps {
@@ -599,7 +599,11 @@ const SignUpMentor = () => {
             color="blue"
           ></InfoInput>
         </div>
-        <>{alreadyRegistered && <p>이미 이메일이 등록되었습니다</p>}</>
+        <>
+          {alreadyRegistered && (
+            <ResultMessage>이미 이메일이 등록되었습니다</ResultMessage>
+          )}
+        </>
         <>
           {!alreadyRegistered && (
             <div>
@@ -611,14 +615,25 @@ const SignUpMentor = () => {
                   placeholder="멘토링 안내 메일이 전송됩니다."
                 />
               </div>
-
               <div style={{ paddingBottom: '0px', marginBottom: '0px' }}>
                 <CertificationSendingButton onClick={() => SendEmail(email)}>
                   인증
                 </CertificationSendingButton>
-                <>{isMailSucess && <p>메일 전송 완료했습니다</p>}</>
-                <>{isMailFail && <p>메일 전송 실패했습니다</p>}</>
-                <>{mailOverlaped && <p>사용 불가능한 이메일입니다</p>}</>
+                <>
+                  {isMailSucess && (
+                    <ResultMessage>메일 전송 완료했습니다</ResultMessage>
+                  )}
+                </>
+                <>
+                  {isMailFail && (
+                    <ResultMessage>메일 전송 실패했습니다</ResultMessage>
+                  )}
+                </>
+                <>
+                  {mailOverlaped && (
+                    <ResultMessage>사용 불가능한 이메일입니다</ResultMessage>
+                  )}
+                </>
               </div>
               <NameTitle style={{ paddingTop: '0px', marginTop: '0px' }}>
                 인증코드
@@ -633,8 +648,16 @@ const SignUpMentor = () => {
               >
                 확인
               </CertificationSendingButton>
-              <>{isCodeSucess && <p>인증에 완료했습니다</p>}</>
-              <>{isCodeFail && <p>인증에 실패했습니다</p>}</>
+              <>
+                {isCodeSucess && (
+                  <ResultMessage>인증에 완료했습니다</ResultMessage>
+                )}
+              </>
+              <>
+                {isCodeFail && (
+                  <ResultMessage>인증에 실패했습니다</ResultMessage>
+                )}
+              </>
             </div>
           )}
         </>

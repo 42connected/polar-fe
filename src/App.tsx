@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MentorList from './containers/mentor-list/mentor-list';
-import SignUpCadet from './containers/signup/signup-cadet';
 import SignUpMentor from './containers/signup/signup-mentor';
 import MyMentoringMentor from './containers/my-mentoring-mentor/my-mentoring-mentor';
 import NotFound from './containers/not-found/not-found';
@@ -44,7 +43,6 @@ const App = observer(() => {
           <Route path="report-details" element={<ReportDetail />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
-          <Route path="/cadets/join" element={<SignUpCadet />} />
           <Route path="/mentors/join" element={<SignUpMentor />} />
         </Routes>
         <Footer />
