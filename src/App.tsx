@@ -34,10 +34,7 @@ const App = observer(() => {
             path="/mentorings/reports/:reportId"
             element={<ReportForm />}
           />
-          <Route
-            path="/mentors/mentorings/:intraId"
-            element={<MyMentoringMentor />}
-          />
+          <Route path="/mentors/mentorings" element={<MyMentoringMentor />} />
           <Route path="" element={<MainPage />} />
           <Route path="login" element={<Login />} />
           <Route path="apply-page" element={<ApplyPage />} />

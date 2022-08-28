@@ -89,9 +89,9 @@ const muiTheme = createTheme({
 const INITIAL_PAGE = '1';
 
 const MyMentoringMentor = observer(() => {
+  const [intraId, setIntraId] = useState<string>('');
   const [params, setParams] = useSearchParams();
   const pageNumber = params.get('page');
-  const { intraId } = useParams<string>();
   const [log, setLog] = useState<MentoringLogs>();
   const [applyModal, setApplyModal] = useState<boolean>(false);
 
@@ -103,9 +103,8 @@ const MyMentoringMentor = observer(() => {
   }, [pageNumber]);
 
   useEffect(() => {
-    if (!intraId) {
-      return;
-    }
+    setIntraId(AuthStore.getUserIntraId());
+    console.log(intraId);
     MentorStore.getMentor(intraId);
     return () => {
       MentorStore.clearMentor();
@@ -159,7 +158,7 @@ const MyMentoringMentor = observer(() => {
             renderItem={item => (
               <PaginationItem
                 component={Link}
-                to={`/mentors/mentorings/${intraId}${`?page=${item.page}`}`}
+                to={`/mentors/mentorings${`?page=${item.page}`}`}
                 {...item}
               />
             )}

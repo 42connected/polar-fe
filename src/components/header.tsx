@@ -83,8 +83,10 @@ const Header = () => {
             <Link
               to={
                 AuthStore.getUserRole() === USER_ROLES.MENTOR
-                  ? `/mentors/mentorings/${AuthStore.getUserIntraId()}`
-                  : `/cadets/mentorings/${AuthStore.getUserIntraId()}`
+                  ? `/mentors/mentorings`
+                  : AuthStore.getUserRole() === USER_ROLES.CADET
+                  ? `/cadets/mentorings`
+                  : `/data-room`
               }
             >
               <MypageButton>마이페이지</MypageButton>
