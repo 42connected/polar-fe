@@ -227,7 +227,7 @@ const ReportDetail = () => {
         'reports/3072b2af-4326-45fc-94f1-99636dab90ed',
         {
           headers: {
-            Authorization: `Bearer ${AuthStore.jwt}`,
+            Authorization: `Bearer ${AuthStore.getAccessToken()}`,
           },
         },
       );

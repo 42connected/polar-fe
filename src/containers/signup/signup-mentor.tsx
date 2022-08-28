@@ -269,8 +269,7 @@ const SignUpMentor = () => {
   ]);
 
   useEffect(() => {
-    AuthStore.Login();
-    MentorStore.getMentor(AuthStore.user.intraId, AuthStore.jwt);
+    MentorStore.getMentor(AuthStore.getUserIntraId());
   }, []);
 
   const nextId = useRef(1);
@@ -444,7 +443,7 @@ const SignUpMentor = () => {
     try {
       axios.defaults.headers.common[
         'Authorization'
-      ] = `bearer ${AuthStore.jwt}`;
+      ] = `bearer ${AuthStore.getAccessToken()}`;
 
       const response = await axios.patch(
         'https://polar42-be-dev.herokuapp.com/api/v1/mentors/join',
@@ -512,7 +511,7 @@ const SignUpMentor = () => {
       LoadingStore.on();
       axios.defaults.headers.common[
         'Authorization'
-      ] = `bearer ${AuthStore.jwt}`;
+      ] = `bearer ${AuthStore.getAccessToken}`;
 
       const response = await axios.post(
         'https://polar42-be-dev.herokuapp.com/api/v1/email-verifications',
@@ -553,7 +552,7 @@ const SignUpMentor = () => {
 
       axios.defaults.headers.common[
         'Authorization'
-      ] = `bearer ${AuthStore.jwt}`;
+      ] = `bearer ${AuthStore.getAccessToken()}`;
 
       const response = await axios.post(
         `https://polar42-be-dev.herokuapp.com/api/v1/email-verifications/${code}`,

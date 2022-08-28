@@ -50,7 +50,7 @@ class MentorLogStore {
     this.curPage = 0;
   }
 
-  async Initializer(mentorIntraId: string, token: string, page: number) {
+  async Initializer(token: string, page: number) {
     LoadingStore.on();
     await axiosInstance
       .get(`/mentors/mentorings?take=15&page=${page}`, {
