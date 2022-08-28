@@ -134,7 +134,7 @@ const Header = () => {
             <a href={`${process.env.REACT_APP_BASE_FORM_URL}`} target="_blank">
               <SuggestionButton>건의사항</SuggestionButton>
             </a>
-            <Link to="/mypage">
+            <Link to="/cadets/mentorings">
               <MypageButton>마이페이지</MypageButton>
             </Link>
           </div>
