@@ -109,7 +109,7 @@ const Header = () => {
           </LogoButton>
         </Link>
         {AuthStore.getAccessToken() ? (
-          AuthStore.getUserRole() === 'cadet' ? (
+          AuthStore.getUserRole() === USER_ROLES.CADET ? (
             <div>{AlertDetail()}</div>
           ) : (
             <LoginButton
@@ -129,7 +129,7 @@ const Header = () => {
             로그인
           </LoginButton>
         )}
-        {AuthStore.getUserRole() === 'cadet' ? (
+        {AuthStore.getUserRole() === USER_ROLES.CADET ? (
           <div>
             <a href={`${process.env.REACT_APP_BASE_FORM_URL}`} target="_blank">
               <SuggestionButton>건의사항</SuggestionButton>
@@ -138,7 +138,7 @@ const Header = () => {
               <MypageButton>마이페이지</MypageButton>
             </Link>
           </div>
-        ) : AuthStore.getUserRole() === 'mentor' ? (
+        ) : AuthStore.getUserRole() === USER_ROLES.MENTOR ? (
           <div>
             <a href={`${process.env.REACT_APP_BASE_FORM_URL}`} target="_blank">
               <SuggestionButton>건의사항</SuggestionButton>
@@ -150,7 +150,7 @@ const Header = () => {
               <MypageButton>마이페이지</MypageButton>
             </Link>
           </div>
-        ) : (
+        ) : AuthStore.getUserRole() === USER_ROLES.BOCAL ? (
           <div>
             <a href={`${process.env.REACT_APP_BASE_FORM_URL}`} target="_blank">
               <SuggestionButton>건의사항</SuggestionButton>
@@ -158,6 +158,12 @@ const Header = () => {
             <Link to="/data-room">
               <DataRoomButton>데이터룸</DataRoomButton>
             </Link>
+          </div>
+        ) : (
+          <div>
+            <a href={`${process.env.REACT_APP_BASE_FORM_URL}`} target="_blank">
+              <SuggestionButton>건의사항</SuggestionButton>
+            </a>
           </div>
         )}
       </div>
