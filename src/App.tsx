@@ -42,8 +42,8 @@ const App = observer(() => {
           <Route path="report-details" element={<ReportDetail />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
-          <Route path="/signup-cadet" element={<SignUpCadet />} />
-          <Route path="/signup-mentor" element={<SignUpMentor />} />
+          <Route path="/cadets/join" element={<SignUpCadet />} />
+          <Route path="/mentors/join" element={<SignUpMentor />} />
         </Routes>
         <Footer />
       </Router>
