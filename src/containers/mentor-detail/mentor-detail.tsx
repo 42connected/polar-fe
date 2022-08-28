@@ -1,25 +1,21 @@
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../components/button';
 import TimeTableMuiComponent from '../../components/mentor-detail/mui-table';
-import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
-import theme from '../../styles/theme';
-import { MentoringLogProps } from '../../interface/mentor-detail/mentoringLogProps';
-import MarkdownRender from './markdownRender';
-import CommentComponent from '../../components/mentor-detail/comment';
-import { CadetProps } from '../../interface/mentor-detail/cadet-props.interface';
-import { CommentProps } from '../../interface/mentor-detail/comment-props.interface';
 import ReportSummaryInputComponent from '../../components/report-summery-input';
-import { mentorAvailableTimeInterface } from '../../interface/mentor-detail/mentor-available-time.interface';
-import { appointmentsInterface } from '../../interface/mentor-detail/appointments.interface';
-import { getCookie } from '../../context/cookies';
-import { useParams } from 'react-router-dom';
 import { axiosInstance } from '../../context/axios-interface';
-import { Link } from 'react-router-dom';
+import { getCookie } from '../../context/cookies';
+import { appointmentsInterface } from '../../interface/mentor-detail/appointments.interface';
+import { CommentProps } from '../../interface/mentor-detail/comment-props.interface';
 import { CommentsWithPageProps } from '../../interface/mentor-detail/comments-with-page.interface';
-import { URLSearchParams } from 'url';
+import { mentorAvailableTimeInterface } from '../../interface/mentor-detail/mentor-available-time.interface';
+import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
+import { MentoringLogProps } from '../../interface/mentor-detail/mentoringLogProps';
+import theme from '../../styles/theme';
+import MarkdownRender from './markdownRender';
 
 function MentorDetail() {
   const mockMentoringLog: MentoringLogProps[] = [
@@ -63,6 +59,8 @@ function MentorDetail() {
   const [comments, setComments] = useState<CommentsWithPageProps | null>(null);
   const [appointments, setAppointments] =
     useState<appointmentsInterface[]>(appointmentsTest);
+  const [isActivateIntroductionEdit, setIsActivateIntroductionEdit] =
+    useState<boolean>(false);
 
   //2018, 5, 25 화요일
   //const date2 = new Date('1995-12-17T03:24:00');
@@ -109,10 +107,11 @@ function MentorDetail() {
   useEffect(() => {
     const params = {
       page: 1,
-      take: 1,
+      take: 5,
     };
     axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
-      console.log('mentor', typeof result.data.updatedAt);
+      console.log('mentor', result.data);
+      result.data.tags = ['aaaa', 'bbbb', 'cccc'];
       setMentor(result.data);
     });
     axiosInstance
@@ -162,7 +161,6 @@ function MentorDetail() {
   };
   return (
     <MentorDetailTag>
-      <h1>Mentor Detail</h1>
       <MentorHeader>
         <MentorInfo>
           <MentorImage src={mentor?.profileImage} />
@@ -235,9 +233,31 @@ function MentorDetail() {
           </MentorBody1Left>
           <MentorBody1Right>
             <MentorBody1Right1>
-              <MenuBox>멘토 소개</MenuBox>
-              <MentorIntroduction>{mentor?.introduction}</MentorIntroduction>
-              <MentorTags>{AddHashtag}</MentorTags>
+              <MenuBox>
+                멘토 소개
+                <FontAwesomeIcon
+                  icon={faPencil}
+                  className="icon"
+                  onClick={() => {
+                    console.log('clicked');
+                    setIsActivateIntroductionEdit(!isActivateIntroductionEdit);
+                    console.log(isActivateIntroductionEdit);
+                  }}
+                />
+              </MenuBox>
+              {isActivateIntroductionEdit ? (
+                <>
+                  <MentorIntroduction>
+                    {mentor?.introduction}
+                  </MentorIntroduction>
+                  <MentorTags>{AddHashtag}</MentorTags>
+                </>
+              ) : (
+                <>
+                  <MentorIntroductionInput></MentorIntroductionInput>
+                  {/* <MentorTagsInput></MentorTagsInput> */}
+                </>
+              )}
             </MentorBody1Right1>
             <MentorBody1Right2>
               <MenuBox1>
@@ -250,10 +270,10 @@ function MentorDetail() {
           </MentorBody1Right>
         </MentorBody1>
         <MentorBody2>
-          <MenuBox>
+          <MenuBox3>
             <div>가능 시간</div>
             <div>update:time</div>
-          </MenuBox>
+          </MenuBox3>
           <TimTableScroll>
             <TimeTableMuiComponent
               appointments={appointments}
@@ -311,6 +331,40 @@ function MentorDetail() {
     </MentorDetailTag>
   );
 }
+// const WithEditButton = styled.div`
+//   position: relative;
+//   .icon {
+//     position: absolute;
+//   }
+// `;
+
+const MentorIntroductionInput = styled.textarea``;
+
+const MenuBox3 = styled.div`
+  border-top: 2px solid ${props => props.theme.colors.blackThree};
+  border-bottom: 1px solid ${props => props.theme.colors.grayFive};
+  width: 100%;
+  /* height: 3rem; */
+  box-sizing: border-box;
+  padding-left: 1rem;
+  padding-top: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  ${theme.fontFrame.titleSmall};
+  font-weight: 900;
+  letter-spacing: 0.1rem;
+  margin-bottom: 1.3rem;
+  div:last-child {
+    color: ${theme.colors.fontGray};
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    padding-left: 0.3rem;
+    font-size: 1rem;
+  }
+  padding-bottom: 0.5rem;
+`;
 
 const HowToContent = styled.div`
   margin: 0 1.5rem;
@@ -358,6 +412,8 @@ const TimTableScroll = styled.div`
 
 const MenuBox2 = styled.div`
   display: grid;
+  justify-content: center;
+  align-items: center;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(1, 1fr);
   border-bottom: 1px solid ${theme.colors.grayFive};
@@ -365,6 +421,7 @@ const MenuBox2 = styled.div`
   height: 3rem;
   box-sizing: border-box;
   overflow-wrap: break-word;
+
   div {
     display: flex;
     justify-content: center;
@@ -441,6 +498,10 @@ const MentorTags = styled.div`
 `;
 
 const MentorIntroduction = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  word-break: break-all;
   margin: 1.3rem;
   ${theme.fontFrame.bodyMiddle};
   color: ${theme.colors.blackThree};
@@ -557,26 +618,21 @@ const MenuBox = styled.div`
   border-top: 2px solid ${props => props.theme.colors.blackThree};
   border-bottom: 1px solid ${props => props.theme.colors.grayFive};
   width: 100%;
-  /* height: 3rem; */
   box-sizing: border-box;
   padding-left: 1rem;
   padding-top: 1.3rem;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: center;
   ${theme.fontFrame.titleSmall};
   font-weight: 900;
   letter-spacing: 0.1rem;
   margin-bottom: 1.3rem;
-  div:last-child {
-    color: ${theme.colors.fontGray};
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    padding-left: 0.3rem;
-    font-size: 1rem;
-  }
   padding-bottom: 0.5rem;
+  .icon {
+    margin-left: 1rem;
+    cursor: pointer;
+  }
 `;
 const MentorDetailTag = styled.div`
   font-family: ${theme.font.nanumGothic};
