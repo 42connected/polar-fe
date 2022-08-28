@@ -36,6 +36,7 @@ class MentorsStore {
     makeObservable(this, {
       mentorsList: observable,
       clear: action,
+      Initializer: action,
     });
     this.mentorsList = { mentorCount: 0, mentors: [] };
   }

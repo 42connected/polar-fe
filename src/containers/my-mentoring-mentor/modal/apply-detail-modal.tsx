@@ -65,6 +65,7 @@ const XButton = styled.div`
   justify-content: right;
   align-items: center;
   margin-top: 20px;
+  cursor: pointer;
 `;
 
 export interface ApplyDetailModalProps {
