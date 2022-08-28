@@ -24,6 +24,7 @@ const LinkContainer = styled.div`
   color: ${defaultTheme.colors.polarSimpleMain};
   font-weight: bold;
   text-decoration: underline;
+  cursor: pointer;
 `;
 
 export interface ReportButtonProps {
@@ -76,9 +77,10 @@ export function ReportButton(props: ReportButtonProps) {
     return (
       <LinkContainer
         onClick={async () => {
-          // FIXME: AuthStore ...
-          await AuthStore.Login();
-          await ReportStore.createReport(props.mentoringId, AuthStore.jwt);
+          await ReportStore.createReport(
+            props.mentoringId,
+            AuthStore.getAccessToken(),
+          );
         }}
       >
         {status}

@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
 import defaultTheme from '../../styles/theme';
 
 const StatusColumn = styled.div`
@@ -30,7 +29,6 @@ export function StatusButton(props: ReportButtonProps) {
         <StatusColumn
           style={{
             color: defaultTheme.colors.polarSimpleMain,
-            textDecoration: 'underline',
             fontWeight: 'bold',
           }}
         >

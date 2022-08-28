@@ -49,11 +49,7 @@ class MentorsStore {
     keywords: string[],
     name: string | undefined,
   ) {
-    console.log(category);
-    console.log(keywords);
-    console.log(name);
     if (!category) {
-      console.log('Category is undefined');
       return;
     }
     if (name === '') {

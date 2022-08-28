@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import defaultTheme from '../../styles/theme';
 import { TableTitle } from './table-title';
-import { TableColumnLine, TableRow } from './table-row';
+import { TableRow } from './table-row';
 import MentorLogStore, {
   LOGS_PER_PAGE,
   MentoringLogs,
@@ -96,27 +96,17 @@ const MyMentoringMentor = observer(() => {
   const [applyModal, setApplyModal] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!intraId) {
-      return;
-    }
-    AuthStore.Login();
     MentorLogStore.Initializer(
-      intraId,
-      AuthStore.jwt,
+      AuthStore.getAccessToken(),
       parseInt(pageNumber || INITIAL_PAGE),
     );
   }, [pageNumber]);
 
   useEffect(() => {
-    async function initialize() {
-      if (!intraId) {
-        return;
-      }
-      await AuthStore.Login();
-      await MentorStore.getMentor(intraId, AuthStore.jwt);
-      //await MentorLogStore.Initializer(intraId, AuthStore.jwt, INIT_PAGE);
+    if (!intraId) {
+      return;
     }
-    initialize();
+    MentorStore.getMentor(intraId);
     return () => {
       MentorStore.clearMentor();
       MentorLogStore.clearLogs();

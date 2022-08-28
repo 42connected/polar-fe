@@ -91,21 +91,16 @@ class MentorStore {
     this.mentor = { id: '', intraId: '', email: '' };
   }
 
-  async getMentor(intraId: string, token: string) {
+  async getMentor(intraId: string) {
     LoadingStore.on();
     await axiosInstance
-      .get(`/mentors/${intraId}`, {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      })
+      .get(`/mentors/${intraId}`)
       .then(res => {
         this.mentor = res.data;
         return true;
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
-        return false;
       });
     LoadingStore.off();
   }
