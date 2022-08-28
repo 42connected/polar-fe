@@ -105,7 +105,9 @@ const Header = () => {
           </LogoButton>
         </Link>
         {AuthStore.getAccessToken() ? (
-          <>
+          AuthStore.getUserRole() === 'cadet' ? (
+            <div>{AlertDetail()}</div>
+          ) : (
             <LoginButton
               onClick={() => {
                 AuthStore.Logout();
@@ -113,16 +115,7 @@ const Header = () => {
             >
               로그아웃
             </LoginButton>
-            <Link
-              to={
-                AuthStore.getUserRole() === USER_ROLES.MENTOR
-                  ? `/mentors/mentorings/${AuthStore.getUserIntraId()}`
-                  : `/cadets/mentorings/${AuthStore.getUserIntraId()}`
-              }
-            >
-              <MypageButton>마이페이지</MypageButton>
-            </Link>
-          </>
+          )
         ) : (
           <LoginButton
             onClick={() => {
