@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import DataRoom from './containers/data-room';
+import DataRoom from './containers/data-room/data-room';
 import MentorList from './containers/mentor-list/mentor-list';
 import SignUpMentor from './containers/signup/signup-mentor';
 import MyMentoringMentor from './containers/my-mentoring-mentor/my-mentoring-mentor';
