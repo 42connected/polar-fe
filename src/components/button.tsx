@@ -12,10 +12,11 @@ export interface ButtonProps
   width?: string;
   height?: string;
   color?: string;
-  fontSize?: string;
+  fontFrame?: string;
   font?: string;
   boxShadow?: string;
   backgroundColor?: string;
+  onClick?: () => void;
 }
 
 const ButtonStyle = styled.button<ButtonProps>`
@@ -33,7 +34,7 @@ const ButtonStyle = styled.button<ButtonProps>`
   color: ${props => props.color ?? theme.colors.backgoundWhite};
   background-color: ${props =>
     props.backgroundColor ?? theme.colors.polarBrightMain};
-  ${props => props.fontSize ?? theme.fontFrame.bodyMiddle};
+  ${props => props.fontFrame ?? theme.fontFrame.bodyMiddle};
   ${props => props.font ?? theme.font.sebangGothic};
   &:active {
     background-color: ${props =>
