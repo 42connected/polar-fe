@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Switch } from '@mui/material';
+import { debounce, Switch } from '@mui/material';
 import axios from 'axios';
 import defaultTheme from '../../styles/theme';
 import singupImage from '../../assets/signup/signup.png';
@@ -13,13 +13,23 @@ import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
 import AuthStore from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
 
-export const Containers = styled.div`
+export const ContainersPc = styled.div`
   display: grid;
   background: white;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr auto;
   grid-column-gap: 10rem;
   justify-items: center;
+`;
+
+export const ContainersMobile = styled.div`
+  display: grid;
+  background: white;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  grid-column-gap: 10rem;
+  justify-items: center;
+  zoom: 0.7;
 `;
 
 export const RequiredWrapper = styled.div`
@@ -38,7 +48,6 @@ export const OptionWrapper = styled.div`
   padding-bottom: 100px;
   margin-top: 3rem;
   margin-right: 0rem;
-  width: 500px;
 `;
 
 export const HeadLetters = styled.h1`
@@ -71,17 +80,14 @@ export const InfoInput = styled.input`
   margin-left: 20px;
   margin-bottom: 10px;
   padding-left: 3rem;
-  background: ${theme.colors.polarBackground}; 
-  border:none;
-  border-right:0px;
-  border-top:0px;
-  boder-left:0px;
-  boder-bottom:0px;"
-  fontSize: 19;
-  ${theme.font.sebangGothic}; 
-  ${theme.fontWeight.weightSmall}; 
-  ${theme.fontSize.sizeExtraSmall}; 
-}
+  background: ${theme.colors.polarBackground};
+  border: none;
+  border-right: 0px;
+  border-top: 0px;
+  font-size: 19;
+  ${theme.font.sebangGothic};
+  ${theme.fontWeight.weightSmall};
+  ${theme.fontSize.sizeExtraSmall};
 `;
 
 export const EmailInput = styled.input`
@@ -91,11 +97,9 @@ export const EmailInput = styled.input`
   align: center;
   margin-left: 20px;
   margin-bottom: 10px;
-  border:none;
-  border-right:0px;
-  border-top:0px;
-  boder-left:0px;
-  boder-bottom:0px;"
+  border: none;
+  border-right: 0px;
+  border-top: 0px;
 `;
 
 export const CertificationSendingButton = styled.button`
@@ -111,7 +115,6 @@ export const CertificationSendingButton = styled.button`
   cursor: pointer;
   font-size: 27px;
   border-radius: 20px;
-  position: absolute
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
@@ -195,9 +198,7 @@ export const ToggleContainer = styled.p`
   height: 1px;
   gap: 5rem;
   margin-top: 10rem;
-  padding-top; 10rem;
   margin-bottom: 8rem;
-  padding-bottom; 8rem;
 `;
 
 const BodySmallFont = styled.p`
@@ -261,6 +262,7 @@ const SignUpMentor = () => {
   const [code, setCode] = useState<string>('');
   const [isCodeSucess, setIsCodeSucesss] = useState(false);
   const [isCodeFail, setIsCodeFail] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [rows, setRows] = useState<IRows[]>([
     {
       id: 0,
@@ -270,9 +272,20 @@ const SignUpMentor = () => {
 
   useEffect(() => {
     MentorStore.getMentor(AuthStore.getUserIntraId());
+    window.screen.width <= 500 ? setIsMobile(true) : setIsMailFail(false);
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const nextId = useRef(1);
+
+  const handleResize = debounce(() => {
+    if (window.innerWidth <= 500) setIsMobile(true);
+    else setIsMobile(false);
+  }, 10);
 
   const onRowCreate = () => {
     const newRows: IRows = {
@@ -574,153 +587,318 @@ const SignUpMentor = () => {
   }
 
   return (
-    <Containers>
-      <RequiredWrapper>
-        <HeadLetters>필수 정보 입력</HeadLetters>
-        <SingupImage src={singupImage} alt="singup-image" />
+    <>
+      {!isMobile && (
+        <ContainersPc>
+          <RequiredWrapper>
+            <HeadLetters>필수 정보 입력</HeadLetters>
+            <SingupImage src={singupImage} alt="singup-image" />
 
-        <div style={{ paddingBottom: '5px' }}>
-          <NameTitle>본인 이름</NameTitle>
-          <InfoInput
-            type="text"
-            onChange={onNameChange}
-            placeholder="보고서 작성 등에 사용됩니다."
-            maxLength={10}
-          ></InfoInput>
-        </div>
-
-        <div style={{ paddingBottom: '5px' }}>
-          <NameTitle>슬랙 ID</NameTitle>
-          <InfoInput
-            type="text"
-            onChange={onSlackChange}
-            maxLength={100}
-            placeholder="카뎃과의 연락에 사용됩니다."
-            color="blue"
-          ></InfoInput>
-        </div>
-        <>
-          {alreadyRegistered && (
-            <ResultMessage>이미 이메일이 등록되었습니다</ResultMessage>
-          )}
-        </>
-        <>
-          {!alreadyRegistered && (
-            <div>
-              <div style={{ paddingBottom: '5px' }}>
-                <NameTitle>e-mail</NameTitle>
-                <InfoInput
-                  maxLength={100}
-                  onChange={onEmailChange}
-                  placeholder="멘토링 안내 메일이 전송됩니다."
-                />
-              </div>
-              <div style={{ paddingBottom: '0px', marginBottom: '0px' }}>
-                <CertificationSendingButton onClick={() => SendEmail(email)}>
-                  인증
-                </CertificationSendingButton>
-                <>
-                  {isMailSucess && (
-                    <ResultMessage>메일 전송 완료했습니다</ResultMessage>
-                  )}
-                </>
-                <>
-                  {isMailFail && (
-                    <ResultMessage>메일 전송 실패했습니다</ResultMessage>
-                  )}
-                </>
-                <>
-                  {mailOverlaped && (
-                    <ResultMessage>사용 불가능한 이메일입니다</ResultMessage>
-                  )}
-                </>
-              </div>
-              <NameTitle style={{ paddingTop: '0px', marginTop: '0px' }}>
-                인증코드
-              </NameTitle>
+            <div style={{ paddingBottom: '5px' }}>
+              <NameTitle>본인 이름</NameTitle>
               <InfoInput
+                type="text"
+                onChange={onNameChange}
+                placeholder="보고서 작성 등에 사용됩니다."
                 maxLength={10}
-                onChange={onCodeChange}
-                placeholder="인증코드를 입력해주세요."
-              />
-              <CertificationSendingButton
-                onClick={() => certificateEmail(code)}
-              >
-                확인
-              </CertificationSendingButton>
-              <>
-                {isCodeSucess && (
-                  <ResultMessage>인증에 완료했습니다</ResultMessage>
-                )}
-              </>
-              <>
-                {isCodeFail && (
-                  <ResultMessage>인증에 실패했습니다</ResultMessage>
-                )}
-              </>
+              ></InfoInput>
             </div>
-          )}
-        </>
-      </RequiredWrapper>
-      <OptionWrapper>
-        <HeadLetters style={{ paddingLeft: '16rem' }}>
-          멘토링 가능 시간
-        </HeadLetters>
-        <ToggleContainer>
-          <NameTitle>멘토링 가능/불가</NameTitle>
-          <Switch
-            checked={checked}
-            onChange={handleChange}
-            inputProps={{ 'aria-label': 'controlled' }}
-            sx={{ mb: 1, mr: -6 }}
-          />
-          <BodySmallFont style={{ paddingBottom: '6px' }}>가능</BodySmallFont>
-        </ToggleContainer>
-        <NameTitle
-          style={{
-            paddingLeft: '1rem',
-            height: '0rem',
-          }}
-        >
-          시간
-        </NameTitle>
-        <TimeTableContainer style={{ marginTop: '0rem' }}>
-          <ColumnDays>
-            <BodyBigFont>요일</BodyBigFont>
-          </ColumnDays>
-          <ColumnName>
-            <BodyBigFont>가능시간</BodyBigFont>
-          </ColumnName>
-          <ColumnLine></ColumnLine>
-        </TimeTableContainer>
-        <>
-          {checked && (
-            <AddColumns
-              rows={rows}
-              onRemove={onRowRemove}
-              onChange={onRowChange}
+
+            <div style={{ paddingBottom: '5px' }}>
+              <NameTitle>슬랙 ID</NameTitle>
+              <InfoInput
+                type="text"
+                onChange={onSlackChange}
+                maxLength={100}
+                placeholder="카뎃과의 연락에 사용됩니다."
+                color="blue"
+              ></InfoInput>
+            </div>
+            <>
+              {alreadyRegistered && (
+                <ResultMessage>이미 이메일이 등록되었습니다</ResultMessage>
+              )}
+            </>
+            <>
+              {!alreadyRegistered && (
+                <div>
+                  <div style={{ paddingBottom: '5px' }}>
+                    <NameTitle>e-mail</NameTitle>
+                    <InfoInput
+                      maxLength={100}
+                      onChange={onEmailChange}
+                      placeholder="멘토링 안내 메일이 전송됩니다."
+                    />
+                  </div>
+                  <div style={{ paddingBottom: '0px', marginBottom: '0px' }}>
+                    <CertificationSendingButton
+                      onClick={() => SendEmail(email)}
+                    >
+                      인증
+                    </CertificationSendingButton>
+                    <>
+                      {isMailSucess && (
+                        <ResultMessage>메일 전송 완료했습니다</ResultMessage>
+                      )}
+                    </>
+                    <>
+                      {isMailFail && (
+                        <ResultMessage>메일 전송 실패했습니다</ResultMessage>
+                      )}
+                    </>
+                    <>
+                      {mailOverlaped && (
+                        <ResultMessage>
+                          사용 불가능한 이메일입니다
+                        </ResultMessage>
+                      )}
+                    </>
+                  </div>
+                  <NameTitle style={{ paddingTop: '0px', marginTop: '0px' }}>
+                    인증코드
+                  </NameTitle>
+                  <InfoInput
+                    maxLength={10}
+                    onChange={onCodeChange}
+                    placeholder="인증코드를 입력해주세요."
+                  />
+                  <CertificationSendingButton
+                    onClick={() => certificateEmail(code)}
+                  >
+                    확인
+                  </CertificationSendingButton>
+                  <>
+                    {isCodeSucess && (
+                      <ResultMessage>인증에 완료했습니다</ResultMessage>
+                    )}
+                  </>
+                  <>
+                    {isCodeFail && (
+                      <ResultMessage>인증에 실패했습니다</ResultMessage>
+                    )}
+                  </>
+                </div>
+              )}
+            </>
+          </RequiredWrapper>
+          <OptionWrapper>
+            <HeadLetters style={{ paddingLeft: '16rem' }}>
+              멘토링 가능 시간
+            </HeadLetters>
+            <ToggleContainer>
+              <NameTitle>멘토링 가능/불가</NameTitle>
+              <Switch
+                checked={checked}
+                onChange={handleChange}
+                inputProps={{ 'aria-label': 'controlled' }}
+                sx={{ mb: 1, mr: -6 }}
+              />
+              <BodySmallFont style={{ paddingBottom: '6px' }}>
+                가능
+              </BodySmallFont>
+            </ToggleContainer>
+            <NameTitle
+              style={{
+                paddingLeft: '1rem',
+                height: '0rem',
+              }}
+            >
+              시간
+            </NameTitle>
+            <TimeTableContainer style={{ marginTop: '0rem' }}>
+              <ColumnDays>
+                <BodyBigFont>요일</BodyBigFont>
+              </ColumnDays>
+              <ColumnName>
+                <BodyBigFont>가능시간</BodyBigFont>
+              </ColumnName>
+              <ColumnLine></ColumnLine>
+            </TimeTableContainer>
+            <>
+              {checked && (
+                <AddColumns
+                  rows={rows}
+                  onRemove={onRowRemove}
+                  onChange={onRowChange}
+                />
+              )}
+            </>
+            <AddButtonImage
+              src={addButtonImage}
+              alt="add-button-image"
+              style={{ paddingLeft: '27.7rem' }}
+              onClick={onRowCreate}
             />
-          )}
-        </>
-        <AddButtonImage
-          src={addButtonImage}
-          alt="add-button-image"
-          style={{ paddingLeft: '27.7rem' }}
-          onClick={onRowCreate}
-        />
-        <Button
-          style={{
-            marginBottom: '5rem',
-            marginLeft: '20rem',
-            marginTop: '10rem',
-          }}
-          onClick={() => joinMentorServer(rows)}
-        >
-          제출
-          {isRedirection && <Navigate to="/" />}
-        </Button>
-      </OptionWrapper>
-    </Containers>
+            <Button
+              style={{
+                marginBottom: '5rem',
+                marginLeft: '20rem',
+                marginTop: '10rem',
+              }}
+              onClick={() => joinMentorServer(rows)}
+            >
+              제출
+              {isRedirection && <Navigate to="/" />}
+            </Button>
+          </OptionWrapper>
+        </ContainersPc>
+      )}
+      {isMobile && (
+        <ContainersMobile>
+          <RequiredWrapper>
+            <HeadLetters>필수 정보 입력</HeadLetters>
+            <SingupImage src={singupImage} alt="singup-image" />
+
+            <div style={{ paddingBottom: '5px' }}>
+              <NameTitle>본인 이름</NameTitle>
+              <InfoInput
+                type="text"
+                onChange={onNameChange}
+                placeholder="보고서 작성 등에 사용됩니다."
+                maxLength={10}
+              ></InfoInput>
+            </div>
+
+            <div style={{ paddingBottom: '5px' }}>
+              <NameTitle>슬랙 ID</NameTitle>
+              <InfoInput
+                type="text"
+                onChange={onSlackChange}
+                maxLength={100}
+                placeholder="카뎃과의 연락에 사용됩니다."
+                color="blue"
+              ></InfoInput>
+            </div>
+            <>
+              {alreadyRegistered && (
+                <ResultMessage>이미 이메일이 등록되었습니다</ResultMessage>
+              )}
+            </>
+            <>
+              {!alreadyRegistered && (
+                <div>
+                  <div style={{ paddingBottom: '5px' }}>
+                    <NameTitle>e-mail</NameTitle>
+                    <InfoInput
+                      maxLength={100}
+                      onChange={onEmailChange}
+                      placeholder="멘토링 안내 메일이 전송됩니다."
+                    />
+                  </div>
+                  <div style={{ paddingBottom: '0px', marginBottom: '0px' }}>
+                    <CertificationSendingButton
+                      onClick={() => SendEmail(email)}
+                    >
+                      인증
+                    </CertificationSendingButton>
+                    <>
+                      {isMailSucess && (
+                        <ResultMessage>메일 전송 완료했습니다</ResultMessage>
+                      )}
+                    </>
+                    <>
+                      {isMailFail && (
+                        <ResultMessage>메일 전송 실패했습니다</ResultMessage>
+                      )}
+                    </>
+                    <>
+                      {mailOverlaped && (
+                        <ResultMessage>
+                          사용 불가능한 이메일입니다
+                        </ResultMessage>
+                      )}
+                    </>
+                  </div>
+                  <NameTitle style={{ paddingTop: '0px', marginTop: '0px' }}>
+                    인증코드
+                  </NameTitle>
+                  <InfoInput
+                    maxLength={10}
+                    onChange={onCodeChange}
+                    placeholder="인증코드를 입력해주세요."
+                  />
+                  <CertificationSendingButton
+                    onClick={() => certificateEmail(code)}
+                  >
+                    확인
+                  </CertificationSendingButton>
+                  <>
+                    {isCodeSucess && (
+                      <ResultMessage>인증에 완료했습니다</ResultMessage>
+                    )}
+                  </>
+                  <>
+                    {isCodeFail && (
+                      <ResultMessage>인증에 실패했습니다</ResultMessage>
+                    )}
+                  </>
+                </div>
+              )}
+            </>
+          </RequiredWrapper>
+          <OptionWrapper>
+            <HeadLetters style={{ paddingLeft: '16rem' }}>
+              멘토링 가능 시간
+            </HeadLetters>
+            <ToggleContainer>
+              <NameTitle>멘토링 가능/불가</NameTitle>
+              <Switch
+                checked={checked}
+                onChange={handleChange}
+                inputProps={{ 'aria-label': 'controlled' }}
+                sx={{ mb: 1, mr: -6 }}
+              />
+              <BodySmallFont style={{ paddingBottom: '6px' }}>
+                가능
+              </BodySmallFont>
+            </ToggleContainer>
+            <NameTitle
+              style={{
+                paddingLeft: '1rem',
+                height: '0rem',
+              }}
+            >
+              시간
+            </NameTitle>
+            <TimeTableContainer style={{ marginTop: '0rem' }}>
+              <ColumnDays>
+                <BodyBigFont>요일</BodyBigFont>
+              </ColumnDays>
+              <ColumnName>
+                <BodyBigFont>가능시간</BodyBigFont>
+              </ColumnName>
+              <ColumnLine></ColumnLine>
+            </TimeTableContainer>
+            <>
+              {checked && (
+                <AddColumns
+                  rows={rows}
+                  onRemove={onRowRemove}
+                  onChange={onRowChange}
+                />
+              )}
+            </>
+            <AddButtonImage
+              src={addButtonImage}
+              alt="add-button-image"
+              style={{ paddingLeft: '27.7rem' }}
+              onClick={onRowCreate}
+            />
+            <Button
+              style={{
+                marginBottom: '5rem',
+                marginLeft: '20rem',
+                marginTop: '10rem',
+              }}
+              onClick={() => joinMentorServer(rows)}
+            >
+              제출
+              {isRedirection && <Navigate to="/" />}
+            </Button>
+          </OptionWrapper>
+        </ContainersMobile>
+      )}
+    </>
   );
 };
 
