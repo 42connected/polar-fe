@@ -68,11 +68,15 @@ function MentorDetail() {
   const [isActivateMentor, setIsActivateMentor] = useState<boolean>(false);
   const [inputComment, setInputComment] = useState<string>('');
   const [mentorTags, setMentorTags] = useState<string[]>([]);
+  const [isActivateMentorInfoEdit, setIsActivateMentorInfoEdit] =
+    useState<boolean>(false);
+  const [mentorInfo, setMentorInfo] = useState<string>('');
   //2018, 5, 25 화요일
   //const date2 = new Date('1995-12-17T03:24:00');
   // Sun Dec 17 1995 03:24:00 GMT...
   //2018-06-28
   // console.log(mockMentorAvailableTimeToArray);
+
   const setMentorAvailableTimeData = () => {
     const appointmentsData: appointmentsInterface[] = [];
     mockMentorAvailableTimeToArray.forEach(
@@ -119,6 +123,7 @@ function MentorDetail() {
       setMentorIntroduction(
         result.data?.introduction ? result.data.introduction : '',
       );
+      setMentorInfo(result.data?.info ? result.data.info : '');
     });
     axiosInstance
       .get(`/comments/${getParams.intraId}`, { params })
@@ -133,23 +138,38 @@ function MentorDetail() {
 
   useEffect(() => {
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
-    console.log(accessToken);
     const config = {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
     const data = { introduction: mentorIntroduction };
     axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
   }, [isActivateIntroductionEdit]);
+  useEffect(() => {
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    const data = { introduction: mentorIntroduction };
+    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+  }, [mentorTags]);
 
   useEffect(() => {
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
-    console.log(accessToken);
     const config = {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
     const data = { isActive: isActivateMentor };
     axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
   }, [isActivateMentor]);
+
+  useEffect(() => {
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    const data = { markdownContent: mentorInfo };
+    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+  }, [isActivateMentorInfoEdit]);
 
   const AddHashtag = mentorTags.map(tag => {
     return <div>{tag.padStart(tag.length + 1, '#')}</div>;
@@ -182,22 +202,22 @@ function MentorDetail() {
     );
   });
 
-  const MakeCommentsTags = ({ comments }: any) => {
-    comments.map((comment: CommentProps) => {
-      return (
-        <Comment>
-          <img src={comment?.cadets?.profileImage} />
-          <div>
-            <div>
-              <div>{comment?.cadets?.intraId}</div>
-              <div>{comment?.createdAt}</div>
-            </div>
-            <div>{comment?.content}</div>
-          </div>
-        </Comment>
-      );
-    });
-  };
+  // const MakeCommentsTags = ({ comments }: any) => {
+  //   comments.map((comment: CommentProps) => {
+  //     return (
+  //       <Comment>
+  //         <img src={comment?.cadets?.profileImage} />
+  //         <div>
+  //           <div>
+  //             <div>{comment?.cadets?.intraId}</div>
+  //             <div>{comment?.createdAt}</div>
+  //           </div>
+  //           <div>{comment?.content}</div>
+  //         </div>
+  //       </Comment>
+  //     );
+  //   });
+  // };
 
   return (
     <MentorDetailTag>
@@ -279,6 +299,7 @@ function MentorDetail() {
                 <FontAwesomeIcon
                   icon={faPencil}
                   className="icon"
+                  size="xs"
                   onClick={() => {
                     setIsActivateIntroductionEdit(!isActivateIntroductionEdit);
                   }}
@@ -298,9 +319,20 @@ function MentorDetail() {
                     items={mentorTags}
                     setter={setMentorTags}
                   />
-                  <TagInputBoxComponent setter={setMentorTags} />
+                  <TagInputBoxComponent
+                    setter={setMentorTags}
+                    value={mentorTags}
+                  />
                   <ButtonBox>
-                    <Button text="편집완료" borderRadius="20px" />
+                    <Button
+                      text="편집완료"
+                      borderRadius="20px"
+                      onClick={() => {
+                        setIsActivateIntroductionEdit(
+                          !isActivateIntroductionEdit,
+                        );
+                      }}
+                    />
                   </ButtonBox>
                 </>
               ) : (
@@ -353,8 +385,45 @@ function MentorDetail() {
           </MentorBody3Toggle>
           {isActiveMentorDetail ? (
             <>
-              <MenuBox>멘토정보</MenuBox>
-              <MarkdownRender markdown={mentor?.markdownContent} />
+              <MenuBox>
+                멘토 정보
+                <FontAwesomeIcon
+                  icon={faPencil}
+                  className="icon"
+                  size="xs"
+                  onClick={() => {
+                    setIsActivateMentorInfoEdit(!isActivateMentorInfoEdit);
+                  }}
+                />
+              </MenuBox>
+
+              {isActivateMentorInfoEdit ? (
+                <>
+                  <InputCounter
+                    value={mentorInfo}
+                    setter={setMentorInfo}
+                    disabled={false}
+                    maxLength={10000}
+                    width={'100%'}
+                    height={'50rem'}
+                    fontSize={theme.fontFrame.bodyMiddle}
+                  />
+                  <SubmitButton>
+                    <Button
+                      text="편집완료"
+                      width="12rem"
+                      height="3.5rem"
+                      backgroundColor={theme.colors.polarSimpleMain}
+                      borderRadius="20px"
+                      onClick={() => {
+                        setIsActivateMentorInfoEdit(!isActivateMentorInfoEdit);
+                      }}
+                    />
+                  </SubmitButton>
+                </>
+              ) : (
+                <MarkdownRender markdown={mentorInfo} />
+              )}
             </>
           ) : null}
         </MentorBody3>
@@ -398,7 +467,7 @@ function MentorDetail() {
             maxLength={300}
             width={'100%'}
           />
-          <div className="submitButton">
+          <SubmitButton>
             <Button
               text="제출하기"
               width="12rem"
@@ -409,7 +478,7 @@ function MentorDetail() {
                 handleCommentSubmit();
               }}
             />
-          </div>
+          </SubmitButton>
         </MentorCommets>
       </MentorBody>
     </MentorDetailTag>
@@ -418,6 +487,7 @@ function MentorDetail() {
 
 const ButtonBox = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 `;
 
@@ -524,12 +594,17 @@ const MenuBox2 = styled.div`
 
 const MentorCommetsContent = styled.div``;
 
+const SubmitButton = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
 const MentorCommets = styled.div`
   margin-top: 5%;
-  .submitButton {
+  /* .submitButton {
     display: flex;
     justify-content: flex-end;
-  }
+  } */
 `;
 
 const MentorBody3Toggle = styled.div`
@@ -583,6 +658,7 @@ const MentorBody1Right2 = styled.div`
 
 const MentorTags = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -716,6 +792,7 @@ const MenuBox = styled.div`
   padding-left: 1rem;
   padding-top: 1.3rem;
   display: flex;
+  text-align: center;
   justify-content: flex-start;
   align-items: center;
   ${theme.fontFrame.titleSmall};

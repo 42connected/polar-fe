@@ -3,7 +3,7 @@ import defaultTheme from '../styles/theme';
 
 const Input = styled.textarea<InputCounterProps>`
   width: ${props => props.width ?? '80%'};
-  height: 100px;
+  height: ${props => props.height ?? '100px'};
   padding: 10px;
   background-color: #f6f6f6;
   border-radius: 5px;
@@ -33,6 +33,7 @@ interface InputCounterProps {
   disabled: boolean;
   width?: string;
   fontSize?: string;
+  height?: string;
 }
 
 export function InputCounter(props: InputCounterProps) {
