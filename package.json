@@ -25,7 +25,6 @@
     "axios": "^0.27.2",
     "date-fns": "^2.29.2",
     "dotenv": "^16.0.1",
-    "http-proxy-middleware": "^2.0.6",
     "js-file-download": "^0.4.12",
     "mobx": "^6.6.1",
     "mobx-react-lite": "^3.4.0",
