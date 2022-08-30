@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../components/button';
+import { InputCounter } from '../../components/input-counter';
+import ButtonBoxComponent from '../../components/mentor-detail/button-box';
 import TimeTableMuiComponent from '../../components/mentor-detail/mui-table';
+import TagInputBoxComponent from '../../components/mentor-detail/tag-input-box';
 import ReportSummaryInputComponent from '../../components/report-summery-input';
 import { axiosInstance } from '../../context/axios-interface';
 import { getCookie, TOKEN_LIST } from '../../context/cookies';
@@ -51,6 +54,7 @@ function MentorDetail() {
     },
   ];
 
+  const [mentorIntroduction, setMentorIntroduction] = useState<string>('');
   const [mentor, setMentor] = useState<MentorDetailProps | null>(null);
   const [mentoringLog, setMentoringLog] =
     useState<MentoringLogProps[]>(mockMentoringLog);
@@ -61,7 +65,9 @@ function MentorDetail() {
     useState<appointmentsInterface[]>(appointmentsTest);
   const [isActivateIntroductionEdit, setIsActivateIntroductionEdit] =
     useState<boolean>(false);
-
+  const [isActivateMentor, setIsActivateMentor] = useState<boolean>(false);
+  const [inputComment, setInputComment] = useState<string>('');
+  const [mentorTags, setMentorTags] = useState<string[]>([]);
   //2018, 5, 25 화요일
   //const date2 = new Date('1995-12-17T03:24:00');
   // Sun Dec 17 1995 03:24:00 GMT...
@@ -98,12 +104,8 @@ function MentorDetail() {
     );
     return appointmentsData;
   };
-  const getParams = useParams();
 
-  const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
-  const config = {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  };
+  const getParams = useParams();
   useEffect(() => {
     const params = {
       page: 1,
@@ -111,8 +113,12 @@ function MentorDetail() {
     };
     axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
       console.log('mentor', result.data);
-      result.data.tags = ['aaaa', 'bbbb', 'cccc'];
+      result.data.tags = ['aaaa', 'bbbb', 'cccccccccc'];
       setMentor(result.data);
+      setMentorTags(result.data.tags);
+      setMentorIntroduction(
+        result.data?.introduction ? result.data.introduction : '',
+      );
     });
     axiosInstance
       .get(`/comments/${getParams.intraId}`, { params })
@@ -125,9 +131,42 @@ function MentorDetail() {
     setAppointments(appointmentsData);
   }, []);
 
-  const AddHashtag = mentor?.tags?.map(tag => {
-    return '#' + tag + ' ';
+  useEffect(() => {
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    console.log(accessToken);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    const data = { introduction: mentorIntroduction };
+    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+  }, [isActivateIntroductionEdit]);
+
+  useEffect(() => {
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    console.log(accessToken);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    const data = { isActive: isActivateMentor };
+    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+  }, [isActivateMentor]);
+
+  const AddHashtag = mentorTags.map(tag => {
+    return <div>{tag.padStart(tag.length + 1, '#')}</div>;
   });
+
+  const handleCommentSubmit = () => {
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    const data = { content: inputComment };
+    axiosInstance.post(`/comments/${getParams.intraId}`, data, config);
+    setInputComment('');
+    axiosInstance.get(`/comments/${getParams.intraId}`).then(result => {
+      setComments(result.data);
+    });
+  };
 
   const mentoringLogList = mentoringLog.map(log => {
     const makeDate = `${log.meetingAt
@@ -147,10 +186,10 @@ function MentorDetail() {
     comments.map((comment: CommentProps) => {
       return (
         <Comment>
-          <img src={comment?.cadet?.profileImage} />
+          <img src={comment?.cadets?.profileImage} />
           <div>
             <div>
-              <div>{comment?.cadet?.name}</div>
+              <div>{comment?.cadets?.intraId}</div>
               <div>{comment?.createdAt}</div>
             </div>
             <div>{comment?.content}</div>
@@ -159,6 +198,7 @@ function MentorDetail() {
       );
     });
   };
+
   return (
     <MentorDetailTag>
       <MentorHeader>
@@ -166,19 +206,20 @@ function MentorDetail() {
           <MentorImage src={mentor?.profileImage} />
           <MentorInfoContent>
             <MentorName>
-              <div>{mentor?.name} 멘토</div>
-              <div>{mentor?.intraId}</div>
-              <div>{mentor?.createdAt}</div>
+              <div className="mentor-name">{mentor?.name} 멘토</div>
+              <div className="mentor-intra">{mentor?.intraId}</div>
             </MentorName>
             <Button
               fontSize={theme.fontFrame.subTitleSmall}
               borderWidth="1px"
-              text={`멘토링 ${mentor?.isActive ? '가능' : '불가능'}`}
+              text={`멘토링 ${isActivateMentor ? '가능' : '불가능'}`}
               backgroundColor={theme.colors.polarBackground}
               color={theme.colors.polarSimpleMain}
               width="12rem"
-              height="2rem"
-            ></Button>
+              height="2.5rem"
+              borderRadius="20px"
+              onClick={() => setIsActivateMentor(!isActivateMentor)}
+            />
           </MentorInfoContent>
         </MentorInfo>
         {mentor?.isActive ? (
@@ -189,7 +230,7 @@ function MentorDetail() {
               height="6rem"
               background-color={theme.colors.polarSimpleMain}
               color={theme.colors.backgoundWhite}
-            ></Button>
+            />
           </Link>
         ) : (
           <Button
@@ -198,7 +239,7 @@ function MentorDetail() {
             height="6rem"
             background-color={theme.colors.polarSimpleMain}
             color={theme.colors.backgoundWhite}
-          ></Button>
+          />
         )}
       </MentorHeader>
       <MentorBody>
@@ -239,23 +280,33 @@ function MentorDetail() {
                   icon={faPencil}
                   className="icon"
                   onClick={() => {
-                    console.log('clicked');
                     setIsActivateIntroductionEdit(!isActivateIntroductionEdit);
-                    console.log(isActivateIntroductionEdit);
                   }}
                 />
               </MenuBox>
               {isActivateIntroductionEdit ? (
                 <>
-                  <MentorIntroduction>
-                    {mentor?.introduction}
-                  </MentorIntroduction>
-                  <MentorTags>{AddHashtag}</MentorTags>
+                  <InputCounter
+                    value={mentorIntroduction}
+                    setter={setMentorIntroduction}
+                    disabled={false}
+                    maxLength={150}
+                    width={'100%'}
+                    fontSize={theme.fontFrame.bodyMiddle}
+                  />
+                  <ButtonBoxComponent
+                    items={mentorTags}
+                    setter={setMentorTags}
+                  />
+                  <TagInputBoxComponent setter={setMentorTags} />
+                  <ButtonBox>
+                    <Button text="편집완료" borderRadius="20px" />
+                  </ButtonBox>
                 </>
               ) : (
                 <>
-                  <MentorIntroductionInput></MentorIntroductionInput>
-                  {/* <MentorTagsInput></MentorTagsInput> */}
+                  <MentorIntroduction>{mentorIntroduction}</MentorIntroduction>
+                  <MentorTags>{AddHashtag}</MentorTags>
                 </>
               )}
             </MentorBody1Right1>
@@ -271,8 +322,15 @@ function MentorDetail() {
         </MentorBody1>
         <MentorBody2>
           <MenuBox3>
-            <div>가능 시간</div>
-            <div>update:time</div>
+            <div>
+              가능 시간
+              <FontAwesomeIcon icon={faPencil} size={'xs'} className="icon" />
+            </div>
+            {mentor?.createdAt ? (
+              <div>update: {mentor?.updatedAt?.substring(0, 10)}</div>
+            ) : (
+              <div>create: {mentor?.createdAt?.substring(0, 10)}</div>
+            )}
           </MenuBox3>
           <TimTableScroll>
             <TimeTableMuiComponent
@@ -306,18 +364,26 @@ function MentorDetail() {
             {comments?.comments?.map((comment: CommentProps) => {
               return (
                 <Comment>
-                  <img src={comment?.cadet?.profileImage} />
+                  <img src={comment?.cadets?.profileImage} />
                   <UserContent>
                     <div>
-                      <div>{comment?.cadet?.name}</div>
+                      <div className="cadetName">
+                        {comment?.cadets?.intraId}
+                      </div>
                       {mentor?.updatedAt ? (
-                        <div>{`${
-                          mentor?.updatedAt
-                        }.${mentor?.updatedAt.padStart(
-                          2,
-                          '0',
-                        )}.${mentor?.updatedAt.padStart(2, '0')}`}</div>
+                        <div className="updatedAt">{`${mentor?.updatedAt.substring(
+                          0,
+                          4,
+                        )}.${mentor?.updatedAt.substring(
+                          5,
+                          7,
+                        )}.${mentor?.updatedAt.substring(8, 10)}`}</div>
                       ) : null}
+                      <FontAwesomeIcon
+                        icon={faPencil}
+                        className="icon"
+                        size={'xs'}
+                      />
                     </div>
                     <div>{comment?.content}</div>
                   </UserContent>
@@ -325,26 +391,40 @@ function MentorDetail() {
               );
             })}
           </MentorCommetsContent>
-          <ReportSummaryInputComponent />
+          <InputCounter
+            value={inputComment}
+            setter={setInputComment}
+            disabled={false}
+            maxLength={300}
+            width={'100%'}
+          />
+          <div className="submitButton">
+            <Button
+              text="제출하기"
+              width="12rem"
+              height="3.5rem"
+              backgroundColor={theme.colors.polarSimpleMain}
+              borderRadius="20px"
+              onClick={() => {
+                handleCommentSubmit();
+              }}
+            />
+          </div>
         </MentorCommets>
       </MentorBody>
     </MentorDetailTag>
   );
 }
-// const WithEditButton = styled.div`
-//   position: relative;
-//   .icon {
-//     position: absolute;
-//   }
-// `;
 
-const MentorIntroductionInput = styled.textarea``;
+const ButtonBox = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const MenuBox3 = styled.div`
   border-top: 2px solid ${props => props.theme.colors.blackThree};
   border-bottom: 1px solid ${props => props.theme.colors.grayFive};
   width: 100%;
-  /* height: 3rem; */
   box-sizing: border-box;
   padding-left: 1rem;
   padding-top: 1.3rem;
@@ -358,17 +438,20 @@ const MenuBox3 = styled.div`
   margin-bottom: 1.3rem;
   div:last-child {
     color: ${theme.colors.fontGray};
-    margin-top: 1.5rem;
     margin-bottom: 0.5rem;
     padding-left: 0.3rem;
     font-size: 1rem;
+  }
+  .icon {
+    margin-left: 0.5rem;
+    cursor: pointer;
   }
   padding-bottom: 0.5rem;
 `;
 
 const HowToContent = styled.div`
   margin: 0 1.5rem;
-  color: ${theme.colors.grayTwo};
+  color: ${theme.colors.grayOne};
 `;
 const UserContent = styled.div`
   display: flex;
@@ -377,16 +460,21 @@ const UserContent = styled.div`
   margin-left: 1.5rem;
   div:first-child {
     display: flex;
-    align-items: flex-end;
+    text-align: end;
+    align-items: center;
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 0.2rem;
-    div:last-child {
+    .updatedAt {
       font-size: 1rem;
       padding-left: 0.7rem;
       color: ${props => props.theme.colors.grayThree};
       font-weight: normal;
       margin-top: 0.1rem;
+    }
+    .icon {
+      margin-left: 1rem;
+      cursor: pointer;
     }
   }
   div:last-child {
@@ -438,6 +526,10 @@ const MentorCommetsContent = styled.div``;
 
 const MentorCommets = styled.div`
   margin-top: 5%;
+  .submitButton {
+    display: flex;
+    justify-content: flex-end;
+  }
 `;
 
 const MentorBody3Toggle = styled.div`
@@ -495,6 +587,10 @@ const MentorTags = styled.div`
   align-items: center;
   text-align: center;
   color: ${theme.colors.polarSimpleMain};
+  ${theme.fontFrame.bodyMiddle};
+  div {
+    margin-right: 0.5rem;
+  }
 `;
 
 const MentorIntroduction = styled.div`
@@ -550,7 +646,6 @@ const MentorHowToContent = styled.div`
   footer {
     color: ${theme.colors.fontGray};
     font-size: 1rem;
-    /* padding-left:2rem; */
     position: absolute;
     top: 100%;
     left: 5%;
@@ -595,15 +690,14 @@ const MentorName = styled.div`
   align-items: center;
   justify-content: flex-start;
   flex-wrap: wrap;
-  div:first-child {
+  .mentor-name {
     ${theme.fontFrame.titleLarge};
-    font-family: ${theme.font.sebangGothic};
+    ${theme.font.sebangGothic};
     font-weight: 900;
   }
-  div:last-child {
+  .mentor-intra {
     margin-left: 1rem;
-    ${theme.fontFrame.bodySmall};
-    font-weight: bolder;
+    ${theme.fontFrame.titleSmall};
   }
   margin-bottom: 0.5rem;
 `;
@@ -631,11 +725,12 @@ const MenuBox = styled.div`
   padding-bottom: 0.5rem;
   .icon {
     margin-left: 1rem;
+    margin-bottom: 2%;
     cursor: pointer;
   }
 `;
 const MentorDetailTag = styled.div`
-  font-family: ${theme.font.nanumGothic};
+  ${theme.font.nanumGothic};
   background-color: ${theme.colors.backgoundWhite};
 `;
 

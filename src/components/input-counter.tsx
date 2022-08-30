@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import defaultTheme from '../styles/theme';
 
-const Input = styled.textarea`
-  width: 80%;
+const Input = styled.textarea<InputCounterProps>`
+  width: ${props => props.width ?? '80%'};
   height: 100px;
   padding: 10px;
   background-color: #f6f6f6;
@@ -16,21 +16,23 @@ const Input = styled.textarea`
   background-color: ${defaultTheme.colors.polarGray};
 `;
 
-export const Count = styled.div`
+export const Count = styled.div<InputCounterProps>`
   display: flex;
-  width: 80%;
+  width: ${props => props.width ?? '80%'};
   justify-content: right;
   margin: 5px;
   align-items: center;
-  ${defaultTheme.fontSize.sizeSmall};
+  ${props => props.fontSize ?? defaultTheme.fontSize.sizeSmall};
   color: rgba(0, 0, 0, 0.5);
 `;
 
 interface InputCounterProps {
-  setter?: (s: string) => void;
+  setter?: (s: any) => void;
   value: string;
   maxLength?: number;
   disabled: boolean;
+  width?: string;
+  fontSize?: string;
 }
 
 export function InputCounter(props: InputCounterProps) {
@@ -42,12 +44,13 @@ export function InputCounter(props: InputCounterProps) {
             props.setter(e.target.value);
           }
         }}
+        {...props}
         value={props.value}
         maxLength={props.maxLength}
         disabled={props.disabled}
       />
       {props.disabled ? null : (
-        <Count>
+        <Count {...props}>
           {props.value.length} / {props.maxLength}
         </Count>
       )}
