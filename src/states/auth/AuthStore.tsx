@@ -39,8 +39,8 @@ class AuthStore {
   async Logout() {
     removeCookie(TOKEN_LIST.ACCESS_TOKEN, DEFAULT_COOKIE_OPTION);
     removeCookie(TOKEN_LIST.INTRA_ID, DEFAULT_COOKIE_OPTION);
-    removeCookie(TOKEN_LIST.USER_ROLE), DEFAULT_COOKIE_OPTION;
-    location.reload();
+    removeCookie(TOKEN_LIST.USER_ROLE, DEFAULT_COOKIE_OPTION);
+    window.location.reload();
   }
 
   /**
@@ -62,7 +62,7 @@ class AuthStore {
   //  setCookie(TOKEN_LIST.ACCESS_TOKEN, '', DEFAULT_COOKIE_OPTION);
   //  setCookie(TOKEN_LIST.INTRA_ID, '', DEFAULT_COOKIE_OPTION);
   //  setCookie(TOKEN_LIST.USER_ROLE, '', DEFAULT_COOKIE_OPTION);
-  //  location.reload();
+  //  window.location.reload();
   //}
 
   /**

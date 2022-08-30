@@ -57,7 +57,7 @@ class MentorStore {
       )
       .then(() => {
         alert('이메일 변경 완료');
-        location.reload();
+        window.location.reload();
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
@@ -82,7 +82,7 @@ class MentorStore {
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
-        location.reload();
+        window.location.reload();
       });
     LoadingStore.off();
   }
