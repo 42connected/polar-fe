@@ -13,7 +13,7 @@ export interface keywordsLists {
 }
 
 export const MainContainer = styled.div`
-  background-color: ${theme.colors.polarBackground};
+  background-color: ${theme.colors.backgoundWhite};
   left: 0;
   ${theme.fontSize.sizeMedium};
   ${theme.font.sebangGothic};
@@ -69,7 +69,7 @@ export const ImageBox = styled.div<{
 
 export const MainImageStyle = styled.div`
   box-sizing: border-box;
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: ${theme.colors.polarGray};
   border-radius: 10%;
   height: 40rem;
   width: 60rem;
