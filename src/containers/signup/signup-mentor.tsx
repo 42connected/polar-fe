@@ -76,7 +76,6 @@ export const InfoInput = styled.input`
   width: 27rem;
   height: 3rem;
   border-radius: 20px;
-  align: center;
   margin-left: 20px;
   margin-bottom: 10px;
   padding-left: 3rem;
@@ -94,7 +93,6 @@ export const EmailInput = styled.input`
   width: 27rem;
   height: 3rem;
   border-radius: 20px;
-  align: center;
   margin-left: 20px;
   margin-bottom: 10px;
   border: none;
@@ -272,7 +270,7 @@ const SignUpMentor = () => {
 
   useEffect(() => {
     MentorStore.getMentor(AuthStore.getUserIntraId());
-    window.screen.width <= 500 ? setIsMobile(true) : setIsMailFail(false);
+    window.screen.width <= 500 ? setIsMobile(true) : setIsMobile(false);
 
     window.addEventListener('resize', handleResize);
     return () => {
@@ -354,7 +352,7 @@ const SignUpMentor = () => {
       const length = time[day].length;
       for (let i = 0; i < length; i++) {
         for (let j = 0; j < length; j++) {
-          if (i == j) {
+          if (i === j) {
             continue;
           }
           if (!validateTimeOverlap(time[day][i], time[day][j])) {
