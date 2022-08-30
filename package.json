@@ -3,29 +3,53 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.11.49",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.7.4",
-    "web-vitals": "^2.1.4",
+    "@date-io/date-fns": "^2.15.0",
+    "@devexpress/dx-react-core": "^3.0.5",
+    "@devexpress/dx-react-scheduler": "^3.0.5",
+    "@devexpress/dx-react-scheduler-material-ui": "^3.0.5",
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-brands-svg-icons": "^6.1.2",
+    "@fortawesome/free-regular-svg-icons": "^6.1.2",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@material-ui/core": "^4.12.4",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/lab": "^5.0.0-alpha.96",
+    "@mui/material": "^5.10.1",
+    "@mui/x-date-pickers": "^5.0.0-beta.6",
     "@types/jest": "^28.1.7",
     "@types/node": "^18.7.6",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
-    "typescript": "^4.7.4"
+    "@types/react": "^17.0.0",
+    "axios": "^0.27.2",
+    "date-fns": "^2.29.2",
+    "dotenv": "^16.0.1",
+    "js-file-download": "^0.4.12",
+    "mobx": "^6.6.1",
+    "mobx-react-lite": "^3.4.0",
+    "prettier": "^2.7.1",
+    "query-string": "^7.1.1",
+    "react": "^17.0.0",
+    "react-cookie": "^4.1.1",
+    "react-dom": "^17.0.0",
+    "react-markdown": "^8.0.3",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1",
+    "react-to-print": "^2.14.7",
+    "serve": "^14.0.1",
+    "styled-components": "^5.3.5",
+    "typescript": "^4.7.4",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-prod": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "format": "prettier --write \"src/**/*.ts\""
   },
   "eslintConfig": {
     "extends": [
@@ -44,5 +68,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-dom": "^18.0.6",
+    "@types/styled-components": "^5.1.26",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }
