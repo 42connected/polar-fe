@@ -72,6 +72,8 @@ const SuggestionButton = styled.button`
   border: none;
   margin-top: 0.4rem;
   background-color: transparent;
+  color: black;
+  -webkit-text-fill-color: rgba(0, 0, 0, 256);
 `;
 
 const MovSuggestionButton = styled.button`
@@ -172,7 +174,7 @@ const Header = () => {
     else setIsMobile(false);
   }, 10);
   const AlertDetail = () => {
-    return alert('카뎃배포는 다음주입니다! 조금만 기다려주세요:)'), null;
+    return alert('카뎃배포는 다음주입니다! 조금만 기다려주세요:)');
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   AuthStore.getUserRole()
@@ -180,6 +182,7 @@ const Header = () => {
       (mlinks = '/mentors/mentorings/' + AuthStore.getUserIntraId()))
     : '';
   useEffect(() => {
+    window.screen.width <= 600 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -198,7 +201,10 @@ const Header = () => {
             </Link>
             {AuthStore.getAccessToken() ? (
               AuthStore.getUserRole() === USER_ROLES.CADET ? (
-                <div>{AlertDetail()}</div>
+                <div>
+                  {AlertDetail()}
+                  {AuthStore.Logout()}
+                </div>
               ) : (
                 <MovLoginButton
                   onClick={() => {
@@ -288,7 +294,10 @@ const Header = () => {
             </Link>
             {AuthStore.getAccessToken() ? (
               AuthStore.getUserRole() === USER_ROLES.CADET ? (
-                <div>{AlertDetail()}</div>
+                <div>
+                  {AlertDetail()}
+                  {AuthStore.Logout()}
+                </div>
               ) : (
                 <LoginButton
                   onClick={() => {
