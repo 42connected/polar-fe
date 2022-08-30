@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import { Box, Modal, Typography } from '@mui/material';
 import { useState } from 'react';
+import { ApplyModal } from '../containers/cadet-mentoring/modal/modal';
 import { MentoringLog } from '../interfaces/cadet-mentoring/mentoring-log.interface';
 import defaultTheme from '../styles/theme';
 
@@ -104,8 +104,8 @@ const getDurationTime = (meetingAt: Date[]): string => {
 };
 
 const getMeetingAt = (meetingAt: Date[]): string => {
-  if (!meetingAt) {
-    return '';
+  if (!meetingAt || isNaN(meetingAt[0].getHours())) {
+    return '미정';
   }
   const hour = meetingAt[0].getHours().toString().padStart(2, '0');
   const minute = meetingAt[0].getMinutes().toString().padStart(2, '0');
@@ -150,19 +150,21 @@ const stringToDate = (log: MentoringLog): void => {
     log.meta.meetingAt[0] = new Date(log.meta.meetingAt[0]);
     log.meta.meetingAt[1] = new Date(log.meta.meetingAt[1]);
   }
-  log.meta.requestTime[0] = [];
-  log.meta.requestTime[1] = log.meta.requestTime[1]
-    ? [
-        new Date(log.meta.requestTime[1][0]),
-        new Date(log.meta.requestTime[1][1]),
-      ]
-    : null;
-  log.meta.requestTime[2] = log.meta.requestTime[2]
-    ? [
-        new Date(log.meta.requestTime[2][0]),
-        new Date(log.meta.requestTime[2][1]),
-      ]
-    : null;
+  if (log.meta.requestTime[0])
+    log.meta.requestTime[0] = [
+      new Date(log.meta.requestTime[0][0]),
+      new Date(log.meta.requestTime[0][1]),
+    ];
+  if (log.meta.requestTime[1])
+    log.meta.requestTime[1] = [
+      new Date(log.meta.requestTime[1][0]),
+      new Date(log.meta.requestTime[1][1]),
+    ];
+  if (log.meta.requestTime[2])
+    log.meta.requestTime[2] = [
+      new Date(log.meta.requestTime[2][0]),
+      new Date(log.meta.requestTime[2][1]),
+    ];
 };
 
 const style = {
@@ -178,13 +180,19 @@ const style = {
 };
 
 export function MentorCard(props: CardProps) {
+  const [applyModal, setApplyModal] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => setApplyModal(true);
   const handleClose = () => setOpen(false);
   const log = props.log;
   stringToDate(log);
   return (
     <>
+      <ApplyModal
+        log={log}
+        applyModal={applyModal}
+        setApplyModal={setApplyModal}
+      />
       <Container>
         <Header>
           <LeftData>

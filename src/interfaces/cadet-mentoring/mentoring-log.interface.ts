@@ -10,7 +10,7 @@ export interface MentoringLog {
   meta: {
     isCommon: boolean;
     content: string;
-    requestTime: (Date[] | null)[];
+    requestTime: Date[][];
     meetingAt: Date[];
     rejectMessage: string;
   };

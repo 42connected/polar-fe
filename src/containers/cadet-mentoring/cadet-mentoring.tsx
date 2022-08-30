@@ -6,6 +6,7 @@ import { axiosInstance } from '../../context/axios-interface';
 import { Header } from './header';
 import LoadingStore from '../../states/loading/LoadingStore';
 import { MentoringLog } from '../../interfaces/cadet-mentoring/mentoring-log.interface';
+import AuthStore from '../../states/auth/AuthStore';
 
 const NoneDrag = styled.div`
   display: flex;
@@ -25,7 +26,7 @@ const MentorCards = styled.div`
   height: 100%;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(350px, 380px));
-  gap: 20px;
+  gap: 30px;
   margin: 20px 0;
 `;
 
@@ -38,11 +39,12 @@ const CadetMentornig = observer(() => {
     try {
       const save = await axiosInstance.get('/cadets/mentorings', {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NjU5NzNiMy1hMjBmLTQ4NDAtOGY2Yy02NTAxOTAwNTgyNTgiLCJ1c2VybmFtZSI6Im5ha2tpbSIsInJvbGUiOiJjYWRldCIsImlhdCI6MTY2MTM5OTU0OCwiZXhwIjoxNjYxNDg1OTQ4fQ.ZDyEoejOtcUFvTf6VY7F20FWOw-Ld5UQZq0lkXreJlE`,
+          Authorization: `Bearer ${AuthStore.getAccessToken()}`,
         },
       });
       setLogs(save.data.mentorings);
       setUrl(save.data.resumeUrl);
+      console.log(save.data);
       LoadingStore.off();
     } catch (e) {
       console.log(e);
@@ -56,13 +58,12 @@ const CadetMentornig = observer(() => {
 
   return (
     <>
-      {/* <Modal isWait={true} /> */}
       <NoneDrag>
         <Header url={url} setUrl={setUrl}></Header>
         <MentorCards>
-          {/* {logs.map(log => {
+          {logs.map(log => {
             return <MentorCard log={log}></MentorCard>;
-          })} */}
+          })}
         </MentorCards>
       </NoneDrag>
     </>

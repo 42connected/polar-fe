@@ -5,6 +5,7 @@ import { faCheck, faPencil, faX } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { axiosInstance } from '../../context/axios-interface';
 import { ResumeProps } from '../../interfaces/cadet-mentoring/resume-props.interface';
+import AuthStore from '../../states/auth/AuthStore';
 
 const Container = styled.div`
   display: flex;
@@ -66,7 +67,7 @@ export function Header(props: ResumeProps) {
         { resumeUrl },
         {
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NjU5NzNiMy1hMjBmLTQ4NDAtOGY2Yy02NTAxOTAwNTgyNTgiLCJ1c2VybmFtZSI6Im5ha2tpbSIsInJvbGUiOiJjYWRldCIsImlhdCI6MTY2MTM5OTU0OCwiZXhwIjoxNjYxNDg1OTQ4fQ.ZDyEoejOtcUFvTf6VY7F20FWOw-Ld5UQZq0lkXreJlE`,
+            Authorization: `Bearer ${AuthStore.getAccessToken()}`,
           },
         },
       );
