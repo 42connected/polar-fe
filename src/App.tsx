@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DataRoom from './containers/data-room/data-room';
+import CadetMentornig from './containers/cadet-mentoring/cadet-mentoring';
 import MentorList from './containers/mentor-list/mentor-list';
 import SignUpMentor from './containers/signup/signup-mentor';
 import MyMentoringMentor from './containers/my-mentoring-mentor/my-mentoring-mentor';
@@ -31,6 +32,7 @@ const App = observer(() => {
         <Header />
         <Routes>
           <Route path="/data-room" element={<DataRoom />} />
+          <Route path="/cadets/mentorings" element={<CadetMentornig />} />
           <Route path="/mentor-lists/:category" element={<MentorList />} />
           <Route
             path="/mentorings/reports/:reportId"
