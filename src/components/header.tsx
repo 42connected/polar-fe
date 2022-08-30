@@ -222,6 +222,7 @@ const Header = () => {
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <MovSuggestionButton>건의사항</MovSuggestionButton>
                 </a>
@@ -238,6 +239,7 @@ const Header = () => {
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <MovSuggestionButton>건의사항</MovSuggestionButton>
                 </a>
@@ -253,6 +255,7 @@ const Header = () => {
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <MovSuggestionButton>건의사항</MovSuggestionButton>
                 </a>
@@ -265,6 +268,7 @@ const Header = () => {
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <MovSuggestionButton>건의사항</MovSuggestionButton>
                 </a>
@@ -308,6 +312,7 @@ const Header = () => {
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <SuggestionButton>건의사항</SuggestionButton>
                 </a>
@@ -324,6 +329,7 @@ const Header = () => {
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <SuggestionButton>건의사항</SuggestionButton>
                 </a>
@@ -339,6 +345,7 @@ const Header = () => {
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <SuggestionButton>건의사항</SuggestionButton>
                 </a>
@@ -351,6 +358,7 @@ const Header = () => {
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <SuggestionButton>건의사항</SuggestionButton>
                 </a>
