@@ -1,4 +1,8 @@
-import { faAngleDown, faPencil } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleDown,
+  faPencil,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -17,6 +21,7 @@ import { CommentsWithPageProps } from '../../interface/mentor-detail/comments-wi
 import { mentorAvailableTimeInterface } from '../../interface/mentor-detail/mentor-available-time.interface';
 import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
 import { MentoringLogProps } from '../../interface/mentor-detail/mentoringLogProps';
+import AuthStore, { User } from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
 import MarkdownRender from './markdownRender';
 
@@ -71,6 +76,8 @@ function MentorDetail() {
   const [isActivateMentorInfoEdit, setIsActivateMentorInfoEdit] =
     useState<boolean>(false);
   const [mentorInfo, setMentorInfo] = useState<string>('');
+  const [user, setUser] = useState<User | null>(null);
+
   //2018, 5, 25 화요일
   //const date2 = new Date('1995-12-17T03:24:00');
   // Sun Dec 17 1995 03:24:00 GMT...
@@ -134,6 +141,11 @@ function MentorDetail() {
 
     const appointmentsData = setMentorAvailableTimeData();
     setAppointments(appointmentsData);
+    const user: User = {
+      intraId: AuthStore.getUserIntraId(),
+      role: AuthStore.getUserRole(),
+    };
+    setUser(user);
   }, []);
 
   useEffect(() => {
@@ -176,16 +188,18 @@ function MentorDetail() {
   });
 
   const handleCommentSubmit = () => {
-    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
-    const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    };
-    const data = { content: inputComment };
-    axiosInstance.post(`/comments/${getParams.intraId}`, data, config);
-    setInputComment('');
-    axiosInstance.get(`/comments/${getParams.intraId}`).then(result => {
-      setComments(result.data);
-    });
+    if (inputComment !== '') {
+      const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+      const config = {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      };
+      const data = { content: inputComment };
+      axiosInstance.post(`/comments/${getParams.intraId}`, data, config);
+      setInputComment('');
+      axiosInstance.get(`/comments/${getParams.intraId}`).then(result => {
+        setComments(result.data.comments);
+      });
+    }
   };
 
   const mentoringLogList = mentoringLog.map(log => {
@@ -201,6 +215,17 @@ function MentorDetail() {
       </MenuBox2>
     );
   });
+
+  const deleteComment = (commentId: any) => {
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    axiosInstance.delete(`/comments/${commentId}`, config);
+    axiosInstance.get(`/comments/${getParams.intraId}`).then(result => {
+      setComments(result.data.comments);
+    });
+  };
 
   // const MakeCommentsTags = ({ comments }: any) => {
   //   comments.map((comment: CommentProps) => {
@@ -296,14 +321,18 @@ function MentorDetail() {
             <MentorBody1Right1>
               <MenuBox>
                 멘토 소개
-                <FontAwesomeIcon
-                  icon={faPencil}
-                  className="icon"
-                  size="xs"
-                  onClick={() => {
-                    setIsActivateIntroductionEdit(!isActivateIntroductionEdit);
-                  }}
-                />
+                {user?.intraId === mentor?.intraId && user && mentor ? (
+                  <FontAwesomeIcon
+                    icon={faPencil}
+                    className="icon"
+                    size="xs"
+                    onClick={() => {
+                      setIsActivateIntroductionEdit(
+                        !isActivateIntroductionEdit,
+                      );
+                    }}
+                  />
+                ) : null}
               </MenuBox>
               {isActivateIntroductionEdit ? (
                 <>
@@ -356,7 +385,11 @@ function MentorDetail() {
           <MenuBox3>
             <div>
               가능 시간
-              <FontAwesomeIcon icon={faPencil} size={'xs'} className="icon" />
+              {user?.intraId === mentor?.intraId && user && mentor ? (
+                <FontAwesomeIcon icon={faPencil} size={'xs'} className="icon" />
+              ) : (
+                <FontAwesomeIcon icon={faPencil} size={'xs'} className="icon" />
+              )}
             </div>
             {mentor?.createdAt ? (
               <div>update: {mentor?.updatedAt?.substring(0, 10)}</div>
@@ -387,14 +420,16 @@ function MentorDetail() {
             <>
               <MenuBox>
                 멘토 정보
-                <FontAwesomeIcon
-                  icon={faPencil}
-                  className="icon"
-                  size="xs"
-                  onClick={() => {
-                    setIsActivateMentorInfoEdit(!isActivateMentorInfoEdit);
-                  }}
-                />
+                {user?.intraId === mentor?.intraId && user && mentor ? (
+                  <FontAwesomeIcon
+                    icon={faPencil}
+                    className="icon"
+                    size="xs"
+                    onClick={() => {
+                      setIsActivateMentorInfoEdit(!isActivateMentorInfoEdit);
+                    }}
+                  />
+                ) : null}
               </MenuBox>
 
               {isActivateMentorInfoEdit ? (
@@ -448,11 +483,18 @@ function MentorDetail() {
                           7,
                         )}.${mentor?.updatedAt.substring(8, 10)}`}</div>
                       ) : null}
-                      <FontAwesomeIcon
-                        icon={faPencil}
-                        className="icon"
-                        size={'xs'}
-                      />
+                      {user?.intraId === comment?.cadets?.intraId &&
+                      user &&
+                      comment?.cadets ? (
+                        <FontAwesomeIcon
+                          icon={faXmark}
+                          className="icon"
+                          color={'red'}
+                          onClick={() => {
+                            deleteComment(comment?.id);
+                          }}
+                        />
+                      ) : null}
                     </div>
                     <div>{comment?.content}</div>
                   </UserContent>
