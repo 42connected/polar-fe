@@ -77,7 +77,7 @@ export function MainImage(props: MainImageProps) {
   };
 
   return (
-    <div>
+    <>
       <MoImageGrid1>{isleft ? CadetText : MentorText}</MoImageGrid1>
       <ImageGrid2>
         {isleft ? (
@@ -116,6 +116,6 @@ export function MainImage(props: MainImageProps) {
           </div>
         )}
       </ImageGrid2>
-    </div>
+    </>
   );
 }
