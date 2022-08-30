@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import DataRoom from './containers/data-room/data-room';
 import MentorList from './containers/mentor-list/mentor-list';
 import SignUpMentor from './containers/signup/signup-mentor';
 import MyMentoringMentor from './containers/my-mentoring-mentor/my-mentoring-mentor';
@@ -32,6 +33,7 @@ const App = observer(() => {
         <ScrollToTop />
         <Header />
         <Routes>
+          <Route path="/data-room" element={<DataRoom />} />
           <Route path="/mentor-lists/:category" element={<MentorList />} />
           <Route
             path="/mentorings/reports/:reportId"
@@ -44,7 +46,7 @@ const App = observer(() => {
           <Route path="" element={<MainPage />} />
           <Route path="login" element={<Login />} />
           <Route path="apply-page" element={<ApplyPage />} />
-          <Route path="report-details" element={<ReportDetail />} />
+          <Route path="report-details/:intraId" element={<ReportDetail />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
           <Route path="/mentors/join" element={<SignUpMentor />} />

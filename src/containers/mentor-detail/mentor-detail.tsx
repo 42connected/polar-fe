@@ -210,7 +210,7 @@ function MentorDetail() {
               <div className="mentor-intra">{mentor?.intraId}</div>
             </MentorName>
             <Button
-              fontSize={theme.fontFrame.subTitleSmall}
+              fontFrame={theme.fontFrame.subTitleSmall}
               borderWidth="1px"
               text={`멘토링 ${isActivateMentor ? '가능' : '불가능'}`}
               backgroundColor={theme.colors.polarBackground}
