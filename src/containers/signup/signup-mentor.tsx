@@ -29,7 +29,10 @@ export const ContainersMobile = styled.div`
   grid-template-rows: 1fr auto;
   grid-column-gap: 10rem;
   justify-items: center;
-  zoom: 0.7;
+  -webkit-transform: scale(0.7);
+  transform: scale(0.7);
+  transform-origin: left top;
+  padding-left: 1.5rem;
 `;
 
 export const RequiredWrapper = styled.div`
