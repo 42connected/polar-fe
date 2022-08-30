@@ -26,6 +26,7 @@ const Button = styled.div`
   &:hover {
     opacity: 0.8;
   }
+  cursor: pointer;
 `;
 
 const rejectMentoring = async (
@@ -49,7 +50,7 @@ const rejectMentoring = async (
     )
     .then(() => {
       alert('거절 요청 성공');
-      location.reload();
+      window.location.reload();
     })
     .catch(err => {
       alert(`${err?.response?.data?.message}`);
@@ -78,7 +79,7 @@ const approveMentoring = async (
     )
     .then(() => {
       alert('수락 요청 성공');
-      location.reload();
+      window.location.reload();
     })
     .catch(err => {
       alert(`${err?.response?.data?.message}`);

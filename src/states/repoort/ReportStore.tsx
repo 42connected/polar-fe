@@ -125,7 +125,7 @@ class ReportStore {
       .then(() => {
         this.save = new FormData();
         this.deleteFormdataExceptImage();
-        location.reload();
+        window.location.reload();
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
@@ -151,7 +151,7 @@ class ReportStore {
       .then(() => {
         this.save = new FormData();
         this.deleteFormdataExceptImage();
-        location.reload();
+        window.location.reload();
       })
       .catch(err => {
         alert(`${err?.response?.data?.message}`);
@@ -173,7 +173,6 @@ class ReportStore {
         },
       )
       .then(res => {
-        res.data;
         document.location.href = `/mentorings/reports/${res.data}`;
       })
       .catch(err => {
