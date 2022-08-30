@@ -1,5 +1,5 @@
 import theme from '../../styles/theme';
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback, ReactNode } from 'react';
 import { Pagination } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import Button from '../../components/button';
@@ -12,6 +12,7 @@ import { TOKEN } from './data-room-list';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { Navigate } from 'react-router-dom';
 import { dataRoomQuery } from '../../interface/data-room/data-room-query.interface';
+import { useMediaQuery } from 'react-responsive';
 
 export const muiPaginationTheme = createTheme({
   palette: {
@@ -33,10 +34,6 @@ const DataRoomDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-`;
-
-const DataRoomBody = styled.div`
-  width: 140rem;
 `;
 
 const DataRoomTitle = styled.div`
@@ -75,13 +72,25 @@ const DataRoomButton = styled.div`
 const Back = styled.div`
   position: fixed;
   width: 100%;
-  height: 14rem;
+  height: 23rem;
   top: 0;
   left: 0;
 `;
 
 const DRButton = styled(Button)`
   z-index: 100;
+`;
+
+type DRProps = {
+  children: ReactNode;
+};
+
+const DataRoomBodyForPcLarge = styled.div`
+  width: 120rem;
+`;
+const DataRoomBodyForPcSmall = styled.div`
+  width: 140rem;
+  zoom: 0.75;
 `;
 
 function DataRoom() {
@@ -94,6 +103,25 @@ function DataRoom() {
   const onClickSearchBoxModal = useCallback(() => {
     setIsOpenModal(!isOpenModal);
   }, [isOpenModal]);
+  const isDesktopLarge = useMediaQuery({
+    minWidth: 900,
+  });
+  const isDesktopSmall = useMediaQuery({
+    maxWidth: 900,
+    minWidth: 500,
+  });
+
+  const DataRoomBodyForDesktop: React.FC<DRProps> = props => {
+    return (
+      <>
+        {isDesktopLarge ? (
+          <DataRoomBodyForPcLarge>{props.children}</DataRoomBodyForPcLarge>
+        ) : (
+          <DataRoomBodyForPcSmall>{props.children}</DataRoomBodyForPcSmall>
+        )}
+      </>
+    );
+  };
 
   const getExcel = async () => {
     const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}bocals/data-room/excel`;
@@ -148,7 +176,7 @@ function DataRoom() {
   } else
     return (
       <DataRoomDiv>
-        <DataRoomBody>
+        <DataRoomBodyForDesktop>
           <DataRoomTitle>데이터룸</DataRoomTitle>
           <DataRoomButtonDiv>
             <DataRoomButton>
@@ -176,6 +204,7 @@ function DataRoom() {
             setTotal,
             selectedList,
             setSelectedList,
+            isDesktopLarge || isDesktopSmall,
           )}
           <DataRoomNavigationDiv>
             <ThemeProvider theme={muiPaginationTheme}>
@@ -192,7 +221,7 @@ function DataRoom() {
               />
             </ThemeProvider>
           </DataRoomNavigationDiv>
-        </DataRoomBody>
+        </DataRoomBodyForDesktop>
       </DataRoomDiv>
     );
 }

@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { dataRoomProps } from '../../interface/data-room/data-room-props.interface';
 import { mentoringIds } from '../../interface/data-room/mentoring-ids.interface';
+import ReactToPrint from 'react-to-print';
+import ReportDetail from '../report-detail/report-detail';
 
-const TableData = styled.td`
+export const TableData = styled.td`
   height: 3.6rem;
   ${theme.fontFrame.bodyMiddle};
   border-bottom-style: solid;
@@ -14,12 +16,12 @@ const TableData = styled.td`
   border-color: ${theme.colors.grayFour};
 `;
 
-const Link = styled.a`
+export const Link = styled.a`
   color: ${theme.colors.polarSimpleMain};
   ${theme.fontWeight.weightLarge};
 `;
 
-function refineMeetingAt(rawDate: Date[]) {
+export function refineMeetingAt(rawDate: Date[]) {
   const week = ['일', '월', '화', '수', '목', '금', '토'];
   const dateString: string[] = [
     new Date(rawDate[0]).toLocaleString('ko-KR'),
@@ -113,7 +115,7 @@ function DataRoomListElement(
       <TableData>{data.money?.toLocaleString('ko-KR') ?? ''}</TableData>
       <TableData>
         <Link
-          href={'https://www.42polar.kr/report-detail/' + data.id}
+          href={'https://www.42polar.kr/report-details/' + data.id}
           //FIX ME: 연결 제대로 안됨, 수정 필요
         >
           {data.id ? '상세보기' : ''}

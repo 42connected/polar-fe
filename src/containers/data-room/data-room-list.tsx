@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import AuthStore from '../../states/auth/AuthStore';
 import { mentoringIds } from '../../interface/data-room/mentoring-ids.interface';
+import DataRoomListElementMobile from './data-room-list-element-mobile';
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -44,6 +45,7 @@ function DataRoomList(
   setTotal: (total: number) => void,
   selectedList: mentoringIds[],
   setSelectedList: (list: mentoringIds[]) => void,
+  isDesktop: boolean,
 ) {
   const [datas, setDatas] = useState<dataRoomProps[]>(
     Array(query.take).fill({}),
@@ -107,11 +109,6 @@ function DataRoomList(
       });
   }, [query, offset, setOffset, setTotal, total]);
 
-  useEffect(() => {
-    console.log(`changed!`);
-    console.log(selectedList);
-  }, [selectedList]);
-
   function onAscendingChange() {
     setQuery({
       ...query,
@@ -120,61 +117,120 @@ function DataRoomList(
   }
 
   return (
-    <Table>
-      <thead>
-        <tr>
-          <TableHead width="3%">
-            <CheckBox
-              key={'all'}
-              onChange={e => buttonAllToggle(e.target.checked)}
-              checked={
-                selectedList.length !== 0 && selectedList.length === offset
-                  ? true
-                  : false
-              }
-            ></CheckBox>
-          </TableHead>
-          <TableHead width="10%">신청 일시</TableHead>
-          <TableHead width="8%">멘토 이름</TableHead>
-          <TableHead width="8%">아이디</TableHead>
-          <TableHead width="8%">카뎃 이름</TableHead>
-          <TableHead width="8%">아이디</TableHead>
-          <TableHead width="4%">구분</TableHead>
-          <TableHead>
-            멘토링 시간{' '}
-            {query.isAscending === true && (
-              <FontAwesomeIcon
-                icon={faSortUp}
-                fixedWidth
-                size="lg"
-                onClick={onAscendingChange}
-              />
-            )}
-            {query.isAscending === false && (
-              <FontAwesomeIcon
-                icon={faSortDown}
-                fixedWidth
-                size="lg"
-                onClick={onAscendingChange}
-              />
-            )}
-          </TableHead>
-          <TableHead width="8%">금액</TableHead>
-          <TableHead width="8%">보고서</TableHead>
-          <TableHead width="8%">보고서 출력</TableHead>
-        </tr>
-      </thead>
-      <tbody>
-        {datas.map((data, index) => {
-          return DataRoomListElement(
-            data,
-            index,
-            buttonClickToggle,
-            selectedList,
-          );
-        })}
-      </tbody>
-    </Table>
+    <>
+      {isDesktop && (
+        <Table>
+          <thead>
+            <tr>
+              <TableHead width="3%">
+                <CheckBox
+                  key={'all'}
+                  onChange={e => buttonAllToggle(e.target.checked)}
+                  checked={
+                    selectedList.length !== 0 && selectedList.length === offset
+                      ? true
+                      : false
+                  }
+                ></CheckBox>
+              </TableHead>
+              <TableHead width="10%">신청 일시</TableHead>
+              <TableHead width="8%">멘토 이름</TableHead>
+              <TableHead width="8%">아이디</TableHead>
+              <TableHead width="8%">카뎃 이름</TableHead>
+              <TableHead width="8%">아이디</TableHead>
+              <TableHead width="4%">구분</TableHead>
+              <TableHead width="27%">
+                멘토링 시간{' '}
+                {query.isAscending === true && (
+                  <FontAwesomeIcon
+                    icon={faSortUp}
+                    fixedWidth
+                    size="lg"
+                    onClick={onAscendingChange}
+                  />
+                )}
+                {query.isAscending === false && (
+                  <FontAwesomeIcon
+                    icon={faSortDown}
+                    fixedWidth
+                    size="lg"
+                    onClick={onAscendingChange}
+                  />
+                )}
+              </TableHead>
+              <TableHead width="8%">금액</TableHead>
+              <TableHead width="8%">보고서</TableHead>
+              <TableHead width="8%">보고서 출력</TableHead>
+            </tr>
+          </thead>
+          <tbody>
+            {datas.map((data, index) => {
+              return DataRoomListElement(
+                data,
+                index,
+                buttonClickToggle,
+                selectedList,
+              );
+            })}
+          </tbody>
+        </Table>
+      )}
+      {!isDesktop && (
+        <Table>
+          <thead>
+            <tr>
+              <TableHead width="3%">
+                <CheckBox
+                  key={'all'}
+                  onChange={e => buttonAllToggle(e.target.checked)}
+                  checked={
+                    selectedList.length !== 0 && selectedList.length === offset
+                      ? true
+                      : false
+                  }
+                ></CheckBox>
+              </TableHead>
+              <TableHead width="8%">멘토 이름</TableHead>
+              <TableHead width="8%">아이디</TableHead>
+              <TableHead width="8%">카뎃 이름</TableHead>
+              <TableHead width="8%">아이디</TableHead>
+              <TableHead width="4%">구분</TableHead>
+              <TableHead width="27%">
+                멘토링 시간{' '}
+                {query.isAscending === true && (
+                  <FontAwesomeIcon
+                    icon={faSortUp}
+                    fixedWidth
+                    size="lg"
+                    onClick={onAscendingChange}
+                  />
+                )}
+                {query.isAscending === false && (
+                  <FontAwesomeIcon
+                    icon={faSortDown}
+                    fixedWidth
+                    size="lg"
+                    onClick={onAscendingChange}
+                  />
+                )}
+              </TableHead>
+              <TableHead width="8%">금액</TableHead>
+              <TableHead width="8%">보고서</TableHead>
+            </tr>
+          </thead>
+          <tbody>
+            {datas.map((data, index) => {
+              return DataRoomListElementMobile(
+                data,
+                index,
+                buttonClickToggle,
+                selectedList,
+              );
+            })}
+          </tbody>
+        </Table>
+      )}
+    </>
   );
 }
 

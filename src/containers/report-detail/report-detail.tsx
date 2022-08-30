@@ -47,7 +47,7 @@ import {
   ImgLogo3,
   ImgLogo4,
 } from './reportStyled';
-import AuthStore from '../../states/auth/AuthStore';
+import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { useParams } from 'react-router-dom';
 import Alert from '@mui/material/Alert/Alert';
 import { width } from '@mui/system';
@@ -285,7 +285,7 @@ const ReportDetail = () => {
   return (
     <div className="reportpage">
       {token ? (
-        role == 'mentor' ? (
+        role === USER_ROLES.MENTOR ? (
           isMobile ? (
             <ReportpageStyle2>
               <ImgBody>

@@ -189,7 +189,7 @@ function SearchBox(props: SearchBoxProps) {
         <SearchButtonDiv>
           <SearchBoxButton
             type="button"
-            width="5.1rem"
+            width="5.4rem"
             height="1.9rem"
             text="초기화"
             font={theme.font.nanumGothic}

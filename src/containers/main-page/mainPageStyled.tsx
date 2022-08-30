@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
-import { createTheme } from '@material-ui/core/styles';
 
 export interface keywordsPro {
   name: string;
