@@ -1,5 +1,9 @@
 import styled from '@emotion/styled';
-import { axiosInstance } from '../../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithData,
+  AXIOS_METHOD_WITH_DATA,
+} from '../../../context/axios-interface';
 import AuthStore from '../../../states/auth/AuthStore';
 import LoadingStore from '../../../states/loading/LoadingStore';
 import defaultTheme from '../../../styles/theme';
@@ -36,19 +40,33 @@ const rejectMentoring = async (
 ) => {
   LoadingStore.on();
   console.log(token);
-  await axiosInstance
-    .patch(
-      `/mentoring-logs/reject`,
-      {
-        mentoringLogId: mentoringLogId,
-        rejectMessage: rejectMessage,
+
+  //await axiosInstance
+  //  .patch(
+  //    `/mentoring-logs/reject`,
+  //    {
+  //      mentoringLogId: mentoringLogId,
+  //      rejectMessage: rejectMessage,
+  //    },
+  //    {
+  //      headers: {
+  //        Authorization: `bearer ${token}`,
+  //      },
+  //    },
+  //  )
+  await axiosWithData(
+    AXIOS_METHOD_WITH_DATA.PACTH,
+    `/mentoring-logs/reject`,
+    {
+      mentoringLogId: mentoringLogId,
+      rejectMessage: rejectMessage,
+    },
+    {
+      headers: {
+        Authorization: `bearer ${token}`,
       },
-      {
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
-      },
-    )
+    },
+  )
     .then(() => {
       alert('거절 요청 성공');
       window.location.reload();

@@ -2,7 +2,11 @@ import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { MentorCard } from '../../components/mentoring-log-card';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import { Header } from './header';
 import LoadingStore from '../../states/loading/LoadingStore';
 import { MentoringLog } from '../../interfaces/cadet-mentoring/mentoring-log.interface';
@@ -37,11 +41,20 @@ const CadetMentornig = observer(() => {
   const getKeywords = async () => {
     LoadingStore.on();
     try {
-      const save = await axiosInstance.get('/cadets/mentorings', {
-        headers: {
-          Authorization: `Bearer ${AuthStore.getAccessToken()}`,
+      const save = await axiosWithNoData(
+        AXIOS_METHOD_WITH_NO_DATA.GET,
+        '/cadets/mentorings',
+        {
+          headers: {
+            Authorization: `Bearer ${AuthStore.getAccessToken()}`,
+          },
         },
-      });
+      );
+      //const save = await axiosInstance.get('/cadets/mentorings', {
+      //  headers: {
+      //    Authorization: `Bearer ${AuthStore.getAccessToken()}`,
+      //  },
+      //});
       setLogs(save.data.mentorings);
       setUrl(save.data.resumeUrl);
       console.log(save.data);

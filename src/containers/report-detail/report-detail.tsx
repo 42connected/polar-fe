@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import ReactToPrint from 'react-to-print';
 import styled from 'styled-components';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import theme from '../../styles/theme';
 import { reportsPro } from './getreportdata';
 import ino1 from '../../assets/image/logo/ino1.png';
@@ -259,11 +263,20 @@ const ReportDetail = () => {
   const getReports = async () => {
     try {
       setLoading(true);
-      const save = await axiosInstance.get(`/reports/${reportId}`, {
-        headers: {
-          Authorization: `bearer ${token}`,
+      const save = await axiosWithNoData(
+        AXIOS_METHOD_WITH_NO_DATA.GET,
+        `/reports/${reportId}`,
+        {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
         },
-      });
+      );
+      //const save = await axiosInstance.get(`/reports/${reportId}`, {
+      //  headers: {
+      //    Authorization: `bearer ${token}`,
+      //  },
+      //});
       const tmp: reportsPro = save.data;
       setreportdata(tmp);
       setLoading(false);

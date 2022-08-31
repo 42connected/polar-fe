@@ -3,7 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import defaultTheme from '../../styles/theme';
 import { faCheck, faPencil, faX } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithData,
+  AXIOS_METHOD_WITH_DATA,
+} from '../../context/axios-interface';
 import { ResumeProps } from '../../interfaces/cadet-mentoring/resume-props.interface';
 import AuthStore from '../../states/auth/AuthStore';
 
@@ -62,7 +66,8 @@ export function Header(props: ResumeProps) {
   const save = () => {
     const { url: resumeUrl } = props;
     try {
-      axiosInstance.post(
+      axiosWithData(
+        AXIOS_METHOD_WITH_DATA.POST,
         '/cadets',
         { resumeUrl },
         {
@@ -71,6 +76,15 @@ export function Header(props: ResumeProps) {
           },
         },
       );
+      //axiosInstance.post(
+      //  '/cadets',
+      //  { resumeUrl },
+      //  {
+      //    headers: {
+      //      Authorization: `Bearer ${AuthStore.getAccessToken()}`,
+      //    },
+      //  },
+      //);
     } catch (err) {
       console.log(err);
       return err;

@@ -15,7 +15,11 @@ import {
   TitleStyle2,
 } from './mainPageStyled';
 import { useEffect, useRef, useState } from 'react';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -45,7 +49,11 @@ const MainPage = () => {
   const getKeywords = async () => {
     try {
       setLoading(true);
-      const save = await axiosInstance.get('/categories');
+      const save = await axiosWithNoData(
+        AXIOS_METHOD_WITH_NO_DATA.GET,
+        '/categories',
+      );
+      //const save = await axiosInstance.get('/categories');
       const tmp = save.data;
       setKeywords(tmp);
       setLoading(false);
