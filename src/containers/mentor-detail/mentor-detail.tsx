@@ -1,141 +1,31 @@
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleDown,
+  faPencil,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../components/button';
+import { InputCounter } from '../../components/input-counter';
+import ButtonBoxComponent from '../../components/mentor-detail/button-box';
 import TimeTableMuiComponent from '../../components/mentor-detail/mui-table';
-import { getMentorDetailWithParams } from '../../context/mentor-detail/mentor-detail-axios';
-import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
-import theme from '../../styles/theme';
-import { MentoringLogProps } from '../../interface/mentor-detail/mentoringLogProps';
-import MarkdownRender from './markdownRender';
-import CommentComponent from '../../components/mentor-detail/comment';
-import { CadetProps } from '../../interface/mentor-detail/cadet-props.interface';
-import { CommentProps } from '../../interface/mentor-detail/comment-props.interface';
+import TagInputBoxComponent from '../../components/mentor-detail/tag-input-box';
 import ReportSummaryInputComponent from '../../components/report-summery-input';
-import { mentorAvailableTimeInterface } from '../../interface/mentor-detail/mentor-available-time.interface';
+import { axiosInstance } from '../../context/axios-interface';
+import { getCookie, TOKEN_LIST } from '../../context/cookies';
 import { appointmentsInterface } from '../../interface/mentor-detail/appointments.interface';
-import { getCookie } from '../../context/cookies';
-import { useParams } from 'react-router-dom';
+import { CommentProps } from '../../interface/mentor-detail/comment-props.interface';
+import { CommentsWithPageProps } from '../../interface/mentor-detail/comments-with-page.interface';
+import { mentorAvailableTimeInterface } from '../../interface/mentor-detail/mentor-available-time.interface';
+import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
+import { MentoringLogProps } from '../../interface/mentor-detail/mentoringLogProps';
+import AuthStore, { User } from '../../states/auth/AuthStore';
+import theme from '../../styles/theme';
+import MarkdownRender from './markdownRender';
 
 function MentorDetail() {
-  const mockCadet: CadetProps[] = [
-    {
-      name: 'seoyepar',
-      profileImage: 'https://cdn.intra.42.fr/users/seoyepar.jpg',
-    },
-    {
-      name: 'hkong',
-      profileImage: 'https://cdn.intra.42.fr/users/hkong.jpg',
-    },
-    {
-      name: 'jokang',
-      profileImage: 'https://cdn.intra.42.fr/users/jokang.jpg',
-    },
-  ];
-  const mockComments: CommentProps[] = [
-    {
-      cadet: mockCadet[0],
-      comment: 'This is a comment by seoyepar',
-      createdAt: new Date(),
-    },
-    {
-      cadet: mockCadet[1],
-      comment:
-        'This is a comment by hkong. This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.This is a comment by hkong.',
-      createdAt: new Date(),
-    },
-    {
-      cadet: mockCadet[2],
-      comment: 'This is a comment by jokang',
-      createdAt: new Date(),
-    },
-  ];
-
-  const mockMentor: MentorDetailProps = {
-    id: '1',
-    intraId: 'm-seoypar',
-    name: '박서연',
-    email: 'good',
-    company: 'goood',
-    duty: 'gooood',
-    profileImage: 'https://cdn.intra.42.fr/users/seoyepar.jpg',
-    availableTime: 'available',
-    introduction:
-      '가장큰 크기의 text로 변환<br/>## 그다음 작은 크기위 text로 변환  ### 그다음 작은 크기의 text로 변환<br/>#### 그다음 작은 크기의 text로 변환<br/>##### 그다음 작은 크기의 text로 변환<br/>###### 그다음 작은 크기의 text로 변환',
-    tags: [
-      'tag1',
-      'tag2',
-      'tag3',
-      'tag1',
-      'tag2',
-      'tag3',
-      'tag1',
-      'tag2',
-      'tag3',
-    ],
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    markdownContent: `# 김루비 멘토(청년)
-    e-mail: dev_rubykim@naver.com / dev.rubykim@gmail.com     slack: m-ruby
-    전문분야: JavaScript, Python, React.js
-### 👋 Hello, 42 Cadet!
-    
-안녕하세요~ 2기 1차에 cadet으로 활동하다 현재는 외국계 스타트업에서 근무 중인 m-ruby 입니다 :-)
-
-혹시라도 덕몽어스(구스구스덕) 좋아하시는 분들 중 같이 하실 분 DM주세요! (두근두근)
-
-### 👣 발자취
-
-[ruby-kim - Overview](https://github.com/ruby-kim)
-
-2022.01 - 현재 Sibel International(Sibel Health 한국 지부) 클라우드 엔지니어
-
-2020.10 - 2022.01 42SEOUL 2기 1차 Cadet
-
-### 👓 멘토링 주요분야
-    
-- 신입(주니어) 개발자 취준법
-  - Github 관리하기
-    - 인턴 및 정규직 지원할 때 Github 덕분에 면접까지 간 경우가 꽤 있습니다✨
-    - Github를 내 마음대로 신명나게 꾸미는 법을 알려드립니다.
-  - 포트폴리오 준비 / 인성 면접
-    - 자신의 장점을 극대화할 수 있는 방안에 대해 상담 해드립니다.
-    - 면접 팁은 특히 저같은 선천적 내성적인 분들께 많이 도움이 될 것이라 생각해요. (MBTI가 I로 시작합니다 😌)
-    - [참고] 기술 면접은 시니어 멘토님들께 여쭤보시는 것을 추천드려요! 물론 경험담 공유를 원하시면 언제든지 가능합니다 😊
-  - 외국계 기업 준비
-    - 국내에서 영어 회화 공부하기
-    - 외국계 기업 찾기 & 준비법
-    - 참고로 토종 한국인입니다. **_아이 라잌 코리아_** 🇰🇷 *(펄럭)*
-- 개발하면서 생기는 고민들
-  - 42 프로젝트 말고 뭔가 더 해야할까요?
-  - 어느 정도 언어 문법 알겠는데, 뭘 더 해야할까요?
-  - 프로젝트 어떻게 시작하나요?
-  - 어느 분야(프론트, 데이터사이언스, 인공지능 등)로 가야할지 잘 모르겠어요
-  - 개발자를 준비하면서 한 번 쯤 해봤던 고민들 같이 얘기해봐요!
-- 따끈한 취준 & 입사 썰 듣고 싶으신 분들도 환영합니다!
-  - ex) 면접 중 인공 암벽장 간 썰
-  - ex) MAGA, 네카라쿠배 중 일부 기업 면접 썰
-  - ex) 내가 알던 사람이 회사 선배님의 친구?! 썰
-  - ex) 연봉 협상 썰
-  - ex) 대기업을 포기하고 스타트업으로 취직한 썰 등
-  - 이 외에 다양한 썰이 있습니다 📦
-- 가벼운 일상부터 고민 거리까지 상담 가능합니다.
-  - 대인관계 등, 카뎃분들도 각자의 사정이 있으실거라 생각해요.
-  - 또 가끔은 외롭다고 생각이 드실 때가 있지 않으신가요?
-  - 사람 대 사람으로 같이 천천히 티타임 가지면서 힐링하는 시간을 가져봐요 😇
-
-### ❌ 아래 분야에 대해서는 멘토링 불가능합니다. 다른 시니어 멘토님께 연락해보세요!
-
-- 42서울 과제: 그 유명한, ‘왼쪽 보고 오른쪽 보자'로 동료 카뎃분들께 질문해보세요.
-- 먼 미래 진로고민
-  - 2022년 1월에 입사한 따끈따끈 신입입니다.
-  - 개발 직군 관련해서 먼 미래까지는 아직 무리에요 🥲
-- 기술 분야 상담 & 코드 리뷰: 개발자 짬이 차면 해드릴 수 있겠지만, 위에 적었듯이 따끈한 신입입니다 🐣
-    `,
-  };
-
   const mockMentoringLog: MentoringLogProps[] = [
     {
       topic: 'nestjs 프로젝트',
@@ -169,20 +59,31 @@ function MentorDetail() {
     },
   ];
 
+  const [mentorIntroduction, setMentorIntroduction] = useState<string>('');
   const [mentor, setMentor] = useState<MentorDetailProps | null>(null);
   const [mentoringLog, setMentoringLog] =
     useState<MentoringLogProps[]>(mockMentoringLog);
   const [isActiveMentorDetail, setIsActiveMentorDetail] =
     useState<boolean>(false);
-  const [comments, setComments] = useState<CommentProps[]>(mockComments);
+  const [comments, setComments] = useState<CommentsWithPageProps | null>(null);
   const [appointments, setAppointments] =
     useState<appointmentsInterface[]>(appointmentsTest);
+  const [isActivateIntroductionEdit, setIsActivateIntroductionEdit] =
+    useState<boolean>(false);
+  const [isActivateMentor, setIsActivateMentor] = useState<boolean>(false);
+  const [inputComment, setInputComment] = useState<string>('');
+  const [mentorTags, setMentorTags] = useState<string[]>([]);
+  const [isActivateMentorInfoEdit, setIsActivateMentorInfoEdit] =
+    useState<boolean>(false);
+  const [mentorInfo, setMentorInfo] = useState<string>('');
+  const [user, setUser] = useState<User | null>(null);
 
   //2018, 5, 25 화요일
   //const date2 = new Date('1995-12-17T03:24:00');
   // Sun Dec 17 1995 03:24:00 GMT...
   //2018-06-28
   // console.log(mockMentorAvailableTimeToArray);
+
   const setMentorAvailableTimeData = () => {
     const appointmentsData: appointmentsInterface[] = [];
     mockMentorAvailableTimeToArray.forEach(
@@ -214,27 +115,92 @@ function MentorDetail() {
     );
     return appointmentsData;
   };
-  const params = useParams();
 
-  const getMentorDetailData = async (accessToken: string) => {
-    return await getMentorDetailWithParams(accessToken, params.intraId);
-  };
+  const getParams = useParams();
   useEffect(() => {
-    // const accessToken = getCookie();
-    // const mentorDataPromise = getMentorDetailData(accessToken);
-    // const appointmentsData = setMentorAvailableTimeData();
-    // setAppointments(appointmentsData);
-    // console.log(mentorDataPromise);
-    // const mentorData = mentorDataPromise;
-    // if (!mentorData.tags) {
-    //   mentorData.tags = [];
-    // }
-    // setMentor(mentorData);
+    const params = {
+      page: 1,
+      take: 5,
+    };
+    axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
+      console.log('mentor', result.data);
+      result.data.tags = ['aaaa', 'bbbb', 'cccccccccc'];
+      setMentor(result.data);
+      setMentorTags(result.data.tags);
+      setMentorIntroduction(
+        result.data?.introduction ? result.data.introduction : '',
+      );
+      setMentorInfo(result.data?.info ? result.data.info : '');
+    });
+    axiosInstance
+      .get(`/comments/${getParams.intraId}`, { params })
+      .then(result => {
+        console.log('comments', result.data);
+        setComments(result.data);
+      });
+
+    const appointmentsData = setMentorAvailableTimeData();
+    setAppointments(appointmentsData);
+    const user: User = {
+      intraId: AuthStore.getUserIntraId(),
+      role: AuthStore.getUserRole(),
+    };
+    setUser(user);
   }, []);
 
-  const AddHashtag = mentor?.tags?.map(tag => {
-    return '#' + tag + ' ';
+  useEffect(() => {
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    const data = { introduction: mentorIntroduction };
+    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+  }, [isActivateIntroductionEdit]);
+  useEffect(() => {
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    const data = { introduction: mentorIntroduction };
+    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+  }, [mentorTags]);
+
+  useEffect(() => {
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    const data = { isActive: isActivateMentor };
+    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+  }, [isActivateMentor]);
+
+  useEffect(() => {
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    const data = { markdownContent: mentorInfo };
+    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+  }, [isActivateMentorInfoEdit]);
+
+  const AddHashtag = mentorTags.map(tag => {
+    return <div>{tag.padStart(tag.length + 1, '#')}</div>;
   });
+
+  const handleCommentSubmit = () => {
+    if (inputComment !== '') {
+      const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+      const config = {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      };
+      const data = { content: inputComment };
+      axiosInstance.post(`/comments/${getParams.intraId}`, data, config);
+      setInputComment('');
+      axiosInstance.get(`/comments/${getParams.intraId}`).then(result => {
+        setComments(result.data.comments);
+      });
+    }
+  };
 
   const mentoringLogList = mentoringLog.map(log => {
     const makeDate = `${log.meetingAt
@@ -250,52 +216,59 @@ function MentorDetail() {
     );
   });
 
-  const MakeCommentsTags = ({ comments }: any) => {
-    comments.map((comment: CommentProps) => {
-      return (
-        <Comment>
-          <img src={comment?.cadet?.profileImage} />
-          <div>
-            <div>
-              <div>{comment?.cadet?.name}</div>
-              <div>{comment?.createdAt.getTime()}</div>
-            </div>
-            <div>{comment?.comment}</div>
-          </div>
-        </Comment>
-      );
+  const deleteComment = (commentId: any) => {
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    axiosInstance.delete(`/comments/${commentId}`, config);
+    axiosInstance.get(`/comments/${getParams.intraId}`).then(result => {
+      setComments(result.data.comments);
     });
   };
 
   return (
     <MentorDetailTag>
-      <h1>Mentor Detail</h1>
       <MentorHeader>
         <MentorInfo>
           <MentorImage src={mentor?.profileImage} />
           <MentorInfoContent>
             <MentorName>
-              <div>{mentor?.name} 멘토</div>
-              <div>{mentor?.intraId}</div>
+              <div className="mentor-name">{mentor?.name} 멘토</div>
+              <div className="mentor-intra">{mentor?.intraId}</div>
             </MentorName>
             <Button
               fontFrame={theme.fontFrame.subTitleSmall}
               borderWidth="1px"
-              text={`멘토링 ${mentor?.isActive ? '가능' : '불가능'}`}
+              text={`멘토링 ${isActivateMentor ? '가능' : '불가능'}`}
               backgroundColor={theme.colors.polarBackground}
               color={theme.colors.polarSimpleMain}
               width="12rem"
-              height="2rem"
-            ></Button>
+              height="2.5rem"
+              borderRadius="20px"
+              onClick={() => setIsActivateMentor(!isActivateMentor)}
+            />
           </MentorInfoContent>
         </MentorInfo>
-        <Button
-          text="멘토링 신청하기"
-          width="21rem"
-          height="6rem"
-          background-color={theme.colors.polarSimpleMain}
-          color={theme.colors.backgoundWhite}
-        ></Button>
+        {mentor?.isActive ? (
+          <Link to={`/apply-page/${mentor?.intraId}`}>
+            <Button
+              text="멘토링 신청하기"
+              width="21rem"
+              height="6rem"
+              background-color={theme.colors.polarSimpleMain}
+              color={theme.colors.backgoundWhite}
+            />
+          </Link>
+        ) : (
+          <Button
+            text="멘토링 신청하기"
+            width="21rem"
+            height="6rem"
+            background-color={theme.colors.polarSimpleMain}
+            color={theme.colors.backgoundWhite}
+          />
+        )}
       </MentorHeader>
       <MentorBody>
         <MentorBody1>
@@ -313,7 +286,7 @@ function MentorDetail() {
                 </ol>
               </HowToContent>
               <HowToContent>
-                <div className="mentor">멘토</div>
+                <div>멘토</div>
                 <ol>
                   <li>카뎃의 멘토링 신청 시 알림 메일 발송</li>
                   <li>마이페이지에서 만남 상태 결정 가능</li>
@@ -329,9 +302,68 @@ function MentorDetail() {
           </MentorBody1Left>
           <MentorBody1Right>
             <MentorBody1Right1>
-              <MenuBox>멘토 소개</MenuBox>
-              <MentorIntroduction>{mentor?.introduction}</MentorIntroduction>
-              <MentorTags>{AddHashtag}</MentorTags>
+              <MenuBox>
+                멘토 소개
+                {user?.intraId === mentor?.intraId && user && mentor ? (
+                  <FontAwesomeIcon
+                    icon={faPencil}
+                    className="icon"
+                    size="xs"
+                    onClick={() => {
+                      setIsActivateIntroductionEdit(
+                        !isActivateIntroductionEdit,
+                      );
+                    }}
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faPencil}
+                    className="icon"
+                    size="xs"
+                    onClick={() => {
+                      setIsActivateIntroductionEdit(
+                        !isActivateIntroductionEdit,
+                      );
+                    }}
+                  />
+                )}
+              </MenuBox>
+              {isActivateIntroductionEdit ? (
+                <>
+                  <InputCounter
+                    value={mentorIntroduction}
+                    setter={setMentorIntroduction}
+                    disabled={false}
+                    maxLength={150}
+                    width={'100%'}
+                    fontSize={theme.fontFrame.bodyMiddle}
+                  />
+                  <ButtonBoxComponent
+                    items={mentorTags}
+                    setter={setMentorTags}
+                  />
+                  <TagInputBoxComponent
+                    setter={setMentorTags}
+                    value={mentorTags}
+                  />
+                  <ButtonBox>
+                    <Button
+                      text="편집완료"
+                      borderRadius="20px"
+                      onClick={() => {
+                        setIsActivateIntroductionEdit(
+                          !isActivateIntroductionEdit,
+                        );
+                      }}
+                    />
+                  </ButtonBox>
+                </>
+              ) : (
+                <>
+                  <MentorIntroduction>{mentorIntroduction}</MentorIntroduction>
+                  <MentorTags>{AddHashtag}</MentorTags>
+                </>
+              )}
             </MentorBody1Right1>
             <MentorBody1Right2>
               <MenuBox1>
@@ -344,27 +376,21 @@ function MentorDetail() {
           </MentorBody1Right>
         </MentorBody1>
         <MentorBody2>
-          <MenuBox>
-            <div>가능 시간</div>
+          <MenuBox3>
             <div>
-              업데이트 :
-              {mentor?.updatedAt
-                ? `${mentor?.updatedAt.getFullYear()}-${mentor?.updatedAt
-                    .getMonth()
-                    .toString()
-                    .padStart(2, '0')}-${mentor?.updatedAt
-                    .getDay()
-                    .toString()
-                    .padStart(2, '0')}`
-                : `${mentor?.createdAt.getFullYear()}-${mentor?.createdAt
-                    .getMonth()
-                    .toString()
-                    .padStart(2, '0')}-${mentor?.createdAt
-                    .getDay()
-                    .toString()
-                    .padStart(2, '0')}`}
+              가능 시간
+              {user?.intraId === mentor?.intraId && user && mentor ? (
+                <FontAwesomeIcon icon={faPencil} size={'xs'} className="icon" />
+              ) : (
+                <FontAwesomeIcon icon={faPencil} size={'xs'} className="icon" />
+              )}
             </div>
-          </MenuBox>
+            {mentor?.createdAt ? (
+              <div>update: {mentor?.updatedAt?.substring(0, 10)}</div>
+            ) : (
+              <div>create: {mentor?.createdAt?.substring(0, 10)}</div>
+            )}
+          </MenuBox3>
           <TimTableScroll>
             <TimeTableMuiComponent
               appointments={appointments}
@@ -386,45 +412,153 @@ function MentorDetail() {
           </MentorBody3Toggle>
           {isActiveMentorDetail ? (
             <>
-              <MenuBox>멘토정보</MenuBox>
-              <MarkdownRender markdown={mentor?.markdownContent} />
+              <MenuBox>
+                멘토 정보
+                {user?.intraId === mentor?.intraId && user && mentor ? (
+                  <FontAwesomeIcon
+                    icon={faPencil}
+                    className="icon"
+                    size="xs"
+                    onClick={() => {
+                      setIsActivateMentorInfoEdit(!isActivateMentorInfoEdit);
+                    }}
+                  />
+                ) : null}
+              </MenuBox>
+
+              {isActivateMentorInfoEdit ? (
+                <>
+                  <InputCounter
+                    value={mentorInfo}
+                    setter={setMentorInfo}
+                    disabled={false}
+                    maxLength={10000}
+                    width={'100%'}
+                    height={'50rem'}
+                    fontSize={theme.fontFrame.bodyMiddle}
+                  />
+                  <SubmitButton>
+                    <Button
+                      text="편집완료"
+                      width="12rem"
+                      height="3.5rem"
+                      backgroundColor={theme.colors.polarSimpleMain}
+                      borderRadius="20px"
+                      onClick={() => {
+                        setIsActivateMentorInfoEdit(!isActivateMentorInfoEdit);
+                      }}
+                    />
+                  </SubmitButton>
+                </>
+              ) : (
+                <MarkdownRender markdown={mentorInfo} />
+              )}
             </>
           ) : null}
         </MentorBody3>
         <MentorCommets>
           <MenuBox>댓글</MenuBox>
           <MentorCommetsContent>
-            {comments.map((comment: CommentProps) => {
+            {comments?.comments?.map((comment: CommentProps) => {
               return (
                 <Comment>
-                  <img src={comment?.cadet?.profileImage} />
+                  <img src={comment?.cadets?.profileImage} />
                   <UserContent>
                     <div>
-                      <div>{comment?.cadet?.name}</div>
+                      <div className="cadetName">
+                        {comment?.cadets?.intraId}
+                      </div>
                       {mentor?.updatedAt ? (
-                        <div>{`${mentor?.updatedAt?.getFullYear()}.${mentor?.updatedAt
-                          .getMonth()
-                          .toString()
-                          .padStart(2, '0')}.${mentor.updatedAt
-                          .getDay()
-                          .toString()
-                          .padStart(2, '0')}`}</div>
+                        <div className="updatedAt">{`${mentor?.updatedAt.substring(
+                          0,
+                          4,
+                        )}.${mentor?.updatedAt.substring(
+                          5,
+                          7,
+                        )}.${mentor?.updatedAt.substring(8, 10)}`}</div>
+                      ) : null}
+                      {user?.intraId === comment?.cadets?.intraId &&
+                      user &&
+                      comment?.cadets ? (
+                        <FontAwesomeIcon
+                          icon={faXmark}
+                          className="icon"
+                          color={'red'}
+                          onClick={() => {
+                            deleteComment(comment?.id);
+                          }}
+                        />
                       ) : null}
                     </div>
-                    <div>{comment?.comment}</div>
+                    <div>{comment?.content}</div>
                   </UserContent>
                 </Comment>
               );
             })}
           </MentorCommetsContent>
-          <ReportSummaryInputComponent />
+          <InputCounter
+            value={inputComment}
+            setter={setInputComment}
+            disabled={false}
+            maxLength={300}
+            width={'100%'}
+          />
+          <SubmitButton>
+            <Button
+              text="제출하기"
+              width="12rem"
+              height="3.5rem"
+              backgroundColor={theme.colors.polarSimpleMain}
+              borderRadius="20px"
+              onClick={() => {
+                handleCommentSubmit();
+              }}
+            />
+          </SubmitButton>
         </MentorCommets>
       </MentorBody>
     </MentorDetailTag>
   );
 }
 
-const HowToContent = styled.div``;
+const ButtonBox = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+
+const MenuBox3 = styled.div`
+  border-top: 2px solid ${props => props.theme.colors.blackThree};
+  border-bottom: 1px solid ${props => props.theme.colors.grayFive};
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 1rem;
+  padding-top: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  ${theme.fontFrame.titleSmall};
+  font-weight: 900;
+  letter-spacing: 0.1rem;
+  margin-bottom: 1.3rem;
+  div:last-child {
+    color: ${theme.colors.fontGray};
+    margin-bottom: 0.5rem;
+    padding-left: 0.3rem;
+    font-size: 1rem;
+  }
+  .icon {
+    margin-left: 0.5rem;
+    cursor: pointer;
+  }
+  padding-bottom: 0.5rem;
+`;
+
+const HowToContent = styled.div`
+  margin: 0 1.5rem;
+  color: ${theme.colors.grayOne};
+`;
 const UserContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -432,16 +566,21 @@ const UserContent = styled.div`
   margin-left: 1.5rem;
   div:first-child {
     display: flex;
-    align-items: flex-end;
+    text-align: end;
+    align-items: center;
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 0.2rem;
-    div:last-child {
+    .updatedAt {
       font-size: 1rem;
       padding-left: 0.7rem;
       color: ${props => props.theme.colors.grayThree};
       font-weight: normal;
       margin-top: 0.1rem;
+    }
+    .icon {
+      margin-left: 1rem;
+      cursor: pointer;
     }
   }
   div:last-child {
@@ -467,6 +606,8 @@ const TimTableScroll = styled.div`
 
 const MenuBox2 = styled.div`
   display: grid;
+  justify-content: center;
+  align-items: center;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(1, 1fr);
   border-bottom: 1px solid ${theme.colors.grayFive};
@@ -474,6 +615,7 @@ const MenuBox2 = styled.div`
   height: 3rem;
   box-sizing: border-box;
   overflow-wrap: break-word;
+
   div {
     display: flex;
     justify-content: center;
@@ -488,8 +630,17 @@ const MenuBox2 = styled.div`
 
 const MentorCommetsContent = styled.div``;
 
+const SubmitButton = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
 const MentorCommets = styled.div`
   margin-top: 5%;
+  /* .submitButton {
+    display: flex;
+    justify-content: flex-end;
+  } */
 `;
 
 const MentorBody3Toggle = styled.div`
@@ -543,13 +694,22 @@ const MentorBody1Right2 = styled.div`
 
 const MentorTags = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   text-align: center;
   color: ${theme.colors.polarSimpleMain};
+  ${theme.fontFrame.bodyMiddle};
+  div {
+    margin-right: 0.5rem;
+  }
 `;
 
 const MentorIntroduction = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  word-break: break-all;
   margin: 1.3rem;
   ${theme.fontFrame.bodyMiddle};
   color: ${theme.colors.blackThree};
@@ -582,14 +742,7 @@ const MentorHowToContent = styled.div`
   flex-wrap: wrap;
   position: relative;
   ${theme.fontFrame.bodySmall}
-  div {
-    margin: 1.5rem;
-    margin-bottom: 0;
-    color: ${theme.colors.grayTwo};
-  }
-  .mentor {
-    margin-top: 0;
-  }
+
   ol {
     margin-top: 0.5rem;
     padding-left: 3rem;
@@ -605,7 +758,6 @@ const MentorHowToContent = styled.div`
   footer {
     color: ${theme.colors.fontGray};
     font-size: 1rem;
-    /* padding-left:2rem; */
     position: absolute;
     top: 100%;
     left: 5%;
@@ -650,15 +802,14 @@ const MentorName = styled.div`
   align-items: center;
   justify-content: flex-start;
   flex-wrap: wrap;
-  div:first-child {
+  .mentor-name {
     ${theme.fontFrame.titleLarge};
-    font-family: ${theme.font.sebangGothic};
+    ${theme.font.sebangGothic};
     font-weight: 900;
   }
-  div:last-child {
+  .mentor-intra {
     margin-left: 1rem;
-    ${theme.fontFrame.bodySmall};
-    font-weight: bolder;
+    ${theme.fontFrame.titleSmall};
   }
   margin-bottom: 0.5rem;
 `;
@@ -673,28 +824,27 @@ const MenuBox = styled.div`
   border-top: 2px solid ${props => props.theme.colors.blackThree};
   border-bottom: 1px solid ${props => props.theme.colors.grayFive};
   width: 100%;
-  /* height: 3rem; */
   box-sizing: border-box;
   padding-left: 1rem;
   padding-top: 1.3rem;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+  text-align: center;
+  justify-content: flex-start;
+  align-items: center;
   ${theme.fontFrame.titleSmall};
   font-weight: 900;
   letter-spacing: 0.1rem;
-  div:last-child {
-    color: ${theme.colors.fontGray};
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    padding-left: 0.3rem;
-    font-size: 1rem;
-  }
+  margin-bottom: 1.3rem;
   padding-bottom: 0.5rem;
+  .icon {
+    margin-left: 1rem;
+    margin-bottom: 2%;
+    cursor: pointer;
+  }
 `;
 const MentorDetailTag = styled.div`
-  font-family: ${theme.font.nanumGothic};
+  ${theme.font.nanumGothic};
+  background-color: ${theme.colors.backgoundWhite};
 `;
 
 export default MentorDetail;
