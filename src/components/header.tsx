@@ -15,7 +15,6 @@ const HeaderStyle = styled.header`
   padding-top: 2rem;
   background-color: ${theme.colors.backgoundWhite};
   box-shadow: ${theme.shadow.defaultShadow};
-  color: ${theme.colors.blackOne};
 `;
 
 const LogoButton = styled.button`
@@ -52,7 +51,6 @@ const MypageButton = styled.button`
   margin: 10;
   margin-top: 0.4rem;
   background-color: transparent;
-  color: ${theme.colors.blackOne};
 `;
 
 const MovMypageButton = styled.button`
@@ -64,7 +62,6 @@ const MovMypageButton = styled.button`
   margin: 10;
   margin-top: 0.4rem;
   background-color: transparent;
-  color: ${theme.colors.blackOne};
 `;
 
 const SuggestionButton = styled.button`
@@ -77,7 +74,6 @@ const SuggestionButton = styled.button`
   background-color: transparent;
   color: black;
   -webkit-text-fill-color: rgba(0, 0, 0, 256);
-  color: ${theme.colors.blackOne};
 `;
 
 const MovSuggestionButton = styled.button`
@@ -88,7 +84,6 @@ const MovSuggestionButton = styled.button`
   border: none;
   margin-top: 0.4rem;
   background-color: transparent;
-  color: ${theme.colors.blackOne};
 `;
 
 const LoginButton = styled.button`
@@ -124,7 +119,6 @@ const MyMentoringButton = styled.button`
   margin: 10;
   margin-top: 0.4rem;
   background-color: transparent;
-  color: ${theme.colors.blackOne};
 `;
 
 const MovMyMentoringButton = styled.button`
@@ -136,7 +130,6 @@ const MovMyMentoringButton = styled.button`
   margin: 10;
   margin-top: 0.4rem;
   background-color: transparent;
-  color: ${theme.colors.blackOne};
 `;
 
 const DataRoomButton = styled.button`
@@ -148,7 +141,6 @@ const DataRoomButton = styled.button`
   margin: 10;
   margin-top: 0.4rem;
   background-color: transparent;
-  color: ${theme.colors.blackOne};
 `;
 
 const MovDataRoomButton = styled.button`
@@ -160,7 +152,6 @@ const MovDataRoomButton = styled.button`
   margin: 10;
   margin-top: 0.4rem;
   background-color: transparent;
-  color: ${theme.colors.blackOne};
 `;
 
 const imagestyle = {
@@ -185,10 +176,11 @@ const Header = () => {
   const AlertDetail = () => {
     return alert('9월 2째주 comming soon~ :)');
   };
-  if (AuthStore.getUserRole()) {
-    mdlinks = '/mentor-detail/' + AuthStore.getUserIntraId();
-    mlinks = '/mentors/mentorings/' + AuthStore.getUserIntraId();
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  AuthStore.getUserRole()
+    ? ((mdlinks = '/mentor-detail/' + AuthStore.getUserIntraId()),
+      (mlinks = '/mentors/mentorings/' + AuthStore.getUserIntraId()))
+    : '';
   useEffect(() => {
     window.screen.width <= 600 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
@@ -208,13 +200,20 @@ const Header = () => {
               </MovLogoButton>
             </Link>
             {AuthStore.getAccessToken() ? (
-              <MovLoginButton
-                onClick={() => {
-                  AuthStore.Logout();
-                }}
-              >
-                로그아웃
-              </MovLoginButton>
+              AuthStore.getUserRole() === USER_ROLES.CADET ? (
+                <div>
+                  {AlertDetail()}
+                  {AuthStore.Logout()}
+                </div>
+              ) : (
+                <MovLoginButton
+                  onClick={() => {
+                    AuthStore.Logout();
+                  }}
+                >
+                  로그아웃
+                </MovLoginButton>
+              )
             ) : (
               <MovLoginButton
                 onClick={() => {
@@ -226,10 +225,6 @@ const Header = () => {
             )}
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
-                <div>
-                  {AlertDetail()}
-                  {AuthStore.Logout()}
-                </div>
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
@@ -237,6 +232,13 @@ const Header = () => {
                 >
                   <MovSuggestionButton>건의사항</MovSuggestionButton>
                 </a>
+                <MovLoginButton
+                  onClick={() => {
+                    AuthStore.Login();
+                  }}
+                >
+                  로그인
+                </MovLoginButton>
               </div>
             ) : AuthStore.getUserRole() === USER_ROLES.MENTOR ? (
               <div>
@@ -291,13 +293,20 @@ const Header = () => {
               </LogoButton>
             </Link>
             {AuthStore.getAccessToken() ? (
-              <LoginButton
-                onClick={() => {
-                  AuthStore.Logout();
-                }}
-              >
-                로그아웃
-              </LoginButton>
+              AuthStore.getUserRole() === USER_ROLES.CADET ? (
+                <div>
+                  {AlertDetail()}
+                  {AuthStore.Logout()}
+                </div>
+              ) : (
+                <LoginButton
+                  onClick={() => {
+                    AuthStore.Logout();
+                  }}
+                >
+                  로그아웃
+                </LoginButton>
+              )
             ) : (
               <LoginButton
                 onClick={() => {
@@ -309,10 +318,6 @@ const Header = () => {
             )}
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
-                <div>
-                  {AlertDetail()}
-                  {AuthStore.Logout()}
-                </div>
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
@@ -320,6 +325,13 @@ const Header = () => {
                 >
                   <SuggestionButton>건의사항</SuggestionButton>
                 </a>
+                <LoginButton
+                  onClick={() => {
+                    AuthStore.Login();
+                  }}
+                >
+                  로그인
+                </LoginButton>
               </div>
             ) : AuthStore.getUserRole() === USER_ROLES.MENTOR ? (
               <div>
