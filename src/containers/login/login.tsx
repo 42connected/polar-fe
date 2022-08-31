@@ -40,6 +40,11 @@ export function Login() {
           res?.data?.user?.role,
           DEFAULT_COOKIE_OPTION,
         );
+        setCookie(
+          TOKEN_LIST.JOIN,
+          res?.data?.user?.join,
+          DEFAULT_COOKIE_OPTION,
+        );
         document.location.href = '/';
       })
       .catch(err => {

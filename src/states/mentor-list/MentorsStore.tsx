@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { action, makeObservable, observable } from 'mobx';
 import qs from 'qs';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import LoadingStore from '../loading/LoadingStore';
 
 export interface Categories {
@@ -61,10 +65,17 @@ class MentorsStore {
     };
     const params = { mentorName: name, keywords: keywords };
     LoadingStore.on();
-    await axiosInstance
-      .get(`/categories/${category}`, {
+    //await axiosInstance
+    //  .get(`/categories/${category}`, {
+    //    params,
+    //  })
+    await axiosWithNoData(
+      AXIOS_METHOD_WITH_NO_DATA.GET,
+      `/categories/${category}`,
+      {
         params,
-      })
+      },
+    )
       .then(res => {
         this.mentorsList = res.data;
       })

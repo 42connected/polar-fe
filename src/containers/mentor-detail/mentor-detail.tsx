@@ -13,7 +13,13 @@ import ButtonBoxComponent from '../../components/mentor-detail/button-box';
 import TimeTableMuiComponent from '../../components/mentor-detail/mui-table';
 import TagInputBoxComponent from '../../components/mentor-detail/tag-input-box';
 import ReportSummaryInputComponent from '../../components/report-summery-input';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithData,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_DATA,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import { getCookie, TOKEN_LIST } from '../../context/cookies';
 import { appointmentsInterface } from '../../interface/mentor-detail/appointments.interface';
 import { CommentProps } from '../../interface/mentor-detail/comment-props.interface';
@@ -122,7 +128,11 @@ function MentorDetail() {
       page: 1,
       take: 5,
     };
-    axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
+    //axiosInstance.get(`/mentors/${getParams.intraId}`)
+    axiosWithNoData(
+      AXIOS_METHOD_WITH_NO_DATA.GET,
+      `/mentors/${getParams.intraId}`,
+    ).then(result => {
       console.log('mentor', result.data);
       result.data.tags = ['aaaa', 'bbbb', 'cccccccccc'];
       setMentor(result.data);
@@ -132,12 +142,16 @@ function MentorDetail() {
       );
       setMentorInfo(result.data?.info ? result.data.info : '');
     });
-    axiosInstance
-      .get(`/comments/${getParams.intraId}`, { params })
-      .then(result => {
-        console.log('comments', result.data);
-        setComments(result.data);
-      });
+    //axiosInstance
+    //  .get(`/comments/${getParams.intraId}`, { params })
+    axiosWithNoData(
+      AXIOS_METHOD_WITH_NO_DATA.GET,
+      `/comments/${getParams.intraId}`,
+      { params },
+    ).then(result => {
+      console.log('comments', result.data);
+      setComments(result.data);
+    });
 
     const appointmentsData = setMentorAvailableTimeData();
     setAppointments(appointmentsData);
@@ -154,7 +168,13 @@ function MentorDetail() {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
     const data = { introduction: mentorIntroduction };
-    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+    axiosWithData(
+      AXIOS_METHOD_WITH_DATA.PACTH,
+      `/mentors/${getParams.intraId}`,
+      data,
+      config,
+    );
+    //axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
   }, [isActivateIntroductionEdit]);
   useEffect(() => {
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
@@ -162,7 +182,13 @@ function MentorDetail() {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
     const data = { introduction: mentorIntroduction };
-    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+    axiosWithData(
+      AXIOS_METHOD_WITH_DATA.PACTH,
+      `/mentors/${getParams.intraId}`,
+      data,
+      config,
+    );
+    //axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
   }, [mentorTags]);
 
   useEffect(() => {
@@ -171,7 +197,13 @@ function MentorDetail() {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
     const data = { isActive: isActivateMentor };
-    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+    axiosWithData(
+      AXIOS_METHOD_WITH_DATA.PACTH,
+      `/mentors/${getParams.intraId}`,
+      data,
+      config,
+    );
+    //axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
   }, [isActivateMentor]);
 
   useEffect(() => {
@@ -180,7 +212,13 @@ function MentorDetail() {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
     const data = { markdownContent: mentorInfo };
-    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+    axiosWithData(
+      AXIOS_METHOD_WITH_DATA.PACTH,
+      `/mentors/${getParams.intraId}`,
+      data,
+      config,
+    );
+    //axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
   }, [isActivateMentorInfoEdit]);
 
   const AddHashtag = mentorTags.map(tag => {
@@ -194,9 +232,19 @@ function MentorDetail() {
         headers: { Authorization: `Bearer ${accessToken}` },
       };
       const data = { content: inputComment };
-      axiosInstance.post(`/comments/${getParams.intraId}`, data, config);
+      axiosWithData(
+        AXIOS_METHOD_WITH_DATA.POST,
+        `/comments/${getParams.intraId}`,
+        data,
+        config,
+      );
+      //axiosInstance.post(`/comments/${getParams.intraId}`, data, config);
       setInputComment('');
-      axiosInstance.get(`/comments/${getParams.intraId}`).then(result => {
+      //axiosInstance.get(`/comments/${getParams.intraId}`)
+      axiosWithNoData(
+        AXIOS_METHOD_WITH_NO_DATA.GET,
+        `/comments/${getParams.intraId}`,
+      ).then(result => {
         setComments(result.data.comments);
       });
     }
@@ -221,8 +269,17 @@ function MentorDetail() {
     const config = {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
-    axiosInstance.delete(`/comments/${commentId}`, config);
-    axiosInstance.get(`/comments/${getParams.intraId}`).then(result => {
+    axiosWithNoData(
+      AXIOS_METHOD_WITH_NO_DATA.DELETE,
+      `/comments/${commentId}`,
+      config,
+    );
+    //axiosInstance.delete(`/comments/${commentId}`, config);
+    //axiosInstance.get(`/comments/${getParams.intraId}`)
+    axiosWithNoData(
+      AXIOS_METHOD_WITH_NO_DATA.GET,
+      `/comments/${getParams.intraId}`,
+    ).then(result => {
       setComments(result.data.comments);
     });
   };
