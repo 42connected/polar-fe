@@ -1,4 +1,4 @@
 export interface CadetProps {
-  name: string;
+  intraId: string;
   profileImage: string;
 }

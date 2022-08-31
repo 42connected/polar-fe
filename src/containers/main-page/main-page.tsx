@@ -1,16 +1,8 @@
-import styled, { css } from 'styled-components';
-import theme from '../../styles/theme';
 import {
   ClickContainer,
   ClickContainer2,
-  ClickedSwapButton,
   IconImageStyle,
   IconImageStyle2,
-  ImageBox,
-  ImageGrid1,
-  ImageGrid2,
-  ImageStyle,
-  ImageStyle2,
   keywordsPro,
   KeywordStyle,
   KeywordStyle2,
@@ -19,12 +11,6 @@ import {
   MainContainer2,
   MainImageStyle,
   MainImageStyle2,
-  MoImageGrid1,
-  MoImageStyle,
-  MoImageStyle2,
-  SwapButton,
-  TextStyle,
-  TextUnder,
   TitleStyle,
   TitleStyle2,
 } from './mainPageStyled';
