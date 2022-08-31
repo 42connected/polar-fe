@@ -229,7 +229,7 @@ const SimpleComponent = (props: {
   );
 };
 
-const AlertDetail = (flag: boolean) => {
+export const AlertDetail = (flag: boolean) => {
   return flag
     ? (alert('유효하지 않은 접근입니다.'), null)
     : (alert('로그인이 필요합니다.'), null);
