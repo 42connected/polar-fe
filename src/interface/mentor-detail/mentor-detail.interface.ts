@@ -11,6 +11,6 @@ export default interface MentorDetailProps {
   tags: string[];
   isActive?: boolean;
   markdownContent?: string;
-  createdAt: Date;
-  updatedAt?: Date;
+  createdAt: string;
+  updatedAt?: string;
 }

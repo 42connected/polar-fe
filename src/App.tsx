@@ -17,6 +17,7 @@ import MentorDetail from './containers/mentor-detail/mentor-detail';
 import { Loading } from './components/loading';
 import { Login } from './containers/login/login';
 import SignUpCadet from './containers/signup/signup-cadet';
+import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -24,11 +25,13 @@ import SignUpCadet from './containers/signup/signup-cadet';
  *
  * {{BASE_URL}}/경로로 해당 컴포넌트 접근 가능
  */
+
 const App = observer(() => {
   return (
     <>
       {LoadingStore.isLoding ? <Loading /> : null}
       <Router basename={'/'}>
+        <ScrollToTop />
         <Header />
         <Routes>
           <Route path="/data-room" element={<DataRoom />} />
