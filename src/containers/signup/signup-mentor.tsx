@@ -12,6 +12,10 @@ import { Navigate } from 'react-router-dom';
 import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
 import AuthStore from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
+import {
+  axiosWithData,
+  AXIOS_METHOD_WITH_DATA,
+} from '../../context/axios-interface';
 
 export const ContainersPc = styled.div`
   display: grid;
@@ -460,7 +464,8 @@ const SignUpMentor = () => {
         'Authorization'
       ] = `bearer ${AuthStore.getAccessToken()}`;
 
-      const response = await axios.patch(
+      const response = await axiosWithData(
+        AXIOS_METHOD_WITH_DATA.PACTH,
         `${process.env.REACT_APP_BASE_BACKEND_URL}/mentors/join`,
         {
           name: name,
@@ -469,6 +474,15 @@ const SignUpMentor = () => {
           isActive: checked,
         },
       );
+      //const response = await axios.patch(
+      //  `${process.env.REACT_APP_BASE_BACKEND_URL}/mentors/join`,
+      //  {
+      //    name: name,
+      //    slackId: slackId,
+      //    availableTime: availableTime,
+      //    isActive: checked,
+      //  },
+      //);
 
       if (response.status === 200) {
         alert('제출에 성공하셨습니다');
@@ -528,12 +542,19 @@ const SignUpMentor = () => {
         'Authorization'
       ] = `bearer ${AuthStore.getAccessToken()}`;
 
-      const response = await axios.post(
+      const response = await axiosWithData(
+        AXIOS_METHOD_WITH_DATA.POST,
         `${process.env.REACT_APP_BASE_BACKEND_URL}/email-verifications`,
         {
           email: email,
         },
       );
+      //const response = await axios.post(
+      //  `${process.env.REACT_APP_BASE_BACKEND_URL}/email-verifications`,
+      //  {
+      //    email: email,
+      //  },
+      //);
 
       if (response.status === 201) {
         setIsMailSucesss(true);
@@ -569,12 +590,19 @@ const SignUpMentor = () => {
         'Authorization'
       ] = `bearer ${AuthStore.getAccessToken()}`;
 
-      const response = await axios.post(
+      const response = await axiosWithData(
+        AXIOS_METHOD_WITH_DATA.POST,
         `${process.env.REACT_APP_BASE_BACKEND_URL}/email-verifications/${code}`,
         {
           code: code,
         },
       );
+      //const response = await axios.post(
+      //  `${process.env.REACT_APP_BASE_BACKEND_URL}/email-verifications/${code}`,
+      //  {
+      //    code: code,
+      //  },
+      //);
 
       if (response.status === 201) {
         setIsCodeSucesss(true);

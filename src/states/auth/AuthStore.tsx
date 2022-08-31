@@ -1,5 +1,9 @@
 import { action, makeObservable } from 'mobx';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import {
   DEFAULT_COOKIE_OPTION,
   getCookie,
@@ -46,8 +50,9 @@ class AuthStore {
    * 로그인, 토큰 및 AuthStore 값 설정
    */
   Login() {
-    axiosInstance
-      .get('login')
+    //axiosInstance
+    //  .get('login')
+    axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, 'login')
       .then(res => {
         document.location.href = res.data;
       })
