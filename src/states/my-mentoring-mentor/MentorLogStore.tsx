@@ -76,7 +76,7 @@ class MentorLogStore {
         this.total = res.data.total;
       })
       .catch(err => {
-        alert(`${err?.response?.data?.message}`);
+        //console.log(err);
       });
     LoadingStore.off();
   }
