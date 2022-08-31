@@ -4,7 +4,6 @@ import {
   DEFAULT_COOKIE_OPTION,
   getCookie,
   removeCookie,
-  setCookie,
   TOKEN_LIST,
 } from '../../context/cookies';
 
