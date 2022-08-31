@@ -1,16 +1,8 @@
-import styled, { css } from 'styled-components';
-import theme from '../../styles/theme';
 import {
   ClickContainer,
   ClickContainer2,
-  ClickedSwapButton,
   IconImageStyle,
   IconImageStyle2,
-  ImageBox,
-  ImageGrid1,
-  ImageGrid2,
-  ImageStyle,
-  ImageStyle2,
   keywordsPro,
   KeywordStyle,
   KeywordStyle2,
@@ -19,12 +11,6 @@ import {
   MainContainer2,
   MainImageStyle,
   MainImageStyle2,
-  MoImageGrid1,
-  MoImageStyle,
-  MoImageStyle2,
-  SwapButton,
-  TextStyle,
-  TextUnder,
   TitleStyle,
   TitleStyle2,
 } from './mainPageStyled';
@@ -110,7 +96,11 @@ const MainPage = () => {
                       <Link to={link}>
                         <IconImageStyle colStart={index} rowStart={1}>
                           <IconButton>
-                            <FontAwesomeIcon icon={image[index]} size="3x" />
+                            <FontAwesomeIcon
+                              icon={image[index]}
+                              size="3x"
+                              color="black"
+                            />
                           </IconButton>
                         </IconImageStyle>
                       </Link>
@@ -139,6 +129,7 @@ const MainPage = () => {
                             <FontAwesomeIcon
                               icon={image[index - 4]}
                               size="3x"
+                              color="black"
                             />
                           </IconButton>
                         </IconImageStyle>
@@ -177,7 +168,11 @@ const MainPage = () => {
                       <Link to={link}>
                         <IconImageStyle2 colStart={index} rowStart={1}>
                           <IconButton>
-                            <FontAwesomeIcon icon={image[index]} size="3x" />
+                            <FontAwesomeIcon
+                              icon={image[index]}
+                              size="3x"
+                              color="black"
+                            />
                           </IconButton>
                         </IconImageStyle2>
                       </Link>
@@ -206,6 +201,7 @@ const MainPage = () => {
                             <FontAwesomeIcon
                               icon={image[index - 4]}
                               size="3x"
+                              color="black"
                             />
                           </IconButton>
                         </IconImageStyle2>
