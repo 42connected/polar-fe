@@ -32,7 +32,7 @@ export const ContainersMobile = styled.div`
   -webkit-transform: scale(0.7);
   transform: scale(0.7);
   transform-origin: left top;
-  padding-left: 1.5rem;
+  padding-left: 2rem;
 `;
 
 export const RequiredWrapper = styled.div`
@@ -42,6 +42,7 @@ export const RequiredWrapper = styled.div`
   padding-bottom: 100px;
   padding-top: 4rem;
   width: 400px;
+  padding-left: 2rem;
 `;
 
 export const OptionWrapper = styled.div`
