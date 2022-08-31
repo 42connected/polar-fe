@@ -315,7 +315,18 @@ function MentorDetail() {
                       );
                     }}
                   />
-                ) : null}
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faPencil}
+                    className="icon"
+                    size="xs"
+                    onClick={() => {
+                      setIsActivateIntroductionEdit(
+                        !isActivateIntroductionEdit,
+                      );
+                    }}
+                  />
+                )}
               </MenuBox>
               {isActivateIntroductionEdit ? (
                 <>
