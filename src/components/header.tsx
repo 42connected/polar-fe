@@ -174,7 +174,7 @@ const Header = () => {
     else setIsMobile(false);
   }, 10);
   const AlertDetail = () => {
-    return alert('카뎃배포는 다음주입니다! 조금만 기다려주세요:)');
+    return alert('9월 2째주 comming soon~ :)');
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   AuthStore.getUserRole()
