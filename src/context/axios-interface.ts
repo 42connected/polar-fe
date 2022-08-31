@@ -20,22 +20,25 @@ export enum AXIOS_METHOD_WITH_DATA {
   PACTH,
 }
 
-const checkJoin = (config?: AxiosRequestConfig<any>): boolean => {
-  if (config?.headers?.Authorization && getCookie(TOKEN_LIST.JOIN) === false) {
-    return false;
+const isNeedJoin = (config?: AxiosRequestConfig<any>): boolean => {
+  if (
+    config?.headers?.Authorization &&
+    getCookie(TOKEN_LIST.JOIN) === 'false'
+  ) {
+    return true;
   }
-  return true;
+  return false;
 };
 
 const userWithNoRequiredInfo = () => {
-  alert(
-    `${getCookie(
-      TOKEN_LIST.INTRA_ID,
-    )}님 필수 정보를 입력해야 원할한 서비스 이용이 가능합니다.\n필수 정보 입력 페이지로 이동합니다.`,
-  );
+  //alert(
+  //  `${getCookie(
+  //    TOKEN_LIST.INTRA_ID,
+  //  )}님 필수 정보를 입력해야 원할한 서비스 이용이 가능합니다.\n필수 정보 입력 페이지로 이동합니다.`,
+  //);
   document.location.href = `${process.env.REACT_APP_ORIGIN}/${getCookie(
     TOKEN_LIST.USER_ROLE,
-  )}/join`;
+  )}s/join`;
 };
 
 /**
@@ -50,7 +53,7 @@ export const axiosWithNoData = async (
   url: string,
   config?: AxiosRequestConfig<any>,
 ): Promise<AxiosResponse<any, any>> => {
-  if (checkJoin(config)) {
+  if (isNeedJoin(config)) {
     userWithNoRequiredInfo();
   }
 
@@ -76,7 +79,7 @@ export const axiosWithData = async (
   data?: any,
   config?: AxiosRequestConfig<any>,
 ): Promise<AxiosResponse<any, any>> => {
-  if (checkJoin(config)) {
+  if (isNeedJoin(config)) {
     userWithNoRequiredInfo();
   }
 

@@ -3,10 +3,6 @@ import axios from 'axios';
 import defaultTheme from '../../styles/theme';
 import singupImage from '../../assets/signup/signup.png';
 import AuthStore from '../../states/auth/AuthStore';
-import {
-  axiosWithData,
-  AXIOS_METHOD_WITH_DATA,
-} from '../../context/axios-interface';
 
 // const UserMainImg = styled.img.attrs({
 //   src: `${singupImage}`,
@@ -84,19 +80,12 @@ async function onButtonSubmit() {
       'Authorization'
     ] = `bearer ${AuthStore.getAccessToken()}`;
 
-    const response = await axiosWithData(
-      AXIOS_METHOD_WITH_DATA.PACTH,
+    const response = await axios.patch(
       `${process.env.REACT_APP_BASE_BACKEND_URL}/cadets/join`,
       {
         name: '강주현',
       },
     );
-    //const response = await axios.patch(
-    //  `${process.env.REACT_APP_BASE_BACKEND_URL}/cadets/join`,
-    //  {
-    //    name: '강주현',
-    //  },
-    //);
     console.log(response);
   } catch (err) {
     console.error(err);
