@@ -2,13 +2,15 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 /*grid*/
-export const ReportContainer = styled.span`
+export const ReportContainer = styled.span<{
+  index: number;
+}>`
   position: absolute;
   left: 0;
   ${theme.fontSize.sizeExtraSmall};
   ${theme.font.nanumGothic};
   display: grid;
-  height: 230vh;
+  height: 100%;
   width: 100%;
   grid-template-rows: 10.7rem 5.8rem 0.6rem 4rem 0.6rem 3.9rem 4.1rem 5.3rem 0.6rem 8rem 24rem 26rem 11rem 10.7rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem 9.5rem;
   grid-template-columns: 7rem 8.5rem 5.5rem 17rem 5.7rem 7rem 18rem;
@@ -40,6 +42,7 @@ export const ReportContainer = styled.span`
   transition: all 0.25s ease-in-out;
   border-radius: 10px;
   margin-left: -2rem;
+  margin-top: ${props => props.index * 100 + 'rem'};
   background-color: ${theme.colors.backgoundWhite};
 `;
 

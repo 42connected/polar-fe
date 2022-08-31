@@ -1,3 +1,7 @@
+export interface getReportId {
+  reportId: string;
+}
+
 export interface reportsPro {
   cadets: {
     name: string;
