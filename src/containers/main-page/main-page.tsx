@@ -110,7 +110,11 @@ const MainPage = () => {
                       <Link to={link}>
                         <IconImageStyle colStart={index} rowStart={1}>
                           <IconButton>
-                            <FontAwesomeIcon icon={image[index]} size="3x" />
+                            <FontAwesomeIcon
+                              icon={image[index]}
+                              size="3x"
+                              color="black"
+                            />
                           </IconButton>
                         </IconImageStyle>
                       </Link>
@@ -139,6 +143,7 @@ const MainPage = () => {
                             <FontAwesomeIcon
                               icon={image[index - 4]}
                               size="3x"
+                              color="black"
                             />
                           </IconButton>
                         </IconImageStyle>
@@ -177,7 +182,11 @@ const MainPage = () => {
                       <Link to={link}>
                         <IconImageStyle2 colStart={index} rowStart={1}>
                           <IconButton>
-                            <FontAwesomeIcon icon={image[index]} size="3x" />
+                            <FontAwesomeIcon
+                              icon={image[index]}
+                              size="3x"
+                              color="black"
+                            />
                           </IconButton>
                         </IconImageStyle2>
                       </Link>
@@ -206,6 +215,7 @@ const MainPage = () => {
                             <FontAwesomeIcon
                               icon={image[index - 4]}
                               size="3x"
+                              color="black"
                             />
                           </IconButton>
                         </IconImageStyle2>
