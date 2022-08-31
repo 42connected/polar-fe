@@ -18,6 +18,8 @@ import { Loading } from './components/loading';
 import { Login } from './containers/login/login';
 import SignUpCadet from './containers/signup/signup-cadet';
 import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
+import UserJoinStore from './states/user-join/UserJoinStore';
+import { UserJoin } from './containers/user-join/user-join';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -29,8 +31,9 @@ import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
 const App = observer(() => {
   return (
     <>
-      {LoadingStore.isLoding ? <Loading /> : null}
+      {LoadingStore.isLoding && <Loading />}
       <Router basename={'/'}>
+        {UserJoinStore.needJoin && <UserJoin />}
         <ScrollToTop />
         <Header />
         <Routes>

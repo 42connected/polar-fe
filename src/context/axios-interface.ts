@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import UserJoinStore from '../states/user-join/UserJoinStore';
 import { getCookie, TOKEN_LIST } from './cookies';
 
 export const axiosInstance = axios.create({
@@ -31,14 +32,7 @@ const isNeedJoin = (config?: AxiosRequestConfig<any>): boolean => {
 };
 
 const userWithNoRequiredInfo = () => {
-  //alert(
-  //  `${getCookie(
-  //    TOKEN_LIST.INTRA_ID,
-  //  )}님 필수 정보를 입력해야 원할한 서비스 이용이 가능합니다.\n필수 정보 입력 페이지로 이동합니다.`,
-  //);
-  document.location.href = `${process.env.REACT_APP_ORIGIN}/${getCookie(
-    TOKEN_LIST.USER_ROLE,
-  )}s/join`;
+  UserJoinStore.on();
 };
 
 /**
@@ -55,6 +49,7 @@ export const axiosWithNoData = async (
 ): Promise<AxiosResponse<any, any>> => {
   if (isNeedJoin(config)) {
     userWithNoRequiredInfo();
+    throw new Error(`Need Join`);
   }
 
   switch (method) {
@@ -81,6 +76,7 @@ export const axiosWithData = async (
 ): Promise<AxiosResponse<any, any>> => {
   if (isNeedJoin(config)) {
     userWithNoRequiredInfo();
+    throw new Error(`Need Join`);
   }
 
   switch (method) {
