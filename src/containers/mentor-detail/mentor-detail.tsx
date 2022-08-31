@@ -227,23 +227,6 @@ function MentorDetail() {
     });
   };
 
-  // const MakeCommentsTags = ({ comments }: any) => {
-  //   comments.map((comment: CommentProps) => {
-  //     return (
-  //       <Comment>
-  //         <img src={comment?.cadets?.profileImage} />
-  //         <div>
-  //           <div>
-  //             <div>{comment?.cadets?.intraId}</div>
-  //             <div>{comment?.createdAt}</div>
-  //           </div>
-  //           <div>{comment?.content}</div>
-  //         </div>
-  //       </Comment>
-  //     );
-  //   });
-  // };
-
   return (
     <MentorDetailTag>
       <MentorHeader>
