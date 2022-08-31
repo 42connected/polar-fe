@@ -49,6 +49,7 @@ export const axiosWithNoData = async (
 ): Promise<AxiosResponse<any, any>> => {
   if (isNeedJoin(config)) {
     userWithNoRequiredInfo();
+    throw new Error();
   }
 
   switch (method) {
@@ -75,6 +76,7 @@ export const axiosWithData = async (
 ): Promise<AxiosResponse<any, any>> => {
   if (isNeedJoin(config)) {
     userWithNoRequiredInfo();
+    throw new Error();
   }
 
   switch (method) {

@@ -4,6 +4,7 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { getCookie, TOKEN_LIST } from '../../context/cookies';
+import UserJoinStore from '../../states/user-join/UserJoinStore';
 import defaultTheme from '../../styles/theme';
 
 const Fade = keyframes`
@@ -131,14 +132,14 @@ export function UserJoin() {
             icon={faX}
             style={{ opacity: 0.2 }}
             onClick={() => {
-              document.location.href = '/';
+              UserJoinStore.off();
             }}
           />
         </XButton>
         안녕하세요 {userName}님 👋
         <br />
         <br />
-        필수 정보를 입력해야 원활한 서비스 이용이 가능합니다!
+        필수 정보를 입력해야 원활한 서비스 이용이 가능합니다! 🙇‍♂️
         <br />
         <br />
         <ButtonWrapper to={url}>
