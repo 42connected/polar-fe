@@ -105,14 +105,13 @@ export const EmailInput = styled.input`
 `;
 
 export const CertificationSendingButton = styled.button`
+  justify-content: center;
   margin-left: 240px;
   width: 70.19px;
   height: 35.11px;
-  justify-content: center;
   background: ${defaultTheme.colors.polarSimpleMain};
   color: WHITE;
   padding-top: 1rem;
-  padding-right: 0.8rem;
   border: none;
   cursor: pointer;
   font-size: 27px;
