@@ -1,11 +1,11 @@
 import { action, makeObservable, observable } from 'mobx';
 import {
-  axiosInstance,
   axiosWithData,
   axiosWithNoData,
   AXIOS_METHOD_WITH_DATA,
   AXIOS_METHOD_WITH_NO_DATA,
 } from '../../context/axios-interface';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
 import LoadingStore from '../loading/LoadingStore';
 
 export interface Mentor {
@@ -51,16 +51,6 @@ class MentorStore {
 
   async verifyEmail(code: string, token: string) {
     LoadingStore.on();
-    //await axiosInstance
-    //  .post(
-    //    `/email-verifications/${code}`,
-    //    {},
-    //    {
-    //      headers: {
-    //        Authorization: `bearer ${token}`,
-    //      },
-    //    },
-    //  )
     await axiosWithData(
       AXIOS_METHOD_WITH_DATA.POST,
       `/email-verifications/${code}`,
@@ -76,23 +66,13 @@ class MentorStore {
         window.location.reload();
       })
       .catch(err => {
-        alert(`${err?.response?.data?.message}`);
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
       });
     LoadingStore.off();
   }
 
   async changeEmail(email: string, token: string) {
     LoadingStore.on();
-    //await axiosInstance
-    //  .post(
-    //    `/email-verifications`,
-    //    { email: email },
-    //    {
-    //      headers: {
-    //        Authorization: `bearer ${token}`,
-    //      },
-    //    },
-    //  )
     await axiosWithData(
       AXIOS_METHOD_WITH_DATA.POST,
       `/email-verifications`,
@@ -107,8 +87,7 @@ class MentorStore {
         return true;
       })
       .catch(err => {
-        alert(`${err?.response?.data?.message}`);
-        window.location.reload();
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
       });
     LoadingStore.off();
   }
@@ -119,15 +98,13 @@ class MentorStore {
 
   async getMentor(intraId: string) {
     LoadingStore.on();
-    //await axiosInstance
-    //  .get(`/mentors/${intraId}`)
     await axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, `/mentors/${intraId}`)
       .then(res => {
         this.mentor = res.data;
         return true;
       })
       .catch(err => {
-        //alert(`${err?.response?.data?.message}`);
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
       });
     LoadingStore.off();
   }
