@@ -1,13 +1,12 @@
 import CheckBox from '../../components/check-box';
 import { dataRoomProps } from '../../interface/data-room/data-room-props.interface';
-import { mentoringIds } from '../../interface/data-room/mentoring-ids.interface';
 import { TableData, Link, refineMeetingAt } from './data-room-list-element';
 
 function DataRoomListElementMobile(
   data: dataRoomProps,
   index: number,
-  buttonClickToggle: (status: boolean, ids: mentoringIds) => void,
-  selectedList: mentoringIds[],
+  buttonClickToggle: (status: boolean, ids: string) => void,
+  selectedList: string[],
 ) {
   return (
     <tr>
@@ -16,13 +15,10 @@ function DataRoomListElementMobile(
           <CheckBox
             key={index}
             onChange={e => {
-              buttonClickToggle(e.target.checked, {
-                reportId: data.id,
-                mentoringLogId: data.mentoringLogs.id,
-              });
+              buttonClickToggle(e.target.checked, data.id);
             }}
             checked={
-              selectedList.findIndex(list => list.reportId === data.id) !== -1
+              selectedList.findIndex(list => list === data.id) !== -1
                 ? true
                 : false
             }

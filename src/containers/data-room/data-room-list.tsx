@@ -13,7 +13,6 @@ import CheckBox from '../../components/check-box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import AuthStore from '../../states/auth/AuthStore';
-import { mentoringIds } from '../../interface/data-room/mentoring-ids.interface';
 import DataRoomListElementMobile from './data-room-list-element-mobile';
 import LoadingStore from '../../states/loading/LoadingStore';
 
@@ -47,24 +46,19 @@ function DataRoomList(
   setOffset: (offset: number) => void,
   total: number,
   setTotal: (total: number) => void,
-  selectedList: mentoringIds[],
-  setSelectedList: (list: mentoringIds[]) => void,
+  selectedList: string[],
+  setSelectedList: (list: string[]) => void,
   isDesktop: boolean,
 ) {
   const [datas, setDatas] = useState<dataRoomProps[]>(
     Array(query.take).fill({}),
   );
 
-  function buttonClickToggle(status: boolean, ids: mentoringIds) {
-    if (
-      status &&
-      selectedList.findIndex(data => data.reportId === ids.reportId) === -1
-    ) {
-      setSelectedList(selectedList.concat(ids));
+  function buttonClickToggle(status: boolean, id: string) {
+    if (status && selectedList.findIndex(data => data === id) === -1) {
+      setSelectedList(selectedList.concat(id));
     } else if (!status) {
-      setSelectedList(
-        selectedList.filter(data => data.reportId !== ids.reportId),
-      );
+      setSelectedList(selectedList.filter(data => data !== id));
     }
   }
 
@@ -72,7 +66,7 @@ function DataRoomList(
     if (status) {
       setSelectedList(
         datas.slice(0, offset).map(data => {
-          return { reportId: data.id, mentoringLogId: data.mentoringLogs.id };
+          return data.id;
         }),
       );
     } else {

@@ -7,9 +7,8 @@ import { ThemeProvider } from '@mui/system';
 import styled from 'styled-components';
 import SearchBox from '../../components/data-room/search-box';
 import DataRoomList from './data-room-list';
-import { mentoringIds } from '../../interface/data-room/mentoring-ids.interface';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { dataRoomQuery } from '../../interface/data-room/data-room-query.interface';
 import { useMediaQuery } from 'react-responsive';
 import LoadingStore from '../../states/loading/LoadingStore';
@@ -102,11 +101,12 @@ function DataRoom() {
   const [page, setPage] = useState<number>(1); //현재 페이지
   const [total, setTotal] = useState<number>(0); //전체 값
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [selectedList, setSelectedList] = useState<mentoringIds[]>([]);
+  const [selectedList, setSelectedList] = useState<string[]>([]);
   const [offset, setOffset] = useState<number>(0);
   const onClickSearchBoxModal = useCallback(() => {
     setIsOpenModal(!isOpenModal);
   }, [isOpenModal]);
+  const navigate = useNavigate();
   const isDesktopLarge = useMediaQuery({
     minWidth: 900,
   });
@@ -131,9 +131,7 @@ function DataRoom() {
     LoadingStore.on();
     const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}bocals/data-room/excel`;
     const data = {
-      reportIds: selectedList.map((data: mentoringIds) => {
-        return data.reportId;
-      }),
+      reportIds: selectedList,
     };
 
     if (selectedList.length === 0) {
@@ -170,70 +168,82 @@ function DataRoom() {
     LoadingStore.off();
   };
 
+  function printReports() {
+    LoadingStore.on();
+    let url = '/report-detail?autoPrint=true';
+    if (selectedList.length === 0) {
+      alert('멘토링 정보를 하나 이상 선택해주세요.');
+      return;
+    }
+    selectedList.forEach(data => (url += `&reportId=${data}`));
+    LoadingStore.off();
+    navigate(url);
+  }
+
   const [query, setQuery] = useState<dataRoomQuery>({
     page: page,
     take: take,
     isAscending: false,
   });
 
-  if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
-    alert('접근 권한이 없습니다.');
-    return <Navigate to="/" />;
-  } else
-    return (
-      <DataRoomDiv>
-        <DataRoomBodyForDesktop>
-          <DataRoomTitle>데이터룸</DataRoomTitle>
-          <DataRoomButtonDiv>
-            <DataRoomButton>
-              {isOpenModal && (
-                <>
-                  <Back onClick={onClickSearchBoxModal}></Back>
-                  <SearchBox
-                    query={query}
-                    setQuery={setQuery}
-                    setSelectedList={setSelectedList}
-                  />
-                </>
-              )}
-              <DRButton text="정렬" onClick={onClickSearchBoxModal} />
-            </DataRoomButton>
-            <DataRoomButton>
-              <DRButton text="출력" />
-            </DataRoomButton>
-            <DataRoomButton>
-              <DRButton text="엑셀 저장" onClick={getExcel} />
-            </DataRoomButton>
-          </DataRoomButtonDiv>
-          {DataRoomList(
-            query,
-            setQuery,
-            offset,
-            setOffset,
-            total,
-            setTotal,
-            selectedList,
-            setSelectedList,
-            isDesktopLarge || isDesktopSmall,
-          )}
-          <DataRoomNavigationDiv>
-            <ThemeProvider theme={muiPaginationTheme}>
-              <Pagination
-                count={Math.ceil(total / take)}
-                color="primary"
-                showFirstButton
-                showLastButton
-                onChange={(_, page) => {
-                  setPage(page);
-                  setQuery({ ...query, page: page });
-                  setOffset(page * take > total ? total % take : take);
-                }}
-              />
-            </ThemeProvider>
-          </DataRoomNavigationDiv>
-        </DataRoomBodyForDesktop>
-      </DataRoomDiv>
-    );
+  // if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
+  //   alert('접근 권한이 없습니다.');
+  //   return <Navigate to="/" />;
+  // } else
+  return (
+    <DataRoomDiv>
+      <DataRoomBodyForDesktop>
+        <DataRoomTitle>데이터룸</DataRoomTitle>
+        <DataRoomButtonDiv>
+          <DataRoomButton>
+            {isOpenModal && (
+              <>
+                <Back onClick={onClickSearchBoxModal}></Back>
+                <SearchBox
+                  query={query}
+                  setQuery={setQuery}
+                  setSelectedList={setSelectedList}
+                />
+              </>
+            )}
+            <DRButton text="정렬" onClick={onClickSearchBoxModal} />
+          </DataRoomButton>
+          <DataRoomButton>
+            <DRButton text="출력" onClick={printReports} />
+          </DataRoomButton>
+          <DataRoomButton>
+            <DRButton text="엑셀 저장" onClick={getExcel} />
+          </DataRoomButton>
+        </DataRoomButtonDiv>
+        {DataRoomList(
+          query,
+          setQuery,
+          offset,
+          setOffset,
+          total,
+          setTotal,
+          selectedList,
+          setSelectedList,
+          isDesktopLarge || isDesktopSmall,
+        )}
+        <DataRoomNavigationDiv>
+          <ThemeProvider theme={muiPaginationTheme}>
+            <Pagination
+              count={Math.ceil(total / take)}
+              color="primary"
+              showFirstButton
+              showLastButton
+              onChange={(_, page) => {
+                setPage(page);
+                setQuery({ ...query, page: page });
+                setOffset(page * take > total ? total % take : take);
+              }}
+            />
+          </ThemeProvider>
+        </DataRoomNavigationDiv>
+      </DataRoomBodyForDesktop>
+    </DataRoomDiv>
+  );
 }
 
 export default DataRoom;
