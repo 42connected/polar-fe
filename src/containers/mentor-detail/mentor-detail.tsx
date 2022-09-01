@@ -1,5 +1,7 @@
 import {
   faAngleDown,
+  faAngleLeft,
+  faAngleRight,
   faPencil,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +14,7 @@ import { InputCounter } from '../../components/input-counter';
 import ButtonBoxComponent from '../../components/mentor-detail/button-box';
 import TimeTableMuiComponent from '../../components/mentor-detail/mui-table';
 import TagInputBoxComponent from '../../components/mentor-detail/tag-input-box';
+import PageNationComponent from '../../components/page-nation';
 import ReportSummaryInputComponent from '../../components/report-summery-input';
 import { axiosInstance } from '../../context/axios-interface';
 import { getCookie, TOKEN_LIST } from '../../context/cookies';
@@ -26,24 +29,6 @@ import theme from '../../styles/theme';
 import MarkdownRender from './markdownRender';
 
 function MentorDetail() {
-  const mockMentoringLog: MentoringLogProps[] = [
-    {
-      topic: 'nestjs 프로젝트',
-      state: '확정',
-      meetingAt: new Date(),
-    },
-    {
-      topic: 'nestjs',
-      state: '완료',
-      meetingAt: new Date(),
-    },
-    {
-      topic: '백앤드 진로상담',
-      state: '확정',
-      meetingAt: new Date(),
-    },
-  ];
-
   const mockMentorAvailableTime =
     '[[],[{"startHour":6,"startMinute":0,"endHour":10,"endMinute":0},{"startHour":10,"startMinute":0,"endHour":11,"endMinute":0}],[],[],[{"startHour":6,"startMinute":30,"endHour":9,"endMinute":0}],[],[{"startHour":6,"startMinute":30,"endHour":9,"endMinute":0}]]';
   const mockMentorAvailableTimeToArray = JSON.parse(mockMentorAvailableTime);
@@ -61,8 +46,7 @@ function MentorDetail() {
 
   const [mentorIntroduction, setMentorIntroduction] = useState<string>('');
   const [mentor, setMentor] = useState<MentorDetailProps | null>(null);
-  const [mentoringLog, setMentoringLog] =
-    useState<MentoringLogProps[]>(mockMentoringLog);
+
   const [isActiveMentorDetail, setIsActiveMentorDetail] =
     useState<boolean>(false);
   const [comments, setComments] = useState<CommentsWithPageProps | null>(null);
@@ -77,12 +61,6 @@ function MentorDetail() {
     useState<boolean>(false);
   const [mentorInfo, setMentorInfo] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
-
-  //2018, 5, 25 화요일
-  //const date2 = new Date('1995-12-17T03:24:00');
-  // Sun Dec 17 1995 03:24:00 GMT...
-  //2018-06-28
-  // console.log(mockMentorAvailableTimeToArray);
 
   const setMentorAvailableTimeData = () => {
     const appointmentsData: appointmentsInterface[] = [];
@@ -123,19 +101,19 @@ function MentorDetail() {
       take: 5,
     };
     axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
-      console.log('mentor', result.data);
-      result.data.tags = ['aaaa', 'bbbb', 'cccccccccc'];
+      console.log(result.data);
       setMentor(result.data);
       setMentorTags(result.data.tags);
       setMentorIntroduction(
-        result.data?.introduction ? result.data.introduction : '',
+        result.data?.introduction
+          ? result.data.introduction
+          : result.data?.introduction,
       );
-      setMentorInfo(result.data?.info ? result.data.info : '');
+      setMentorInfo(result.data?.info ? result.data.info : result.data?.info);
     });
     axiosInstance
       .get(`/comments/${getParams.intraId}`, { params })
       .then(result => {
-        console.log('comments', result.data);
         setComments(result.data);
       });
 
@@ -148,31 +126,32 @@ function MentorDetail() {
     setUser(user);
   }, []);
 
-  useEffect(() => {
+  const handleSubmitIntroductionTags = () => {
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
     const config = {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
-    const data = { introduction: mentorIntroduction };
+    const data = { introduction: mentorIntroduction, tags: mentorTags };
     axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
-  }, [isActivateIntroductionEdit]);
-  useEffect(() => {
-    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
-    const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    };
-    const data = { introduction: mentorIntroduction };
-    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
-  }, [mentorTags]);
+  };
 
   useEffect(() => {
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
     const config = {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
-    const data = { isActive: isActivateMentor };
+    const data = { tags: mentorTags };
     axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
-  }, [isActivateMentor]);
+  }, [mentorTags]);
+
+  // useEffect(() => {
+  //   const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+  //   const config = {
+  //     headers: { Authorization: `Bearer ${accessToken}` },
+  //   };
+  //   const data = { isActive: isActivateMentor };
+  //   axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+  // }, [isActivateMentor]);
 
   useEffect(() => {
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
@@ -189,43 +168,62 @@ function MentorDetail() {
 
   const handleCommentSubmit = () => {
     if (inputComment !== '') {
+      const params = {
+        page: 1,
+        take: 5,
+      };
       const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
       const config = {
         headers: { Authorization: `Bearer ${accessToken}` },
       };
       const data = { content: inputComment };
-      axiosInstance.post(`/comments/${getParams.intraId}`, data, config);
-      setInputComment('');
-      axiosInstance.get(`/comments/${getParams.intraId}`).then(result => {
-        setComments(result.data.comments);
-      });
+      axiosInstance
+        .post(`/comments/${getParams.intraId}`, data, config)
+        .then(() => {
+          axiosInstance
+            .get(`/comments/${getParams.intraId}`, { params })
+            .then(result => {
+              setComments(result.data);
+            })
+            .catch(err => {
+              console.log(err);
+            });
+          setInputComment('');
+        });
     }
   };
 
-  const mentoringLogList = mentoringLog.map(log => {
-    const makeDate = `${log.meetingAt
-      .getFullYear()
-      .toString()
-      .slice(-2)}/${log.meetingAt.getMonth()}/${log.meetingAt.getDay()}`;
-    return (
-      <MenuBox2>
-        <div>{log.topic}</div>
-        <div>{log.state}</div>
-        <div>{makeDate}</div>
-      </MenuBox2>
-    );
-  });
-
   const deleteComment = (commentId: any) => {
+    const params = {
+      page: 1,
+      take: 5,
+    };
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
     const config = {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
-    axiosInstance.delete(`/comments/${commentId}`, config);
-    axiosInstance.get(`/comments/${getParams.intraId}`).then(result => {
-      setComments(result.data.comments);
+    axiosInstance.delete(`/comments/${commentId}`, config).then(() => {
+      axiosInstance
+        .get(`/comments/${getParams.intraId}`, { params })
+        .then(result => {
+          setComments(result.data);
+        });
     });
   };
+
+  // const mentoringLogList = mentoringLog.map(log => {
+  //   const makeDate = `${log.meetingAt
+  //     .getFullYear()
+  //     .toString()
+  //     .slice(-2)}/${log.meetingAt.getMonth()}/${log.meetingAt.getDay()}`;
+  //   return (
+  //     <MenuBox2>
+  //       <div>{log.topic}</div>
+  //       <div>{log.state}</div>
+  //       <div>{makeDate}</div>
+  //     </MenuBox2>
+  //   );
+  // });
 
   return (
     <MentorDetailTag>
@@ -354,6 +352,7 @@ function MentorDetail() {
                         setIsActivateIntroductionEdit(
                           !isActivateIntroductionEdit,
                         );
+                        handleSubmitIntroductionTags();
                       }}
                     />
                   </ButtonBox>
@@ -371,7 +370,9 @@ function MentorDetail() {
                 <div>상태</div>
                 <div>일시</div>
               </MenuBox1>
-              {mentoringLogList}
+
+              {/* {mentoringLogList} */}
+              <PageNationComponent intraId={getParams.intraId} />
             </MentorBody1Right2>
           </MentorBody1Right>
         </MentorBody1>
@@ -488,7 +489,16 @@ function MentorDetail() {
                             deleteComment(comment?.id);
                           }}
                         />
-                      ) : null}
+                      ) : (
+                        <FontAwesomeIcon
+                          icon={faXmark}
+                          className="icon"
+                          color={'red'}
+                          onClick={() => {
+                            deleteComment(comment?.id);
+                          }}
+                        />
+                      )}
                     </div>
                     <div>{comment?.content}</div>
                   </UserContent>
@@ -637,10 +647,6 @@ const SubmitButton = styled.div`
 
 const MentorCommets = styled.div`
   margin-top: 5%;
-  /* .submitButton {
-    display: flex;
-    justify-content: flex-end;
-  } */
 `;
 
 const MentorBody3Toggle = styled.div`
