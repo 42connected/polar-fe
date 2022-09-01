@@ -150,6 +150,7 @@ export const TimeTableContainer = styled.ul`
   grid-gap: 4px;
   list-style-type: none;
   margin-right: 2rem;
+  margin-bottom: 0rem;
 `;
 
 const ColumnDays = styled.li`
@@ -273,7 +274,7 @@ const SignUpMentor = () => {
 
   useEffect(() => {
     MentorStore.getMentor(AuthStore.getUserIntraId());
-    window.screen.width <= 500 ? setIsMobile(true) : setIsMobile(false);
+    window.innerWidth <= 500 ? setIsMobile(true) : setIsMobile(false);
 
     window.addEventListener('resize', handleResize);
     return () => {

@@ -18,6 +18,9 @@ import { Loading } from './components/loading';
 import { Login } from './containers/login/login';
 import SignUpCadet from './containers/signup/signup-cadet';
 import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
+import MentorInfoModal, {
+  ModalType,
+} from './containers/signup/mentor-info-modal';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -53,6 +56,25 @@ const App = observer(() => {
           <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
           <Route path="/mentors/join" element={<SignUpMentor />} />
           <Route path="/cadets/join" element={<SignUpCadet />} />
+          {/* 모달 테스트용 URL -> 추후 멘토 상세페이지에 붙일 예정 */}
+          <Route
+            path="/mentors/info"
+            element={
+              <MentorInfoModal
+                intraId="m-engeng"
+                modalType={ModalType.MENTOR_INFO}
+              />
+            }
+          />
+          <Route
+            path="/mentors/time"
+            element={
+              <MentorInfoModal
+                intraId="m-engeng"
+                modalType={ModalType.AVAILABLE_TIME}
+              />
+            }
+          />
         </Routes>
         <Footer />
       </Router>
