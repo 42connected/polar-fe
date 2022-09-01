@@ -37,25 +37,22 @@ const App = observer(() => {
         <ScrollToTop />
         <Header />
         <Routes>
-          <Route path="/data-room" element={<DataRoom />} />
-          <Route path="/cadets/mentorings" element={<CadetMentornig />} />
-          <Route path="/mentor-lists/:category" element={<MentorList />} />
+          <Route path="data-room" element={<DataRoom />} />
+          <Route path="cadets/mentorings" element={<CadetMentornig />} />
+          <Route path="mentor-lists/:category" element={<MentorList />} />
+          <Route path="mentorings/reports/:reportId" element={<ReportForm />} />
           <Route
-            path="/mentorings/reports/:reportId"
-            element={<ReportForm />}
-          />
-          <Route
-            path="/mentors/mentorings/:intraId"
+            path="mentors/mentorings/:intraId"
             element={<MyMentoringMentor />}
           />
           <Route path="" element={<MainPage />} />
           <Route path="login" element={<Login />} />
           <Route path="apply-page" element={<ApplyPage />} />
-          <Route path="report-details/:intraId" element={<ReportDetail />} />
+          <Route path="report-detail" element={<ReportDetail />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
-          <Route path="/mentors/join" element={<SignUpMentor />} />
-          <Route path="/cadets/join" element={<SignUpCadet />} />
+          <Route path="mentor-detail/:intraId" element={<MentorDetail />} />
+          <Route path="mentors/join" element={<SignUpMentor />} />
+          <Route path="cadets/join" element={<SignUpCadet />} />
         </Routes>
         <Footer />
       </Router>

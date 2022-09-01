@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../assets/image/logo/logo.png';
-import { AlertDetail } from '../containers/report-detail/report-detail';
 import AuthStore, { USER_ROLES } from '../states/auth/AuthStore';
 import theme from '../styles/theme';
 
