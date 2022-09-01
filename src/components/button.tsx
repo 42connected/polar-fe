@@ -38,6 +38,12 @@ const ButtonStyle = styled.button<ButtonProps>`
     props.backgroundColor ?? theme.colors.polarBrightMain};
   ${props => props.fontFrame ?? theme.fontFrame.bodyMiddle};
   ${props => props.font ?? theme.font.sebangGothic};
+  &:hover {
+    background-color: ${props =>
+      props.backgroundColor
+        ? darken(props.backgroundColor, 0.05)
+        : darken(theme.colors.polarBrightMain, 0.05)};
+  }
   &:active {
     background-color: ${props =>
       props.backgroundColor
