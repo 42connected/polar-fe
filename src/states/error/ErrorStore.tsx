@@ -17,7 +17,7 @@ class ErrorStore {
       on: action,
       off: action,
     });
-    this.isError = true;
+    this.isError = false;
     this.errorMsg = ERROR_DEFAULT_VALUE.ERROR_MSG;
     this.Title = ERROR_DEFAULT_VALUE.TITLE;
   }
