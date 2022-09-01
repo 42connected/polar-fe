@@ -80,7 +80,6 @@ export const ModalTitle = styled.div`
   text-align: center;
   ${defaultTheme.font.sebangGothic};
   ${defaultTheme.fontSize.sizeExtraSmall};
-  /*color: ${defaultTheme.fontColor.whiteColor};*/
 `;
 
 export const XButton = styled.div`
