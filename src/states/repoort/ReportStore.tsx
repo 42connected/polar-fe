@@ -1,5 +1,11 @@
 import { makeObservable, observable } from 'mobx';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithData,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_DATA,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import LoadingStore from '../loading/LoadingStore';
 
 export interface ReportSaveFormdata {
@@ -115,13 +121,24 @@ class ReportStore {
     this.appendFormdataExceptImage(data);
     this.save.append('isDone', 'true');
     LoadingStore.on();
-    await axiosInstance
-      .patch(`/reports/${reportId}`, this.save, {
+    //await axiosInstance
+    //  .patch(`/reports/${reportId}`, this.save, {
+    //    headers: {
+    //      'Content-Type': 'multipart/form-data',
+    //      Authorization: `bearer ${token}`,
+    //    },
+    //  })
+    await axiosWithData(
+      AXIOS_METHOD_WITH_DATA.PACTH,
+      `/reports/${reportId}`,
+      this.save,
+      {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `bearer ${token}`,
         },
-      })
+      },
+    )
       .then(() => {
         this.save = new FormData();
         this.deleteFormdataExceptImage();
@@ -141,13 +158,24 @@ class ReportStore {
   ) {
     this.appendFormdataExceptImage(data);
     LoadingStore.on();
-    await axiosInstance
-      .patch(`/reports/${reportId}`, this.save, {
+    //await axiosInstance
+    //  .patch(`/reports/${reportId}`, this.save, {
+    //    headers: {
+    //      'Content-Type': 'multipart/form-data',
+    //      Authorization: `bearer ${token}`,
+    //    },
+    //  })
+    await axiosWithData(
+      AXIOS_METHOD_WITH_DATA.PACTH,
+      `/reports/${reportId}`,
+      this.save,
+      {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `bearer ${token}`,
         },
-      })
+      },
+    )
       .then(() => {
         this.save = new FormData();
         this.deleteFormdataExceptImage();
@@ -162,16 +190,26 @@ class ReportStore {
 
   async createReport(mentoringLogId: string, token: string) {
     LoadingStore.on();
-    await axiosInstance
-      .post(
-        `/reports/${mentoringLogId}`,
-        {},
-        {
-          headers: {
-            Authorization: `bearer ${token}`,
-          },
+    //await axiosInstance
+    //  .post(
+    //    `/reports/${mentoringLogId}`,
+    //    {},
+    //    {
+    //      headers: {
+    //        Authorization: `bearer ${token}`,
+    //      },
+    //    },
+    //  )
+    await axiosWithData(
+      AXIOS_METHOD_WITH_DATA.POST,
+      `/reports/${mentoringLogId}`,
+      {},
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
         },
-      )
+      },
+    )
       .then(res => {
         document.location.href = `/mentorings/reports/${res.data}`;
       })
@@ -183,12 +221,21 @@ class ReportStore {
 
   async Initializer(reportId: string, token: string) {
     LoadingStore.on();
-    await axiosInstance
-      .get(`/reports/${reportId}`, {
+    //await axiosInstance
+    //  .get(`/reports/${reportId}`, {
+    //    headers: {
+    //      Authorization: `bearer ${token}`,
+    //    },
+    //  })
+    await axiosWithNoData(
+      AXIOS_METHOD_WITH_NO_DATA.GET,
+      `/reports/${reportId}`,
+      {
         headers: {
           Authorization: `bearer ${token}`,
         },
-      })
+      },
+    )
       .then(res => {
         this.report = res.data;
       })

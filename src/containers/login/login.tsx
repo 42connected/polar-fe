@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import axios from 'axios';
 import { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Loading } from '../../components/loading';
 import {
   DEFAULT_COOKIE_OPTION,
@@ -18,6 +18,7 @@ const Background = styled.div`
 `;
 
 export function Login() {
+  const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const code = params.get('code');
 
@@ -40,10 +41,15 @@ export function Login() {
           res?.data?.user?.role,
           DEFAULT_COOKIE_OPTION,
         );
-        document.location.href = '/';
+        setCookie(
+          TOKEN_LIST.JOIN,
+          res?.data?.user?.join,
+          DEFAULT_COOKIE_OPTION,
+        );
+        navigate(-1);
       })
-      .catch(err => {
-        alert(err);
+      .catch(() => {
+        navigate(-1);
       });
   });
 

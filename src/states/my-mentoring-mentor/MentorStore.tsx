@@ -1,5 +1,11 @@
 import { action, makeObservable, observable } from 'mobx';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithData,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_DATA,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import LoadingStore from '../loading/LoadingStore';
 
 export interface Mentor {
@@ -45,16 +51,26 @@ class MentorStore {
 
   async verifyEmail(code: string, token: string) {
     LoadingStore.on();
-    await axiosInstance
-      .post(
-        `/email-verifications/${code}`,
-        {},
-        {
-          headers: {
-            Authorization: `bearer ${token}`,
-          },
+    //await axiosInstance
+    //  .post(
+    //    `/email-verifications/${code}`,
+    //    {},
+    //    {
+    //      headers: {
+    //        Authorization: `bearer ${token}`,
+    //      },
+    //    },
+    //  )
+    await axiosWithData(
+      AXIOS_METHOD_WITH_DATA.POST,
+      `/email-verifications/${code}`,
+      {},
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
         },
-      )
+      },
+    )
       .then(() => {
         alert('이메일 변경 완료');
         window.location.reload();
@@ -67,16 +83,26 @@ class MentorStore {
 
   async changeEmail(email: string, token: string) {
     LoadingStore.on();
-    await axiosInstance
-      .post(
-        `/email-verifications`,
-        { email: email },
-        {
-          headers: {
-            Authorization: `bearer ${token}`,
-          },
+    //await axiosInstance
+    //  .post(
+    //    `/email-verifications`,
+    //    { email: email },
+    //    {
+    //      headers: {
+    //        Authorization: `bearer ${token}`,
+    //      },
+    //    },
+    //  )
+    await axiosWithData(
+      AXIOS_METHOD_WITH_DATA.POST,
+      `/email-verifications`,
+      { email: email },
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
         },
-      )
+      },
+    )
       .then(() => {
         return true;
       })
@@ -93,14 +119,15 @@ class MentorStore {
 
   async getMentor(intraId: string) {
     LoadingStore.on();
-    await axiosInstance
-      .get(`/mentors/${intraId}`)
+    //await axiosInstance
+    //  .get(`/mentors/${intraId}`)
+    await axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, `/mentors/${intraId}`)
       .then(res => {
         this.mentor = res.data;
         return true;
       })
       .catch(err => {
-        alert(`${err?.response?.data?.message}`);
+        //alert(`${err?.response?.data?.message}`);
       });
     LoadingStore.off();
   }

@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DataRoom from './containers/data-room/data-room';
+import CadetMentornig from './containers/cadet-mentoring/cadet-mentoring';
 import MentorList from './containers/mentor-list/mentor-list';
 import SignUpMentor from './containers/signup/signup-mentor';
 import MyMentoringMentor from './containers/my-mentoring-mentor/my-mentoring-mentor';
@@ -16,6 +17,9 @@ import MentorDetail from './containers/mentor-detail/mentor-detail';
 import { Loading } from './components/loading';
 import { Login } from './containers/login/login';
 import SignUpCadet from './containers/signup/signup-cadet';
+import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
+import UserJoinStore from './states/user-join/UserJoinStore';
+import { UserJoin } from './containers/user-join/user-join';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -23,14 +27,18 @@ import SignUpCadet from './containers/signup/signup-cadet';
  *
  * {{BASE_URL}}/경로로 해당 컴포넌트 접근 가능
  */
+
 const App = observer(() => {
   return (
     <>
-      {LoadingStore.isLoding ? <Loading /> : null}
+      {LoadingStore.isLoding && <Loading />}
       <Router basename={'/'}>
+        {UserJoinStore.needJoin && <UserJoin />}
+        <ScrollToTop />
         <Header />
         <Routes>
           <Route path="/data-room" element={<DataRoom />} />
+          <Route path="/cadets/mentorings" element={<CadetMentornig />} />
           <Route path="/mentor-lists/:category" element={<MentorList />} />
           <Route
             path="/mentorings/reports/:reportId"
@@ -40,10 +48,10 @@ const App = observer(() => {
             path="/mentors/mentorings/:intraId"
             element={<MyMentoringMentor />}
           />
-          <Route path="" element={<MainPage />} />
-          <Route path="login" element={<Login />} />
-          <Route path="apply-page" element={<ApplyPage />} />
-          <Route path="report-details/:reportId" element={<ReportDetail />} />
+          <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/apply-page" element={<ApplyPage />} />
+          <Route path="/report-detail" element={<ReportDetail />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
           <Route path="/mentors/join" element={<SignUpMentor />} />

@@ -15,6 +15,7 @@ export const TOKEN_LIST = {
   ACCESS_TOKEN: 'access_token',
   USER_ROLE: 'user_role',
   INTRA_ID: 'intra_id',
+  JOIN: 'info_join',
 };
 
 /**

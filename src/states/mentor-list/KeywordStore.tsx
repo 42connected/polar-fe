@@ -1,5 +1,9 @@
 import { makeObservable, observable, action } from 'mobx';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import LoadingStore from '../loading/LoadingStore';
 
 class KeywordStore {
@@ -41,8 +45,12 @@ class KeywordStore {
 
   async Initializer(category: string) {
     LoadingStore.on();
-    await axiosInstance
-      .get(`/categories/${category}/keywords`)
+    //await axiosInstance
+    //  .get(`/categories/${category}/keywords`)
+    await axiosWithNoData(
+      AXIOS_METHOD_WITH_NO_DATA.GET,
+      `/categories/${category}/keywords`,
+    )
       .then(res =>
         res?.data?.map((e: string) => {
           this.keywords.push(e);
