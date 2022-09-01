@@ -48,9 +48,8 @@ import {
   ImgLogo4,
 } from './reportStyled';
 import AuthStore from '../../states/auth/AuthStore';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { debounce } from '@mui/material';
-import { isConstructorDeclaration } from 'typescript';
 
 const ReportpageStyle = styled.div<{
   height: number;
