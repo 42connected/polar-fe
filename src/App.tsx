@@ -45,7 +45,10 @@ const App = observer(() => {
           <Route path="/data-room" element={<DataRoom />} />
           <Route path="/cadets/mentorings" element={<CadetMentornig />} />
           <Route path="/mentor-lists/:category" element={<MentorList />} />
-          <Route path="/mentorings/reports/:reportId" element={<ReportForm />} />
+          <Route
+            path="/mentorings/reports/:reportId"
+            element={<ReportForm />}
+          />
           <Route
             path="/mentors/mentorings/:intraId"
             element={<MyMentoringMentor />}

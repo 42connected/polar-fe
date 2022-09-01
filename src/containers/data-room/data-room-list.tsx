@@ -13,7 +13,8 @@ import CheckBox from '../../components/check-box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import AuthStore from '../../states/auth/AuthStore';
-import { mentoringIds } from '../../interface/data-room/mentoring-ids.interface';
+import DataRoomListElementMobile from './data-room-list-element-mobile';
+import LoadingStore from '../../states/loading/LoadingStore';
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -32,10 +33,9 @@ const TableHead = styled.th<{ width?: string }>`
 `;
 
 const API_URL = `/bocals/data-room`;
-export const TOKEN = AuthStore.getAccessToken();
 const config = {
   headers: {
-    Authorization: `bearer ${TOKEN}`,
+    Authorization: `bearer ${AuthStore.getAccessToken()}`,
   },
 };
 
@@ -46,23 +46,19 @@ function DataRoomList(
   setOffset: (offset: number) => void,
   total: number,
   setTotal: (total: number) => void,
-  selectedList: mentoringIds[],
-  setSelectedList: (list: mentoringIds[]) => void,
+  selectedList: string[],
+  setSelectedList: (list: string[]) => void,
+  isDesktop: boolean,
 ) {
   const [datas, setDatas] = useState<dataRoomProps[]>(
     Array(query.take).fill({}),
   );
 
-  function buttonClickToggle(status: boolean, ids: mentoringIds) {
-    if (
-      status &&
-      selectedList.findIndex(data => data.reportId === ids.reportId) === -1
-    ) {
-      setSelectedList(selectedList.concat(ids));
+  function buttonClickToggle(status: boolean, id: string) {
+    if (status && selectedList.findIndex(data => data === id) === -1) {
+      setSelectedList(selectedList.concat(id));
     } else if (!status) {
-      setSelectedList(
-        selectedList.filter(data => data.reportId !== ids.reportId),
-      );
+      setSelectedList(selectedList.filter(data => data !== id));
     }
   }
 
@@ -70,7 +66,7 @@ function DataRoomList(
     if (status) {
       setSelectedList(
         datas.slice(0, offset).map(data => {
-          return { reportId: data.id, mentoringLogId: data.mentoringLogs.id };
+          return data.id;
         }),
       );
     } else {
@@ -79,6 +75,7 @@ function DataRoomList(
   }
 
   useEffect(() => {
+    LoadingStore.on();
     let url = `${API_URL}?page=${query.page}&take=${query.take}`;
 
     if (query.isAscending)
@@ -109,13 +106,11 @@ function DataRoomList(
       })
       .catch(error => {
         console.log(error);
+      })
+      .finally(() => {
+        LoadingStore.off();
       });
   }, [query, offset, setOffset, setTotal, total]);
-
-  useEffect(() => {
-    console.log(`changed!`);
-    console.log(selectedList);
-  }, [selectedList]);
 
   function onAscendingChange() {
     setQuery({
@@ -125,61 +120,72 @@ function DataRoomList(
   }
 
   return (
-    <Table>
-      <thead>
-        <tr>
-          <TableHead width="3%">
-            <CheckBox
-              key={'all'}
-              onChange={e => buttonAllToggle(e.target.checked)}
-              checked={
-                selectedList.length !== 0 && selectedList.length === offset
-                  ? true
-                  : false
-              }
-            ></CheckBox>
-          </TableHead>
-          <TableHead width="10%">신청 일시</TableHead>
-          <TableHead width="8%">멘토 이름</TableHead>
-          <TableHead width="8%">아이디</TableHead>
-          <TableHead width="8%">카뎃 이름</TableHead>
-          <TableHead width="8%">아이디</TableHead>
-          <TableHead width="4%">구분</TableHead>
-          <TableHead>
-            멘토링 시간{' '}
-            {query.isAscending === true && (
-              <FontAwesomeIcon
-                icon={faSortUp}
-                fixedWidth
-                size="lg"
-                onClick={onAscendingChange}
-              />
-            )}
-            {query.isAscending === false && (
-              <FontAwesomeIcon
-                icon={faSortDown}
-                fixedWidth
-                size="lg"
-                onClick={onAscendingChange}
-              />
-            )}
-          </TableHead>
-          <TableHead width="8%">금액</TableHead>
-          <TableHead width="8%">보고서</TableHead>
-          <TableHead width="8%">보고서 출력</TableHead>
-        </tr>
-      </thead>
-      <tbody>
-        {datas.map((data, index) => {
-          return DataRoomListElement(
-            data,
-            index,
-            buttonClickToggle,
-            selectedList,
-          );
-        })}
-      </tbody>
-    </Table>
+    <>
+      <Table>
+        <thead>
+          <tr>
+            <TableHead width="3%">
+              <CheckBox
+                key={'all'}
+                onChange={e => buttonAllToggle(e.target.checked)}
+                checked={
+                  selectedList.length !== 0 && selectedList.length === offset
+                    ? true
+                    : false
+                }
+              ></CheckBox>
+            </TableHead>
+            {isDesktop && <TableHead width="10%">신청 일시</TableHead>}
+            <TableHead width="8%">멘토 이름</TableHead>
+            <TableHead width="8%">아이디</TableHead>
+            <TableHead width="8%">카뎃 이름</TableHead>
+            <TableHead width="8%">아이디</TableHead>
+            <TableHead width="4%">구분</TableHead>
+            <TableHead width="27%">
+              멘토링 시간{' '}
+              {query.isAscending === true && (
+                <FontAwesomeIcon
+                  icon={faSortUp}
+                  fixedWidth
+                  size="lg"
+                  onClick={onAscendingChange}
+                />
+              )}
+              {query.isAscending === false && (
+                <FontAwesomeIcon
+                  icon={faSortDown}
+                  fixedWidth
+                  size="lg"
+                  onClick={onAscendingChange}
+                />
+              )}
+            </TableHead>
+            <TableHead width="8%">금액</TableHead>
+            <TableHead width="8%">보고서</TableHead>
+            {isDesktop && <TableHead width="8%">보고서 출력</TableHead>}
+          </tr>
+        </thead>
+        <tbody>
+          {datas.map((data, index) => {
+            if (isDesktop)
+              return DataRoomListElement(
+                data,
+                index,
+                buttonClickToggle,
+                selectedList,
+              );
+            else
+              return DataRoomListElementMobile(
+                data,
+                index,
+                buttonClickToggle,
+                selectedList,
+              );
+          })}
+        </tbody>
+      </Table>
+      )
+    </>
   );
 }
 
