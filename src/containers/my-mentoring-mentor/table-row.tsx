@@ -43,8 +43,10 @@ const TableColumnTopic = styled.div`
   width: 30%;
   justify-content: left;
   align-items: center;
-  padding-left: 30px;
   cursor: pointer;
+  text-decoration: underline wavy;
+  text-decoration-color: rgba(0, 0, 0, 0.2);
+  text-underline-position: under;
 `;
 
 const TableColumnTime = styled.div`
