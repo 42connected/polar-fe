@@ -227,8 +227,8 @@ const Header = () => {
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
                 <div>
-                  {AlertDetail()}
-                  {AuthStore.Logout()}
+                  {/* {AlertDetail()}
+                  {AuthStore.Logout()} */}
                 </div>
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
@@ -310,8 +310,8 @@ const Header = () => {
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
                 <div>
-                  {AlertDetail()}
-                  {AuthStore.Logout()}
+                  {/* {AlertDetail()}
+                  {AuthStore.Logout()} */}
                 </div>
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}

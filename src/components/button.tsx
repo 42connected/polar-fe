@@ -18,13 +18,14 @@ export interface ButtonProps
   backgroundColor?: string;
   hoverBackgroundColor?: string;
   onClick?: () => void;
+  isUnActivated?: boolean;
 }
 
 const ButtonStyle = styled.button<ButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  ${props => (props.isUnActivated ? `cursor: default` : `cursor: pointer`)};
   border-radius: ${props => props.borderRadius ?? '1rem'};
   border-width: ${props => props.borderWidth ?? '0rem'};
   border-style: solid;

@@ -152,15 +152,6 @@ function MentorDetail() {
     axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
   }, [mentorTags]);
 
-  // useEffect(() => {
-  //   const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
-  //   const config = {
-  //     headers: { Authorization: `Bearer ${accessToken}` },
-  //   };
-  //   const data = { isActive: isActivateMentor };
-  //   axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
-  // }, [isActivateMentor]);
-
   useEffect(() => {
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
     const config = {
@@ -240,7 +231,7 @@ function MentorDetail() {
               width="12rem"
               height="2.5rem"
               borderRadius="20px"
-              onClick={() => setIsActivateMentor(!isActivateMentor)}
+              isUnActivated={true}
             />
           </MentorInfoContent>
         </MentorInfo>
@@ -250,7 +241,7 @@ function MentorDetail() {
               text="멘토링 신청하기"
               width="21rem"
               height="6rem"
-              background-color={theme.colors.polarSimpleMain}
+              backgroundColor={theme.colors.polarSimpleMain}
               color={theme.colors.backgoundWhite}
             />
           </Link>
@@ -259,8 +250,9 @@ function MentorDetail() {
             text="멘토링 신청하기"
             width="21rem"
             height="6rem"
-            background-color={theme.colors.polarSimpleMain}
+            backgroundColor={theme.colors.grayThree}
             color={theme.colors.backgoundWhite}
+            isUnActivated={true}
           />
         )}
       </MentorHeader>
@@ -309,18 +301,7 @@ function MentorDetail() {
                       );
                     }}
                   />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faPencil}
-                    className="icon"
-                    size="xs"
-                    onClick={() => {
-                      setIsActivateIntroductionEdit(
-                        !isActivateIntroductionEdit,
-                      );
-                    }}
-                  />
-                )}
+                ) : null}
               </MenuBox>
               {isActivateIntroductionEdit ? (
                 <>
@@ -475,46 +456,21 @@ function MentorDetail() {
                     text="제출하기"
                     width="12rem"
                     height="3.5rem"
-                    backgroundColor={theme.colors.grayThree}
-                    hoverBackgroundColor={theme.colors.polarSimpleMain}
+                    backgroundColor={
+                      inputComment.length
+                        ? theme.colors.polarSimpleMain
+                        : theme.colors.grayThree
+                    }
                     borderRadius="20px"
                     onClick={() => {
                       handleCommentSubmit();
                     }}
+                    isUnActivated={inputComment.length === 0}
                   />
                 </SubmitButton>
               </Comment>
             </ReplyContainer>
-          ) : (
-            // TODO: DELETE
-            <ReplyContainer>
-              <Comment>
-                <InputUserContent>jojoo</InputUserContent>
-                <InputCounter
-                  value={inputComment}
-                  setter={setInputComment}
-                  countDisabled={true}
-                  inputDisabled={false}
-                  maxLength={300}
-                  width={'100%'}
-                  height={'6rem'}
-                />
-                <SubmitButton>
-                  <Button
-                    text="제출하기"
-                    width="12rem"
-                    height="3.5rem"
-                    backgroundColor={theme.colors.grayThree}
-                    hoverBackgroundColor={theme.colors.polarSimpleMain}
-                    borderRadius="20px"
-                    onClick={() => {
-                      handleCommentSubmit();
-                    }}
-                  />
-                </SubmitButton>
-              </Comment>
-            </ReplyContainer>
-          )}
+          ) : null}
           <MentorCommetsContent>
             {comments?.map((comment: CommentProps) => {
               return (
@@ -534,8 +490,9 @@ function MentorDetail() {
                           7,
                         )}.${mentor?.updatedAt.substring(8, 10)}`}</div>
                       ) : null}
-                      {user?.intraId ===
-                      (comment?.cadets?.intraId && user && comment?.cadets) ? (
+                      {user?.intraId === comment?.cadets?.intraId &&
+                      user &&
+                      comment?.cadets ? (
                         <FontAwesomeIcon
                           icon={faXmark}
                           className="icon"
@@ -544,13 +501,7 @@ function MentorDetail() {
                             deleteComment(comment?.id);
                           }}
                         />
-                      ) : (
-                        <FontAwesomeIcon
-                          icon={faXmark}
-                          className="icon"
-                          color={'red'}
-                        />
-                      )}
+                      ) : null}
                     </div>
                     <div>{comment?.content}</div>
                   </UserContent>
