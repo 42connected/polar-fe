@@ -14,6 +14,7 @@ import { InputCounter } from '../../components/input-counter';
 import ButtonBoxComponent from '../../components/mentor-detail/button-box';
 import TimeTableMuiComponent from '../../components/mentor-detail/mui-table';
 import TagInputBoxComponent from '../../components/mentor-detail/tag-input-box';
+import { TwoButtonModal } from '../../components/modal/two-button-modal.tsx/two-button-modal';
 import PageNationComponent from '../../components/page-nation';
 import ReportSummaryInputComponent from '../../components/report-summery-input';
 import {
@@ -70,6 +71,9 @@ function MentorDetail() {
   const [take, setTake] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
   const [maxPage, setMaxPage] = useState<number>(1);
+  const [isActivateDeleteModal, setIsActivateDeleteModal] =
+    useState<boolean>(false);
+
   const setMentorAvailableTimeData = () => {
     const appointmentsData: appointmentsInterface[] = [];
     mockMentorAvailableTimeToArray.forEach(
@@ -214,6 +218,26 @@ function MentorDetail() {
 
   return (
     <MentorDetailTag>
+      {/* {isActivateDeleteModal && (
+        <TwoButtonModal
+          Text="정말 삭제하시겠습니까?"
+          TitleText="asdasd"
+          XButtonFunc={() => {
+            console.log('x');
+            setIsActivateDeleteModal(false);
+          }}
+          Button1Func={() => {
+            console.log('1');
+            setIsActivateDeleteModal(false);
+          }}
+          Button2Func={() => {
+            console.log('2');
+            setIsActivateDeleteModal(false);
+          }}
+          Button1Text="1"
+          Button2Text="2"
+        />
+      )} */}
       <MentorHeader>
         <MentorInfo>
           <MentorImage src={mentor?.profileImage} />
@@ -323,14 +347,34 @@ function MentorDetail() {
                     value={mentorTags}
                   />
                   <ButtonBox>
+                    {isActivateDeleteModal && (
+                      <TwoButtonModal
+                        Text="수정하시겠습니까?"
+                        TitleText="수정"
+                        XButtonFunc={() => {
+                          setIsActivateDeleteModal(false);
+                        }}
+                        Button1Func={() => {
+                          setIsActivateDeleteModal(false);
+                          handleSubmitIntroductionTags();
+                        }}
+                        Button2Func={() => {
+                          setIsActivateDeleteModal(false);
+                          setIsActivateIntroductionEdit(
+                            !isActivateIntroductionEdit,
+                          );
+                        }}
+                        Button1Text="네"
+                        Button2Text="아니요"
+                      />
+                    )}
                     <Button
-                      text="편집완료"
+                      text="수정완료"
                       borderRadius="20px"
                       onClick={() => {
                         setIsActivateIntroductionEdit(
                           !isActivateIntroductionEdit,
                         );
-                        handleSubmitIntroductionTags();
                       }}
                     />
                   </ButtonBox>
@@ -438,6 +482,7 @@ function MentorDetail() {
         </MentorBody3>
         <MentorCommets>
           <MenuBox>댓글</MenuBox>
+
           {user?.intraId ? (
             <ReplyContainer>
               <Comment>
@@ -490,14 +535,13 @@ function MentorDetail() {
                           7,
                         )}.${mentor?.updatedAt.substring(8, 10)}`}</div>
                       ) : null}
-                      {user?.intraId === comment?.cadets?.intraId &&
-                      user &&
-                      comment?.cadets ? (
+                      {user?.intraId === comment?.cadets?.intraId && user ? (
                         <FontAwesomeIcon
                           icon={faXmark}
                           className="icon"
                           color={'red'}
                           onClick={() => {
+                            setIsActivateDeleteModal(true);
                             deleteComment(comment?.id);
                           }}
                         />
