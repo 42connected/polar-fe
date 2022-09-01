@@ -39,7 +39,7 @@ export function OneButtonModal(props: OneButtonModalProps) {
             onClick={props.ButtonFunc}
             style={{ backgroundColor: props.ButtonBg }}
           >
-            {sliceMoreInfoStr(props.ButtonText, 4)}
+            {sliceMoreInfoStr(props.ButtonText, 6)}
           </ModalButton>
         </ModalButtonContainer>
       </ModalBox>

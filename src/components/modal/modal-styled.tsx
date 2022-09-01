@@ -52,7 +52,7 @@ export const ModalBackground = styled.div`
   right: 0;
   background-color: rgba(246, 246, 246, 0.7);
 
-  z-index: 999;
+  z-index: 1004;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -114,8 +114,7 @@ export const ModalButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80px;
-  height: 40px;
+  padding: 7px 10px;
   border-radius: 10px;
   &:hover {
     opacity: 0.8;

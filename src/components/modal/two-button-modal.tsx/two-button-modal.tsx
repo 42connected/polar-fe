@@ -42,13 +42,13 @@ export function TwoButtonModal(props: TwoButtonModalProps) {
             onClick={props.Button1Func}
             style={{ background: props.Button1bg }}
           >
-            {sliceMoreInfoStr(props.Button1Text, 4)}
+            {sliceMoreInfoStr(props.Button1Text, 6)}
           </ModalButton>
           <ModalButton
             onClick={props.Button2Func}
             style={{ background: props.Button2bg }}
           >
-            {sliceMoreInfoStr(props.Button2Text, 4)}
+            {sliceMoreInfoStr(props.Button2Text, 6)}
           </ModalButton>
         </ModalButtonContainer>
       </ModalBox>
