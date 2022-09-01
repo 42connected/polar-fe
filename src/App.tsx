@@ -20,6 +20,8 @@ import SignUpCadet from './containers/signup/signup-cadet';
 import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
 import UserJoinStore from './states/user-join/UserJoinStore';
 import { UserJoin } from './containers/user-join/user-join';
+import ErrorStore from './states/error/ErrorStore';
+import { Error } from './containers/error/error';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -33,6 +35,9 @@ const App = observer(() => {
     <>
       {LoadingStore.isLoding && <Loading />}
       <Router basename={'/'}>
+        {ErrorStore.isError && (
+          <Error TitleText={ErrorStore.Title} errorMsg={ErrorStore.errorMsg} />
+        )}
         {UserJoinStore.needJoin && <UserJoin />}
         <ScrollToTop />
         <Header />

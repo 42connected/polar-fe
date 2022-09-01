@@ -1,9 +1,9 @@
 import { action, makeObservable, observable } from 'mobx';
 import {
-  axiosInstance,
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
 } from '../../context/axios-interface';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
 import LoadingStore from '../loading/LoadingStore';
 
 export interface MentoringLogs {
@@ -56,12 +56,6 @@ class MentorLogStore {
 
   async Initializer(token: string, page: number) {
     LoadingStore.on();
-    //await axiosInstance
-    //  .get(`/mentors/mentorings?take=15&page=${page}`, {
-    //    headers: {
-    //      Authorization: `bearer ${token}`,
-    //    },
-    //  })
     await axiosWithNoData(
       AXIOS_METHOD_WITH_NO_DATA.GET,
       `/mentors/mentorings?take=15&page=${page}`,
@@ -76,7 +70,7 @@ class MentorLogStore {
         this.total = res.data.total;
       })
       .catch(err => {
-        //console.log(err);
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
       });
     LoadingStore.off();
   }
