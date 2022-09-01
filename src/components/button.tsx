@@ -16,6 +16,7 @@ export interface ButtonProps
   font?: string;
   boxShadow?: string;
   backgroundColor?: string;
+  hoverBackgroundColor?: string;
   onClick?: () => void;
 }
 
@@ -41,6 +42,9 @@ const ButtonStyle = styled.button<ButtonProps>`
       props.backgroundColor
         ? darken(props.backgroundColor, 0.15)
         : darken(theme.colors.polarBrightMain, 0.15)};
+  }
+  &:hover {
+    background-color: ${props => props.hoverBackgroundColor ?? ''};
   }
 `;
 

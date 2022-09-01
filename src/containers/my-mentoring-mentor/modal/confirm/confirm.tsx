@@ -78,10 +78,15 @@ export function Confirm(props: ConfirmProps) {
           setter={props.rejectReasonSetter}
           value={props.rejectReason}
           maxLength={250}
-          disabled={false}
+          inputDisabled={false}
+          countDisabled={false}
         />
       ) : (
-        <InputCounter value={props.content} disabled={true} />
+        <InputCounter
+          value={props.content}
+          inputDisabled={true}
+          countDisabled={true}
+        />
       )}
     </Container>
   );

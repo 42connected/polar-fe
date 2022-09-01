@@ -49,7 +49,7 @@ function MentorDetail() {
 
   const [isActiveMentorDetail, setIsActiveMentorDetail] =
     useState<boolean>(false);
-  const [comments, setComments] = useState<CommentsWithPageProps | null>(null);
+  const [comments, setComments] = useState<CommentProps[]>([]);
   const [appointments, setAppointments] =
     useState<appointmentsInterface[]>(appointmentsTest);
   const [isActivateIntroductionEdit, setIsActivateIntroductionEdit] =
@@ -61,7 +61,9 @@ function MentorDetail() {
     useState<boolean>(false);
   const [mentorInfo, setMentorInfo] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
-
+  const [take, setTake] = useState<number>(5);
+  const [page, setPage] = useState<number>(1);
+  const [maxPage, setMaxPage] = useState<number>(1);
   const setMentorAvailableTimeData = () => {
     const appointmentsData: appointmentsInterface[] = [];
     mockMentorAvailableTimeToArray.forEach(
@@ -97,11 +99,10 @@ function MentorDetail() {
   const getParams = useParams();
   useEffect(() => {
     const params = {
-      page: 1,
-      take: 5,
+      page: page,
+      take: take,
     };
     axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
-      console.log(result.data);
       setMentor(result.data);
       setMentorTags(result.data.tags);
       setMentorIntroduction(
@@ -114,7 +115,8 @@ function MentorDetail() {
     axiosInstance
       .get(`/comments/${getParams.intraId}`, { params })
       .then(result => {
-        setComments(result.data);
+        setComments(result.data.comments);
+        setMaxPage(Math.ceil(result.data.totalCount / take));
       });
 
     const appointmentsData = setMentorAvailableTimeData();
@@ -170,7 +172,7 @@ function MentorDetail() {
     if (inputComment !== '') {
       const params = {
         page: 1,
-        take: 5,
+        take: page * take,
       };
       const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
       const config = {
@@ -183,7 +185,8 @@ function MentorDetail() {
           axiosInstance
             .get(`/comments/${getParams.intraId}`, { params })
             .then(result => {
-              setComments(result.data);
+              setComments(result.data.comments);
+              setMaxPage(Math.ceil(result.data.totalCount / take));
             })
             .catch(err => {
               console.log(err);
@@ -196,7 +199,7 @@ function MentorDetail() {
   const deleteComment = (commentId: any) => {
     const params = {
       page: 1,
-      take: 5,
+      take: take * page,
     };
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
     const config = {
@@ -206,24 +209,11 @@ function MentorDetail() {
       axiosInstance
         .get(`/comments/${getParams.intraId}`, { params })
         .then(result => {
-          setComments(result.data);
+          setComments(result.data.comments);
+          setMaxPage(Math.ceil(result.data.totalCount / take));
         });
     });
   };
-
-  // const mentoringLogList = mentoringLog.map(log => {
-  //   const makeDate = `${log.meetingAt
-  //     .getFullYear()
-  //     .toString()
-  //     .slice(-2)}/${log.meetingAt.getMonth()}/${log.meetingAt.getDay()}`;
-  //   return (
-  //     <MenuBox2>
-  //       <div>{log.topic}</div>
-  //       <div>{log.state}</div>
-  //       <div>{makeDate}</div>
-  //     </MenuBox2>
-  //   );
-  // });
 
   return (
     <MentorDetailTag>
@@ -331,7 +321,8 @@ function MentorDetail() {
                   <InputCounter
                     value={mentorIntroduction}
                     setter={setMentorIntroduction}
-                    disabled={false}
+                    countDisabled={false}
+                    inputDisabled={false}
                     maxLength={150}
                     width={'100%'}
                     fontSize={theme.fontFrame.bodyMiddle}
@@ -432,7 +423,8 @@ function MentorDetail() {
                   <InputCounter
                     value={mentorInfo}
                     setter={setMentorInfo}
-                    disabled={false}
+                    countDisabled={false}
+                    inputDisabled={false}
                     maxLength={10000}
                     width={'100%'}
                     height={'50rem'}
@@ -459,8 +451,66 @@ function MentorDetail() {
         </MentorBody3>
         <MentorCommets>
           <MenuBox>댓글</MenuBox>
+          {user?.intraId ? (
+            <ReplyContainer>
+              <Comment>
+                <InputUserContent>{user.intraId}</InputUserContent>
+                <InputCounter
+                  value={inputComment}
+                  setter={setInputComment}
+                  countDisabled={true}
+                  inputDisabled={false}
+                  maxLength={300}
+                  width={'100%'}
+                  height={'6rem'}
+                />
+                <SubmitButton>
+                  <Button
+                    text="제출하기"
+                    width="12rem"
+                    height="3.5rem"
+                    backgroundColor={theme.colors.grayThree}
+                    hoverBackgroundColor={theme.colors.polarSimpleMain}
+                    borderRadius="20px"
+                    onClick={() => {
+                      handleCommentSubmit();
+                    }}
+                  />
+                </SubmitButton>
+              </Comment>
+            </ReplyContainer>
+          ) : (
+            // TODO: DELETE
+            <ReplyContainer>
+              <Comment>
+                <InputUserContent>jojoo</InputUserContent>
+                <InputCounter
+                  value={inputComment}
+                  setter={setInputComment}
+                  countDisabled={true}
+                  inputDisabled={false}
+                  maxLength={300}
+                  width={'100%'}
+                  height={'6rem'}
+                />
+                <SubmitButton>
+                  <Button
+                    text="제출하기"
+                    width="12rem"
+                    height="3.5rem"
+                    backgroundColor={theme.colors.grayThree}
+                    hoverBackgroundColor={theme.colors.polarSimpleMain}
+                    borderRadius="20px"
+                    onClick={() => {
+                      handleCommentSubmit();
+                    }}
+                  />
+                </SubmitButton>
+              </Comment>
+            </ReplyContainer>
+          )}
           <MentorCommetsContent>
-            {comments?.comments?.map((comment: CommentProps) => {
+            {comments?.map((comment: CommentProps) => {
               return (
                 <Comment>
                   <img src={comment?.cadets?.profileImage} />
@@ -478,9 +528,8 @@ function MentorDetail() {
                           7,
                         )}.${mentor?.updatedAt.substring(8, 10)}`}</div>
                       ) : null}
-                      {user?.intraId === comment?.cadets?.intraId &&
-                      user &&
-                      comment?.cadets ? (
+                      {user?.intraId ===
+                      (comment?.cadets?.intraId && user && comment?.cadets) ? (
                         <FontAwesomeIcon
                           icon={faXmark}
                           className="icon"
@@ -494,9 +543,6 @@ function MentorDetail() {
                           icon={faXmark}
                           className="icon"
                           color={'red'}
-                          onClick={() => {
-                            deleteComment(comment?.id);
-                          }}
                         />
                       )}
                     </div>
@@ -505,32 +551,54 @@ function MentorDetail() {
                 </Comment>
               );
             })}
+            {maxPage <= page ? null : (
+              <CommentPageNation
+                onClick={() => {
+                  const params = {
+                    page: page + 1,
+                    take: take,
+                  };
+                  axiosInstance
+                    .get(`/comments/${getParams.intraId}`, { params })
+                    .then(response => {
+                      if (response.data.comments !== 0) {
+                        setComments([...comments, ...response.data.comments]);
+                      }
+                      setMaxPage(Math.ceil(response.data.total / take));
+                      if (response.data.total > page * take) {
+                        setPage(page + 1);
+                      }
+                    })
+                    .catch(error => {
+                      console.log(error);
+                    });
+                }}
+              >
+                댓글 더보기
+              </CommentPageNation>
+            )}
           </MentorCommetsContent>
-          <InputCounter
-            value={inputComment}
-            setter={setInputComment}
-            disabled={false}
-            maxLength={300}
-            width={'100%'}
-          />
-          <SubmitButton>
-            <Button
-              text="제출하기"
-              width="12rem"
-              height="3.5rem"
-              backgroundColor={theme.colors.polarSimpleMain}
-              borderRadius="20px"
-              onClick={() => {
-                handleCommentSubmit();
-              }}
-            />
-          </SubmitButton>
         </MentorCommets>
       </MentorBody>
     </MentorDetailTag>
   );
 }
 
+const InputUserContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ${theme.fontFrame.titleSmall}
+  margin-right: 1rem;
+`;
+
+const ReplyContainer = styled.div`
+  border-bottom: 1px solid ${theme.colors.polarSimpleMain};
+`;
+
+const CommentPageNation = styled.div`
+  cursor: pointer;
+`;
 const ButtonBox = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -574,6 +642,10 @@ const UserContent = styled.div`
   flex-direction: column;
   justify-content: space-around;
   margin-left: 1.5rem;
+  .inputCommentName {
+    font-weight: 900;
+    margin-right: 1rem;
+  }
   div:first-child {
     display: flex;
     text-align: end;
@@ -602,6 +674,7 @@ const UserContent = styled.div`
 const Comment = styled.div`
   display: flex;
   margin: 2rem;
+  position: relative;
   img {
     width: 5rem;
     height: 5rem;
@@ -614,35 +687,12 @@ const TimTableScroll = styled.div`
   height: 70rem;
 `;
 
-const MenuBox2 = styled.div`
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(1, 1fr);
-  border-bottom: 1px solid ${theme.colors.grayFive};
-  width: 100%;
-  height: 3rem;
-  box-sizing: border-box;
-  overflow-wrap: break-word;
-
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-
-  div:nth-child(2) {
-    color: ${theme.colors.polarSimpleMain};
-  }
-`;
-
 const MentorCommetsContent = styled.div``;
 
 const SubmitButton = styled.div`
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  margin-left: 1rem;
 `;
 
 const MentorCommets = styled.div`
@@ -664,8 +714,6 @@ const MentorBody3Toggle = styled.div`
 const MentorBody3 = styled.div`
   margin-top: 10%;
 `;
-
-const MenuBoxHead = styled.div``;
 
 const MentorBody2 = styled.div`
   margin-top: 10%;
