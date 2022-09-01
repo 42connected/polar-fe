@@ -299,53 +299,59 @@ const ReportDetail = () => {
 
   return (
     <div className="reportpage">
-      {/* {token ? (
+      {token ? (
         role === USER_ROLES.BOCAL ? (
-          isMobile ? ( */}
-      {/* <ReportpageStyle2>
-        <ImgBody>
-          <SimpleComponent printRef={componentRef} reportdata={reportdata} />
-        </ImgBody>
-        <ReactToPrint
-          content={() => componentRef.current}
-          trigger={() => (
-            <ButtonBody>
-              <PrintButton ref={buttonRef}>출력</PrintButton>
-            </ButtonBody>
-          )}
-          onAfterPrint={() => {
-            if (isAutoPrint) {
-              navigate('/data-room');
-            }
-          }}
-        />
-      </ReportpageStyle2>
-      ) : ( */}
-      <ReportpageStyle>
-        <ImgBody>
-          <SimpleComponent printRef={componentRef} reportdata={reportdata} />
-        </ImgBody>
-        <ReactToPrint
-          content={() => componentRef.current}
-          trigger={() => (
-            <ButtonBody>
-              <PrintButton ref={buttonRef}>출력</PrintButton>
-            </ButtonBody>
-          )}
-          onAfterPrint={() => {
-            if (isAutoPrint) {
-              navigate('/data-room');
-            }
-          }}
-        />
-      </ReportpageStyle>
-      {/* )
+          isMobile ? (
+            <ReportpageStyle2>
+              <ImgBody>
+                <SimpleComponent
+                  printRef={componentRef}
+                  reportdata={reportdata}
+                />
+              </ImgBody>
+              <ReactToPrint
+                content={() => componentRef.current}
+                trigger={() => (
+                  <ButtonBody>
+                    <PrintButton ref={buttonRef}>출력</PrintButton>
+                  </ButtonBody>
+                )}
+                onAfterPrint={() => {
+                  if (isAutoPrint) {
+                    navigate('/data-room');
+                  }
+                }}
+              />
+            </ReportpageStyle2>
+          ) : (
+            <ReportpageStyle>
+              <ImgBody>
+                <SimpleComponent
+                  printRef={componentRef}
+                  reportdata={reportdata}
+                />
+              </ImgBody>
+              <ReactToPrint
+                content={() => componentRef.current}
+                trigger={() => (
+                  <ButtonBody>
+                    <PrintButton ref={buttonRef}>출력</PrintButton>
+                  </ButtonBody>
+                )}
+                onAfterPrint={() => {
+                  if (isAutoPrint) {
+                    navigate('/data-room');
+                  }
+                }}
+              />
+            </ReportpageStyle>
+          )
         ) : (
           <div>{AlertDetail(true)}</div>
         )
       ) : (
         <div>{AlertDetail(false)}</div>
-      )} */}
+      )}
     </div>
   );
 };
