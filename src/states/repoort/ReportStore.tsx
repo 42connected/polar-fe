@@ -1,11 +1,11 @@
 import { makeObservable, observable } from 'mobx';
 import {
-  axiosInstance,
   axiosWithData,
   axiosWithNoData,
   AXIOS_METHOD_WITH_DATA,
   AXIOS_METHOD_WITH_NO_DATA,
 } from '../../context/axios-interface';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
 import LoadingStore from '../loading/LoadingStore';
 
 export interface ReportSaveFormdata {
@@ -121,13 +121,6 @@ class ReportStore {
     this.appendFormdataExceptImage(data);
     this.save.append('isDone', 'true');
     LoadingStore.on();
-    //await axiosInstance
-    //  .patch(`/reports/${reportId}`, this.save, {
-    //    headers: {
-    //      'Content-Type': 'multipart/form-data',
-    //      Authorization: `bearer ${token}`,
-    //    },
-    //  })
     await axiosWithData(
       AXIOS_METHOD_WITH_DATA.PACTH,
       `/reports/${reportId}`,
@@ -145,7 +138,7 @@ class ReportStore {
         window.location.reload();
       })
       .catch(err => {
-        alert(`${err?.response?.data?.message}`);
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
         this.deleteFormdataExceptImage();
       });
     LoadingStore.off();
@@ -158,13 +151,6 @@ class ReportStore {
   ) {
     this.appendFormdataExceptImage(data);
     LoadingStore.on();
-    //await axiosInstance
-    //  .patch(`/reports/${reportId}`, this.save, {
-    //    headers: {
-    //      'Content-Type': 'multipart/form-data',
-    //      Authorization: `bearer ${token}`,
-    //    },
-    //  })
     await axiosWithData(
       AXIOS_METHOD_WITH_DATA.PACTH,
       `/reports/${reportId}`,
@@ -182,7 +168,7 @@ class ReportStore {
         window.location.reload();
       })
       .catch(err => {
-        alert(`${err?.response?.data?.message}`);
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
         this.deleteFormdataExceptImage();
       });
     LoadingStore.off();
@@ -190,16 +176,6 @@ class ReportStore {
 
   async createReport(mentoringLogId: string, token: string) {
     LoadingStore.on();
-    //await axiosInstance
-    //  .post(
-    //    `/reports/${mentoringLogId}`,
-    //    {},
-    //    {
-    //      headers: {
-    //        Authorization: `bearer ${token}`,
-    //      },
-    //    },
-    //  )
     await axiosWithData(
       AXIOS_METHOD_WITH_DATA.POST,
       `/reports/${mentoringLogId}`,
@@ -214,19 +190,13 @@ class ReportStore {
         document.location.href = `/mentorings/reports/${res.data}`;
       })
       .catch(err => {
-        alert(`${err?.response?.data?.message}`);
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
       });
     LoadingStore.off();
   }
 
   async Initializer(reportId: string, token: string) {
     LoadingStore.on();
-    //await axiosInstance
-    //  .get(`/reports/${reportId}`, {
-    //    headers: {
-    //      Authorization: `bearer ${token}`,
-    //    },
-    //  })
     await axiosWithNoData(
       AXIOS_METHOD_WITH_NO_DATA.GET,
       `/reports/${reportId}`,
@@ -240,7 +210,7 @@ class ReportStore {
         this.report = res.data;
       })
       .catch(err => {
-        alert(`${err?.response?.data?.message}`);
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
       });
     LoadingStore.off();
   }

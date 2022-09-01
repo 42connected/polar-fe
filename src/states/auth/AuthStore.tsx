@@ -10,6 +10,7 @@ import {
   removeCookie,
   TOKEN_LIST,
 } from '../../context/cookies';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
 
 export interface User {
   intraId: string;
@@ -57,7 +58,9 @@ class AuthStore {
       .then(res => {
         document.location.href = res.data;
       })
-      .catch(err => alert(err));
+      .catch(err => {
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
+      });
   }
 
   /**
