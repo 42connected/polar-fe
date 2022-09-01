@@ -65,7 +65,7 @@ const MainPage = () => {
 
   useEffect(() => {
     getKeywords();
-    window.screen.width <= 1070 ? setIsMobile(true) : setIsMobile(false);
+    window.innerWidth <= 1070 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
