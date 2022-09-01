@@ -16,7 +16,6 @@ export function Error(props: ErrorProps) {
       Text={props.errorMsg}
       XButtonFunc={() => {
         ErrorStore.off();
-        navigate(-1);
       }}
       ButtonText="뒤로 가기"
       ButtonFunc={() => {
