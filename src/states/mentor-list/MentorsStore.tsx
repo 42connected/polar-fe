@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { action, makeObservable, observable } from 'mobx';
 import qs from 'qs';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
 import LoadingStore from '../loading/LoadingStore';
 
 export interface Categories {
@@ -61,16 +65,18 @@ class MentorsStore {
     };
     const params = { mentorName: name, keywords: keywords };
     LoadingStore.on();
-    await axiosInstance
-      .get(`/categories/${category}`, {
+    await axiosWithNoData(
+      AXIOS_METHOD_WITH_NO_DATA.GET,
+      `/categories/${category}`,
+      {
         params,
-      })
+      },
+    )
       .then(res => {
         this.mentorsList = res.data;
       })
       .catch(err => {
-        alert(`${err?.response?.data?.message}`);
-        document.location.href = '/mentor-lists/개발';
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
       });
     LoadingStore.off();
   }

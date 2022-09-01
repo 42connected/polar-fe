@@ -1,16 +1,8 @@
-import styled, { css } from 'styled-components';
-import theme from '../../styles/theme';
 import {
   ClickContainer,
   ClickContainer2,
-  ClickedSwapButton,
   IconImageStyle,
   IconImageStyle2,
-  ImageBox,
-  ImageGrid1,
-  ImageGrid2,
-  ImageStyle,
-  ImageStyle2,
   keywordsPro,
   KeywordStyle,
   KeywordStyle2,
@@ -19,17 +11,15 @@ import {
   MainContainer2,
   MainImageStyle,
   MainImageStyle2,
-  MoImageGrid1,
-  MoImageStyle,
-  MoImageStyle2,
-  SwapButton,
-  TextStyle,
-  TextUnder,
   TitleStyle,
   TitleStyle2,
 } from './mainPageStyled';
 import { useEffect, useRef, useState } from 'react';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -59,7 +49,11 @@ const MainPage = () => {
   const getKeywords = async () => {
     try {
       setLoading(true);
-      const save = await axiosInstance.get('/categories');
+      const save = await axiosWithNoData(
+        AXIOS_METHOD_WITH_NO_DATA.GET,
+        '/categories',
+      );
+      //const save = await axiosInstance.get('/categories');
       const tmp = save.data;
       setKeywords(tmp);
       setLoading(false);

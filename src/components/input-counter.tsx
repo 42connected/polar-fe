@@ -53,7 +53,7 @@ export function InputCounter(props: InputCounterProps) {
       />
       {props.countDisabled ? null : (
         <Count {...props}>
-          {props.value.length} / {props.maxLength}
+          {props.value ? props.value.length : 0} / {props.maxLength}
         </Count>
       )}
     </>

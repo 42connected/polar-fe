@@ -14,7 +14,6 @@ export const Containers = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: 1fr;
-  gird-gap: 2000px;
 `;
 
 export const TopLetter = styled.h1`
@@ -65,10 +64,9 @@ const SingupImg = styled.img`
 `;
 
 export const NameInput = styled.input`
-  width: 27rem;b
+  width: 27rem;
   height: 4rem;
   border-radius: 20px;
-  align: center;
   margin-bottom: 10px;
 `;
 
@@ -77,6 +75,9 @@ export const NameInput = styled.input`
 // };
 
 async function onButtonSubmit() {
+  /**
+   * TODO: Add UserJoinStore.off()
+   */
   try {
     axios.defaults.headers.common[
       'Authorization'

@@ -16,7 +16,13 @@ import TimeTableMuiComponent from '../../components/mentor-detail/mui-table';
 import TagInputBoxComponent from '../../components/mentor-detail/tag-input-box';
 import PageNationComponent from '../../components/page-nation';
 import ReportSummaryInputComponent from '../../components/report-summery-input';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithData,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_DATA,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import { getCookie, TOKEN_LIST } from '../../context/cookies';
 import { appointmentsInterface } from '../../interface/mentor-detail/appointments.interface';
 import { CommentProps } from '../../interface/mentor-detail/comment-props.interface';

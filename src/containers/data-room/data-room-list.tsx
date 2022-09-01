@@ -1,5 +1,9 @@
 import DataRoomListElement from './data-room-list-element';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { dataRoomQuery } from '../../interface/data-room/data-room-query.interface';
@@ -84,8 +88,9 @@ function DataRoomList(
       url = url.concat(`&mentorIntra=${query.mentorIntra}`);
     if (query.mentorName) url = url.concat(`&mentorName=${query.mentorName}`);
 
-    axiosInstance
-      .get(url, config)
+    //axiosInstance
+    //  .get(url, config)
+    axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, url, config)
       .then(async response => {
         const tmpOffset: number =
           query.page * query.take > response.data.total

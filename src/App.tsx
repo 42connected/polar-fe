@@ -18,6 +18,10 @@ import { Loading } from './components/loading';
 import { Login } from './containers/login/login';
 import SignUpCadet from './containers/signup/signup-cadet';
 import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
+import UserJoinStore from './states/user-join/UserJoinStore';
+import { UserJoin } from './containers/user-join/user-join';
+import ErrorStore from './states/error/ErrorStore';
+import { Error } from './containers/error/error';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -29,26 +33,27 @@ import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
 const App = observer(() => {
   return (
     <>
-      {LoadingStore.isLoding ? <Loading /> : null}
+      {LoadingStore.isLoding && <Loading />}
       <Router basename={'/'}>
+        {ErrorStore.isError && (
+          <Error TitleText={ErrorStore.Title} errorMsg={ErrorStore.errorMsg} />
+        )}
+        {UserJoinStore.needJoin && <UserJoin />}
         <ScrollToTop />
         <Header />
         <Routes>
           <Route path="/data-room" element={<DataRoom />} />
           <Route path="/cadets/mentorings" element={<CadetMentornig />} />
           <Route path="/mentor-lists/:category" element={<MentorList />} />
-          <Route
-            path="/mentorings/reports/:reportId"
-            element={<ReportForm />}
-          />
+          <Route path="/mentorings/reports/:reportId" element={<ReportForm />} />
           <Route
             path="/mentors/mentorings/:intraId"
             element={<MyMentoringMentor />}
           />
-          <Route path="" element={<MainPage />} />
-          <Route path="login" element={<Login />} />
-          <Route path="apply-page" element={<ApplyPage />} />
-          <Route path="report-details/:intraId" element={<ReportDetail />} />
+          <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/apply-page" element={<ApplyPage />} />
+          <Route path="/report-detail" element={<ReportDetail />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
           <Route path="/mentors/join" element={<SignUpMentor />} />

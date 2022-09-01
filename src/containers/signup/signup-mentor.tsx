@@ -12,6 +12,7 @@ import { Navigate } from 'react-router-dom';
 import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
 import AuthStore from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
+import UserJoinStore from '../../states/user-join/UserJoinStore';
 
 export const ContainersPc = styled.div`
   display: grid;
@@ -29,7 +30,10 @@ export const ContainersMobile = styled.div`
   grid-template-rows: 1fr auto;
   grid-column-gap: 10rem;
   justify-items: center;
-  zoom: 0.7;
+  -webkit-transform: scale(0.7);
+  transform: scale(0.7);
+  transform-origin: left top;
+  padding-left: 2rem;
 `;
 
 export const RequiredWrapper = styled.div`
@@ -39,6 +43,7 @@ export const RequiredWrapper = styled.div`
   padding-bottom: 100px;
   padding-top: 4rem;
   width: 400px;
+  padding-left: 2rem;
 `;
 
 export const OptionWrapper = styled.div`
@@ -101,14 +106,13 @@ export const EmailInput = styled.input`
 `;
 
 export const CertificationSendingButton = styled.button`
+  justify-content: center;
   margin-left: 240px;
   width: 70.19px;
   height: 35.11px;
-  justify-content: center;
   background: ${defaultTheme.colors.polarSimpleMain};
   color: WHITE;
   padding-top: 1rem;
-  padding-right: 0.8rem;
   border: none;
   cursor: pointer;
   font-size: 27px;
@@ -269,6 +273,7 @@ const SignUpMentor = () => {
   ]);
 
   useEffect(() => {
+    UserJoinStore.off();
     MentorStore.getMentor(AuthStore.getUserIntraId());
     window.screen.width <= 500 ? setIsMobile(true) : setIsMobile(false);
 

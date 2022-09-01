@@ -1,10 +1,13 @@
 import { action, makeObservable } from 'mobx';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import {
   DEFAULT_COOKIE_OPTION,
   getCookie,
   removeCookie,
-  setCookie,
   TOKEN_LIST,
 } from '../../context/cookies';
 
@@ -40,6 +43,7 @@ class AuthStore {
     removeCookie(TOKEN_LIST.ACCESS_TOKEN, DEFAULT_COOKIE_OPTION);
     removeCookie(TOKEN_LIST.INTRA_ID, DEFAULT_COOKIE_OPTION);
     removeCookie(TOKEN_LIST.USER_ROLE, DEFAULT_COOKIE_OPTION);
+    removeCookie(TOKEN_LIST.JOIN, DEFAULT_COOKIE_OPTION);
     window.location.reload();
   }
 
@@ -47,8 +51,9 @@ class AuthStore {
    * 로그인, 토큰 및 AuthStore 값 설정
    */
   Login() {
-    axiosInstance
-      .get('login')
+    //axiosInstance
+    //  .get('login')
+    axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, 'login')
       .then(res => {
         document.location.href = res.data;
       })
