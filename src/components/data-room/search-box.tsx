@@ -7,6 +7,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { Box, ThemeProvider } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { createTheme } from '@mui/material';
+import { mentoringIds } from '../../interface/data-room/mentoring-ids.interface';
 
 const SearchBoxBackground = styled.div`
   position: absolute;
@@ -138,6 +139,7 @@ function BasicDatePicker({ value, setValue }: datepickertype) {
 interface SearchBoxProps {
   query: dataRoomQuery;
   setQuery: (query: dataRoomQuery) => void;
+  setSelectedList: (list: mentoringIds[]) => void;
 }
 
 function SearchBox(props: SearchBoxProps) {
@@ -148,6 +150,7 @@ function SearchBox(props: SearchBoxProps) {
   return (
     <form
       onSubmit={event => {
+        props.setSelectedList([]);
         event.preventDefault();
         props.setQuery({
           ...props.query,
@@ -202,6 +205,7 @@ function SearchBox(props: SearchBoxProps) {
               setMentorIntraId('');
               setMentorName('');
               setDate(null);
+              props.setSelectedList([]);
               props.setQuery({
                 ...props.query,
                 mentorName: undefined,

@@ -1,12 +1,9 @@
-import styled, { css } from 'styled-components';
-import theme from '../../styles/theme';
 import {
   ClickContainer,
   ClickContainer2,
   ClickedSwapButton,
   IconImageStyle,
   IconImageStyle2,
-  ImageBox,
   ImageGrid1,
   ImageGrid2,
   ImageStyle,
@@ -43,6 +40,7 @@ import {
   faSitemap,
 } from '@fortawesome/free-solid-svg-icons';
 import { debounce, IconButton } from '@mui/material';
+import LoadingStore from '../../states/loading/LoadingStore';
 
 export const CadetText = (
   <div>
@@ -80,7 +78,6 @@ export const MentorText = (
 );
 
 const MainPage = () => {
-  const [isLoading, setLoading] = useState(false);
   const [keyWords, setKeywords] = useState<keywordsPro[] | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [text, setText] = useState(CadetText);
@@ -102,11 +99,11 @@ const MainPage = () => {
   }, 10);
   const getKeywords = async () => {
     try {
-      setLoading(true);
+      LoadingStore.on();
       const save = await axiosInstance.get('/categories');
       const tmp = save.data;
       setKeywords(tmp);
-      setLoading(false);
+      LoadingStore.off();
     } catch (e) {
       console.log(e);
       return e;

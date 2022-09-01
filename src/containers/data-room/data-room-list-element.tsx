@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { dataRoomProps } from '../../interface/data-room/data-room-props.interface';
 import { mentoringIds } from '../../interface/data-room/mentoring-ids.interface';
-import ReactToPrint from 'react-to-print';
-import ReportDetail from '../report-detail/report-detail';
 
 export const TableData = styled.td`
   height: 3.6rem;
@@ -114,15 +112,18 @@ function DataRoomListElement(
       )}
       <TableData>{data.money?.toLocaleString('ko-KR') ?? ''}</TableData>
       <TableData>
-        <Link
-          href={'https://www.42polar.kr/report-details/' + data.id}
-          //FIX ME: 연결 제대로 안됨, 수정 필요
-        >
+        <Link href={'https://42polar.kr/report-details/' + data.id}>
           {data.id ? '상세보기' : ''}
         </Link>
       </TableData>
       <TableData>
-        <Link>{data.id ? '출력' : ''}</Link>
+        <Link
+          href={
+            'https://42polar.kr/report-details/' + data.id + '/?autoPrint=true'
+          }
+        >
+          {data.id ? '출력' : ''}
+        </Link>
       </TableData>
     </tr>
   );

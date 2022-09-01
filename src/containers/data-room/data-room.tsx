@@ -8,11 +8,11 @@ import styled from 'styled-components';
 import SearchBox from '../../components/data-room/search-box';
 import DataRoomList from './data-room-list';
 import { mentoringIds } from '../../interface/data-room/mentoring-ids.interface';
-import { TOKEN } from './data-room-list';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { Navigate } from 'react-router-dom';
 import { dataRoomQuery } from '../../interface/data-room/data-room-query.interface';
 import { useMediaQuery } from 'react-responsive';
+import LoadingStore from '../../states/loading/LoadingStore';
 
 export const muiPaginationTheme = createTheme({
   palette: {
@@ -24,7 +24,7 @@ export const muiPaginationTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: theme.font.sebangGothic,
+    fontFamily: 'SEBANG Gothic',
     fontSize: 20,
     fontWeightLight: 700,
   },
@@ -89,8 +89,12 @@ const DataRoomBodyForPcLarge = styled.div`
   width: 120rem;
 `;
 const DataRoomBodyForPcSmall = styled.div`
-  width: 140rem;
-  zoom: 0.75;
+  width: 160rem;
+  margin-left: -10rem;
+  margin-right: -10rem;
+  -webkit-transform: scale(0.75);
+  transform: scale(0.75);
+  transform-origin: top;
 `;
 
 function DataRoom() {
@@ -124,6 +128,7 @@ function DataRoom() {
   };
 
   const getExcel = async () => {
+    LoadingStore.on();
     const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}bocals/data-room/excel`;
     const data = {
       reportIds: selectedList.map((data: mentoringIds) => {
@@ -139,7 +144,7 @@ function DataRoom() {
     const res = await fetch(realurl, {
       method: 'POST',
       headers: {
-        Authorization: `bearer ${TOKEN}`,
+        Authorization: `bearer ${AuthStore.getAccessToken()}`,
         'Content-type': 'application/json',
       },
       body: JSON.stringify(data),
@@ -162,6 +167,7 @@ function DataRoom() {
     link?.parentNode?.removeChild(link);
 
     window.URL.revokeObjectURL(blobUrl);
+    LoadingStore.off();
   };
 
   const [query, setQuery] = useState<dataRoomQuery>({
@@ -183,7 +189,11 @@ function DataRoom() {
               {isOpenModal && (
                 <>
                   <Back onClick={onClickSearchBoxModal}></Back>
-                  <SearchBox query={query} setQuery={setQuery} />
+                  <SearchBox
+                    query={query}
+                    setQuery={setQuery}
+                    setSelectedList={setSelectedList}
+                  />
                 </>
               )}
               <DRButton text="정렬" onClick={onClickSearchBoxModal} />

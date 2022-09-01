@@ -48,7 +48,12 @@ import {
   ImgLogo4,
 } from './reportStyled';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
-import { useParams } from 'react-router-dom';
+import {
+  Navigate,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import Alert from '@mui/material/Alert/Alert';
 import { width } from '@mui/system';
 import { debounce } from '@mui/material';
@@ -236,7 +241,11 @@ const AlertDetail = (flag: boolean) => {
 };
 
 const ReportDetail = () => {
+  const [query] = useSearchParams();
+  const isAutoPrint = query.get('autoPrint') ? true : false;
+  const navigate = useNavigate();
   const componentRef = useRef(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const [isLoading, setLoading] = useState(false);
   const [reportdata, setreportdata] = useState<reportsPro | null>(null);
   const { reportId } = useParams<string>();
@@ -273,60 +282,70 @@ const ReportDetail = () => {
     }
   };
   useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    setToken(AuthStore.getAccessToken());
-    setRole(AuthStore.getUserRole());
-    getReports();
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    async function report() {
+      window.addEventListener('resize', handleResize);
+      setToken(AuthStore.getAccessToken());
+      setRole(AuthStore.getUserRole());
+      await getReports();
+      if (isAutoPrint) {
+        buttonRef?.current?.click();
+      }
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+    report();
   }, []);
 
   return (
     <div className="reportpage">
-      {token ? (
-        role === USER_ROLES.MENTOR ? (
-          isMobile ? (
-            <ReportpageStyle2>
-              <ImgBody>
-                <SimpleComponent
-                  printRef={componentRef}
-                  reportdata={reportdata}
-                />
-              </ImgBody>
-              <ReactToPrint
-                content={() => componentRef.current}
-                trigger={() => (
-                  <ButtonBody>
-                    <PrintButton>출력</PrintButton>
-                  </ButtonBody>
-                )}
-              />
-            </ReportpageStyle2>
-          ) : (
-            <ReportpageStyle>
-              <ImgBody>
-                <SimpleComponent
-                  printRef={componentRef}
-                  reportdata={reportdata}
-                />
-              </ImgBody>
-              <ReactToPrint
-                content={() => componentRef.current}
-                trigger={() => (
-                  <ButtonBody>
-                    <PrintButton>출력</PrintButton>
-                  </ButtonBody>
-                )}
-              />
-            </ReportpageStyle>
-          )
+      {/* {token ? (
+        role === USER_ROLES.BOCAL ? (
+          isMobile ? ( */}
+      {/* <ReportpageStyle2>
+        <ImgBody>
+          <SimpleComponent printRef={componentRef} reportdata={reportdata} />
+        </ImgBody>
+        <ReactToPrint
+          content={() => componentRef.current}
+          trigger={() => (
+            <ButtonBody>
+              <PrintButton ref={buttonRef}>출력</PrintButton>
+            </ButtonBody>
+          )}
+          onAfterPrint={() => {
+            if (isAutoPrint) {
+              navigate('/data-room');
+            }
+          }}
+        />
+      </ReportpageStyle2>
+      ) : ( */}
+      <ReportpageStyle>
+        <ImgBody>
+          <SimpleComponent printRef={componentRef} reportdata={reportdata} />
+        </ImgBody>
+        <ReactToPrint
+          content={() => componentRef.current}
+          trigger={() => (
+            <ButtonBody>
+              <PrintButton ref={buttonRef}>출력</PrintButton>
+            </ButtonBody>
+          )}
+          onAfterPrint={() => {
+            if (isAutoPrint) {
+              navigate('/data-room');
+            }
+          }}
+        />
+      </ReportpageStyle>
+      {/* )
         ) : (
           <div>{AlertDetail(true)}</div>
         )
       ) : (
         <div>{AlertDetail(false)}</div>
-      )}
+      )} */}
     </div>
   );
 };
