@@ -4,6 +4,7 @@ import {
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
 } from '../../context/axios-interface';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
 import LoadingStore from '../loading/LoadingStore';
 
 class KeywordStore {
@@ -45,8 +46,6 @@ class KeywordStore {
 
   async Initializer(category: string) {
     LoadingStore.on();
-    //await axiosInstance
-    //  .get(`/categories/${category}/keywords`)
     await axiosWithNoData(
       AXIOS_METHOD_WITH_NO_DATA.GET,
       `/categories/${category}/keywords`,
@@ -57,7 +56,7 @@ class KeywordStore {
         }),
       )
       .catch(err => {
-        alert(`${err?.response?.data?.message}`);
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
       });
     LoadingStore.off();
   }
