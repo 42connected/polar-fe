@@ -43,6 +43,7 @@ class AuthStore {
     removeCookie(TOKEN_LIST.ACCESS_TOKEN, DEFAULT_COOKIE_OPTION);
     removeCookie(TOKEN_LIST.INTRA_ID, DEFAULT_COOKIE_OPTION);
     removeCookie(TOKEN_LIST.USER_ROLE, DEFAULT_COOKIE_OPTION);
+    removeCookie(TOKEN_LIST.JOIN, DEFAULT_COOKIE_OPTION);
     window.location.reload();
   }
 
