@@ -13,7 +13,9 @@ import Button from '../../components/button';
 import { InputCounter } from '../../components/input-counter';
 import ButtonBoxComponent from '../../components/mentor-detail/button-box';
 import TimeTableMuiComponent from '../../components/mentor-detail/mui-table';
+import SelectKeywords from '../../components/mentor-detail/select-keywords';
 import TagInputBoxComponent from '../../components/mentor-detail/tag-input-box';
+import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 import { TwoButtonModal } from '../../components/modal/two-button-modal.tsx/two-button-modal';
 import PageNationComponent from '../../components/page-nation';
 import ReportSummaryInputComponent from '../../components/report-summery-input';
@@ -73,7 +75,10 @@ function MentorDetail() {
   const [maxPage, setMaxPage] = useState<number>(1);
   const [isActivateDeleteModal, setIsActivateDeleteModal] =
     useState<boolean>(false);
-
+  const [isActivateCommentSubmit, setIsActivateCommentSubmit] =
+    useState<boolean>(false);
+  const [isActivateApplyModal, setIsActivateApplyModal] =
+    useState<boolean>(false);
   const setMentorAvailableTimeData = () => {
     const appointmentsData: appointmentsInterface[] = [];
     mockMentorAvailableTimeToArray.forEach(
@@ -259,7 +264,7 @@ function MentorDetail() {
             />
           </MentorInfoContent>
         </MentorInfo>
-        {mentor?.isActive ? (
+        {mentor?.isActive && user?.role == 'cadet' ? (
           <Link to={`/apply-page/${mentor?.intraId}`}>
             <Button
               text="멘토링 신청하기"
@@ -277,6 +282,22 @@ function MentorDetail() {
             backgroundColor={theme.colors.grayThree}
             color={theme.colors.backgoundWhite}
             isUnActivated={true}
+            onClick={() => {
+              setIsActivateApplyModal(true);
+            }}
+          />
+        )}
+        {isActivateApplyModal && (
+          <OneButtonModal
+            Text="멘토링 신청이 불가능합니다."
+            TitleText="멘토링 신청"
+            XButtonFunc={() => {
+              setIsActivateApplyModal(false);
+            }}
+            ButtonFunc={() => {
+              setIsActivateApplyModal(false);
+            }}
+            ButtonText="확인"
           />
         )}
       </MentorHeader>
@@ -385,6 +406,7 @@ function MentorDetail() {
                   <MentorTags>{AddHashtag}</MentorTags>
                 </>
               )}
+              <SelectKeywords />
             </MentorBody1Right1>
             <MentorBody1Right2>
               <MenuBox1>
@@ -482,7 +504,6 @@ function MentorDetail() {
         </MentorBody3>
         <MentorCommets>
           <MenuBox>댓글</MenuBox>
-
           {user?.intraId ? (
             <ReplyContainer>
               <Comment>
@@ -508,10 +529,27 @@ function MentorDetail() {
                     }
                     borderRadius="20px"
                     onClick={() => {
-                      handleCommentSubmit();
+                      {
+                        user.role === 'cadet'
+                          ? handleCommentSubmit()
+                          : setIsActivateCommentSubmit(true);
+                      }
                     }}
                     isUnActivated={inputComment.length === 0}
                   />
+                  {isActivateCommentSubmit && (
+                    <OneButtonModal
+                      TitleText="댓글 작성"
+                      Text="댓글은 cadet만 작성할 수 있습니다."
+                      XButtonFunc={() => {
+                        setIsActivateCommentSubmit(false);
+                      }}
+                      ButtonFunc={() => {
+                        setIsActivateCommentSubmit(false);
+                      }}
+                      ButtonText="확인"
+                    />
+                  )}
                 </SubmitButton>
               </Comment>
             </ReplyContainer>

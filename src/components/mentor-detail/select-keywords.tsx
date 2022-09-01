@@ -7,6 +7,8 @@ import { axiosInstance } from '../../context/axios-interface';
 import LoadingStore from '../../states/loading/LoadingStore';
 import Button from '../button';
 import AuthStore from '../../states/auth/AuthStore';
+import { useParams } from 'react-router-dom';
+import ButtonBoxComponent from './button-box';
 
 const styles = {
   control: (base: any) => ({
@@ -24,7 +26,8 @@ const styles = {
 };
 
 const Div = styled.div`
-  width: 30rem;
+  width: 100%;
+  margin-top: 2rem;
 `;
 
 interface CategoryAndKeywords {
@@ -47,7 +50,7 @@ function SelectKeywords() {
     CategoryAndKeywords[]
   >([]);
   const [mentorKeywords, setMentorKeywords] = useState<Option[]>([]);
-  const mentorId = 'm-engeng';
+  const mentorId = useParams().intraId;
 
   useEffect(() => {
     axiosInstance.get('categories/category/keywords').then(response => {
@@ -81,6 +84,12 @@ function SelectKeywords() {
       Authorization: `bearer ${AuthStore.getAccessToken()}`,
     },
   };
+
+  const ButtonBoxComponent = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  `;
 
   function patchMentorKeywords(mentorKeywords: Option[]) {
     const newMentorKeywords: { keywords: string[] } = { keywords: [] };
@@ -121,10 +130,12 @@ function SelectKeywords() {
         })}
         styles={styles}
       />
-      <Button
-        onClick={() => patchMentorKeywords(mentorKeywords)}
-        text="완료"
-      ></Button>
+      <ButtonBoxComponent>
+        <Button
+          onClick={() => patchMentorKeywords(mentorKeywords)}
+          text="완료"
+        />
+      </ButtonBoxComponent>
     </Div>
   );
 }

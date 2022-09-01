@@ -10,13 +10,14 @@ import {
   ModalTitle,
   XButton,
 } from '../modal-styled';
+import theme from '../../../styles/theme';
 
 interface OneButtonModalProps {
   TitleText: string;
   Text: string;
   XButtonFunc: () => void;
   ButtonText: string;
-  ButtonBg: string;
+  ButtonBg?: string;
   ButtonFunc: () => void;
 }
 
@@ -37,7 +38,9 @@ export function OneButtonModal(props: OneButtonModalProps) {
         <ModalButtonContainer>
           <ModalButton
             onClick={props.ButtonFunc}
-            style={{ backgroundColor: props.ButtonBg }}
+            style={{
+              backgroundColor: props.ButtonBg && theme.colors.polarSimpleMain,
+            }}
           >
             {sliceMoreInfoStr(props.ButtonText, 6)}
           </ModalButton>
