@@ -1,5 +1,5 @@
 import { Switch } from '@mui/material';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Columns from '../../../../components/signup/getColumns';
 import addButtonImage from '../../../../assets/signup/addButton.png';
 import {
@@ -14,6 +14,12 @@ import {
   TimeTableContainer,
   ToggleContainer,
 } from './time-style';
+import {
+  AddColumnsProps,
+  IAvailableDate,
+  IRows,
+  MentorsData,
+} from '../mentor-details-modal-inteface';
 
 function AddColumns(props: AddColumnsProps) {
   return (
@@ -31,69 +37,67 @@ function AddColumns(props: AddColumnsProps) {
   );
 }
 
-// async function getRows(available: IRows[]): Promise<IAvailableDate[][]> {
-//   const availableTime: IAvailableDate[][] = Array.from(Array(7), () =>
-//     Array(0).fill(null),
-//   );
-
-//   if (checked) {
-//     rows.map(row => {
-//       const temp: IAvailableDate = {
-//         startHour: (row.date[1] + 8) % 24,
-//         startMinute: row.date[2] ? 30 : 0,
-//         endHour: (row.date[3] + 8) % 24,
-//         endMinute: row.date[4] ? 30 : 0,
-//       };
-//       availableTime[row.date[0]].push(temp);
-//     });
-//   }
-
-//   return availableTime;
-// }
-
-interface IRows {
-  id: number;
-  date: number[];
-}
-
-interface AddColumnsProps {
+interface TimeProps {
+  checked: boolean;
+  setChecked: React.Dispatch<React.SetStateAction<boolean>>;
   rows: IRows[];
-  onRemove: (id: number) => void;
-  onChange: (id: number, index: number, value: number) => void;
+  setRows: React.Dispatch<React.SetStateAction<IRows[]>>;
+  MentorsData: MentorsData;
+  setMentorsData: React.Dispatch<React.SetStateAction<MentorsData>>;
+  onRowChange: (id: number, index: number, value: number) => void;
 }
 
-export function Time() {
-  const [checked, setChecked] = useState(true);
-  const [rows, setRows] = useState<IRows[]>([
-    {
-      id: 0,
-      date: [0, 0, 0, 0, 0],
-    },
-  ]);
+export function Time(props: TimeProps) {
+  const defaultChecked: boolean = props.MentorsData.isActive;
+  const defaultAvailableTime: IAvailableDate[][] =
+    props.MentorsData.availableTime;
+  const [count, setCount] = useState<number>(0);
 
-  const nextId = useRef(1);
+  useEffect(() => {
+    const data = getRows(defaultAvailableTime);
+    props.setRows(data);
+    props.setChecked(defaultChecked);
+  }, [defaultAvailableTime, defaultChecked]);
+
+  function getRows(availableTimes: IAvailableDate[][]): IRows[] {
+    const rows: IRows[] = [];
+
+    let index = 0;
+    for (let i = 0; i < availableTimes.length; i++) {
+      for (let j = 0; j < availableTimes[i].length; j++) {
+        const temp: IRows = {
+          id: index++,
+          date: [
+            i,
+            availableTimes[i][j].startHour - (8 % 24),
+            availableTimes[i][j].startMinute === 30 ? 1 : 0,
+            availableTimes[i][j].endHour - (8 % 24),
+            availableTimes[i][j].endMinute === 30 ? 1 : 0,
+          ],
+        };
+        rows.push(temp);
+      }
+    }
+
+    setCount(count + index);
+    return rows;
+  }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+    props.setChecked(event.target.checked);
   };
 
   const onRowCreate = () => {
     const newRows: IRows = {
-      id: nextId.current,
+      id: count,
       date: [0, 0, 0, 0, 0],
     };
-    setRows([...rows, newRows]);
-    nextId.current += 1;
+    props.setRows([...props.rows, newRows]);
+    setCount(count + 1);
   };
 
   const onRowRemove = (id: number) => {
-    setRows(rows.filter(rows => rows.id !== id));
-  };
-
-  const onRowChange = (id: number, index: number, value: number) => {
-    const firstIndex = 0;
-    const row = rows.filter(rows => rows.id === id);
-    row[firstIndex].date[index] = value;
+    props.setRows(props.rows.filter(rows => rows.id !== id));
   };
 
   return (
@@ -101,7 +105,7 @@ export function Time() {
       <ToggleContainer>
         <NameTitle>멘토링 가능/불가</NameTitle>
         <Switch
-          checked={checked}
+          checked={props.checked}
           onChange={handleChange}
           inputProps={{ 'aria-label': 'controlled' }}
           sx={{ mb: 1, mr: -6 }}
@@ -126,11 +130,11 @@ export function Time() {
         <ColumnLine></ColumnLine>
       </TimeTableContainer>
       <>
-        {checked && (
+        {props.checked && (
           <AddColumns
-            rows={rows}
+            rows={props.rows}
             onRemove={onRowRemove}
-            onChange={onRowChange}
+            onChange={props.onRowChange}
           />
         )}
       </>

@@ -10,6 +10,11 @@ import { Mentor } from '../../../states/my-mentoring-mentor/MentorStore';
 import defaultTheme from '../../../styles/theme';
 import { ModalType } from '../mentor-info-modal';
 import { Info } from './info/info';
+import {
+  ApplyDetailModalProps,
+  IRows,
+  MentorsData,
+} from './mentor-details-modal-inteface';
 import { ModalFooter } from './modal-footer';
 import { Time } from './time/time';
 
@@ -84,36 +89,19 @@ function getPageTitle(modalType: ModalType): string {
   }
 }
 
-export interface ApplyDetailModalProps {
-  intraId: string;
-  modalType: ModalType;
-  setApplyModal: (b: boolean) => void;
-}
-
-export interface MentorsData {
-  availableTime: IAvailableDate[][];
-  introduction: string;
-  isActive: boolean;
-  tags: string[];
-  markdownContent: string;
-  slackId: string;
-  email: string;
-  name: string;
-}
-
-interface IAvailableDate {
-  startHour: number;
-  startMinute: number;
-  endHour: number;
-  endMinute: number;
-}
-
 export function ApplyDetailModal(props: ApplyDetailModalProps) {
   const [name, setName] = useState<string>('');
   const [slackId, setSlackId] = useState<string>('');
   const [alreadyRegistered, setAlreadyRegistered] = useState<boolean>(false);
   const [isCodeSucess, setIsCodeSucesss] = useState(false);
-  const [mentorsData, setMentorsData] = useState<MentorsData>({
+  const [checked, setChecked] = useState<boolean>(true);
+  const [rows, setRows] = useState<IRows[]>([
+    {
+      id: 0,
+      date: [0, 0, 0, 0, 0],
+    },
+  ]);
+  const [mentorsOriginData, setMentorsOriginData] = useState<MentorsData>({
     availableTime: [],
     introduction: '',
     isActive: true,
@@ -128,7 +116,7 @@ export function ApplyDetailModal(props: ApplyDetailModalProps) {
     axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, `mentors/${props.intraId}`)
       .then(res => {
         const data: MentorsData = {
-          availableTime: res.data.availableTime,
+          availableTime: JSON.parse(res.data.availableTime),
           introduction: res.data.introduction,
           isActive: res.data.isActive,
           tags: res.data.tags,
@@ -137,13 +125,19 @@ export function ApplyDetailModal(props: ApplyDetailModalProps) {
           email: res.data.email,
           name: res.data.name,
         };
-        setMentorsData(data);
+        setMentorsOriginData(data);
       })
       .catch(err => {
         alert('멘토의 정보를 받아오지 못했습니다');
         props.setApplyModal(false);
       });
   }, []);
+
+  const onRowChange = (id: number, index: number, value: number) => {
+    const firstIndex = 0;
+    const row = rows.filter(rows => rows.id === id);
+    row[firstIndex].date[index] = value;
+  };
 
   return (
     <Box>
@@ -165,21 +159,32 @@ export function ApplyDetailModal(props: ApplyDetailModalProps) {
             setSlackId={setSlackId}
             setAlreadyRegistered={setAlreadyRegistered}
             setIsCodeSucesss={setIsCodeSucesss}
-            setMentorsData={setMentorsData}
+            setMentorsData={setMentorsOriginData}
             alreadyRegistered={alreadyRegistered}
             isCodeSucess={isCodeSucess}
-            MentorsData={mentorsData}
+            MentorsData={mentorsOriginData}
           />
         ) : (
-          <Time />
+          <Time
+            checked={checked}
+            rows={rows}
+            setChecked={setChecked}
+            setRows={setRows}
+            MentorsData={mentorsOriginData}
+            setMentorsData={setMentorsOriginData}
+            onRowChange={onRowChange}
+          />
         )}
       </ModalBody>
       <ModalFooter
+        modalType={props.modalType}
         intraId={props.intraId}
         name={name}
         slackId={slackId}
         alreadyRegistered={alreadyRegistered}
         isCodeSucess={isCodeSucess}
+        checked={checked}
+        rows={rows}
         setApplyModal={props.setApplyModal}
       />
     </Box>

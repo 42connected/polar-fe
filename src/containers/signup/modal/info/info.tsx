@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import AuthStore from '../../../../states/auth/AuthStore';
 import LoadingStore from '../../../../states/loading/LoadingStore';
 import MentorStore from '../../../../states/my-mentoring-mentor/MentorStore';
-import { MentorsData } from '../apply-detail-modal';
+import { MentorsData } from '../mentor-details-modal-inteface';
 import {
   CertificationSendingButton,
   Container,
