@@ -8,6 +8,7 @@ import {
   setCookie,
   TOKEN_LIST,
 } from '../../context/cookies';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
 const Background = styled.div`
   display: flex;
@@ -23,6 +24,9 @@ export function Login() {
   const code = params.get('code');
 
   useEffect(() => {
+    if (ErrorStore.isError === true) {
+      return;
+    }
     axios
       .get(`${process.env.REACT_APP_BASE_LOGIN_CALLBACK_URL}?code=${code}`)
       .then(res => {
@@ -48,8 +52,8 @@ export function Login() {
         );
         navigate(-1);
       })
-      .catch(() => {
-        navigate(-1);
+      .catch(err => {
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
       });
   });
 
