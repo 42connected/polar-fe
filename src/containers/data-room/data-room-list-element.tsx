@@ -108,14 +108,14 @@ function DataRoomListElement(
       )}
       <TableData>{data.money?.toLocaleString('ko-KR') ?? ''}</TableData>
       <TableData>
-        <Link href={'http://localhost:3000/report-detail?reportId=' + data.id}>
+        <Link href={'https://www.42polar.kr/report-detail?reportId=' + data.id}>
           {data.id ? '상세보기' : ''}
         </Link>
       </TableData>
       <TableData>
         <Link
           href={
-            'http://localhost:3000/report-detail?autoPrint=true&reportId=' +
+            'https://www.42polar.kr/report-detail?autoPrint=true&reportId=' +
             data.id
           }
         >

@@ -39,10 +39,7 @@ function DataRoomListElementMobile(
       )}
       <TableData>{data.money?.toLocaleString('ko-KR') ?? ''}</TableData>
       <TableData>
-        <Link
-          href={'https://www.42polar.kr/report-details/' + data.id}
-          //FIX ME: 연결 제대로 안됨, 수정 필요
-        >
+        <Link href={'https://www.42polar.kr/report-detail?reportId=' + data.id}>
           {data.id ? '상세보기' : ''}
         </Link>
       </TableData>

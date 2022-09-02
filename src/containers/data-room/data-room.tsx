@@ -186,64 +186,64 @@ function DataRoom() {
     isAscending: false,
   });
 
-  // if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
-  //   alert('접근 권한이 없습니다.');
-  //   return <Navigate to="/" />;
-  // } else
-  return (
-    <DataRoomDiv>
-      <DataRoomBodyForDesktop>
-        <DataRoomTitle>데이터룸</DataRoomTitle>
-        <DataRoomButtonDiv>
-          <DataRoomButton>
-            {isOpenModal && (
-              <>
-                <Back onClick={onClickSearchBoxModal}></Back>
-                <SearchBox
-                  query={query}
-                  setQuery={setQuery}
-                  setSelectedList={setSelectedList}
-                />
-              </>
-            )}
-            <DRButton text="정렬" onClick={onClickSearchBoxModal} />
-          </DataRoomButton>
-          <DataRoomButton>
-            <DRButton text="출력" onClick={printReports} />
-          </DataRoomButton>
-          <DataRoomButton>
-            <DRButton text="엑셀 저장" onClick={getExcel} />
-          </DataRoomButton>
-        </DataRoomButtonDiv>
-        {DataRoomList(
-          query,
-          setQuery,
-          offset,
-          setOffset,
-          total,
-          setTotal,
-          selectedList,
-          setSelectedList,
-          isDesktopLarge || isDesktopSmall,
-        )}
-        <DataRoomNavigationDiv>
-          <ThemeProvider theme={muiPaginationTheme}>
-            <Pagination
-              count={Math.ceil(total / take)}
-              color="primary"
-              showFirstButton
-              showLastButton
-              onChange={(_, page) => {
-                setPage(page);
-                setQuery({ ...query, page: page });
-                setOffset(page * take > total ? total % take : take);
-              }}
-            />
-          </ThemeProvider>
-        </DataRoomNavigationDiv>
-      </DataRoomBodyForDesktop>
-    </DataRoomDiv>
-  );
+  if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
+    alert('접근 권한이 없습니다.');
+    return <Navigate to="/" />;
+  } else
+    return (
+      <DataRoomDiv>
+        <DataRoomBodyForDesktop>
+          <DataRoomTitle>데이터룸</DataRoomTitle>
+          <DataRoomButtonDiv>
+            <DataRoomButton>
+              {isOpenModal && (
+                <>
+                  <Back onClick={onClickSearchBoxModal}></Back>
+                  <SearchBox
+                    query={query}
+                    setQuery={setQuery}
+                    setSelectedList={setSelectedList}
+                  />
+                </>
+              )}
+              <DRButton text="정렬" onClick={onClickSearchBoxModal} />
+            </DataRoomButton>
+            <DataRoomButton>
+              <DRButton text="출력" onClick={printReports} />
+            </DataRoomButton>
+            <DataRoomButton>
+              <DRButton text="엑셀 저장" onClick={getExcel} />
+            </DataRoomButton>
+          </DataRoomButtonDiv>
+          {DataRoomList(
+            query,
+            setQuery,
+            offset,
+            setOffset,
+            total,
+            setTotal,
+            selectedList,
+            setSelectedList,
+            isDesktopLarge || isDesktopSmall,
+          )}
+          <DataRoomNavigationDiv>
+            <ThemeProvider theme={muiPaginationTheme}>
+              <Pagination
+                count={Math.ceil(total / take)}
+                color="primary"
+                showFirstButton
+                showLastButton
+                onChange={(_, page) => {
+                  setPage(page);
+                  setQuery({ ...query, page: page });
+                  setOffset(page * take > total ? total % take : take);
+                }}
+              />
+            </ThemeProvider>
+          </DataRoomNavigationDiv>
+        </DataRoomBodyForDesktop>
+      </DataRoomDiv>
+    );
 }
 
 export default DataRoom;
