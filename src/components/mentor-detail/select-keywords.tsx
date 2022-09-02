@@ -107,6 +107,7 @@ function SelectKeywords() {
     <Div>
       <Select
         isMulti
+        isDisabled
         value={mentorKeywords}
         onChange={keywords => {
           setMentorKeywords(

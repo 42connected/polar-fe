@@ -79,6 +79,10 @@ function MentorDetail() {
     useState<boolean>(false);
   const [isActivateApplyModal, setIsActivateApplyModal] =
     useState<boolean>(false);
+  const [userCommentId, setUserCommentId] = useState<string>('');
+  const [isActivatCommentDeleteModal, setIsActivatCommentDeleteModal] =
+    useState<boolean>(false);
+
   const setMentorAvailableTimeData = () => {
     const appointmentsData: appointmentsInterface[] = [];
     mockMentorAvailableTimeToArray.forEach(
@@ -141,6 +145,7 @@ function MentorDetail() {
       role: AuthStore.getUserRole(),
     };
     setUser(user);
+    console.log(user);
   }, []);
 
   const handleSubmitIntroductionTags = () => {
@@ -223,26 +228,6 @@ function MentorDetail() {
 
   return (
     <MentorDetailTag>
-      {/* {isActivateDeleteModal && (
-        <TwoButtonModal
-          Text="정말 삭제하시겠습니까?"
-          TitleText="asdasd"
-          XButtonFunc={() => {
-            console.log('x');
-            setIsActivateDeleteModal(false);
-          }}
-          Button1Func={() => {
-            console.log('1');
-            setIsActivateDeleteModal(false);
-          }}
-          Button2Func={() => {
-            console.log('2');
-            setIsActivateDeleteModal(false);
-          }}
-          Button1Text="1"
-          Button2Text="2"
-        />
-      )} */}
       <MentorHeader>
         <MentorInfo>
           <MentorImage src={mentor?.profileImage} />
@@ -579,14 +564,32 @@ function MentorDetail() {
                           className="icon"
                           color={'red'}
                           onClick={() => {
+                            setUserCommentId(comment.id);
                             setIsActivateDeleteModal(true);
-                            deleteComment(comment?.id);
                           }}
                         />
                       ) : null}
                     </div>
                     <div>{comment?.content}</div>
                   </UserContent>
+                  {isActivatCommentDeleteModal && (
+                    <TwoButtonModal
+                      TitleText="댓글 삭제"
+                      Text="정말로 댓글을 삭제하시겠습니까?"
+                      XButtonFunc={() => {
+                        setIsActivateDeleteModal(false);
+                      }}
+                      Button1Func={() => {
+                        setIsActivateDeleteModal(false);
+                      }}
+                      Button1Text="확인"
+                      Button2Func={() => {
+                        deleteComment(userCommentId);
+                        setIsActivateDeleteModal(false);
+                      }}
+                      Button2Text="취소"
+                    />
+                  )}
                 </Comment>
               );
             })}
