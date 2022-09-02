@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactToPrint from 'react-to-print';
 import styled from 'styled-components';
 import {
-  axiosInstance,
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
 } from '../../context/axios-interface';
@@ -52,14 +51,7 @@ import {
   ImgLogo4,
 } from './reportStyled';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
-import {
-  Navigate,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom';
-import Alert from '@mui/material/Alert/Alert';
-import { width } from '@mui/system';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { debounce } from '@mui/material';
 import LoadingStore from '../../states/loading/LoadingStore';
 
@@ -246,14 +238,10 @@ const ReportDetail = () => {
   const navigate = useNavigate();
   const componentRef = useRef(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const [isLoading, setLoading] = useState(false);
   const [reportDatas, setreportDatas] = useState<reportsPro[]>([]);
   const reportIds = reportQuery.getAll('reportId');
   const isAutoPrint = reportQuery.get('autoPrint') === 'true' ? true : false;
-  const [token, setToken] = useState<string>('');
-  const [role, setRole] = useState<string>('');
   const [isMobile, setIsMobile] = useState(false);
-  const tmp: reportsPro[] = [];
   const handleResize = debounce(() => {
     if (window.innerWidth < 1667) setIsMobile(true);
     else setIsMobile(false);
@@ -261,8 +249,8 @@ const ReportDetail = () => {
 
   const getReports = async (reportId: string) => {
     try {
-      LoadingStore.on();
-      const save = await axiosWithNoData(
+      const datas = reportDatas;
+      const response = await axiosWithNoData(
         AXIOS_METHOD_WITH_NO_DATA.GET,
         `/reports/${reportId}`,
         {
@@ -271,40 +259,33 @@ const ReportDetail = () => {
           },
         },
       );
-      const data: reportsPro = save.data;
-      tmp.push(data);
-      setreportDatas(tmp);
-      LoadingStore.off();
+      datas.push(response.data);
+      setreportDatas([...datas]);
     } catch (e) {
       console.log(e);
     }
   };
 
+  async function getAllReportData() {
+    LoadingStore.on();
+    await Promise.all(reportIds.map(id => getReports(id)));
+    if (isAutoPrint) {
+      buttonRef?.current?.click();
+    }
+    LoadingStore.off();
+  }
+
   useEffect(() => {
     window.addEventListener('resize', handleResize);
+    getAllReportData();
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
-  useMemo(() => {
-    LoadingStore.on();
-    reportIds?.forEach((reportId: string) => {
-      getReports(reportId);
-    });
-    LoadingStore.off();
-  }, [reportIds]);
-
-  console.log(reportDatas.length);
-  console.log(reportIds.length);
-  if (reportDatas.length === reportIds.length) {
-    if (isAutoPrint) {
-      buttonRef?.current?.click();
-    }
-  }
   return (
     <div>
-      {/* {AuthStore.getAccessToken() ? (
+      {AuthStore.getAccessToken() ? (
         AuthStore.getUserRole() === USER_ROLES.BOCAL ? (
           isMobile ? (
             <ReportpageStyle2 height={reportDatas.length}>
@@ -328,32 +309,35 @@ const ReportDetail = () => {
                 }}
               />
             </ReportpageStyle2>
-          ) : ( */}
-      <ReportpageStyle height={reportDatas.length}>
-        <ImgBody>
-          <SimpleComponent printRef={componentRef} reportDatas={reportDatas} />
-        </ImgBody>
-        <ReactToPrint
-          content={() => componentRef.current}
-          trigger={() => (
-            <ButtonBody>
-              <PrintButton ref={buttonRef}>출력</PrintButton>
-            </ButtonBody>
-          )}
-          onAfterPrint={() => {
-            if (isAutoPrint) {
-              navigate('/data-room');
-            }
-          }}
-        />
-      </ReportpageStyle>
-      {/* )
+          ) : (
+            <ReportpageStyle height={reportDatas.length}>
+              <ImgBody>
+                <SimpleComponent
+                  printRef={componentRef}
+                  reportDatas={reportDatas}
+                />
+              </ImgBody>
+              <ReactToPrint
+                content={() => componentRef.current}
+                trigger={() => (
+                  <ButtonBody>
+                    <PrintButton ref={buttonRef}>출력</PrintButton>
+                  </ButtonBody>
+                )}
+                onAfterPrint={() => {
+                  if (isAutoPrint) {
+                    navigate('/data-room');
+                  }
+                }}
+              />
+            </ReportpageStyle>
+          )
         ) : (
           <></>
         )
       ) : (
         <></>
-      )} */}
+      )}
     </div>
   );
 };
