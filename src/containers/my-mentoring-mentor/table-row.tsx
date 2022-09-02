@@ -6,6 +6,7 @@ import {
   getTimeToString,
   START_TIME,
 } from '../reports/report-form';
+import { sliceMoreInfoStr } from './email';
 import { ReportButton } from './report-button';
 import { StatusButton } from './status-button';
 
@@ -107,7 +108,7 @@ export function TableRow(props: TableRowProps) {
           props.setApplyModal(true);
         }}
       >
-        {props.topic}
+        {sliceMoreInfoStr(props.topic, 17)}
       </TableColumnTopic>
       <TableColumnTime>
         <Time>{getDayToString(props.meetingAt[START_TIME])}</Time>
