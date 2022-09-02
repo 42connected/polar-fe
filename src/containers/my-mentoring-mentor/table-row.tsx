@@ -6,6 +6,7 @@ import {
   getTimeToString,
   START_TIME,
 } from '../reports/report-form';
+import { sliceMoreInfoStr } from './email';
 import { ReportButton } from './report-button';
 import { StatusButton } from './status-button';
 
@@ -16,11 +17,17 @@ export const TableColumnLine = styled.div`
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   height: 40px;
+  ${defaultTheme.font.nanumGothic};
+  ${defaultTheme.fontSize.sizeExtraSmall};
+  @media screen and (max-width: 800px) {
+    ${defaultTheme.fontSize.sizeSmall};
+  }
+  @media screen and (max-width: 700px) {
+    font-size: 1rem;
+  }
 `;
 
 const TableColumnDate = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeExtraSmall};
   display: flex;
   width: 10%;
   justify-content: center;
@@ -28,8 +35,6 @@ const TableColumnDate = styled.div`
 `;
 
 const TableColumnUser = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeExtraSmall};
   display: flex;
   width: 10%;
   justify-content: center;
@@ -37,8 +42,6 @@ const TableColumnUser = styled.div`
 `;
 
 const TableColumnTopic = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeExtraSmall};
   display: flex;
   width: 30%;
   justify-content: left;
@@ -50,22 +53,15 @@ const TableColumnTopic = styled.div`
 `;
 
 const TableColumnTime = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeExtraSmall};
   display: flex;
   width: 30%;
   justify-content: center;
   align-items: center;
 `;
 
-const Time = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeExtraSmall};
-`;
+const Time = styled.div``;
 
 const TimeWhile = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeExtraSmall};
   color: ${defaultTheme.colors.polarSimpleMain};
   margin-left: 5px;
 `;
@@ -88,10 +84,24 @@ export interface TableRowProps {
   setLog: (l: MentoringLogs) => void;
 }
 
+const getDayToShortString = (meetingAt: Date): string => {
+  const FAILED_TO_MAKE_NEW_DATE = -1;
+  const startTime: Date = new Date(meetingAt);
+  if (startTime.toString().indexOf('Invalid Date') > FAILED_TO_MAKE_NEW_DATE) {
+    return '-';
+  }
+
+  return `${startTime
+    .getFullYear()
+    .toString()
+    .substring(2)}.${startTime.getMonth()}.${startTime.getDate()}
+  `;
+};
+
 export function TableRow(props: TableRowProps) {
   return (
     <TableColumnLine>
-      <TableColumnDate>{getDayToString(props.createdAt)}</TableColumnDate>
+      <TableColumnDate>{getDayToShortString(props.createdAt)}</TableColumnDate>
       <TableColumnUser>{props.user}</TableColumnUser>
       <TableColumnTopic
         onClick={() => {
@@ -99,7 +109,7 @@ export function TableRow(props: TableRowProps) {
           props.setApplyModal(true);
         }}
       >
-        {props.topic}
+        {sliceMoreInfoStr(props.topic, 17)}
       </TableColumnTopic>
       <TableColumnTime>
         <Time>{getDayToString(props.meetingAt[START_TIME])}</Time>

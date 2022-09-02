@@ -2,12 +2,18 @@ import styled from '@emotion/styled';
 import defaultTheme from '../../styles/theme';
 
 const StatusColumn = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeExtraSmall};
   display: flex;
   width: 10%;
   justify-content: center;
   align-items: center;
+  ${defaultTheme.font.nanumGothic};
+  ${defaultTheme.fontSize.sizeExtraSmall};
+  @media screen and (max-width: 800px) {
+    ${defaultTheme.fontSize.sizeSmall};
+  }
+  @media screen and (max-width: 700px) {
+    font-size: 1rem;
+  }
 `;
 
 const MENTORING_STATUS = {
