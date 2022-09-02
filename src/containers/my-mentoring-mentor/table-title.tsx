@@ -15,11 +15,17 @@ const TableColumnLine = styled.div`
   margin-top: 15px;
   height: 50px;
   font-weight: bold;
+  ${defaultTheme.fontSize.sizeExtraSmall};
+  ${defaultTheme.font.nanumGothic};
+  @media screen and (max-width: 800px) {
+    ${defaultTheme.fontSize.sizeSmall};
+  }
+  @media screen and (max-width: 700px) {
+    font-size: 1rem;
+  }
 `;
 
 const TableColumnDate = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeMedium};
   display: flex;
   width: 10%;
   justify-content: center;
@@ -27,8 +33,6 @@ const TableColumnDate = styled.div`
 `;
 
 const TableColumnUser = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeMedium};
   display: flex;
   width: 10%;
   justify-content: center;
@@ -36,8 +40,6 @@ const TableColumnUser = styled.div`
 `;
 
 const TableColumnTopic = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeMedium};
   display: flex;
   width: 30%;
   justify-content: center;
@@ -45,8 +47,6 @@ const TableColumnTopic = styled.div`
 `;
 
 const TableColumnTime = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeMedium};
   display: flex;
   width: 30%;
   justify-content: center;
@@ -54,8 +54,6 @@ const TableColumnTime = styled.div`
 `;
 
 const TableColumnState = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeMedium};
   display: flex;
   width: 10%;
   justify-content: center;
@@ -63,8 +61,6 @@ const TableColumnState = styled.div`
 `;
 
 const TableColumnReport = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeMedium};
   display: flex;
   width: 10%;
   justify-content: center;
