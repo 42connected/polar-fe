@@ -6,17 +6,21 @@ import defaultTheme from '../../styles/theme';
 import { MENTORING_STATUS } from './modal/apply-detail-modal';
 
 const TableColumnReport = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeExtraSmall};
   display: flex;
   width: 10%;
   justify-content: center;
   align-items: center;
+  ${defaultTheme.font.nanumGothic};
+  ${defaultTheme.fontSize.sizeExtraSmall};
+  @media screen and (max-width: 800px) {
+    ${defaultTheme.fontSize.sizeSmall};
+  }
+  @media screen and (max-width: 700px) {
+    font-size: 1rem;
+  }
 `;
 
 const LinkContainer = styled.div`
-  ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeExtraSmall};
   display: flex;
   width: 10%;
   justify-content: center;
