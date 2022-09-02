@@ -85,8 +85,9 @@ export interface TableRowProps {
 }
 
 const getDayToShortString = (meetingAt: Date): string => {
+  const FAILED_TO_MAKE_NEW_DATE = -1;
   const startTime: Date = new Date(meetingAt);
-  if (startTime.toString().indexOf('Invalid Date') > -1) {
+  if (startTime.toString().indexOf('Invalid Date') > FAILED_TO_MAKE_NEW_DATE) {
     return '-';
   }
 
