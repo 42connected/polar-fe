@@ -266,18 +266,18 @@ const ReportDetail = () => {
     }
   };
 
-  async function getAllData() {
+  async function getAllReportData() {
+    LoadingStore.on();
     await Promise.all(reportIds.map(id => getReports(id)));
     if (isAutoPrint) {
       buttonRef?.current?.click();
     }
+    LoadingStore.off();
   }
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
-    LoadingStore.on();
-    getAllData();
-    LoadingStore.off();
+    getAllReportData();
     return () => {
       window.removeEventListener('resize', handleResize);
     };
