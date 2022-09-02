@@ -186,7 +186,11 @@ function DataRoom() {
     isAscending: false,
   });
 
-  if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
+  if (!AuthStore.getAccessToken()) {
+    alert('로그인이 필요한 서비스입니다.');
+    AuthStore.Login();
+    return <></>;
+  } else if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
     alert('접근 권한이 없습니다.');
     return <Navigate to="/" />;
   } else
