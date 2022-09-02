@@ -228,7 +228,7 @@ const Header = () => {
               <div>
                 <div>
                   {AlertDetail()}
-                  {AuthStore.Logout()}
+                  <Link to={'/'}>{AuthStore.Logout()}</Link>
                 </div>
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
