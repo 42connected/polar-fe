@@ -1,6 +1,5 @@
 import DataRoomListElement from './data-room-list-element';
 import {
-  axiosInstance,
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
 } from '../../context/axios-interface';
@@ -85,8 +84,6 @@ function DataRoomList(
       url = url.concat(`&mentorIntra=${query.mentorIntra}`);
     if (query.mentorName) url = url.concat(`&mentorName=${query.mentorName}`);
 
-    //axiosInstance
-    //  .get(url, config)
     axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, url, config)
       .then(async response => {
         const tmpOffset: number =
