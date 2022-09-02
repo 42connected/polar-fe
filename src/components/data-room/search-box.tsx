@@ -138,6 +138,7 @@ function BasicDatePicker({ value, setValue }: datepickertype) {
 interface SearchBoxProps {
   query: dataRoomQuery;
   setQuery: (query: dataRoomQuery) => void;
+  setSelectedList: (list: string[]) => void;
 }
 
 function SearchBox(props: SearchBoxProps) {
@@ -148,6 +149,7 @@ function SearchBox(props: SearchBoxProps) {
   return (
     <form
       onSubmit={event => {
+        props.setSelectedList([]);
         event.preventDefault();
         props.setQuery({
           ...props.query,
@@ -189,7 +191,7 @@ function SearchBox(props: SearchBoxProps) {
         <SearchButtonDiv>
           <SearchBoxButton
             type="button"
-            width="5.1rem"
+            width="5.4rem"
             height="1.9rem"
             text="초기화"
             font={theme.font.nanumGothic}
@@ -202,6 +204,7 @@ function SearchBox(props: SearchBoxProps) {
               setMentorIntraId('');
               setMentorName('');
               setDate(null);
+              props.setSelectedList([]);
               props.setQuery({
                 ...props.query,
                 mentorName: undefined,

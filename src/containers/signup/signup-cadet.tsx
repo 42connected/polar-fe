@@ -75,6 +75,9 @@ export const NameInput = styled.input`
 // };
 
 async function onButtonSubmit() {
+  /**
+   * TODO: Add UserJoinStore.off()
+   */
   try {
     axios.defaults.headers.common[
       'Authorization'

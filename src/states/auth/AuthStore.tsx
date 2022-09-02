@@ -10,6 +10,7 @@ import {
   removeCookie,
   TOKEN_LIST,
 } from '../../context/cookies';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
 
 export interface User {
   intraId: string;
@@ -43,6 +44,7 @@ class AuthStore {
     removeCookie(TOKEN_LIST.ACCESS_TOKEN, DEFAULT_COOKIE_OPTION);
     removeCookie(TOKEN_LIST.INTRA_ID, DEFAULT_COOKIE_OPTION);
     removeCookie(TOKEN_LIST.USER_ROLE, DEFAULT_COOKIE_OPTION);
+    removeCookie(TOKEN_LIST.JOIN, DEFAULT_COOKIE_OPTION);
     window.location.reload();
   }
 
@@ -56,7 +58,9 @@ class AuthStore {
       .then(res => {
         document.location.href = res.data;
       })
-      .catch(err => alert(err));
+      .catch(err => {
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
+      });
   }
 
   /**

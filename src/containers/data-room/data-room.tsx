@@ -1,5 +1,5 @@
 import theme from '../../styles/theme';
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback, ReactNode } from 'react';
 import { Pagination } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import Button from '../../components/button';
@@ -7,11 +7,11 @@ import { ThemeProvider } from '@mui/system';
 import styled from 'styled-components';
 import SearchBox from '../../components/data-room/search-box';
 import DataRoomList from './data-room-list';
-import { mentoringIds } from '../../interface/data-room/mentoring-ids.interface';
-import { TOKEN } from './data-room-list';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { dataRoomQuery } from '../../interface/data-room/data-room-query.interface';
+import { useMediaQuery } from 'react-responsive';
+import LoadingStore from '../../states/loading/LoadingStore';
 
 export const muiPaginationTheme = createTheme({
   palette: {
@@ -23,7 +23,7 @@ export const muiPaginationTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: theme.font.sebangGothic,
+    fontFamily: 'SEBANG Gothic',
     fontSize: 20,
     fontWeightLight: 700,
   },
@@ -33,10 +33,6 @@ const DataRoomDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-`;
-
-const DataRoomBody = styled.div`
-  width: 140rem;
 `;
 
 const DataRoomTitle = styled.div`
@@ -75,7 +71,7 @@ const DataRoomButton = styled.div`
 const Back = styled.div`
   position: fixed;
   width: 100%;
-  height: 14rem;
+  height: 23rem;
   top: 0;
   left: 0;
 `;
@@ -84,23 +80,58 @@ const DRButton = styled(Button)`
   z-index: 100;
 `;
 
+type DRProps = {
+  children: ReactNode;
+};
+
+const DataRoomBodyForPcLarge = styled.div`
+  width: 120rem;
+`;
+const DataRoomBodyForPcSmall = styled.div`
+  width: 160rem;
+  margin-left: -10rem;
+  margin-right: -10rem;
+  -webkit-transform: scale(0.75);
+  transform: scale(0.75);
+  transform-origin: top;
+`;
+
 function DataRoom() {
   const take = 20; //한 페이지
   const [page, setPage] = useState<number>(1); //현재 페이지
   const [total, setTotal] = useState<number>(0); //전체 값
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [selectedList, setSelectedList] = useState<mentoringIds[]>([]);
+  const [selectedList, setSelectedList] = useState<string[]>([]);
   const [offset, setOffset] = useState<number>(0);
   const onClickSearchBoxModal = useCallback(() => {
     setIsOpenModal(!isOpenModal);
   }, [isOpenModal]);
+  const navigate = useNavigate();
+  const isDesktopLarge = useMediaQuery({
+    minWidth: 900,
+  });
+  const isDesktopSmall = useMediaQuery({
+    maxWidth: 900,
+    minWidth: 500,
+  });
+
+  const DataRoomBodyForDesktop: React.FC<DRProps> = props => {
+    return (
+      <>
+        {isDesktopLarge ? (
+          <DataRoomBodyForPcLarge>{props.children}</DataRoomBodyForPcLarge>
+        ) : (
+          <DataRoomBodyForPcSmall>{props.children}</DataRoomBodyForPcSmall>
+        )}
+      </>
+    );
+  };
 
   const getExcel = async () => {
+    LoadingStore.on();
     const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}bocals/data-room/excel`;
     const data = {
-      reportIds: selectedList.map((data: mentoringIds) => {
-        return data.reportId;
-      }),
+      reportIds: selectedList,
     };
 
     if (selectedList.length === 0) {
@@ -111,7 +142,7 @@ function DataRoom() {
     const res = await fetch(realurl, {
       method: 'POST',
       headers: {
-        Authorization: `bearer ${TOKEN}`,
+        Authorization: `bearer ${AuthStore.getAccessToken()}`,
         'Content-type': 'application/json',
       },
       body: JSON.stringify(data),
@@ -134,7 +165,20 @@ function DataRoom() {
     link?.parentNode?.removeChild(link);
 
     window.URL.revokeObjectURL(blobUrl);
+    LoadingStore.off();
   };
+
+  function printReports() {
+    LoadingStore.on();
+    let url = '/report-detail?autoPrint=true';
+    if (selectedList.length === 0) {
+      alert('멘토링 정보를 하나 이상 선택해주세요.');
+      return;
+    }
+    selectedList.forEach(data => (url += `&reportId=${data}`));
+    LoadingStore.off();
+    navigate(url);
+  }
 
   const [query, setQuery] = useState<dataRoomQuery>({
     page: page,
@@ -142,26 +186,34 @@ function DataRoom() {
     isAscending: false,
   });
 
-  if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
+  if (!AuthStore.getAccessToken()) {
+    alert('로그인이 필요한 서비스입니다.');
+    AuthStore.Login();
+    return <></>;
+  } else if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
     alert('접근 권한이 없습니다.');
     return <Navigate to="/" />;
   } else
     return (
       <DataRoomDiv>
-        <DataRoomBody>
+        <DataRoomBodyForDesktop>
           <DataRoomTitle>데이터룸</DataRoomTitle>
           <DataRoomButtonDiv>
             <DataRoomButton>
               {isOpenModal && (
                 <>
                   <Back onClick={onClickSearchBoxModal}></Back>
-                  <SearchBox query={query} setQuery={setQuery} />
+                  <SearchBox
+                    query={query}
+                    setQuery={setQuery}
+                    setSelectedList={setSelectedList}
+                  />
                 </>
               )}
               <DRButton text="정렬" onClick={onClickSearchBoxModal} />
             </DataRoomButton>
             <DataRoomButton>
-              <DRButton text="출력" />
+              <DRButton text="출력" onClick={printReports} />
             </DataRoomButton>
             <DataRoomButton>
               <DRButton text="엑셀 저장" onClick={getExcel} />
@@ -176,6 +228,7 @@ function DataRoom() {
             setTotal,
             selectedList,
             setSelectedList,
+            isDesktopLarge || isDesktopSmall,
           )}
           <DataRoomNavigationDiv>
             <ThemeProvider theme={muiPaginationTheme}>
@@ -192,7 +245,7 @@ function DataRoom() {
               />
             </ThemeProvider>
           </DataRoomNavigationDiv>
-        </DataRoomBody>
+        </DataRoomBodyForDesktop>
       </DataRoomDiv>
     );
 }

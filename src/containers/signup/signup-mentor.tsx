@@ -12,6 +12,7 @@ import { Navigate } from 'react-router-dom';
 import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
 import AuthStore from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
+import UserJoinStore from '../../states/user-join/UserJoinStore';
 
 export const ContainersPc = styled.div`
   display: grid;
@@ -273,6 +274,7 @@ const SignUpMentor = () => {
   ]);
 
   useEffect(() => {
+    UserJoinStore.off();
     MentorStore.getMentor(AuthStore.getUserIntraId());
     window.innerWidth <= 500 ? setIsMobile(true) : setIsMobile(false);
 

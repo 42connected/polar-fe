@@ -2,9 +2,8 @@ import CheckBox from '../../components/check-box';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { dataRoomProps } from '../../interface/data-room/data-room-props.interface';
-import { mentoringIds } from '../../interface/data-room/mentoring-ids.interface';
 
-const TableData = styled.td`
+export const TableData = styled.td`
   height: 3.6rem;
   ${theme.fontFrame.bodyMiddle};
   border-bottom-style: solid;
@@ -14,12 +13,12 @@ const TableData = styled.td`
   border-color: ${theme.colors.grayFour};
 `;
 
-const Link = styled.a`
+export const Link = styled.a`
   color: ${theme.colors.polarSimpleMain};
   ${theme.fontWeight.weightLarge};
 `;
 
-function refineMeetingAt(rawDate: Date[]) {
+export function refineMeetingAt(rawDate: Date[]) {
   const week = ['일', '월', '화', '수', '목', '금', '토'];
   const dateString: string[] = [
     new Date(rawDate[0]).toLocaleString('ko-KR'),
@@ -70,8 +69,8 @@ function refineMeetingAt(rawDate: Date[]) {
 function DataRoomListElement(
   data: dataRoomProps,
   index: number,
-  buttonClickToggle: (status: boolean, ids: mentoringIds) => void,
-  selectedList: mentoringIds[],
+  buttonClickToggle: (status: boolean, ids: string) => void,
+  selectedList: string[],
 ) {
   return (
     <tr>
@@ -80,13 +79,10 @@ function DataRoomListElement(
           <CheckBox
             key={index}
             onChange={e => {
-              buttonClickToggle(e.target.checked, {
-                reportId: data.id,
-                mentoringLogId: data.mentoringLogs.id,
-              });
+              buttonClickToggle(e.target.checked, data.id);
             }}
             checked={
-              selectedList.findIndex(list => list.reportId === data.id) !== -1
+              selectedList.findIndex(list => list === data.id) !== -1
                 ? true
                 : false
             }
@@ -112,15 +108,19 @@ function DataRoomListElement(
       )}
       <TableData>{data.money?.toLocaleString('ko-KR') ?? ''}</TableData>
       <TableData>
-        <Link
-          href={'https://www.42polar.kr/report-detail/' + data.id}
-          //FIX ME: 연결 제대로 안됨, 수정 필요
-        >
+        <Link href={'https://www.42polar.kr/report-detail?reportId=' + data.id}>
           {data.id ? '상세보기' : ''}
         </Link>
       </TableData>
       <TableData>
-        <Link>{data.id ? '출력' : ''}</Link>
+        <Link
+          href={
+            'https://www.42polar.kr/report-detail?autoPrint=true&reportId=' +
+            data.id
+          }
+        >
+          {data.id ? '출력' : ''}
+        </Link>
       </TableData>
     </tr>
   );
