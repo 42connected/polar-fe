@@ -378,9 +378,7 @@ function MentorDetail() {
                       text="수정완료"
                       borderRadius="20px"
                       onClick={() => {
-                        setIsActivateIntroductionEdit(
-                          !isActivateIntroductionEdit,
-                        );
+                        setIsActivateDeleteModal(true);
                       }}
                     />
                   </ButtonBox>
@@ -399,8 +397,6 @@ function MentorDetail() {
                 <div>상태</div>
                 <div>일시</div>
               </MenuBox1>
-
-              {/* {mentoringLogList} */}
               <PageNationComponent intraId={getParams.intraId} />
             </MentorBody1Right2>
           </MentorBody1Right>
