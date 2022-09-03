@@ -6,6 +6,7 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Fade } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -35,7 +36,11 @@ import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.inter
 import { MentoringLogProps } from '../../interface/mentor-detail/mentoringLogProps';
 import AuthStore, { User } from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
+import SignUpMentor, { InfoInput } from '../signup/signup-mentor';
 import MarkdownRender from './markdownRender';
+import { ModalBackground } from '../../components/modal/modal-styled';
+import { Info } from '../signup/modal/info/info';
+import ErrorStore from '../../states/error/ErrorStore';
 
 function MentorDetail() {
   const mockMentorAvailableTime =
@@ -66,9 +71,9 @@ function MentorDetail() {
   const [isActivateMentor, setIsActivateMentor] = useState<boolean>(false);
   const [inputComment, setInputComment] = useState<string>('');
   const [mentorTags, setMentorTags] = useState<string[]>([]);
-  const [isActivateMentorInfoEdit, setIsActivateMentorInfoEdit] =
+  const [isActivateMentorMarkdownEdit, setIsActivateMentorMarkdownEdit] =
     useState<boolean>(false);
-  const [mentorInfo, setMentorInfo] = useState<string>('');
+  const [mentorMarkdown, setMentorMarkdown] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
   const [take, setTake] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
@@ -80,8 +85,14 @@ function MentorDetail() {
   const [isActivateApplyModal, setIsActivateApplyModal] =
     useState<boolean>(false);
   const [userCommentId, setUserCommentId] = useState<string>('');
-  const [isActivatCommentDeleteModal, setIsActivatCommentDeleteModal] =
+  const [isActivateCommentDeleteModal, setIsActivateCommentDeleteModal] =
     useState<boolean>(false);
+  const [isActivateMentorTimeEditModal, setIsActivateMentorTimeEditModal] =
+    useState<boolean>(false);
+  const [
+    isActivateMentorMarkDownEditModal,
+    setIsActivateMentorMarkDownEditModal,
+  ] = useState<boolean>(false);
 
   const setMentorAvailableTimeData = () => {
     const appointmentsData: appointmentsInterface[] = [];
@@ -129,7 +140,9 @@ function MentorDetail() {
           ? result.data.introduction
           : result.data?.introduction,
       );
-      setMentorInfo(result.data?.info ? result.data.info : result.data?.info);
+      setMentorMarkdown(
+        result.data?.info ? result.data.info : result.data?.info,
+      );
     });
     axiosInstance
       .get(`/comments/${getParams.intraId}`, { params })
@@ -171,9 +184,9 @@ function MentorDetail() {
     const config = {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
-    const data = { markdownContent: mentorInfo };
+    const data = { markdownContent: mentorMarkdown };
     axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
-  }, [isActivateMentorInfoEdit]);
+  }, [isActivateMentorMarkdownEdit]);
 
   const AddHashtag = mentorTags.map(tag => {
     return <div>{tag.padStart(tag.length + 1, '#')}</div>;
@@ -207,6 +220,27 @@ function MentorDetail() {
     }
   };
 
+  const handleSubmitMentorMarkdown = () => {
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    const data = { markdownContent: mentorMarkdown };
+    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+    axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
+      setMentor(result.data);
+      setMentorTags(result.data.tags);
+      setMentorIntroduction(
+        result.data?.introduction
+          ? result.data.introduction
+          : result.data?.introduction,
+      );
+      setMentorMarkdown(
+        result.data?.info ? result.data.info : result.data?.info,
+      );
+    });
+  };
+
   const deleteComment = (commentId: any) => {
     const params = {
       page: 1,
@@ -235,18 +269,36 @@ function MentorDetail() {
             <MentorName>
               <div className="mentor-name">{mentor?.name} 멘토</div>
               <div className="mentor-intra">{mentor?.intraId}</div>
+              {user?.intraId === mentor?.intraId && user && mentor ? (
+                <FontAwesomeIcon
+                  icon={faPencil}
+                  className="icon"
+                  size="lg"
+                  onClick={() => {
+                    setIsActivateMentorTimeEditModal(
+                      !isActivateMentorTimeEditModal,
+                    );
+                  }}
+                />
+              ) : null}
             </MentorName>
-            <Button
-              fontFrame={theme.fontFrame.subTitleSmall}
-              borderWidth="1px"
-              text={`멘토링 ${isActivateMentor ? '가능' : '불가능'}`}
-              backgroundColor={theme.colors.polarBackground}
-              color={theme.colors.polarSimpleMain}
-              width="12rem"
-              height="2.5rem"
-              borderRadius="20px"
-              isUnActivated={true}
-            />
+            <MentorActivateContainer>
+              <Button
+                fontFrame={theme.fontFrame.subTitleSmall}
+                borderWidth="1px"
+                text={`멘토링 ${isActivateMentor ? '가능' : '불가능'}`}
+                backgroundColor={theme.colors.polarBackground}
+                color={theme.colors.polarSimpleMain}
+                width="12rem"
+                height="2.5rem"
+                borderRadius="20px"
+                isUnActivated={true}
+              />
+
+              {isActivateMentorTimeEditModal ? (
+                <ModalBackground>{/* <Info /> */}</ModalBackground>
+              ) : null}
+            </MentorActivateContainer>
           </MentorInfoContent>
         </MentorInfo>
         {mentor?.isActive && user?.role == 'cadet' ? (
@@ -352,36 +404,6 @@ function MentorDetail() {
                     setter={setMentorTags}
                     value={mentorTags}
                   />
-                  <ButtonBox>
-                    {isActivateDeleteModal && (
-                      <TwoButtonModal
-                        Text="수정하시겠습니까?"
-                        TitleText="수정"
-                        XButtonFunc={() => {
-                          setIsActivateDeleteModal(false);
-                        }}
-                        Button1Func={() => {
-                          setIsActivateDeleteModal(false);
-                          handleSubmitIntroductionTags();
-                        }}
-                        Button2Func={() => {
-                          setIsActivateDeleteModal(false);
-                          setIsActivateIntroductionEdit(
-                            !isActivateIntroductionEdit,
-                          );
-                        }}
-                        Button1Text="네"
-                        Button2Text="아니요"
-                      />
-                    )}
-                    <Button
-                      text="수정완료"
-                      borderRadius="20px"
-                      onClick={() => {
-                        setIsActivateDeleteModal(true);
-                      }}
-                    />
-                  </ButtonBox>
                 </>
               ) : (
                 <>
@@ -389,7 +411,41 @@ function MentorDetail() {
                   <MentorTags>{AddHashtag}</MentorTags>
                 </>
               )}
-              <SelectKeywords />
+              <SelectKeywords isActivatedEdit={isActivateIntroductionEdit} />
+              <ButtonBox>
+                {isActivateDeleteModal && (
+                  <TwoButtonModal
+                    Text="수정하시겠습니까?"
+                    TitleText="수정"
+                    XButtonFunc={() => {
+                      setIsActivateDeleteModal(false);
+                    }}
+                    Button1Func={() => {
+                      try {
+                        setIsActivateDeleteModal(true);
+                      } catch (e) {
+                        // ErrorStore
+                      }
+                      handleSubmitIntroductionTags();
+                    }}
+                    Button2Func={() => {
+                      setIsActivateDeleteModal(false);
+                      setIsActivateIntroductionEdit(false);
+                    }}
+                    Button1Text="네"
+                    Button2Text="아니요"
+                  />
+                )}
+                {isActivateIntroductionEdit && (
+                  <Button
+                    text="수정완료"
+                    borderRadius="20px"
+                    onClick={() => {
+                      setIsActivateDeleteModal(true);
+                    }}
+                  />
+                )}
+              </ButtonBox>
             </MentorBody1Right1>
             <MentorBody1Right2>
               <MenuBox1>
@@ -446,17 +502,19 @@ function MentorDetail() {
                     className="icon"
                     size="xs"
                     onClick={() => {
-                      setIsActivateMentorInfoEdit(!isActivateMentorInfoEdit);
+                      setIsActivateMentorMarkdownEdit(
+                        !isActivateMentorMarkdownEdit,
+                      );
                     }}
                   />
                 ) : null}
               </MenuBox>
 
-              {isActivateMentorInfoEdit ? (
+              {isActivateMentorMarkdownEdit ? (
                 <>
                   <InputCounter
-                    value={mentorInfo}
-                    setter={setMentorInfo}
+                    value={mentorMarkdown}
+                    setter={setMentorMarkdown}
                     countDisabled={false}
                     inputDisabled={false}
                     maxLength={10000}
@@ -472,13 +530,37 @@ function MentorDetail() {
                       backgroundColor={theme.colors.polarSimpleMain}
                       borderRadius="20px"
                       onClick={() => {
-                        setIsActivateMentorInfoEdit(!isActivateMentorInfoEdit);
+                        setIsActivateMentorMarkDownEditModal(true);
                       }}
                     />
+                    {isActivateMentorMarkDownEditModal && (
+                      <TwoButtonModal
+                        Text="수정하시겠습니까?"
+                        TitleText="수정"
+                        XButtonFunc={() => {
+                          setIsActivateMentorMarkDownEditModal(false);
+                        }}
+                        Button1Func={() => {
+                          try {
+                            handleSubmitMentorMarkdown();
+                          } catch (e) {
+                            // ErrorStore
+                          }
+                          setIsActivateMentorMarkDownEditModal(false);
+                          setIsActivateMentorMarkdownEdit(false);
+                        }}
+                        Button2Func={() => {
+                          setIsActivateMentorMarkDownEditModal(false);
+                          setIsActivateMentorMarkdownEdit(false);
+                        }}
+                        Button1Text="네"
+                        Button2Text="아니요"
+                      />
+                    )}
                   </SubmitButton>
                 </>
               ) : (
-                <MarkdownRender markdown={mentorInfo} />
+                <MarkdownRender markdown={mentorMarkdown} />
               )}
             </>
           ) : null}
@@ -568,7 +650,7 @@ function MentorDetail() {
                     </div>
                     <div>{comment?.content}</div>
                   </UserContent>
-                  {isActivatCommentDeleteModal && (
+                  {isActivateCommentDeleteModal && (
                     <TwoButtonModal
                       TitleText="댓글 삭제"
                       Text="정말로 댓글을 삭제하시겠습니까?"
@@ -622,6 +704,16 @@ function MentorDetail() {
   );
 }
 
+const MentorActivateContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  .icon {
+    margin-left: 1rem;
+    cursor: pointer;
+  }
+`;
+
 const InputUserContent = styled.div`
   display: flex;
   justify-content: center;
@@ -641,6 +733,7 @@ const ButtonBox = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 1rem;
 `;
 
 const MenuBox3 = styled.div`
@@ -903,6 +996,10 @@ const MentorName = styled.div`
     margin-left: 1rem;
     ${theme.fontFrame.titleSmall};
   }
+  .icon {
+    margin-left: 0.5rem;
+    cursor: pointer;
+  }
   margin-bottom: 0.5rem;
 `;
 
@@ -928,15 +1025,14 @@ const MenuBox = styled.div`
   letter-spacing: 0.1rem;
   margin-bottom: 1.3rem;
   padding-bottom: 0.5rem;
-  .icon {
-    margin-left: 1rem;
-    margin-bottom: 2%;
-    cursor: pointer;
-  }
 `;
 const MentorDetailTag = styled.div`
   ${theme.font.nanumGothic};
   background-color: ${theme.colors.backgoundWhite};
+  .icon {
+    margin-left: 0.5rem;
+    cursor: pointer;
+  }
 `;
 
 export default MentorDetail;

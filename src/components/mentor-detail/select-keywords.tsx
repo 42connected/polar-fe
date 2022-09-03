@@ -45,7 +45,11 @@ interface Option {
   label: string;
 }
 
-function SelectKeywords() {
+interface Props {
+  isActivatedEdit: boolean;
+}
+
+function SelectKeywords(props: Props) {
   const [categoryKeywords, setCategoryKeywords] = useState<
     CategoryAndKeywords[]
   >([]);
@@ -107,7 +111,7 @@ function SelectKeywords() {
     <Div>
       <Select
         isMulti
-        isDisabled
+        isDisabled={!props.isActivatedEdit}
         value={mentorKeywords}
         onChange={keywords => {
           setMentorKeywords(
@@ -131,12 +135,6 @@ function SelectKeywords() {
         })}
         styles={styles}
       />
-      <ButtonBoxComponent>
-        <Button
-          onClick={() => patchMentorKeywords(mentorKeywords)}
-          text="완료"
-        />
-      </ButtonBoxComponent>
     </Div>
   );
 }
