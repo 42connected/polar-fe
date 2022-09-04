@@ -49,7 +49,6 @@ const InfoTitle = styled.div`
 const Bottom = styled.div`
   display: flex;
   width: 100%;
-  height: 400px;
   background-color: white;
 `;
 
