@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { OneButtonModalProps } from '../../../../components/modal/one-button-modal/one-button-modal';
 import AuthStore from '../../../../states/auth/AuthStore';
 import LoadingStore from '../../../../states/loading/LoadingStore';
 import MentorStore from '../../../../states/my-mentoring-mentor/MentorStore';
@@ -33,6 +34,9 @@ export function Info(props: InfoProps) {
   const [isMailFail, setIsMailFail] = useState(false);
   const [mailOverlaped, setMailOverlaped] = useState<boolean>(false);
   const [isCodeFail, setIsCodeFail] = useState(false);
+  const [isError, setIsError] = useState<boolean>(false);
+
+  let oneButtonModal: OneButtonModalProps;
 
   useEffect(() => {
     setEmail(defaultEmail);
@@ -59,7 +63,19 @@ export function Info(props: InfoProps) {
   async function SendEmail() {
     if (!email) {
       alert('Email을 입력하세요');
-      return;
+      oneButtonModal = {
+        TitleText: '이메일을 입력하세요',
+        Text: '이메일을 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      };
+      setIsError(true);
+      return isError;
     }
 
     setIsMailSucesss(false);
@@ -101,6 +117,17 @@ export function Info(props: InfoProps) {
   async function certificateEmail(code: string) {
     if (!code) {
       alert('인증코드를 입력하세요');
+      oneButtonModal = {
+        TitleText: '인증코드를 입력하세요',
+        Text: '인증코드를 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      };
       return;
     }
 

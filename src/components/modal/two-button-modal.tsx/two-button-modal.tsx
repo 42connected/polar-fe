@@ -10,6 +10,7 @@ import {
   ModalTitle,
   XButton,
 } from '../modal-styled';
+import theme from '../../../styles/theme';
 
 interface TwoButtonModalProps {
   TitleText: string;
@@ -17,10 +18,10 @@ interface TwoButtonModalProps {
   XButtonFunc: () => void;
   Button1Text: string;
   Button1Func: () => void;
-  Button1bg: string;
+  Button1bg?: string;
   Button2Text: string;
   Button2Func: () => void;
-  Button2bg: string;
+  Button2bg?: string;
 }
 
 export function TwoButtonModal(props: TwoButtonModalProps) {
@@ -40,13 +41,15 @@ export function TwoButtonModal(props: TwoButtonModalProps) {
         <ModalButtonContainer>
           <ModalButton
             onClick={props.Button1Func}
-            style={{ background: props.Button1bg }}
+            style={{
+              background: props.Button1bg && theme.colors.polarSimpleMain,
+            }}
           >
             {sliceMoreInfoStr(props.Button1Text, 6)}
           </ModalButton>
           <ModalButton
             onClick={props.Button2Func}
-            style={{ background: props.Button2bg }}
+            style={{ background: props.Button2bg && theme.colors.grayThree }}
           >
             {sliceMoreInfoStr(props.Button2Text, 6)}
           </ModalButton>
