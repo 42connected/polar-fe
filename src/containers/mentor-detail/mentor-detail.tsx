@@ -178,7 +178,7 @@ function MentorDetail() {
     axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
   }, [isActivateMentorMarkdownEdit]);
 
-  const AddHashtag = mentorTags.map(tag => {
+  const AddHashtag = mentorTags?.map(tag => {
     return <div>{tag.padStart(tag.length + 1, '#')}</div>;
   });
 
