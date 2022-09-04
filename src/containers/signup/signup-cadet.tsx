@@ -20,6 +20,11 @@ import {
   OneButtonModal,
   OneButtonModalProps,
 } from '../../components/modal/one-button-modal/one-button-modal';
+import {
+  DEFAULT_COOKIE_OPTION,
+  setCookie,
+  TOKEN_LIST,
+} from '../../context/cookies';
 
 const SignUpCadet = () => {
   const [name, setName] = useState<string>('');
@@ -109,6 +114,8 @@ const SignUpCadet = () => {
         });
 
         setIsError(true);
+
+        setCookie(TOKEN_LIST.JOIN, 'true', DEFAULT_COOKIE_OPTION);
 
         setIsRedirection(true);
       } else {
