@@ -112,7 +112,7 @@ export function TableRow(props: TableRowProps) {
         {sliceMoreInfoStr(props.topic, 17)}
       </TableColumnTopic>
       <TableColumnTime>
-        <Time>{getDayToString(props.meetingAt[START_TIME])}</Time>
+        <Time>{getDayToString(props?.meetingAt[START_TIME])}</Time>
         <TimeWhile>{getTimeToString(props.meetingAt)}</TimeWhile>
       </TableColumnTime>
       <StatusButton status={props.mentoringState} />
