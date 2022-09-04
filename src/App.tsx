@@ -18,6 +18,13 @@ import { Loading } from './components/loading';
 import { Login } from './containers/login/login';
 import SignUpCadet from './containers/signup/signup-cadet';
 import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
+import UserJoinStore from './states/user-join/UserJoinStore';
+import { UserJoin } from './containers/user-join/user-join';
+import ErrorStore from './states/error/ErrorStore';
+import { Error } from './containers/error/error';
+import MentorInfoModal, {
+  ModalType,
+} from './containers/signup/mentor-info-modal';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -29,8 +36,12 @@ import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
 const App = observer(() => {
   return (
     <>
-      {LoadingStore.isLoding ? <Loading /> : null}
+      {LoadingStore.isLoding && <Loading />}
       <Router basename={'/'}>
+        {ErrorStore.isError && (
+          <Error TitleText={ErrorStore.Title} errorMsg={ErrorStore.errorMsg} />
+        )}
+        {UserJoinStore.needJoin && <UserJoin />}
         <ScrollToTop />
         <Header />
         <Routes>
@@ -45,14 +56,33 @@ const App = observer(() => {
             path="/mentors/mentorings/:intraId"
             element={<MyMentoringMentor />}
           />
-          <Route path="" element={<MainPage />} />
-          <Route path="login" element={<Login />} />
-          <Route path="apply-page" element={<ApplyPage />} />
-          <Route path="report-details/:intraId" element={<ReportDetail />} />
+          <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/apply-page/:mentorId" element={<ApplyPage />} />
+          <Route path="/report-detail" element={<ReportDetail />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
           <Route path="/mentors/join" element={<SignUpMentor />} />
           <Route path="/cadets/join" element={<SignUpCadet />} />
+          {/* 모달 테스트용 URL -> 추후 멘토 상세페이지에 붙일 예정 */}
+          <Route
+            path="/mentors/info"
+            element={
+              <MentorInfoModal
+                intraId="m-engeng"
+                modalType={ModalType.MENTOR_INFO}
+              />
+            }
+          />
+          <Route
+            path="/mentors/time"
+            element={
+              <MentorInfoModal
+                intraId="m-engeng"
+                modalType={ModalType.AVAILABLE_TIME}
+              />
+            }
+          />
         </Routes>
         <Footer />
       </Router>

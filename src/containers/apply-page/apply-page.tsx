@@ -1,7 +1,14 @@
 import styled from 'styled-components';
 import theme from '../../styles/theme';
-import { useState } from 'react';
-import Modal from '../../components/modal';
+import { useEffect, useState } from 'react';
+import Modal from './modal';
+import { debounce } from '@mui/material';
+import { InputCounter } from './apply-input-counter';
+import axios, { AxiosError } from 'axios';
+import { PostApply } from './apply-interface';
+import { axiosInstance } from '../../context/axios-interface';
+import { useParams } from 'react-router-dom';
+import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 
 const Wrapper = styled.div`
   .modal {
@@ -12,7 +19,7 @@ const Wrapper = styled.div`
     bottom: 0;
     left: 0;
     z-index: 99;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: ${theme.colors.grayFour};
   }
   .modal button {
     outline: none;
@@ -89,9 +96,51 @@ const Wrapper = styled.div`
   }
 `;
 
+const ApplyContainer = styled.div`
+  left: 0;
+  ${theme.fontSize.sizeMedium};
+  ${theme.font.sebangGothic};
+  height: 77vh;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 80rem;
+  grid-template-columns: 85rem 85rem;
+  transition: all 0.25s ease-in-out;
+  grid-template-areas: 'time applyText';
+  text-align: center;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: ${theme.colors.polarBackground};
+  color: ${theme.colors.blackOne};
+`;
+
+const MovApplyContainer = styled.div`
+  left: 0;
+  ${theme.fontSize.sizeMedium};
+  ${theme.font.sebangGothic};
+  height: 200vh;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 70rem 70rem;
+  grid-template-columns: 80rem;
+  transition: all 0.25s ease-in-out;
+  grid-template-areas:
+    'time '
+    'applyText ';
+  text-align: center;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: ${theme.colors.polarBackground};
+  color: ${theme.colors.blackOne};
+`;
+
 const ApplypageStyle = styled.body`
   width: 100vw;
-  height: 60vw;
+  height: 120vh;
   display: flex;
   flex-direction: row;
   text-align: center;
@@ -100,19 +149,46 @@ const ApplypageStyle = styled.body`
   background-color: ${theme.colors.polarBackground};
 `;
 const Chooseplan = styled.div`
-  flex: 1;
   display: flex;
+  flex-flow: row;
   text-align: center;
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
+  grid-area: time;
+  grid-column-start: 1;
+  grid-row-start: 1;
 `;
 const Content = styled.div`
-  flex: 2;
   display: flex;
+  flex-flow: row;
+  text-align: center;
   flex-direction: column;
   flex-wrap: wrap;
+  align-items: center;
+  grid-area: applyText;
+  grid-column-start: 2;
+  grid-row-start: 1;
 `;
+
+const MovChooseplan = styled.div`
+  display: flex;
+  flex-flow: row;
+  text-align: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  grid-area: time;
+`;
+const MovContent = styled.div`
+  display: flex;
+  flex-flow: row;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  grid-area: applyText;
+`;
+
 const PlanButton1 = styled.button`
   padding-left: 12rem;
   box-shadow: ${theme.shadow.buttonShadow};
@@ -121,7 +197,6 @@ const PlanButton1 = styled.button`
   ${theme.fontSize.sizeExtraLarge};
   font-size: 3rem;
   color: ${theme.fontColor.whiteColor};
-  margin-left: 17rem;
   background-color: ${theme.colors.polarSimpleMain};
   margin-top: 4rem;
   border-radius: 20px;
@@ -140,7 +215,6 @@ const PlanButton2 = styled.button`
   text-align: center;
   line-height: 12.5rem;
   color: ${theme.fontColor.whiteColor};
-  margin-left: 17rem;
   background-color: ${theme.colors.polarBrightMain};
   margin-top: 4rem;
   border-radius: 20px;
@@ -150,22 +224,23 @@ const PlanButton2 = styled.button`
   border: none;
 `;
 const Line1 = styled.div`
-  margin-top: 20rem;
-  margin-left: 15rem;
+  text-align: center;
+  align-items: center;
   border-top: 0.3rem solid #000000;
   width: 70rem;
 `;
 
 const Line2 = styled.div`
   margin-top: 2rem;
-  margin-left: 15rem;
+  text-align: center;
+  align-items: center;
   border-top: 0.1rem solid #000000;
   width: 70rem;
 `;
 
 const MainText = styled.div`
   margin-top: 2rem;
-  margin-left: -27rem;
+  margin-left: -50%;
   text-align: center;
   ${theme.font.sebangGothic};
   ${theme.fontSize.sizeLarge};
@@ -174,25 +249,39 @@ const MainText = styled.div`
 const MainText2 = styled.div`
   margin-top: 2rem;
   text-align: center;
-  margin-left: -50rem;
+  margin-left: -50%;
   ${theme.font.sebangGothic};
   ${theme.fontSize.sizeLarge};
 `;
 
 const MiddleText = styled.div`
   margin-top: 4rem;
-  margin-left: 16rem;
   ${theme.font.sebangGothic};
   color: ${theme.colors.grayTwo};
   ${theme.fontSize.sizeExtraSmall};
 `;
 
+const MiddleText2 = styled.div`
+  ${theme.fontSize.sizeExtraSmall};
+  font-weight: 400;
+  color: ${theme.colors.grayTwo};
+  margin-left: -55%;
+  margin-top: 4rem;
+  margin-bottom: -2rem;
+`;
+
+const MiddleText3 = styled.div`
+  ${theme.fontSize.sizeExtraSmall};
+  font-weight: 400;
+  color: ${theme.colors.grayTwo};
+  margin-left: -51.5%;
+  margin-bottom: -2rem;
+`;
+
 const TextBox1 = styled.textarea`
   box-shadow: ${theme.shadow.buttonShadow};
   width: 50rem;
-  height: 10rem;
-  margin-left: 23rem;
-  margin-top: 7rem;
+  height: 6rem;
   border-radius: 20px;
   ${theme.font.sebangGothic};
   ${theme.fontSize.sizeExtraSmall};
@@ -201,9 +290,7 @@ const TextBox1 = styled.textarea`
 const TextBox2 = styled.textarea`
   box-shadow: ${theme.shadow.buttonShadow};
   width: 50rem;
-  height: 32rem;
-  margin-left: 23rem;
-  margin-top: 3rem;
+  height: 31rem;
   border-radius: 20px;
   ${theme.fontSize.sizeExtraSmall};
   ${theme.font.sebangGothic};
@@ -220,8 +307,33 @@ const ModalView = styled.div.attrs(props => ({
   color: #4000c7;
 `;
 
+const ApplyButton = styled.button`
+  margin-top: 4rem;
+  box-shadow: ${theme.shadow.buttonShadow};
+  text-align: center;
+  ${theme.fontSize.sizeMedium};
+  ${theme.font.sebangGothic};
+  color: ${theme.fontColor.titleColor};
+  background-color: ${theme.colors.backgoundWhite};
+  border-radius: 20px;
+  width: 12rem;
+  height: 4.5rem;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+`;
+
 const ApplyPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [topic, setTopic] = useState<string>('');
+  const [question, setQuestion] = useState<string>('');
+  const [requestTime, setRequestTime] = useState<Date[]>([]);
+  const [done, setDone] = useState(false);
+  const { mentorId } = useParams();
+  const [token, setToken] = useState<string>('');
+  const [role, setRole] = useState<string>('');
 
   const openModal = () => {
     setModalOpen(true);
@@ -230,43 +342,177 @@ const ApplyPage = () => {
     setModalOpen(false);
   };
 
+  const handleResize = debounce(() => {
+    if (window.innerWidth < 1070) setIsMobile(true);
+    else setIsMobile(false);
+  }, 10);
+
+  const postData: PostApply = {
+    topic: topic,
+    content: question,
+    requestTime1: [
+      new Date('2022-08-25T06:30:00Z'),
+      new Date('2022-08-25T08:30:00Z'),
+    ],
+    requestTime2: null,
+    requestTime3: null,
+  };
+
+  const postApply = async () => {
+    try {
+      const response = await axiosInstance.post(
+        `cadets/mentorings/apply/${mentorId}`,
+        postData,
+        {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        },
+      );
+    } catch (e) {
+      AuthStore.getAccessToken()
+        ? AuthStore.getUserRole() === USER_ROLES.CADET
+          ? alert('중복된 시간선정입니다')
+          : console.log(e)
+        : console.log(e);
+    }
+  };
+
+  if (done) {
+    postApply();
+  }
+
+  useEffect(() => {
+    setToken(AuthStore.getAccessToken());
+    setRole(AuthStore.getUserRole());
+    window.innerWidth <= 1070 ? setIsMobile(true) : setIsMobile(false);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const ClickEvent = () => {
+    if (requestTime[0] != null) return alert('시간을 하나 이상 입력해주세요');
+    else if (topic == null) return alert('주제를 입력해주세요');
+    else if (question == null) return alert('질문을 입력해주세요');
+    else setDone(true);
+  };
+
   return (
     <div className="applypage">
-      <ApplypageStyle>
-        <Chooseplan>
-          <Line1> </Line1>
-          <MainText>일정 선택하기</MainText>
-          <Line2> </Line2>
-          <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
-          <Wrapper>
-            <PlanButton1 onClick={openModal}> 가능시간1</PlanButton1>
-            <Modal
-              open={modalOpen}
-              close={closeModal}
-              header="멘토링 일정 선택"
-            ></Modal>
-            <PlanButton2 onClick={openModal}> 가능시간2</PlanButton2>
-            <Modal
-              open={modalOpen}
-              close={closeModal}
-              header="멘토링 일정 선택"
-            ></Modal>
-            <PlanButton2 onClick={openModal}> 가능시간3</PlanButton2>
-            <Modal
-              open={modalOpen}
-              close={closeModal}
-              header="멘토링 일정 선택"
-            ></Modal>
-          </Wrapper>
-        </Chooseplan>
-        <Content>
-          <Line1> </Line1>
-          <MainText2>신청 정보</MainText2>
-          <Line2> </Line2>
-          <TextBox1> 멘토링 주제 |</TextBox1>
-          <TextBox2> 궁금한 점 |</TextBox2>
-        </Content>
-      </ApplypageStyle>
+      {!isMobile ? ( //pc
+        <div>
+          <ApplyContainer>
+            <Chooseplan>
+              <Line1> </Line1>
+              <MainText>일정 선택하기</MainText>
+              <Line2> </Line2>
+              <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
+              <Wrapper>
+                <PlanButton1 onClick={openModal}> 가능시간1</PlanButton1>
+                <Modal
+                  open={modalOpen}
+                  close={closeModal}
+                  header="멘토링 일정 선택"
+                ></Modal>
+                <PlanButton2 onClick={openModal}> 가능시간2</PlanButton2>
+                <Modal
+                  open={modalOpen}
+                  close={closeModal}
+                  header="멘토링 일정 선택"
+                ></Modal>
+                <PlanButton2 onClick={openModal}> 가능시간3</PlanButton2>
+                <Modal
+                  open={modalOpen}
+                  close={closeModal}
+                  header="멘토링 일정 선택"
+                ></Modal>
+              </Wrapper>
+            </Chooseplan>
+            <Content>
+              <Line1> </Line1>
+              <MainText2>신청 정보</MainText2>
+              <Line2> </Line2>
+              <MiddleText2> * 주제 </MiddleText2>
+              <InputCounter
+                setter={setTopic}
+                value={topic}
+                maxLength={150}
+                width="50rem"
+                disabled={false}
+                height="4rem"
+              />
+              <MiddleText3> * 궁금한 점 </MiddleText3>
+              <InputCounter
+                setter={setQuestion}
+                value={question}
+                maxLength={150}
+                width="50rem"
+                disabled={false}
+                height="20rem"
+              />
+              <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
+            </Content>
+          </ApplyContainer>
+        </div>
+      ) : (
+        <div>
+          <MovApplyContainer>
+            <MovChooseplan>
+              <Line1> </Line1>
+              <MainText>일정 선택하기</MainText>
+              <Line2> </Line2>
+              <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
+              <Wrapper>
+                <PlanButton1 onClick={openModal}> 가능시간1</PlanButton1>
+                <Modal
+                  open={modalOpen}
+                  close={closeModal}
+                  header="멘토링 일정 선택"
+                ></Modal>
+                <PlanButton2 onClick={openModal}> 가능시간2</PlanButton2>
+                <Modal
+                  open={modalOpen}
+                  close={closeModal}
+                  header="멘토링 일정 선택"
+                ></Modal>
+                <PlanButton2 onClick={openModal}> 가능시간3</PlanButton2>
+                <Modal
+                  open={modalOpen}
+                  close={closeModal}
+                  header="멘토링 일정 선택"
+                ></Modal>
+              </Wrapper>
+            </MovChooseplan>
+            <MovContent>
+              <Line1> </Line1>
+              <MainText2>신청 정보</MainText2>
+              <Line2> </Line2>
+              <MiddleText2> * 주제 </MiddleText2>
+              <InputCounter
+                setter={setTopic}
+                value={topic}
+                maxLength={150}
+                width="50rem"
+                disabled={false}
+                height="4rem"
+              />
+              <MiddleText3> * 궁금한 점 </MiddleText3>
+              <InputCounter
+                setter={setQuestion}
+                value={question}
+                maxLength={800}
+                width="50rem"
+                disabled={false}
+                height="20rem"
+              />
+              <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
+            </MovContent>
+          </MovApplyContainer>
+        </div>
+      )}
+      ;
     </div>
   );
 };

@@ -53,6 +53,9 @@ const Text = styled.div`
   ${defaultTheme.font.sebangGothic};
   ${defaultTheme.fontSize.sizeExtraSmall};
   font-weight: bold;
+  @media screen and (max-width: 500px) {
+    ${defaultTheme.fontSize.sizeSmall};
+  }
 `;
 
 const TextContainer = styled.div`
@@ -75,6 +78,9 @@ const SearchBox = styled.input`
   &:hover {
     background-color: #f6f6f6;
   }
+  @media screen and (max-width: 500px) {
+    font-size: 1rem;
+  }
 `;
 
 const Search = styled.div`
@@ -82,6 +88,9 @@ const Search = styled.div`
   width: 50%;
   justify-content: right;
   margin: auto;
+  @media screen and (max-width: 500px) {
+    width: 45%;
+  }
 `;
 
 const CardContainer = styled.div`

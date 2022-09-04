@@ -15,6 +15,7 @@ export const TOKEN_LIST = {
   ACCESS_TOKEN: 'access_token',
   USER_ROLE: 'user_role',
   INTRA_ID: 'intra_id',
+  JOIN: 'info_join',
 };
 
 /**
@@ -66,6 +67,7 @@ export const getCookie = (tokenName: string) => {
 /**
  * 토큰 삭제하는 함수
  * @param tokenName 토큰 이름
+ * @param option 옵션
  */
 export const removeCookie = (tokenName: string, option?: COOKIE_OPTION) => {
   cookies.remove(tokenName, { ...option });

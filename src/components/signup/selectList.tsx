@@ -32,7 +32,7 @@ function SelectList(props: SelectListProps) {
 
   return (
     <Autocomplete
-      defaultValue={props.lists[0]}
+      defaultValue={props.lists[props.value]}
       inputValue={inputValue}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);

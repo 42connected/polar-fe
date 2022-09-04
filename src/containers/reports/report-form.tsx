@@ -28,6 +28,7 @@ const NoneDrag = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  background-color: ${defaultTheme.colors.polarGray};
 `;
 
 const ReportContainer = styled.div`
@@ -95,9 +96,10 @@ export const makeTimePair = (time: number) => {
  * @returns "2022.08.19 (화)"
  */
 export const getDayToString = (meetingAt: Date): string => {
+  const FAILED_TO_MAKE_NEW_DATE = -1;
   const date: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const startTime: Date = new Date(meetingAt);
-  if (startTime.toString().indexOf('Invalid Date') > -1) {
+  if (startTime.toString().indexOf('Invalid Date') > FAILED_TO_MAKE_NEW_DATE) {
     return '-';
   }
 

@@ -12,6 +12,7 @@ import { Navigate } from 'react-router-dom';
 import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
 import AuthStore from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
+import UserJoinStore from '../../states/user-join/UserJoinStore';
 
 export const ContainersPc = styled.div`
   display: grid;
@@ -105,22 +106,21 @@ export const EmailInput = styled.input`
 `;
 
 export const CertificationSendingButton = styled.button`
-  margin-left: 240px;
-  width: 70.19px;
-  height: 35.11px;
   justify-content: center;
+  margin-left: 240px;
+  width: 80.19px;
+  height: 35.11px;
   background: ${defaultTheme.colors.polarSimpleMain};
   color: WHITE;
   padding-top: 1rem;
-  padding-right: 0.8rem;
   border: none;
   cursor: pointer;
-  font-size: 27px;
   border-radius: 20px;
   font-style: normal;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 18px;
+  word-break: keep-all;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 `;
 
@@ -151,6 +151,7 @@ export const TimeTableContainer = styled.ul`
   grid-gap: 4px;
   list-style-type: none;
   margin-right: 2rem;
+  margin-bottom: 0rem;
 `;
 
 const ColumnDays = styled.li`
@@ -273,8 +274,9 @@ const SignUpMentor = () => {
   ]);
 
   useEffect(() => {
+    UserJoinStore.off();
     MentorStore.getMentor(AuthStore.getUserIntraId());
-    window.screen.width <= 500 ? setIsMobile(true) : setIsMobile(false);
+    window.innerWidth <= 500 ? setIsMobile(true) : setIsMobile(false);
 
     window.addEventListener('resize', handleResize);
     return () => {
