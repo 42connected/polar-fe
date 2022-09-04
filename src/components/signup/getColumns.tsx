@@ -1,13 +1,12 @@
+import SelectList from './selectList';
+import deleteButtonImage from '../../assets/signup/deleteButton.png';
 import {
   BodyBigFont,
   DeleteButtonImage,
   TimeTableContainer,
-} from '../../containers/signup/signup-mentor';
-import SelectList from './selectList';
-import deleteButtonImage from '../../assets/signup/deleteButton.png';
-import { IndexInfo } from 'typescript';
+} from '../../containers/signup/signup-style';
 
-const days: string[] = ['월', '화', '수', '목', '금', '토', '일'];
+const days: string[] = ['일', '월', '화', '수', '목', '금', '토'];
 
 const hours: string[] = [
   '08시',

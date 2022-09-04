@@ -57,21 +57,24 @@ export function ReportRowWrite(props: ReportRowWriteProps) {
           setter={props.setTopic}
           value={props.topic}
           maxLength={150}
-          disabled={!props.isEditPossible}
+          countDisabled={!props.isEditPossible}
+          inputDisabled={!props.isEditPossible}
         />
         <ReportSummaryTitle>&#183; 내용</ReportSummaryTitle>
         <InputCounter
           setter={props.setContent}
           value={props.content}
           maxLength={800}
-          disabled={!props.isEditPossible}
+          countDisabled={!props.isEditPossible}
+          inputDisabled={!props.isEditPossible}
         />
         <ReportSummaryTitle>&#183; 교육생에게 남기는 말</ReportSummaryTitle>
         <InputCounter
           setter={props.setFeedbackMessage}
           value={props.feedbackMessage}
           maxLength={800}
-          disabled={!props.isEditPossible}
+          countDisabled={!props.isEditPossible}
+          inputDisabled={!props.isEditPossible}
         />
       </ReportRowContent>
     </ReportRowContainer>

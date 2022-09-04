@@ -94,12 +94,17 @@ const MyMentoringMentor = observer(() => {
   const { intraId } = useParams<string>();
   const [log, setLog] = useState<MentoringLogs>();
   const [applyModal, setApplyModal] = useState<boolean>(false);
+  const [isDoneToGetLogs, setIsDoneToGetLogs] = useState<boolean>(false);
 
   useEffect(() => {
-    MentorLogStore.Initializer(
-      AuthStore.getAccessToken(),
-      parseInt(pageNumber || INITIAL_PAGE),
-    );
+    async function initLog() {
+      await MentorLogStore.Initializer(
+        AuthStore.getAccessToken(),
+        parseInt(pageNumber || INITIAL_PAGE),
+      );
+      setIsDoneToGetLogs(true);
+    }
+    initLog();
   }, [pageNumber]);
 
   useEffect(() => {
@@ -151,23 +156,25 @@ const MyMentoringMentor = observer(() => {
           ))}
         </Container>
       </Bottom>
-      <PaginationContainer>
-        <ThemeProvider theme={muiTheme}>
-          <Pagination
-            page={parseInt(pageNumber || INITIAL_PAGE)}
-            count={Math.trunc(MentorLogStore.total / LOGS_PER_PAGE) + 1}
-            renderItem={item => (
-              <PaginationItem
-                component={Link}
-                to={`/mentors/mentorings/${intraId}${`?page=${item.page}`}`}
-                {...item}
-              />
-            )}
-            size="large"
-            color="primary"
-          />
-        </ThemeProvider>
-      </PaginationContainer>
+      {isDoneToGetLogs && (
+        <PaginationContainer>
+          <ThemeProvider theme={muiTheme}>
+            <Pagination
+              page={parseInt(pageNumber || INITIAL_PAGE)}
+              count={Math.trunc(MentorLogStore.total / LOGS_PER_PAGE) + 1}
+              renderItem={item => (
+                <PaginationItem
+                  component={Link}
+                  to={`/mentors/mentorings/${intraId}${`?page=${item.page}`}`}
+                  {...item}
+                />
+              )}
+              size="large"
+              color="primary"
+            />
+          </ThemeProvider>
+        </PaginationContainer>
+      )}
     </NoneDrag>
   );
 });
