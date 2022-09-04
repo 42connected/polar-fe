@@ -9,6 +9,8 @@ import { PostApply } from './apply-interface';
 import { axiosInstance } from '../../context/axios-interface';
 import { useParams } from 'react-router-dom';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
+import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
+import { defaultTheme } from 'react-select';
 
 const Wrapper = styled.div`
   .modal {
@@ -334,6 +336,8 @@ const ApplyPage = () => {
   const { mentorId } = useParams();
   const [token, setToken] = useState<string>('');
   const [role, setRole] = useState<string>('');
+  const [errorModal, setErrorModal] = useState<boolean>(false);
+  const [errorModalMsg, setErrorModalMsg] = useState<string>('');
 
   const openModal = () => {
     setModalOpen(true);
@@ -360,7 +364,7 @@ const ApplyPage = () => {
 
   const postApply = async () => {
     try {
-      const response = await axiosInstance.post(
+      await axiosInstance.post(
         `cadets/mentorings/apply/${mentorId}`,
         postData,
         {
@@ -369,18 +373,11 @@ const ApplyPage = () => {
           },
         },
       );
-    } catch (e) {
-      AuthStore.getAccessToken()
-        ? AuthStore.getUserRole() === USER_ROLES.CADET
-          ? alert('중복된 시간선정입니다')
-          : console.log(e)
-        : console.log(e);
+    } catch (err) {
+      setErrorModalMsg('요청 에러 발생');
+      setErrorModal(true);
     }
   };
-
-  if (done) {
-    postApply();
-  }
 
   useEffect(() => {
     setToken(AuthStore.getAccessToken());
@@ -393,14 +390,35 @@ const ApplyPage = () => {
   }, []);
 
   const ClickEvent = () => {
-    if (requestTime[0] != null) return alert('시간을 하나 이상 입력해주세요');
-    else if (topic == null) return alert('주제를 입력해주세요');
-    else if (question == null) return alert('질문을 입력해주세요');
-    else setDone(true);
+    if (requestTime.length <= 0) {
+      setErrorModalMsg('신청 시간을 선택해주세요');
+    } else if (topic.length <= 0) {
+      setErrorModalMsg('주제를 입력해주세요');
+    } else if (question.length <= 0) {
+      setErrorModalMsg('궁금한 점을 입력해주세요');
+    } else {
+      postApply();
+      return;
+    }
+    setErrorModal(true);
   };
 
   return (
     <div className="applypage">
+      {errorModal && (
+        <OneButtonModal
+          TitleText="⚠️ 42폴라 경고"
+          Text={errorModalMsg}
+          XButtonFunc={() => {
+            setErrorModal(false);
+          }}
+          ButtonText="닫기"
+          ButtonBg="gray"
+          ButtonFunc={() => {
+            setErrorModal(false);
+          }}
+        />
+      )}
       {!isMobile ? ( //pc
         <div>
           <ApplyContainer>
