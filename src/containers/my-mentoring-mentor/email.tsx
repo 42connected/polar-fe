@@ -120,7 +120,7 @@ export function Email(props: EmailProps) {
                 onClick={() => {
                   setIsEdit(!isEdit);
                 }}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: 'pointer', marginRight: '10px' }}
               />
               <FontAwesomeIcon
                 icon={faCheck}
