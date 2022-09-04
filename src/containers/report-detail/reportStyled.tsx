@@ -346,8 +346,26 @@ export const MentoNameBox = styled.section`
   border: 1px solid black;
   border-left: 0;
   text-align: left;
-  padding-top: 2rem;
-  padding-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+`;
+
+export const SignText = styled.div`
+  position: relative;
+  color: gray;
+  margin-left: 3rem;
+`;
+
+export const MentoSign = styled.span`
+  position: absolute;
+  margin-left: 7rem;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  color: black;
 `;
 
 export const KadetNameBox = styled.section`
