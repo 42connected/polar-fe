@@ -1,30 +1,34 @@
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { axiosInstance } from '../context/axios-interface';
 import { MentoringLogProps } from '../interface/mentor-detail/mentoringLogProps';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../states/error/ErrorStore';
 import theme from '../styles/theme';
 
-function PageNationComponent(intraId: any) {
+function PageNationComponent() {
   const [take, setTake] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
   const [maxPage, setMaxPage] = useState<number>(1);
   const [mentoringLog, setMentoringLog] = useState<MentoringLogProps[]>([]);
 
+  const getParams = useParams();
+  const intraId = getParams.intraId;
   useEffect(() => {
     const params = {
       take: take,
       page: page,
     };
     axiosInstance
-      .get(`/mentoring-log/${intraId.intraId}`, { params })
+      .get(`/mentors/simplelogs/${intraId}`, { params })
       .then(response => {
-        setMentoringLog(response.data.log);
-        setMaxPage(Math.ceil(response.data.total / page));
+        setMentoringLog(response.data?.logs || []);
+        setMaxPage(Math.ceil(response.data.total / take));
       })
       .catch(err => {
-        console.log(err);
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
       });
   }, []);
 
@@ -34,11 +38,14 @@ function PageNationComponent(intraId: any) {
       page: page - 1,
     };
     axiosInstance
-      .get(`/mentors/simplelog/${intraId}`, { params })
+      .get(`/mentors/simplelogs/${intraId}`, { params })
       .then(response => {
-        setMentoringLog(response.data.log);
+        setMentoringLog(response.data.logs);
         setPage(page - 1);
-        setMaxPage(Math.ceil(response.data.total / page));
+        setMaxPage(Math.ceil(response.data.total / take));
+      })
+      .catch(err => {
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
       });
   };
   const handleClickPageNext = () => {
@@ -47,23 +54,31 @@ function PageNationComponent(intraId: any) {
       page: page + 1,
     };
     axiosInstance
-      .get(`/mentors/simplelog/${intraId}`, { params })
+      .get(`/mentors/simplelogs/${intraId}`, { params })
       .then(response => {
-        setMentoringLog(response.data.log);
+        setMentoringLog(response.data?.logs || []);
         setPage(page + 1);
-        setMaxPage(Math.ceil(response.data.total / page));
+        setMaxPage(Math.ceil(response.data.total / take));
+      })
+      .catch(err => {
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
       });
   };
 
-  const PageNationLog = mentoringLog.map((log, index) => {
-    <MenuBoxLog key={index}>
-      <div>{log.topic}</div>
-      <div>{log.state}</div>
-      <div>{`${log.meetingAt.substring(2, 4)}.${log.meetingAt.substring(
-        5,
-        7,
-      )}.${log.meetingAt.substring(8, 10)}`}</div>
-    </MenuBoxLog>;
+  const PageNationLog = mentoringLog?.map((log, index) => {
+    return (
+      <MenuBoxLog key={index}>
+        <div>{log.topic}</div>
+        <div className="status">{log.status}</div>
+        <div>{`${log?.meetingAt?.[0].substring(
+          2,
+          4,
+        )}.${log?.meetingAt?.[0].substring(
+          5,
+          7,
+        )}.${log?.meetingAt?.[0].substring(8, 10)}`}</div>
+      </MenuBoxLog>
+    );
   });
 
   return (
@@ -115,7 +130,6 @@ const PageNation = styled.div`
 const MenuBoxLog = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.grayFive};
   width: 100%;
-  height: 3rem;
   box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -124,6 +138,9 @@ const MenuBoxLog = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .status {
+    color: ${props => props.theme.colors.polarSimpleMain};
   }
 `;
 
