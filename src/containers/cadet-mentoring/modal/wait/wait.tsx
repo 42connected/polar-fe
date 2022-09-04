@@ -106,10 +106,15 @@ export function Wait(props: WaitProps) {
           setter={props.rejectReasonSetter}
           value={props.rejectReason}
           maxLength={250}
-          disabled={false}
+          countDisabled={false}
+          inputDisabled={false}
         />
       ) : (
-        <InputCounter value={props.content} disabled={true} />
+        <InputCounter
+          value={props.content}
+          countDisabled={true}
+          inputDisabled={true}
+        />
       )}
     </Container>
   );
