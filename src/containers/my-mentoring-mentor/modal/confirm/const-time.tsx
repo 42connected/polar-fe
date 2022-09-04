@@ -30,7 +30,7 @@ export const constTime = (meetingAt: Date[]) => {
       <Content style={{ textDecoration: 'none' }}>
         {meetingAt?.length !== 0 ? (
           <>
-            {getDayToString(meetingAt[0])} {getTimeToString(meetingAt)}
+            {getDayToString(meetingAt?.[0])} {getTimeToString(meetingAt)}
           </>
         ) : (
           '미정'
