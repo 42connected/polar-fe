@@ -2,9 +2,11 @@ import { debounce } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import logo from '../assets/image/logo/logo.png';
-import AuthStore, { USER_ROLES } from '../states/auth/AuthStore';
-import theme from '../styles/theme';
+import logo from '../../assets/image/logo/logo.png';
+import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
+import theme from '../../styles/theme';
+import { HeaderLogin } from './login';
 
 const HeaderStyle = styled.header`
   position: relative;
@@ -182,9 +184,6 @@ const Header = () => {
     if (window.innerWidth < 600) setIsMobile(true);
     else setIsMobile(false);
   }, 10);
-  const AlertDetail = () => {
-    return alert('9월 2째주 comming soon~ :)');
-  };
   if (AuthStore.getUserRole()) {
     mdlinks = '/mentor-detail/' + AuthStore.getUserIntraId();
     mlinks = '/mentors/mentorings/' + AuthStore.getUserIntraId();
@@ -207,34 +206,17 @@ const Header = () => {
                 polar
               </MovLogoButton>
             </Link>
-            {AuthStore.getAccessToken() ? (
-              <MovLoginButton
-                onClick={() => {
-                  AuthStore.Logout();
-                }}
-              >
-                로그아웃
-              </MovLoginButton>
-            ) : (
-              <MovLoginButton
-                onClick={() => {
-                  AuthStore.Login();
-                }}
-              >
-                로그인
-              </MovLoginButton>
-            )}
+            <HeaderLogin isMobile={isMobile}></HeaderLogin>
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
-                <div>
-                  {AlertDetail()}
-                  <Link to={'/'}>{AuthStore.Logout()}</Link>
-                </div>
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
                   rel="noreferrer"
                 >
+                  <Link to={'/cadets/mentorings'}>
+                    <MovMyMentoringButton>마이페이지</MovMyMentoringButton>
+                  </Link>
                   <MovSuggestionButton>건의사항</MovSuggestionButton>
                 </a>
               </div>
@@ -290,29 +272,9 @@ const Header = () => {
                 polar
               </LogoButton>
             </Link>
-            {AuthStore.getAccessToken() ? (
-              <LoginButton
-                onClick={() => {
-                  AuthStore.Logout();
-                }}
-              >
-                로그아웃
-              </LoginButton>
-            ) : (
-              <LoginButton
-                onClick={() => {
-                  AuthStore.Login();
-                }}
-              >
-                로그인
-              </LoginButton>
-            )}
+            <HeaderLogin isMobile={isMobile}></HeaderLogin>
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
-                <div>
-                  {AlertDetail()}
-                  {AuthStore.Logout()}
-                </div>
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
