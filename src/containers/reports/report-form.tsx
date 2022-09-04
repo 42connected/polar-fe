@@ -14,6 +14,7 @@ import ReportStore, {
 import { observer } from 'mobx-react-lite';
 import AuthStore from '../../states/auth/AuthStore';
 import { ReportRowWrite } from './report-row-write';
+import { TwoButtonModal } from '../../components/modal/two-button-modal.tsx/two-button-modal';
 
 export const REPORT_STATE = {
   EDIT_POSSIBLE: '작성중',
@@ -139,6 +140,7 @@ const ReportForm = observer(() => {
   const [feedback2, setFeedback2] = useState<number>(5);
   const [feedback3, setFeedback3] = useState<number>(5);
   const [place, setPlace] = useState<string>('');
+  const [modal, setModal] = useState<boolean>(false);
 
   useEffect(() => {
     async function Initialize() {
@@ -171,6 +173,33 @@ const ReportForm = observer(() => {
 
   return (
     <NoneDrag>
+      {modal && (
+        <TwoButtonModal
+          TitleText="📝 레포트 제출 확인"
+          Text={`정말 제출하시겠습니까?\n제출 이후에는 레포트를 수정할 수 없습니다.`}
+          XButtonFunc={() => {
+            setModal(false);
+          }}
+          Button1Text="확인"
+          Button1bg={defaultTheme.colors.polarSimpleMain}
+          Button1Func={() => {
+            if (!reportId) {
+              return;
+            }
+            ReportStore.saveDone(
+              reportId,
+              AuthStore.getAccessToken(),
+              getSaveFormdate(),
+            );
+            setModal(false);
+          }}
+          Button2Text="취소"
+          Button2bg="gray"
+          Button2Func={() => {
+            setModal(false);
+          }}
+        />
+      )}
       <Container component="main" maxWidth="lg">
         <Title title={'보고서 작성'} />
         <ReportContainer>
@@ -254,14 +283,7 @@ const ReportForm = observer(() => {
             </DefualtButton>
             <DefualtButton
               onClick={() => {
-                if (!reportId) {
-                  return;
-                }
-                ReportStore.saveDone(
-                  reportId,
-                  AuthStore.getAccessToken(),
-                  getSaveFormdate(),
-                );
+                setModal(true);
               }}
             >
               제출
