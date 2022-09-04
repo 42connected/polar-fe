@@ -27,7 +27,6 @@ import { mentorAvailableTimeInterface } from '../../interface/mentor-detail/ment
 import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
 import AuthStore, { User } from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
-import SignUpMentor, { InfoInput } from '../signup/signup-mentor';
 import MarkdownRender from './markdownRender';
 import { ModalBackground } from '../../components/modal/modal-styled';
 import ErrorStore from '../../states/error/ErrorStore';
