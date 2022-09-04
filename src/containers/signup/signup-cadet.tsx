@@ -10,44 +10,12 @@ import {
   HeadLetters,
   InfoInput,
   NameTitle,
-  OptionWrapper,
   RequiredWrapper,
   SingupImage,
 } from './signup-style';
 import UserJoinStore from '../../states/user-join/UserJoinStore';
 import { debounce } from '@mui/material';
 import LoadingStore from '../../states/loading/LoadingStore';
-
-// const UserMainImg = styled.img.attrs({
-//   src: `${singupImage}`,
-// })`
-// 	생략...
-// `;
-
-// onInputChange = event => {
-//   this.setState({ input: event.target.value });
-// };
-
-async function onButtonSubmit() {
-  /**
-   * TODO: Add UserJoinStore.off()
-   */
-  try {
-    axios.defaults.headers.common[
-      'Authorization'
-    ] = `bearer ${AuthStore.getAccessToken()}`;
-
-    const response = await axios.patch(
-      `${process.env.REACT_APP_BASE_BACKEND_URL}/cadets/join`,
-      {
-        name: '강주현',
-      },
-    );
-    console.log(response);
-  } catch (err) {
-    console.error(err);
-  }
-}
 
 const SignUpCadet = () => {
   const [name, setName] = useState<string>('');
@@ -91,6 +59,7 @@ const SignUpCadet = () => {
         {
           name: name,
         },
+        { withCredentials: true },
       );
 
       if (response.status === 200) {

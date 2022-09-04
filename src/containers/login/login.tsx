@@ -28,28 +28,10 @@ export function Login() {
       return;
     }
     axios
-      .get(`${process.env.REACT_APP_BASE_LOGIN_CALLBACK_URL}?code=${code}`)
+      .get(`${process.env.REACT_APP_BASE_LOGIN_CALLBACK_URL}?code=${code}`, {
+        withCredentials: true,
+      })
       .then(res => {
-        setCookie(
-          TOKEN_LIST.ACCESS_TOKEN,
-          res?.data?.jwt,
-          DEFAULT_COOKIE_OPTION,
-        );
-        setCookie(
-          TOKEN_LIST.INTRA_ID,
-          res?.data?.user?.intraId,
-          DEFAULT_COOKIE_OPTION,
-        );
-        setCookie(
-          TOKEN_LIST.USER_ROLE,
-          res?.data?.user?.role,
-          DEFAULT_COOKIE_OPTION,
-        );
-        setCookie(
-          TOKEN_LIST.JOIN,
-          res?.data?.user?.join,
-          DEFAULT_COOKIE_OPTION,
-        );
         navigate(-1);
       })
       .catch(err => {

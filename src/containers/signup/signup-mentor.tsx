@@ -283,6 +283,9 @@ const SignUpMentor = () => {
           availableTime: availableTime,
           isActive: checked,
         },
+        {
+          withCredentials: true,
+        },
       );
 
       if (response.status === 200) {
