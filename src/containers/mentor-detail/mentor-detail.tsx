@@ -6,7 +6,6 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Fade } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -19,28 +18,20 @@ import TagInputBoxComponent from '../../components/mentor-detail/tag-input-box';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 import { TwoButtonModal } from '../../components/modal/two-button-modal.tsx/two-button-modal';
 import PageNationComponent from '../../components/page-nation';
-import ReportSummaryInputComponent from '../../components/report-summery-input';
-import {
-  axiosInstance,
-  axiosWithData,
-  axiosWithNoData,
-  AXIOS_METHOD_WITH_DATA,
-  AXIOS_METHOD_WITH_NO_DATA,
-} from '../../context/axios-interface';
+import { axiosInstance } from '../../context/axios-interface';
 import { getCookie, TOKEN_LIST } from '../../context/cookies';
 import { appointmentsInterface } from '../../interface/mentor-detail/appointments.interface';
 import { CommentProps } from '../../interface/mentor-detail/comment-props.interface';
 import { CommentsWithPageProps } from '../../interface/mentor-detail/comments-with-page.interface';
 import { mentorAvailableTimeInterface } from '../../interface/mentor-detail/mentor-available-time.interface';
 import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
-import { MentoringLogProps } from '../../interface/mentor-detail/mentoringLogProps';
 import AuthStore, { User } from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
 import SignUpMentor, { InfoInput } from '../signup/signup-mentor';
 import MarkdownRender from './markdownRender';
 import { ModalBackground } from '../../components/modal/modal-styled';
-import { Info } from '../signup/modal/info/info';
 import ErrorStore from '../../states/error/ErrorStore';
+import MentorInfoModal, { ModalType } from '../signup/mentor-info-modal';
 
 function MentorDetail() {
   const mockMentorAvailableTime =
@@ -295,9 +286,14 @@ function MentorDetail() {
                 isUnActivated={true}
               />
 
-              {isActivateMentorTimeEditModal ? (
-                <ModalBackground>{/* <Info /> */}</ModalBackground>
-              ) : null}
+              {isActivateMentorTimeEditModal && (
+                <ModalBackground>
+                  <MentorInfoModal
+                    intraId={'m-engeng'}
+                    modalType={ModalType.MENTOR_INFO}
+                  />
+                </ModalBackground>
+              )}
             </MentorActivateContainer>
           </MentorInfoContent>
         </MentorInfo>
@@ -1036,3 +1032,8 @@ const MentorDetailTag = styled.div`
 `;
 
 export default MentorDetail;
+// TODO: alert 바꾸기
+// TODO: error alert
+// TODO: 존재하지 않은 mentor있을때 redirect
+// TODO: loading 처리
+// TODO: change grid to flex

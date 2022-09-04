@@ -12,13 +12,13 @@ import {
 } from '../modal-styled';
 import theme from '../../../styles/theme';
 
-interface OneButtonModalProps {
+export interface OneButtonModalProps {
   TitleText: string;
   Text: string;
-  XButtonFunc: () => void;
+  XButtonFunc: () => any;
   ButtonText: string;
   ButtonBg?: string;
-  ButtonFunc: () => void;
+  ButtonFunc: () => any;
 }
 
 export function OneButtonModal(props: OneButtonModalProps) {
