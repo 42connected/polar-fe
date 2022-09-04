@@ -69,9 +69,9 @@ export function Time(props: TimeProps) {
           id: index++,
           date: [
             i,
-            availableTimes[i][j].startHour - (8 % 24),
+            availableTimes[i][j].startHour % 24,
             availableTimes[i][j].startMinute === 30 ? 1 : 0,
-            availableTimes[i][j].endHour - (8 % 24),
+            availableTimes[i][j].endHour % 24,
             availableTimes[i][j].endMinute === 30 ? 1 : 0,
           ],
         };

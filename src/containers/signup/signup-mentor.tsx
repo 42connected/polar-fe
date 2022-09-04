@@ -440,9 +440,9 @@ const SignUpMentor = () => {
     if (checked) {
       rows.map(row => {
         const temp: IAvailableDate = {
-          startHour: (row.date[1] + 8) % 24,
+          startHour: row.date[1] % 24,
           startMinute: row.date[2] ? 30 : 0,
-          endHour: (row.date[3] + 8) % 24,
+          endHour: row.date[3] % 24,
           endMinute: row.date[4] ? 30 : 0,
         };
         availableTime[row.date[0]].push(temp);
