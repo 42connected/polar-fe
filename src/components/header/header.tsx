@@ -211,7 +211,7 @@ const Header = () => {
               <div>
                 {/* <div>
                   {AlertDetail()}
-                  <Link to={'/'}>{AuthStore.Logout()}</Link>
+                  {AuthStore.Logout()}
                 </div> */}
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
@@ -281,7 +281,7 @@ const Header = () => {
               <div>
                 {/* <div>
                   {AlertDetail()}
-                  <Link to={'/'}>{AuthStore.Logout()}</Link>
+                  {AuthStore.Logout()}
                 </div> */}
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
