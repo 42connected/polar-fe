@@ -60,7 +60,7 @@ const SearchBoxInput = styled.input`
 
 const muiTheme = createTheme({
   components: {
-    MuiButtonBase: {
+    MuiButtonGroup: {
       styleOverrides: {
         root: {
           display: 'flex',

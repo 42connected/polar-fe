@@ -251,10 +251,9 @@ function MentorDetail() {
   };
 
   const mentoringLogList = mentoringLog.map(log => {
-    const makeDate = `${log.meetingAt
-      .getFullYear()
-      .toString()
-      .slice(-2)}/${log.meetingAt.getMonth()}/${log.meetingAt.getDay()}`;
+    const makeDate = `${log.meetingAt.getFullYear().toString().slice(-2)}/${
+      log.meetingAt.getMonth() + 1
+    }/${log.meetingAt.getDay()}`;
     return (
       <MenuBox2>
         <div>{log.topic}</div>
