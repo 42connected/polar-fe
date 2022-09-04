@@ -268,7 +268,7 @@ const ReportDetail = () => {
         `/reports/${reportId}`,
         {
           headers: {
-            Authorization: `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYm9jYWwiLCJpYXQiOjE2NjIyOTYyNjEsImV4cCI6MTY2MjM4MjY2MX0.DGedcvnMGgQjhwNdMbAjRw4vG4azpr3vz3tiTUmrWzE`,
+            Authorization: `bearer ${AuthStore.getAccessToken()}`,
           },
         },
       );
@@ -298,62 +298,59 @@ const ReportDetail = () => {
 
   return (
     <div>
-      {
-        //AuthStore.getAccessToken() ? (
-
-        //AuthStore.getUserRole() === USER_ROLES.BOCAL ? (
-        isMobile ? (
-          <ReportpageStyle2 height={reportDatas.length}>
-            <ImgBody>
-              <SimpleComponent
-                printRef={componentRef}
-                reportDatas={reportDatas}
+      {AuthStore.getAccessToken() ? (
+        AuthStore.getUserRole() === USER_ROLES.BOCAL ? (
+          isMobile ? (
+            <ReportpageStyle2 height={reportDatas.length}>
+              <ImgBody>
+                <SimpleComponent
+                  printRef={componentRef}
+                  reportDatas={reportDatas}
+                />
+              </ImgBody>
+              <ReactToPrint
+                content={() => componentRef.current}
+                trigger={() => (
+                  <ButtonBody>
+                    <PrintButton ref={buttonRef}>출력</PrintButton>
+                  </ButtonBody>
+                )}
+                onAfterPrint={() => {
+                  if (isAutoPrint) {
+                    navigate('/data-room');
+                  }
+                }}
               />
-            </ImgBody>
-            <ReactToPrint
-              content={() => componentRef.current}
-              trigger={() => (
-                <ButtonBody>
-                  <PrintButton ref={buttonRef}>출력</PrintButton>
-                </ButtonBody>
-              )}
-              onAfterPrint={() => {
-                if (isAutoPrint) {
-                  navigate('/data-room');
-                }
-              }}
-            />
-          </ReportpageStyle2>
+            </ReportpageStyle2>
+          ) : (
+            <ReportpageStyle height={reportDatas.length}>
+              <ImgBody>
+                <SimpleComponent
+                  printRef={componentRef}
+                  reportDatas={reportDatas}
+                />
+              </ImgBody>
+              <ReactToPrint
+                content={() => componentRef.current}
+                trigger={() => (
+                  <ButtonBody>
+                    <PrintButton ref={buttonRef}>출력</PrintButton>
+                  </ButtonBody>
+                )}
+                onAfterPrint={() => {
+                  if (isAutoPrint) {
+                    navigate('/data-room');
+                  }
+                }}
+              />
+            </ReportpageStyle>
+          )
         ) : (
-          <ReportpageStyle height={reportDatas.length}>
-            <ImgBody>
-              <SimpleComponent
-                printRef={componentRef}
-                reportDatas={reportDatas}
-              />
-            </ImgBody>
-            <ReactToPrint
-              content={() => componentRef.current}
-              trigger={() => (
-                <ButtonBody>
-                  <PrintButton ref={buttonRef}>출력</PrintButton>
-                </ButtonBody>
-              )}
-              onAfterPrint={() => {
-                if (isAutoPrint) {
-                  navigate('/data-room');
-                }
-              }}
-            />
-          </ReportpageStyle>
-        )
-        /* ) : (
           <></>
         )
-        /*) : (
+      ) : (
         <></>
-      )}*/
-      }
+      )}
     </div>
   );
 };
