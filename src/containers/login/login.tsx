@@ -19,7 +19,6 @@ const Background = styled.div`
 `;
 
 export function Login() {
-  const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const code = params.get('code');
 
@@ -32,7 +31,7 @@ export function Login() {
         withCredentials: true,
       })
       .then(res => {
-        navigate(-1);
+        document.location.href = `${process.env.REACT_APP_ORIGIN}`;
       })
       .catch(err => {
         ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);

@@ -99,6 +99,7 @@ export const ModalBody = styled.div`
   width: 30rem;
   height: 10rem;
   word-break: break-all;
+  white-space: pre-wrap;
 `;
 
 export const ModalButtonContainer = styled.div`
@@ -113,7 +114,7 @@ export const ModalButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 7px 10px;
+  padding: 7px 15px;
   border-radius: 10px;
   &:hover {
     opacity: 0.8;
