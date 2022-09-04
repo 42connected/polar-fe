@@ -97,6 +97,9 @@ export const makeTimePair = (time: number) => {
  * @returns "2022.08.19 (화)"
  */
 export const getDayToString = (meetingAt: Date): string => {
+  if (!meetingAt) {
+    return '-';
+  }
   const FAILED_TO_MAKE_NEW_DATE = -1;
   const date: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const startTime: Date = new Date(meetingAt);
@@ -116,6 +119,9 @@ export const getDayToString = (meetingAt: Date): string => {
  * @returns "14:00 ~ 15:00"
  */
 export const getTimeToString = (meetingAt: Date[]): string => {
+  if (!meetingAt) {
+    return '';
+  }
   const startTime: Date = new Date(meetingAt[START_TIME]);
   const endTime: Date = new Date(meetingAt[END_TIME]);
 

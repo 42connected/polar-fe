@@ -85,6 +85,9 @@ export interface TableRowProps {
 }
 
 const getDayToShortString = (meetingAt: Date): string => {
+  if (!meetingAt) {
+    return '-';
+  }
   const FAILED_TO_MAKE_NEW_DATE = -1;
   const startTime: Date = new Date(meetingAt);
   if (startTime.toString().indexOf('Invalid Date') > FAILED_TO_MAKE_NEW_DATE) {
@@ -101,7 +104,7 @@ const getDayToShortString = (meetingAt: Date): string => {
 export function TableRow(props: TableRowProps) {
   return (
     <TableColumnLine>
-      <TableColumnDate>{getDayToShortString(props.createdAt)}</TableColumnDate>
+      <TableColumnDate>{getDayToShortString(props?.createdAt)}</TableColumnDate>
       <TableColumnUser>{props.user}</TableColumnUser>
       <TableColumnTopic
         onClick={() => {
@@ -112,8 +115,8 @@ export function TableRow(props: TableRowProps) {
         {sliceMoreInfoStr(props.topic, 17)}
       </TableColumnTopic>
       <TableColumnTime>
-        <Time>{getDayToString(props?.meetingAt[START_TIME])}</Time>
-        <TimeWhile>{getTimeToString(props.meetingAt)}</TimeWhile>
+        <Time>{getDayToString(props?.meetingAt?.[START_TIME])}</Time>
+        <TimeWhile>{getTimeToString(props?.meetingAt)}</TimeWhile>
       </TableColumnTime>
       <StatusButton status={props.mentoringState} />
       <ReportButton
