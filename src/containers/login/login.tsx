@@ -27,7 +27,9 @@ export function Login() {
       return;
     }
     axios
-      .get(`${process.env.REACT_APP_BASE_LOGIN_CALLBACK_URL}?code=${code}`)
+      .get(`${process.env.REACT_APP_BASE_LOGIN_CALLBACK_URL}?code=${code}`, {
+        withCredentials: true,
+      })
       .then(res => {
         setCookie(
           TOKEN_LIST.ACCESS_TOKEN,

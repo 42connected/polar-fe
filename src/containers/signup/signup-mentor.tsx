@@ -31,6 +31,15 @@ import {
   TimeTableContainer,
   ToggleContainer,
 } from './signup-style';
+import {
+  OneButtonModal,
+  OneButtonModalProps,
+} from '../../components/modal/one-button-modal/one-button-modal';
+import {
+  DEFAULT_COOKIE_OPTION,
+  setCookie,
+  TOKEN_LIST,
+} from '../../context/cookies';
 
 interface AddColumnsProps {
   rows: IRows[];
@@ -85,6 +94,20 @@ const SignUpMentor = () => {
       date: [0, 0, 0, 0, 0],
     },
   ]);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [oneButtonModalProps, setOneButtonModalProps] =
+    useState<OneButtonModalProps>({
+      TitleText: '',
+      Text: 'ss',
+      XButtonFunc: () => {
+        setIsError(false);
+      },
+      ButtonText: '',
+      ButtonBg: '',
+      ButtonFunc: () => {
+        setIsError(false);
+      },
+    });
 
   useEffect(() => {
     UserJoinStore.off();
@@ -232,24 +255,72 @@ const SignUpMentor = () => {
 
   async function joinMentorServer(rows: IRows[]) {
     if (!name) {
-      alert('이름을 입력하세요');
+      setOneButtonModalProps({
+        TitleText: '이름을 입력하세요',
+        Text: '이름을 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       return;
     }
 
     if (!slackId) {
-      alert('Slack ID를 입력하세요');
+      setOneButtonModalProps({
+        TitleText: 'Slack ID를 입력하세요',
+        Text: 'Slack ID를 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       return;
     }
 
     if (!alreadyRegistered && !isCodeSucess) {
-      alert('e-mail 인증을 완료해주세요');
+      setOneButtonModalProps({
+        TitleText: 'e-mail 인증을 완료해주세요',
+        Text: 'e-mail 인증을 완료해주세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       return;
     }
 
     LoadingStore.on();
 
     if (!(await validateRows(rows))) {
-      alert('가능시간에 빈 칸이 있습니다');
+      setOneButtonModalProps({
+        TitleText: '가능시간 빈 칸',
+        Text: '가능시간에 빈 칸이 있습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       LoadingStore.off();
       return;
     }
@@ -261,11 +332,35 @@ const SignUpMentor = () => {
     );
 
     if (resultVaildation === AvailableTimeError.INPUT_ERROR) {
-      alert('가능시간은 시작 시간으로부터 1시간 이상이어야 합니다');
+      setOneButtonModalProps({
+        TitleText: '올바르지 않은 가능시간',
+        Text: '가능시간은 시작 시간으로부터 1시간 이상이어야 합니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       LoadingStore.off();
       return;
     } else if (resultVaildation === AvailableTimeError.OVERLAP_ERROR) {
-      alert('선택하신 가능시간 간에 중복이 있습니다');
+      setOneButtonModalProps({
+        TitleText: '가능시간 간 중복',
+        Text: '선택하신 가능시간 간에 중복이 있습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       LoadingStore.off();
       return;
     }
@@ -283,17 +378,58 @@ const SignUpMentor = () => {
           availableTime: availableTime,
           isActive: checked,
         },
+        {
+          withCredentials: true,
+        },
       );
 
       if (response.status === 200) {
-        alert('제출에 성공하셨습니다');
+        setOneButtonModalProps({
+          TitleText: '제출에 성공하셨습니다',
+          Text: '제출에 성공하셨습니다',
+          XButtonFunc: () => {
+            setIsError(false);
+          },
+          ButtonText: '확인',
+          ButtonFunc: () => {
+            setIsError(false);
+          },
+        });
+
+        setIsError(true);
+
+        setCookie(TOKEN_LIST.JOIN, 'true', DEFAULT_COOKIE_OPTION);
 
         setIsRedirection(true);
       } else {
-        alert('제출에 실패하셨습니다');
+        setOneButtonModalProps({
+          TitleText: '제출에 실패하셨습니다',
+          Text: '제출에 실패하셨습니다',
+          XButtonFunc: () => {
+            setIsError(false);
+          },
+          ButtonText: '확인',
+          ButtonFunc: () => {
+            setIsError(false);
+          },
+        });
+
+        setIsError(true);
       }
     } catch (err) {
-      alert('제출에 실패하셨습니다');
+      setOneButtonModalProps({
+        TitleText: '제출에 실패하셨습니다',
+        Text: '제출에 실패하셨습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
     } finally {
       LoadingStore.off();
     }
@@ -314,9 +450,9 @@ const SignUpMentor = () => {
     if (checked) {
       rows.map(row => {
         const temp: IAvailableDate = {
-          startHour: (row.date[1] + 8) % 24,
+          startHour: row.date[1] % 24,
           startMinute: row.date[2] ? 30 : 0,
-          endHour: (row.date[3] + 8) % 24,
+          endHour: row.date[3] % 24,
           endMinute: row.date[4] ? 30 : 0,
         };
         availableTime[row.date[0]].push(temp);
@@ -328,7 +464,18 @@ const SignUpMentor = () => {
 
   async function SendEmail(email: string) {
     if (!email) {
-      alert('Email을 입력하세요');
+      setOneButtonModalProps({
+        TitleText: '이메일을 입력하세요',
+        Text: '이메일을 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+      setIsError(true);
       return;
     }
 
@@ -370,7 +517,19 @@ const SignUpMentor = () => {
 
   async function certificateEmail(code: string) {
     if (!code) {
-      alert('인증코드를 입력하세요');
+      setOneButtonModalProps({
+        TitleText: '인증코드를 입력하세요',
+        Text: '인증코드를 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       return;
     }
 
@@ -557,6 +716,7 @@ const SignUpMentor = () => {
               제출
               {isRedirection && <Navigate to="/" />}
             </Button>
+            {isError && <OneButtonModal {...oneButtonModalProps} />}
           </OptionWrapper>
         </ContainersPc>
       )}
@@ -712,6 +872,7 @@ const SignUpMentor = () => {
               제출
               {isRedirection && <Navigate to="/" />}
             </Button>
+            {isError && <OneButtonModal {...oneButtonModalProps} />}
           </OptionWrapper>
         </ContainersMobile>
       )}

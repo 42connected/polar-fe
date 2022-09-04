@@ -10,49 +10,40 @@ import {
   HeadLetters,
   InfoInput,
   NameTitle,
-  OptionWrapper,
   RequiredWrapper,
   SingupImage,
 } from './signup-style';
 import UserJoinStore from '../../states/user-join/UserJoinStore';
 import { debounce } from '@mui/material';
 import LoadingStore from '../../states/loading/LoadingStore';
-
-// const UserMainImg = styled.img.attrs({
-//   src: `${singupImage}`,
-// })`
-// 	생략...
-// `;
-
-// onInputChange = event => {
-//   this.setState({ input: event.target.value });
-// };
-
-async function onButtonSubmit() {
-  /**
-   * TODO: Add UserJoinStore.off()
-   */
-  try {
-    axios.defaults.headers.common[
-      'Authorization'
-    ] = `bearer ${AuthStore.getAccessToken()}`;
-
-    const response = await axios.patch(
-      `${process.env.REACT_APP_BASE_BACKEND_URL}/cadets/join`,
-      {
-        name: '강주현',
-      },
-    );
-    console.log(response);
-  } catch (err) {
-    console.error(err);
-  }
-}
+import {
+  OneButtonModal,
+  OneButtonModalProps,
+} from '../../components/modal/one-button-modal/one-button-modal';
+import {
+  DEFAULT_COOKIE_OPTION,
+  setCookie,
+  TOKEN_LIST,
+} from '../../context/cookies';
 
 const SignUpCadet = () => {
   const [name, setName] = useState<string>('');
   const [isMobile, setIsMobile] = useState(false);
   const [isRedirection, setIsRedirection] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [oneButtonModalProps, setOneButtonModalProps] =
+    useState<OneButtonModalProps>({
+      TitleText: '',
+      Text: 'ss',
+      XButtonFunc: () => {
+        setIsError(false);
+      },
+      ButtonText: '',
+      ButtonBg: '',
+      ButtonFunc: () => {
+        setIsError(false);
+      },
+    });
 
   useEffect(() => {
     UserJoinStore.off();
@@ -75,7 +66,20 @@ const SignUpCadet = () => {
 
   async function joinCadetServer() {
     if (!name) {
-      alert('이름을 입력하세요');
+      setOneButtonModalProps({
+        TitleText: '이름을 입력하세요',
+        Text: '이름을 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+
       return;
     }
 
@@ -91,16 +95,58 @@ const SignUpCadet = () => {
         {
           name: name,
         },
+        {
+          withCredentials: true,
+        },
       );
 
       if (response.status === 200) {
-        alert('제출에 성공하셨습니다');
+        setOneButtonModalProps({
+          TitleText: '제출에 성공하셨습니다',
+          Text: '제출에 성공하셨습니다',
+          XButtonFunc: () => {
+            setIsError(false);
+          },
+          ButtonText: '확인',
+          ButtonFunc: () => {
+            setIsError(false);
+          },
+        });
+
+        setIsError(true);
+
+        setCookie(TOKEN_LIST.JOIN, 'true', DEFAULT_COOKIE_OPTION);
+
         setIsRedirection(true);
       } else {
-        alert('제출에 실패하셨습니다');
+        setOneButtonModalProps({
+          TitleText: '제출에 실패하셨습니다',
+          Text: '제출에 실패하셨습니다',
+          XButtonFunc: () => {
+            setIsError(false);
+          },
+          ButtonText: '확인',
+          ButtonFunc: () => {
+            setIsError(false);
+          },
+        });
+
+        setIsError(true);
       }
     } catch (err) {
-      alert('제출에 실패하셨습니다');
+      setOneButtonModalProps({
+        TitleText: '제출에 실패하셨습니다',
+        Text: '제출에 실패하셨습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
     } finally {
       LoadingStore.off();
     }
@@ -126,13 +172,14 @@ const SignUpCadet = () => {
           <Button
             style={{
               marginBottom: '5rem',
-              marginRight: '10rem',
+              marginRight: '6rem',
             }}
             onClick={() => joinCadetServer()}
           >
             제출
             {isRedirection && <Navigate to="/" />}
           </Button>
+          {isError && <OneButtonModal {...oneButtonModalProps} />}
         </ContainersPc>
       )}
       {isMobile && (
@@ -158,13 +205,14 @@ const SignUpCadet = () => {
           <Button
             style={{
               marginBottom: '5rem',
-              marginRight: '10rem',
+              marginRight: '6rem',
             }}
             onClick={() => joinCadetServer()}
           >
             제출
             {isRedirection && <Navigate to="/" />}
           </Button>
+          {isError && <OneButtonModal {...oneButtonModalProps} />}
         </ContainersMobile>
       )}
     </>

@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import axios from 'axios';
+import { useState } from 'react';
 import {
-  axiosInstance,
-  axiosWithData,
-  AXIOS_METHOD_WITH_DATA,
-} from '../../../context/axios-interface';
+  OneButtonModal,
+  OneButtonModalProps,
+} from '../../../components/modal/one-button-modal/one-button-modal';
 import AuthStore from '../../../states/auth/AuthStore';
 import LoadingStore from '../../../states/loading/LoadingStore';
 import defaultTheme from '../../../styles/theme';
@@ -152,9 +152,9 @@ async function getAvailableTime(
   if (checked) {
     rows.map(row => {
       const temp: IAvailableDate = {
-        startHour: (row.date[1] + 8) % 24,
+        startHour: row.date[1] % 24,
         startMinute: row.date[2] ? 30 : 0,
-        endHour: (row.date[3] + 8) % 24,
+        endHour: row.date[3] % 24,
         endMinute: row.date[4] ? 30 : 0,
       };
       availableTime[row.date[0]].push(temp);
@@ -164,105 +164,263 @@ async function getAvailableTime(
   return availableTime;
 }
 
-async function updateMentorInfo(props: ModalFooterProps) {
-  if (!props.name) {
-    alert('이름을 입력하세요');
-    return;
-  }
-
-  if (!props.slackId) {
-    alert('Slack ID를 입력하세요');
-    return;
-  }
-
-  if (!props.alreadyRegistered && !props.isCodeSucess) {
-    alert('e-mail 인증을 완료해주세요');
-    return;
-  }
-
-  LoadingStore.on();
-
-  try {
-    axios.defaults.headers.common[
-      'Authorization'
-    ] = `bearer ${AuthStore.getAccessToken()}`;
-
-    const response = await axios.patch(
-      `${process.env.REACT_APP_BASE_BACKEND_URL}/mentors/${props.intraId}`,
-      {
-        name: props.name,
-        slackId: props.slackId,
-      },
-    );
-
-    if (response.status === 200) {
-      alert('제출에 성공하셨습니다');
-      props.setApplyModal(false);
-    } else {
-      alert('제출에 실패하셨습니다');
-    }
-  } catch (err) {
-    alert('제출에 실패하셨습니다');
-  } finally {
-    LoadingStore.off();
-  }
-}
-
-async function updateMentorTime(props: ModalFooterProps) {
-  LoadingStore.on();
-
-  if (!(await validateRows(props.rows))) {
-    alert('가능시간에 빈 칸이 있습니다');
-    LoadingStore.off();
-    return;
-  }
-  console.log(props.rows);
-  const availableTime: IAvailableDate[][] = await getAvailableTime(
-    props.rows,
-    props.checked,
-  );
-
-  const resultVaildation: AvailableTimeError = await validateAvailableTime(
-    availableTime,
-  );
-
-  if (resultVaildation === AvailableTimeError.INPUT_ERROR) {
-    alert('가능시간은 시작 시간으로부터 1시간 이상이어야 합니다');
-    LoadingStore.off();
-    return;
-  } else if (resultVaildation === AvailableTimeError.OVERLAP_ERROR) {
-    alert('선택하신 가능시간 간에 중복이 있습니다');
-    LoadingStore.off();
-    return;
-  }
-
-  try {
-    axios.defaults.headers.common[
-      'Authorization'
-    ] = `bearer ${AuthStore.getAccessToken()}`;
-
-    const response = await axios.patch(
-      `${process.env.REACT_APP_BASE_BACKEND_URL}/mentors/${props.intraId}`,
-      {
-        availableTime: availableTime,
-        isActive: props.checked,
-      },
-    );
-
-    if (response.status === 200) {
-      alert('제출에 성공하셨습니다');
-      props.setApplyModal(false);
-    } else {
-      alert('제출에 실패하셨습니다');
-    }
-  } catch (err) {
-    alert('제출에 실패하셨습니다');
-  } finally {
-    LoadingStore.off();
-  }
-}
-
 export function ModalFooter(props: ModalFooterProps) {
+  const [isError, setIsError] = useState<boolean>(false);
+  const [oneButtonModalProps, setOneButtonModalProps] =
+    useState<OneButtonModalProps>({
+      TitleText: '',
+      Text: 'ss',
+      XButtonFunc: () => {
+        setIsError(false);
+      },
+      ButtonText: '',
+      ButtonBg: '',
+      ButtonFunc: () => {
+        setIsError(false);
+      },
+    });
+
+  async function updateMentorInfo(props: ModalFooterProps) {
+    if (!props.name) {
+      setOneButtonModalProps({
+        TitleText: '이름을 입력하세요',
+        Text: '이름을 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+      return;
+    }
+
+    if (!props.slackId) {
+      setOneButtonModalProps({
+        TitleText: 'Slack ID를 입력하세요',
+        Text: 'Slack ID를 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+      return;
+    }
+
+    if (!props.alreadyRegistered && !props.isCodeSucess) {
+      setOneButtonModalProps({
+        TitleText: 'e-mail 인증을 완료해주세요',
+        Text: 'e-mail 인증을 완료해주세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+      return;
+    }
+
+    LoadingStore.on();
+
+    try {
+      axios.defaults.headers.common[
+        'Authorization'
+      ] = `bearer ${AuthStore.getAccessToken()}`;
+
+      const response = await axios.patch(
+        `${process.env.REACT_APP_BASE_BACKEND_URL}/mentors/${props.intraId}`,
+        {
+          name: props.name,
+          slackId: props.slackId,
+        },
+      );
+
+      if (response.status === 200) {
+        setOneButtonModalProps({
+          TitleText: '제출에 성공하셨습니다',
+          Text: '제출에 성공하셨습니다',
+          XButtonFunc: () => {
+            setIsError(false);
+          },
+          ButtonText: '확인',
+          ButtonFunc: () => {
+            setIsError(false);
+          },
+        });
+
+        setIsError(true);
+        props.setApplyModal(false);
+      } else {
+        setOneButtonModalProps({
+          TitleText: '제출에 실패하셨습니다',
+          Text: '제출에 실패하셨습니다',
+          XButtonFunc: () => {
+            setIsError(false);
+          },
+          ButtonText: '확인',
+          ButtonFunc: () => {
+            setIsError(false);
+          },
+        });
+
+        setIsError(true);
+      }
+    } catch (err) {
+      setOneButtonModalProps({
+        TitleText: '제출에 실패하셨습니다',
+        Text: '제출에 실패하셨습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+    } finally {
+      LoadingStore.off();
+    }
+  }
+
+  async function updateMentorTime(props: ModalFooterProps) {
+    LoadingStore.on();
+
+    if (!(await validateRows(props.rows))) {
+      setOneButtonModalProps({
+        TitleText: '가능시간 빈 칸',
+        Text: '가능시간에 빈 칸이 있습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+      LoadingStore.off();
+      return;
+    }
+    const availableTime: IAvailableDate[][] = await getAvailableTime(
+      props.rows,
+      props.checked,
+    );
+
+    const resultVaildation: AvailableTimeError = await validateAvailableTime(
+      availableTime,
+    );
+
+    if (resultVaildation === AvailableTimeError.INPUT_ERROR) {
+      setOneButtonModalProps({
+        TitleText: '올바르지 않은 가능시간',
+        Text: '가능시간은 시작 시간으로부터 1시간 이상이어야 합니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+      LoadingStore.off();
+      return;
+    } else if (resultVaildation === AvailableTimeError.OVERLAP_ERROR) {
+      setOneButtonModalProps({
+        TitleText: '가능시간 간 중복',
+        Text: '선택하신 가능시간 간에 중복이 있습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+      LoadingStore.off();
+      return;
+    }
+
+    try {
+      axios.defaults.headers.common[
+        'Authorization'
+      ] = `bearer ${AuthStore.getAccessToken()}`;
+
+      const response = await axios.patch(
+        `${process.env.REACT_APP_BASE_BACKEND_URL}/mentors/${props.intraId}`,
+        {
+          availableTime: availableTime,
+          isActive: props.checked,
+        },
+      );
+
+      if (response.status === 200) {
+        setOneButtonModalProps({
+          TitleText: '제출에 성공하셨습니다',
+          Text: '제출에 성공하셨습니다',
+          XButtonFunc: () => {
+            setIsError(false);
+          },
+          ButtonText: '확인',
+          ButtonFunc: () => {
+            setIsError(false);
+          },
+        });
+
+        setIsError(true);
+        props.setApplyModal(false);
+      } else {
+        setOneButtonModalProps({
+          TitleText: '제출에 실패하셨습니다',
+          Text: '제출에 실패하셨습니다',
+          XButtonFunc: () => {
+            setIsError(false);
+          },
+          ButtonText: '확인',
+          ButtonFunc: () => {
+            setIsError(false);
+          },
+        });
+
+        setIsError(true);
+      }
+    } catch (err) {
+      setOneButtonModalProps({
+        TitleText: '제출에 실패하셨습니다',
+        Text: '제출에 실패하셨습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+    } finally {
+      LoadingStore.off();
+    }
+  }
+
   return (
     <ModalFooterContainer>
       <Button
@@ -275,6 +433,7 @@ export function ModalFooter(props: ModalFooterProps) {
       >
         제출
       </Button>
+      {isError && <OneButtonModal {...oneButtonModalProps} />}
     </ModalFooterContainer>
   );
 }

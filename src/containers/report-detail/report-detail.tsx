@@ -49,6 +49,8 @@ import {
   ImgLogo2,
   ImgLogo3,
   ImgLogo4,
+  MentoSign,
+  SignText,
 } from './reportStyled';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -87,6 +89,11 @@ const imagestyle3 = {
   height: '4.5rem',
   width: '8rem',
 };
+const signimagestyle = {
+  width: '3.8rem',
+  height: '3.8rem',
+};
+
 const ImgBody = styled.section`
   display: flex;
   flex-wrap: wrap;
@@ -150,7 +157,13 @@ const SimpleComponent = (props: {
               <SubTitle3>장소</SubTitle3>
               <PlaceBox>{reportdata?.place}</PlaceBox>
               <SubTitle4>멘토이름</SubTitle4>
-              <MentoNameBox>{reportdata?.mentors.name}</MentoNameBox>
+              <MentoNameBox>
+                {reportdata?.mentors.name}
+                <SignText>(인)</SignText>
+                <MentoSign>
+                  <img src={reportdata?.signatureUrl} style={signimagestyle} />
+                </MentoSign>
+              </MentoNameBox>
               <SubTitle9>멘티이름</SubTitle9>
               <KadetNameBox>{reportdata?.cadets.name}</KadetNameBox>
               <NoneValue3></NoneValue3>
