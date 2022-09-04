@@ -129,7 +129,7 @@ function DataRoom() {
 
   const getExcel = async () => {
     LoadingStore.on();
-    const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}bocals/data-room/excel`;
+    const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}/bocals/data-room/excel`;
     const data = {
       reportIds: selectedList,
     };
@@ -139,32 +139,36 @@ function DataRoom() {
       return;
     }
 
-    const res = await fetch(realurl, {
-      method: 'POST',
-      headers: {
-        Authorization: `bearer ${AuthStore.getAccessToken()}`,
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    try {
+      const res = await fetch(realurl, {
+        method: 'POST',
+        headers: {
+          Authorization: `bearer ${AuthStore.getAccessToken()}`,
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      const blob = await res.blob();
+      const newBlob = new Blob([blob]);
+      const blobUrl = window.URL.createObjectURL(newBlob);
 
-    const blob = await res.blob();
-    const newBlob = new Blob([blob]);
-    const blobUrl = window.URL.createObjectURL(newBlob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.setAttribute(
+        'download',
+        `mentoring-data_${new Date()
+          .toLocaleDateString('ko-KR')
+          .replace(' ', '')}.xlsx`,
+      );
+      document.body.appendChild(link);
+      link.click();
+      link?.parentNode?.removeChild(link);
 
-    const link = document.createElement('a');
-    link.href = blobUrl;
-    link.setAttribute(
-      'download',
-      `mentoring-data_${new Date()
-        .toLocaleDateString('ko-KR')
-        .replace(' ', '')}.xlsx`,
-    );
-    document.body.appendChild(link);
-    link.click();
-    link?.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.log(error);
+    }
 
-    window.URL.revokeObjectURL(blobUrl);
     LoadingStore.off();
   };
 
