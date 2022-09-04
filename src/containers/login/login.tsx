@@ -31,6 +31,26 @@ export function Login() {
         withCredentials: true,
       })
       .then(res => {
+        setCookie(
+          TOKEN_LIST.ACCESS_TOKEN,
+          res?.data?.jwt,
+          DEFAULT_COOKIE_OPTION,
+        );
+        setCookie(
+          TOKEN_LIST.INTRA_ID,
+          res?.data?.user?.intraId,
+          DEFAULT_COOKIE_OPTION,
+        );
+        setCookie(
+          TOKEN_LIST.USER_ROLE,
+          res?.data?.user?.role,
+          DEFAULT_COOKIE_OPTION,
+        );
+        setCookie(
+          TOKEN_LIST.JOIN,
+          res?.data?.user?.join,
+          DEFAULT_COOKIE_OPTION,
+        );
         document.location.href = `${process.env.REACT_APP_ORIGIN}`;
       })
       .catch(err => {

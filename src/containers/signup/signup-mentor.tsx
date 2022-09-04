@@ -35,6 +35,11 @@ import {
   OneButtonModal,
   OneButtonModalProps,
 } from '../../components/modal/one-button-modal/one-button-modal';
+import {
+  DEFAULT_COOKIE_OPTION,
+  setCookie,
+  TOKEN_LIST,
+} from '../../context/cookies';
 
 interface AddColumnsProps {
   rows: IRows[];
@@ -392,6 +397,8 @@ const SignUpMentor = () => {
         });
 
         setIsError(true);
+
+        setCookie(TOKEN_LIST.JOIN, 'true', DEFAULT_COOKIE_OPTION);
 
         setIsRedirection(true);
       } else {
