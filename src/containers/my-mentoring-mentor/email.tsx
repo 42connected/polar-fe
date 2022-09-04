@@ -3,6 +3,7 @@ import { faCheck, faPencil, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import AuthStore from '../../states/auth/AuthStore';
+import ErrorStore from '../../states/error/ErrorStore';
 import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
 import defaultTheme from '../../styles/theme';
 
@@ -91,9 +92,14 @@ export function Email(props: EmailProps) {
     const MINUTE_TO_SEC = 1000 * 60;
     await MentorStore.changeEmail(props.email, AuthStore.getAccessToken());
     setTime(true);
-    setTimeout(() => {
+    if (ErrorStore.isError) {
       setTime(false);
-    }, MINUTE_TO_SEC * 3);
+    } else {
+      setTime(true);
+      setTimeout(() => {
+        setTime(false);
+      }, MINUTE_TO_SEC * 3);
+    }
   };
 
   const verify = async () => {
@@ -120,7 +126,7 @@ export function Email(props: EmailProps) {
                 onClick={() => {
                   setIsEdit(!isEdit);
                 }}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: 'pointer', marginRight: '10px' }}
               />
               <FontAwesomeIcon
                 icon={faCheck}
