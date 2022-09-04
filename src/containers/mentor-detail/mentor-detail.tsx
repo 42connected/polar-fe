@@ -84,6 +84,8 @@ function MentorDetail() {
     isActivateMentorMarkDownEditModal,
     setIsActivateMentorMarkDownEditModal,
   ] = useState<boolean>(false);
+  const [isActivateMentorTimeModal, setIsActivateMentorTimeModal] =
+    useState<boolean>(false);
 
   const setMentorAvailableTimeData = () => {
     const appointmentsData: appointmentsInterface[] = [];
@@ -287,12 +289,10 @@ function MentorDetail() {
               />
 
               {isActivateMentorTimeEditModal && (
-                <ModalBackground>
-                  <MentorInfoModal
-                    intraId={'m-engeng'}
-                    modalType={ModalType.MENTOR_INFO}
-                  />
-                </ModalBackground>
+                <MentorInfoModal
+                  intraId={getParams.intraId || ''}
+                  modalType={ModalType.MENTOR_INFO}
+                />
               )}
             </MentorActivateContainer>
           </MentorInfoContent>
@@ -418,7 +418,8 @@ function MentorDetail() {
                     }}
                     Button1Func={() => {
                       try {
-                        setIsActivateDeleteModal(true);
+                        setIsActivateDeleteModal(false);
+                        setIsActivateIntroductionEdit(false);
                       } catch (e) {
                         // ErrorStore
                       }
@@ -449,7 +450,7 @@ function MentorDetail() {
                 <div>상태</div>
                 <div>일시</div>
               </MenuBox1>
-              <PageNationComponent intraId={getParams.intraId} />
+              <PageNationComponent />
             </MentorBody1Right2>
           </MentorBody1Right>
         </MentorBody1>
@@ -458,9 +459,18 @@ function MentorDetail() {
             <div>
               가능 시간
               {user?.intraId === mentor?.intraId && user && mentor ? (
-                <FontAwesomeIcon icon={faPencil} size={'xs'} className="icon" />
-              ) : (
-                <FontAwesomeIcon icon={faPencil} size={'xs'} className="icon" />
+                <FontAwesomeIcon
+                  icon={faPencil}
+                  size={'xs'}
+                  className="icon"
+                  onClick={() => setIsActivateMentorTimeModal(true)}
+                />
+              ) : null}
+              {isActivateMentorTimeModal && (
+                <MentorInfoModal
+                  intraId={getParams.intraId || ''}
+                  modalType={ModalType.AVAILABLE_TIME}
+                />
               )}
             </div>
             {mentor?.createdAt ? (
@@ -855,6 +865,7 @@ const MenuBox1 = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(1, 1fr);
+  font-weight: 700;
   div {
     display: flex;
     justify-content: center;

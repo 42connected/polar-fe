@@ -1,5 +1,5 @@
 export interface MentoringLogProps {
   topic: string;
-  state: string;
-  meetingAt: string;
+  status: string;
+  meetingAt: string[];
 }
