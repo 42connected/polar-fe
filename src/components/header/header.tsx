@@ -209,6 +209,10 @@ const Header = () => {
             <HeaderLogin isMobile={isMobile}></HeaderLogin>
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
+                {/* <div>
+                  {AlertDetail()}
+                  <Link to={'/'}>{AuthStore.Logout()}</Link>
+                </div> */}
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
@@ -275,6 +279,10 @@ const Header = () => {
             <HeaderLogin isMobile={isMobile}></HeaderLogin>
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
+                {/* <div>
+                  {AlertDetail()}
+                  <Link to={'/'}>{AuthStore.Logout()}</Link>
+                </div> */}
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
