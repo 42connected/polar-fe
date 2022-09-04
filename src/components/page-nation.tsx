@@ -5,30 +5,30 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { axiosInstance } from '../context/axios-interface';
 import { MentoringLogProps } from '../interface/mentor-detail/mentoringLogProps';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../states/error/ErrorStore';
 import theme from '../styles/theme';
 
-function PageNationComponent(intraId: any) {
+function PageNationComponent() {
   const [take, setTake] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
   const [maxPage, setMaxPage] = useState<number>(1);
   const [mentoringLog, setMentoringLog] = useState<MentoringLogProps[]>([]);
 
   const getParams = useParams();
+  const intraId = getParams.intraId;
   useEffect(() => {
     const params = {
       take: take,
       page: page,
     };
-    const intraId = getParams.intraId;
     axiosInstance
       .get(`/mentors/simplelogs/${intraId}`, { params })
       .then(response => {
-        console.log(response.data);
         setMentoringLog(response.data?.logs || []);
         setMaxPage(Math.ceil(response.data.total / take));
       })
       .catch(err => {
-        console.log(err);
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
       });
   }, []);
 
@@ -38,11 +38,14 @@ function PageNationComponent(intraId: any) {
       page: page - 1,
     };
     axiosInstance
-      .get(`/mentors/simplelog/${intraId}`, { params })
+      .get(`/mentors/simplelogs/${intraId}`, { params })
       .then(response => {
         setMentoringLog(response.data.logs);
         setPage(page - 1);
         setMaxPage(Math.ceil(response.data.total / take));
+      })
+      .catch(err => {
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
       });
   };
   const handleClickPageNext = () => {
@@ -51,11 +54,14 @@ function PageNationComponent(intraId: any) {
       page: page + 1,
     };
     axiosInstance
-      .get(`/mentors/simplelog/${intraId}`, { params })
+      .get(`/mentors/simplelogs/${intraId}`, { params })
       .then(response => {
-        setMentoringLog(response.data.logs);
+        setMentoringLog(response.data?.logs || []);
         setPage(page + 1);
         setMaxPage(Math.ceil(response.data.total / take));
+      })
+      .catch(err => {
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
       });
   };
 
@@ -64,10 +70,13 @@ function PageNationComponent(intraId: any) {
       <MenuBoxLog key={index}>
         <div>{log.topic}</div>
         <div className="status">{log.status}</div>
-        <div>{`${log.meetingAt[0].substring(2, 4)}.${log.meetingAt[0].substring(
+        <div>{`${log?.meetingAt?.[0].substring(
+          2,
+          4,
+        )}.${log?.meetingAt?.[0].substring(
           5,
           7,
-        )}.${log.meetingAt[0].substring(8, 10)}`}</div>
+        )}.${log?.meetingAt?.[0].substring(8, 10)}`}</div>
       </MenuBoxLog>
     );
   });
@@ -76,7 +85,7 @@ function PageNationComponent(intraId: any) {
     <>
       {PageNationLog}
       <PageNation>
-        {page > 1 && page < maxPage ? (
+        {page > 1 ? (
           <div
             onClick={() => {
               handleClickPagePrev();

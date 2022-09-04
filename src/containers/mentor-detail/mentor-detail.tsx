@@ -29,7 +29,7 @@ import AuthStore, { User } from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
 import MarkdownRender from './markdownRender';
 import { ModalBackground } from '../../components/modal/modal-styled';
-import ErrorStore from '../../states/error/ErrorStore';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import MentorInfoModal, { ModalType } from '../signup/mentor-info-modal';
 
 function MentorDetail() {
@@ -37,25 +37,13 @@ function MentorDetail() {
     '[[],[{"startHour":6,"startMinute":0,"endHour":10,"endMinute":0},{"startHour":10,"startMinute":0,"endHour":11,"endMinute":0}],[],[],[{"startHour":6,"startMinute":30,"endHour":9,"endMinute":0}],[],[{"startHour":6,"startMinute":30,"endHour":9,"endMinute":0}]]';
   const mockMentorAvailableTimeToArray = JSON.parse(mockMentorAvailableTime);
 
-  const appointmentsTest = [
-    {
-      startDate: new Date(2018, 5, 25, 9, 30),
-      endDate: new Date(2018, 5, 25, 11, 30),
-    },
-    {
-      startDate: new Date(2018, 5, 25, 12, 0),
-      endDate: new Date(2018, 5, 25, 13, 0),
-    },
-  ];
-
   const [mentorIntroduction, setMentorIntroduction] = useState<string>('');
   const [mentor, setMentor] = useState<MentorDetailProps | null>(null);
 
   const [isActiveMentorDetail, setIsActiveMentorDetail] =
     useState<boolean>(false);
   const [comments, setComments] = useState<CommentProps[]>([]);
-  const [appointments, setAppointments] =
-    useState<appointmentsInterface[]>(appointmentsTest);
+  const [appointments, setAppointments] = useState<appointmentsInterface[]>([]);
   const [isActivateIntroductionEdit, setIsActivateIntroductionEdit] =
     useState<boolean>(false);
   const [isActivateMentor, setIsActivateMentor] = useState<boolean>(false);
@@ -86,9 +74,10 @@ function MentorDetail() {
   const [isActivateMentorTimeModal, setIsActivateMentorTimeModal] =
     useState<boolean>(false);
 
-  const setMentorAvailableTimeData = () => {
+  const setMentorAvailableTimeData = (metorAvailableTimeData: string) => {
+    const mentorAvailableTimeDataToArray = JSON.parse(metorAvailableTimeData);
     const appointmentsData: appointmentsInterface[] = [];
-    mockMentorAvailableTimeToArray.forEach(
+    mentorAvailableTimeDataToArray?.forEach(
       (data: mentorAvailableTimeInterface[], index: number) => {
         if (data.length !== 0) {
           data.forEach(data2 => {
@@ -124,33 +113,49 @@ function MentorDetail() {
       page: page,
       take: take,
     };
-    axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
-      setMentor(result.data);
-      setMentorTags(result.data.tags);
-      setMentorIntroduction(
-        result.data?.introduction
-          ? result.data.introduction
-          : result.data?.introduction,
-      );
-      setMentorMarkdown(
-        result.data?.info ? result.data.info : result.data?.info,
-      );
-    });
+    axiosInstance
+      .get(`/mentors/${getParams.intraId}`)
+      .then(result => {
+        setMentor(result.data);
+        setMentorTags(result.data.tags);
+        setMentorIntroduction(
+          result.data?.introduction
+            ? result.data.introduction
+            : result.data?.introduction,
+        );
+        console.log(result.data);
+        setMentorMarkdown(
+          result.data?.markdownContent
+            ? result.data.markdownContent
+            : result.data?.markdownContent,
+        );
+        console.log(result.data.availableTime);
+        const appointmentsData = setMentorAvailableTimeData(
+          mockMentorAvailableTime,
+        );
+        console.log(appointmentsData);
+
+        setAppointments(appointmentsData);
+      })
+      .catch(err => {
+        // ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+        console.log(err);
+      });
     axiosInstance
       .get(`/comments/${getParams.intraId}`, { params })
       .then(result => {
         setComments(result.data.comments);
         setMaxPage(Math.ceil(result.data.totalCount / take));
+      })
+      .catch(err => {
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
       });
 
-    const appointmentsData = setMentorAvailableTimeData();
-    setAppointments(appointmentsData);
     const user: User = {
       intraId: AuthStore.getUserIntraId(),
       role: AuthStore.getUserRole(),
     };
     setUser(user);
-    console.log(user);
   }, []);
 
   const handleSubmitIntroductionTags = () => {
@@ -161,24 +166,6 @@ function MentorDetail() {
     const data = { introduction: mentorIntroduction, tags: mentorTags };
     axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
   };
-
-  useEffect(() => {
-    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
-    const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    };
-    const data = { tags: mentorTags };
-    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
-  }, [mentorTags]);
-
-  useEffect(() => {
-    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
-    const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    };
-    const data = { markdownContent: mentorMarkdown };
-    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
-  }, [isActivateMentorMarkdownEdit]);
 
   const AddHashtag = mentorTags?.map(tag => {
     return <div>{tag.padStart(tag.length + 1, '#')}</div>;
@@ -205,7 +192,7 @@ function MentorDetail() {
               setMaxPage(Math.ceil(result.data.totalCount / take));
             })
             .catch(err => {
-              console.log(err);
+              // ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
             });
           setInputComment('');
         });
@@ -218,19 +205,27 @@ function MentorDetail() {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
     const data = { markdownContent: mentorMarkdown };
-    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
-    axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
-      setMentor(result.data);
-      setMentorTags(result.data.tags);
-      setMentorIntroduction(
-        result.data?.introduction
-          ? result.data.introduction
-          : result.data?.introduction,
-      );
-      setMentorMarkdown(
-        result.data?.info ? result.data.info : result.data?.info,
-      );
-    });
+    axiosInstance
+      .patch(`/mentors/${getParams.intraId}`, data, config)
+      .then(() => {
+        axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
+          setMentor(result.data);
+          setMentorTags(result.data.tags);
+          setMentorIntroduction(
+            result.data?.introduction
+              ? result.data.introduction
+              : result.data?.introduction,
+          );
+          setMentorMarkdown(
+            result.data?.markdownContent
+              ? result.data.markdownContent
+              : result.data?.markdownContent,
+          );
+        });
+      })
+      .catch(err => {
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+      });
   };
 
   const deleteComment = (commentId: any) => {
@@ -548,8 +543,8 @@ function MentorDetail() {
                         Button1Func={() => {
                           try {
                             handleSubmitMentorMarkdown();
-                          } catch (e) {
-                            // ErrorStore
+                          } catch (err) {
+                            // ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
                           }
                           setIsActivateMentorMarkDownEditModal(false);
                           setIsActivateMentorMarkdownEdit(false);
@@ -565,7 +560,7 @@ function MentorDetail() {
                   </SubmitButton>
                 </>
               ) : (
-                <MarkdownRender markdown={mentorMarkdown} />
+                <MarkdownRender markDown={mentorMarkdown} />
               )}
             </>
           ) : null}
