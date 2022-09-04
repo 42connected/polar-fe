@@ -178,7 +178,7 @@ const movimagestyle = {
 const Header = () => {
   let mdlinks = '/mentor-detail/';
   let mlinks = '/mentors/mentorings/';
-
+  const [isLogin, setIsLogin] = useState<string>('로그인');
   const [isMobile, setIsMobile] = useState(false);
   const handleResize: any = debounce(() => {
     if (window.innerWidth < 600) setIsMobile(true);
@@ -211,7 +211,25 @@ const Header = () => {
                 polar
               </MovLogoButton>
             </Link>
-            <HeaderLogin isMobile={isMobile}></HeaderLogin>
+            {AuthStore.getAccessToken() ? (
+              <MovLoginButton
+                onClick={() => {
+                  AuthStore.Logout();
+                  setIsLogin('로그아웃');
+                }}
+              >
+                {isLogin}
+              </MovLoginButton>
+            ) : (
+              <MovLoginButton
+                onClick={() => {
+                  AuthStore.Login();
+                  setIsLogin('로그인');
+                }}
+              >
+                {isLogin}
+              </MovLoginButton>
+            )}
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
                 {/* <div>
@@ -281,11 +299,28 @@ const Header = () => {
                 polar
               </LogoButton>
             </Link>
-            <HeaderLogin isMobile={isMobile}></HeaderLogin>
+            {AuthStore.getAccessToken() ? (
+              <LoginButton
+                onClick={() => {
+                  AuthStore.Logout();
+                  setIsLogin('로그아웃');
+                }}
+              >
+                {isLogin}
+              </LoginButton>
+            ) : (
+              <LoginButton
+                onClick={() => {
+                  AuthStore.Login();
+                  setIsLogin('로그인');
+                }}
+              >
+                {isLogin}
+              </LoginButton>
+            )}
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
                 {/* <div>
-                  {AlertDetail()}
                   {AuthStore.Logout()}
                 </div> */}
                 <a
