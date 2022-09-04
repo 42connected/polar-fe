@@ -94,7 +94,7 @@ export function Header(props: ResumeProps) {
 
   return (
     <Container>
-      <MentorName>{AuthStore.getUserIntraId}의 멘토링</MentorName>
+      <MentorName>{AuthStore.getUserIntraId()}의 멘토링</MentorName>
       <Resume>
         <span>이력서</span>
         <TextInput
