@@ -214,8 +214,8 @@ const Header = () => {
             {AuthStore.getAccessToken() ? (
               <MovLoginButton
                 onClick={() => {
+                  setIsLogin('로그인');
                   AuthStore.Logout();
-                  setIsLogin('로그아웃');
                 }}
               >
                 {isLogin}
@@ -223,8 +223,8 @@ const Header = () => {
             ) : (
               <MovLoginButton
                 onClick={() => {
+                  setIsLogin('로그아웃');
                   AuthStore.Login();
-                  setIsLogin('로그인');
                 }}
               >
                 {isLogin}
@@ -302,8 +302,8 @@ const Header = () => {
             {AuthStore.getAccessToken() ? (
               <LoginButton
                 onClick={() => {
+                  setIsLogin('로그인');
                   AuthStore.Logout();
-                  setIsLogin('로그아웃');
                 }}
               >
                 {isLogin}
@@ -311,8 +311,8 @@ const Header = () => {
             ) : (
               <LoginButton
                 onClick={() => {
+                  setIsLogin('로그아웃');
                   AuthStore.Login();
-                  setIsLogin('로그인');
                 }}
               >
                 {isLogin}
