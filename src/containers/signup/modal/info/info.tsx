@@ -6,7 +6,6 @@ import {
 } from '../../../../components/modal/one-button-modal/one-button-modal';
 import AuthStore from '../../../../states/auth/AuthStore';
 import LoadingStore from '../../../../states/loading/LoadingStore';
-import MentorStore from '../../../../states/my-mentoring-mentor/MentorStore';
 import { MentorsData } from '../mentor-details-modal-inteface';
 import {
   CertificationSendingButton,
@@ -76,7 +75,6 @@ export function Info(props: InfoProps) {
 
   async function SendEmail() {
     if (!email) {
-      alert('Email을 입력하세요!');
       setOneButtonModalProps({
         TitleText: '이메일을 입력하세요',
         Text: '이메일을 입력하세요',
@@ -130,7 +128,6 @@ export function Info(props: InfoProps) {
 
   async function certificateEmail(code: string) {
     if (!code) {
-      // alert('인증코드를 입력하세요');
       setOneButtonModalProps({
         TitleText: '인증코드를 입력하세요',
         Text: '인증코드를 입력하세요',
