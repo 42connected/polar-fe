@@ -12,6 +12,8 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { dataRoomQuery } from '../../interface/data-room/data-room-query.interface';
 import { useMediaQuery } from 'react-responsive';
 import LoadingStore from '../../states/loading/LoadingStore';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
+import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 
 export const muiPaginationTheme = createTheme({
   palette: {
@@ -103,6 +105,8 @@ function DataRoom() {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [selectedList, setSelectedList] = useState<string[]>([]);
   const [offset, setOffset] = useState<number>(0);
+  const [errorModal, setErrorModal] = useState<boolean>(false);
+  const [errorModalMsg, setErrorModalMsg] = useState<string>('');
   const onClickSearchBoxModal = useCallback(() => {
     setIsOpenModal(!isOpenModal);
   }, [isOpenModal]);
@@ -135,7 +139,8 @@ function DataRoom() {
     };
 
     if (selectedList.length === 0) {
-      alert('멘토링 정보를 하나 이상 선택해주세요.');
+      setErrorModalMsg('멘토링 정보를 하나 이상 선택해주세요.');
+      setErrorModal(true);
       return;
     }
 
@@ -148,7 +153,6 @@ function DataRoom() {
         },
         body: JSON.stringify(data),
       });
-      //FIX ME: response에 오류 메세지 있는 지 확인하기
       const blob = await res.blob();
       const newBlob = new Blob([blob]);
       const blobUrl = window.URL.createObjectURL(newBlob);
@@ -177,7 +181,8 @@ function DataRoom() {
     LoadingStore.on();
     let url = '/report-detail?autoPrint=true';
     if (selectedList.length === 0) {
-      alert('멘토링 정보를 하나 이상 선택해주세요.');
+      setErrorModalMsg('멘토링 정보를 하나 이상 선택해주세요.');
+      setErrorModal(true);
       return;
     }
     selectedList.forEach(data => (url += `&reportId=${data}`));
@@ -192,66 +197,82 @@ function DataRoom() {
   });
 
   if (!AuthStore.getAccessToken()) {
-    alert('로그인이 필요한 서비스입니다.');
+    ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
     AuthStore.Login();
     return <></>;
   } else if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
-    alert('접근 권한이 없습니다.');
+    ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
     return <Navigate to="/" />;
   } else
     return (
-      <DataRoomDiv>
-        <DataRoomBodyForDesktop>
-          <DataRoomTitle>데이터룸</DataRoomTitle>
-          <DataRoomButtonDiv>
-            <DataRoomButton>
-              {isOpenModal && (
-                <>
-                  <Back onClick={onClickSearchBoxModal}></Back>
-                  <SearchBox
-                    query={query}
-                    setQuery={setQuery}
-                    setSelectedList={setSelectedList}
-                  />
-                </>
-              )}
-              <DRButton text="정렬" onClick={onClickSearchBoxModal} />
-            </DataRoomButton>
-            <DataRoomButton>
-              <DRButton text="출력" onClick={printReports} />
-            </DataRoomButton>
-            <DataRoomButton>
-              <DRButton text="엑셀 저장" onClick={getExcel} />
-            </DataRoomButton>
-          </DataRoomButtonDiv>
-          {DataRoomList(
-            query,
-            setQuery,
-            offset,
-            setOffset,
-            total,
-            setTotal,
-            selectedList,
-            setSelectedList,
-            isDesktopLarge || isDesktopSmall,
-          )}
-          <DataRoomNavigationDiv>
-            <ThemeProvider theme={muiPaginationTheme}>
-              <Pagination
-                count={Math.ceil(total / take)}
-                color="primary"
-                showFirstButton
-                showLastButton
-                onChange={(_, page) => {
-                  setPage(page);
-                  setQuery({ ...query, page: page });
-                  setOffset(page * take > total ? total % take : take);
-                }}
-              />
-            </ThemeProvider>
-          </DataRoomNavigationDiv>
-        </DataRoomBodyForDesktop>
-      </DataRoomDiv>
+      <>
+        {errorModal && (
+          <OneButtonModal
+            TitleText="⚠️ 42폴라 경고"
+            Text={errorModalMsg}
+            XButtonFunc={() => {
+              setErrorModal(false);
+            }}
+            ButtonText="닫기"
+            ButtonBg="gray"
+            ButtonFunc={() => {
+              setErrorModal(false);
+            }}
+          />
+        )}
+        <DataRoomDiv>
+          <DataRoomBodyForDesktop>
+            <DataRoomTitle>데이터룸</DataRoomTitle>
+            <DataRoomButtonDiv>
+              <DataRoomButton>
+                {isOpenModal && (
+                  <>
+                    <Back onClick={onClickSearchBoxModal}></Back>
+                    <SearchBox
+                      query={query}
+                      setQuery={setQuery}
+                      setSelectedList={setSelectedList}
+                    />
+                  </>
+                )}
+                <DRButton text="정렬" onClick={onClickSearchBoxModal} />
+              </DataRoomButton>
+              <DataRoomButton>
+                <DRButton text="출력" onClick={printReports} />
+              </DataRoomButton>
+              <DataRoomButton>
+                <DRButton text="엑셀 저장" onClick={getExcel} />
+              </DataRoomButton>
+            </DataRoomButtonDiv>
+            {DataRoomList(
+              query,
+              setQuery,
+              offset,
+              setOffset,
+              total,
+              setTotal,
+              selectedList,
+              setSelectedList,
+              isDesktopLarge || isDesktopSmall,
+            )}
+            <DataRoomNavigationDiv>
+              <ThemeProvider theme={muiPaginationTheme}>
+                <Pagination
+                  count={Math.ceil(total / take)}
+                  color="primary"
+                  showFirstButton
+                  showLastButton
+                  onChange={(_, page) => {
+                    setPage(page);
+                    setQuery({ ...query, page: page });
+                    setOffset(page * take > total ? total % take : take);
+                  }}
+                />
+              </ThemeProvider>
+            </DataRoomNavigationDiv>
+          </DataRoomBodyForDesktop>
+        </DataRoomDiv>
+      </>
     );
 }
 
