@@ -532,8 +532,6 @@ function MentorDetail() {
                       onClick={() => {
                         setIsActivateMentorMarkDownEditModal(true);
                       }}
-                      Button1Text="네"
-                      Button2Text="아니요"
                     />
                     {isActivateMentorMarkDownEditModal && (
                       <TwoButtonModal

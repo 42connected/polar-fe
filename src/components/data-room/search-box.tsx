@@ -156,9 +156,9 @@ function SearchBox(props: SearchBoxProps) {
           mentorName: mentorName,
           mentorIntra: mentorIntraId,
           date: date
-            ? date?.toLocaleDateString().split('. ')[0] +
+            ? date?.toLocaleDateString('ko-KR').split('. ')[0] +
               '-' +
-              date?.toLocaleDateString().split('. ')[1].padStart(2, '0')
+              date?.toLocaleDateString('ko-KR').split('. ')[1].padStart(2, '0')
             : undefined,
         });
       }}

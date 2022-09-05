@@ -15,6 +15,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
+import Button from '../button';
 
 const muiTheme = createTheme({
   palette: {
@@ -75,16 +76,22 @@ interface availableTimeType {
   endMinute: number;
 }
 
+interface scheduleType {
+  able: boolean;
+  array: boolean[];
+}
+
 const mentorIntraId = 'm-engeng';
 
 function ApplyCalendar() {
   const [selectDate, onChange] = useState(new Date());
   const [availableTime, setAvailableTime] = useState(new Array(7).fill([]));
   const [requestTime, setRequestTime] = useState(new Array(new Array()));
-  const [schedule, setSchedule] = useState(new Array(new Array<boolean>(48)));
+  const [schedule, setSchedule] = useState(new Array<scheduleType>());
   const [activeDate, setActiveDate] = useState(new Date());
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [getMonthArray, setGetMonthArray] = useState(false);
 
   useEffect(() => {
     axiosWithNoData(
@@ -96,12 +103,13 @@ function ApplyCalendar() {
         },
       },
     ).then(response => {
-      console.log(response.data);
       setAvailableTime(response.data);
     });
   }, []);
 
   useEffect(() => {
+    setGetMonthArray(false);
+    setSchedule([]);
     axiosWithNoData(
       AXIOS_METHOD_WITH_NO_DATA.GET,
       `/calendar/request-times/${mentorIntraId}?date=${
@@ -122,56 +130,124 @@ function ApplyCalendar() {
           selectDate.getMonth() + 1,
           0,
         ).getDate();
-        const array = new Array(maxDate).fill([]);
+        const array: scheduleType[] = new Array(maxDate);
         for (let i = 0; i < maxDate; i++) {
-          array[i] = new Array<boolean>(48).fill(false);
+          const element: scheduleType = {
+            array: new Array<boolean>(48).fill(false),
+            able: false,
+          };
+          array[i] = element;
         }
         setSchedule(array);
+        setGetMonthArray(true);
       });
   }, [activeDate]);
 
   useEffect(() => {
-    console.log('activeDate:' + activeDate);
-    const setInitSchedule = new Promise((resolve, reject) => {
-      schedule.forEach((day, index) => {
-        availableTime[
-          new Date(
-            activeDate.getFullYear(),
-            activeDate.getMonth(),
-            index + 1,
-          ).getDay()
-        ].forEach((data: availableTimeType) => {
-          day.fill(
-            true,
-            data.startHour * 2 + (data.startMinute > 0 ? 1 : 0),
-            data.endHour * 2 + (data.endMinute > 0 ? 1 : 0) - 1,
+    if (getMonthArray === true) {
+      const setInitSchedule = new Promise((resolve, reject) => {
+        schedule.forEach((day, index) => {
+          availableTime[
+            new Date(
+              activeDate.getFullYear(),
+              activeDate.getMonth(),
+              index + 1,
+            ).getDay()
+          ].forEach((data: availableTimeType) => {
+            day.array.fill(
+              true,
+              data.startHour * 2 + (data.startMinute > 0 ? 1 : 0),
+              data.endHour * 2 + (data.endMinute > 0 ? 1 : 0),
+            );
+            day.able = true;
+          });
+        });
+        resolve(schedule);
+      });
+      const setRealSchedule = new Promise((resolve, reject) => {
+        requestTime.forEach(data => {
+          const startTime = new Date(data[0]);
+          const endTime = new Date(data[1]);
+          schedule[startTime.getDate() - 1]?.array.fill(
+            false,
+            startTime.getHours() * 2 + (startTime.getMinutes() > 0 ? 1 : 0),
+            endTime.getHours() * 2 + (endTime.getMinutes() > 0 ? 1 : 0),
           );
         });
+        resolve(schedule);
       });
-      resolve(schedule);
-    });
-    const setRealSchedule = new Promise((resolve, reject) => {
-      requestTime.forEach(data => {
-        const startTime = new Date(data[0]);
-        const endTime = new Date(data[1]);
-        schedule[startTime.getDate() - 1]?.fill(
-          false,
-          startTime.getHours() * 2 + (startTime.getMinutes() > 0 ? 1 : 0),
-          endTime.getHours() * 2 + (endTime.getMinutes() > 0 ? 1 : 0),
-        );
-      });
-      resolve(requestTime);
-    });
 
-    setInitSchedule.then(() =>
-      setRealSchedule.then(() => console.log(schedule)),
-    );
-  }, [schedule]);
+      const refineSchedule = new Promise((resolve, reject) => {
+        schedule.forEach(day => {
+          day.array.forEach((time: boolean, index: number) => {
+            if (
+              !(
+                time &&
+                ((index > 0 && day.array[index - 1]) ||
+                  (index < 47 && day.array[index + 1]))
+              )
+            )
+              day.array[index] = false;
+          });
+        });
+        resolve(schedule);
+      });
+
+      const setAble = new Promise((resolve, reject) => {
+        schedule.forEach(day => {
+          if (
+            day.array.find((element: boolean) => element === true) === undefined
+          )
+            day.able = false;
+        });
+        resolve(schedule);
+      });
+
+      setInitSchedule.then(() =>
+        setRealSchedule.then(() =>
+          refineSchedule.then(() =>
+            setAble.then(data => setSchedule([...schedule])),
+          ),
+        ),
+      );
+    }
+  }, [getMonthArray]);
 
   useEffect(() => {
     setStartTime('');
     setEndTime('');
   }, [selectDate]);
+
+  function GetMenuList() {
+    let index = 0;
+    for (const data of schedule[selectDate.getDate() - 1]?.array) {
+      if (
+        startTime === '' &&
+        data &&
+        index > 0 &&
+        schedule[selectDate.getDate() - 1]?.array[index - 1]
+      )
+        return (
+          <MenuItem
+            value={index}
+            key={selectDate.getMilliseconds() + '' + index}
+          >{`${Math.floor((index + 1) / 2)}:${
+            (index + 1) % 2 ? '30' : '00'
+          }`}</MenuItem>
+        );
+      else if (startTime !== '' && data && index > Number(startTime))
+        return (
+          <MenuItem
+            value={index}
+            key={selectDate.getMilliseconds() + '' + index}
+          >{`${Math.floor((index + 1) / 2)}:${
+            (index + 1) % 2 ? '30' : '00'
+          }`}</MenuItem>
+        );
+      else if (startTime !== '' && index > Number(startTime) && !data) break;
+      index++;
+    }
+  }
 
   return (
     <>
@@ -184,6 +260,10 @@ function ApplyCalendar() {
               setActiveDate(data.activeStartDate);
           }}
           value={selectDate}
+          tileDisabled={({ date }) =>
+            schedule[date.getDate() - 1]?.able === false ||
+            date.getMonth() !== activeDate.getMonth()
+          }
           locale={'ko-KR'}
         />
       </CalendarDiv>
@@ -200,19 +280,24 @@ function ApplyCalendar() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {schedule[selectDate.getDate() - 1]?.map((data, index) => {
-              if (data) {
-                console.log(index);
-                return (
-                  <MenuItem
-                    key={selectDate.getMilliseconds() + '' + index}
-                    value={index}
-                  >{`${Math.floor(index / 2)}:${
-                    index % 2 ? '30' : '00'
-                  }`}</MenuItem>
-                );
-              }
-            })}
+            {schedule[selectDate.getDate() - 1]?.array.map(
+              (data: boolean, index: number) => {
+                if (
+                  data &&
+                  index < 37 &&
+                  schedule[selectDate.getDate() - 1]?.array[index + 1]
+                ) {
+                  return (
+                    <MenuItem
+                      key={selectDate.getMilliseconds() + '' + index}
+                      value={index}
+                    >{`${Math.floor(index / 2)}:${
+                      index % 2 ? '30' : '00'
+                    }`}</MenuItem>
+                  );
+                }
+              },
+            )}
           </Select>
         </FormControl>
       </ThemeProvider>
@@ -229,20 +314,44 @@ function ApplyCalendar() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {schedule[selectDate.getDate() - 1]?.map((data, index) => {
-              if (data)
+            {schedule[selectDate.getDate() - 1]?.array.map((data, index) => {
+              if (
+                startTime === '' &&
+                data &&
+                index > 0 &&
+                schedule[selectDate.getDate() - 1]?.array[index - 1]
+              )
                 return (
                   <MenuItem
                     value={index}
                     key={selectDate.getMilliseconds() + '' + index}
-                  >{`${Math.floor(index / 2)}:${
-                    index % 2 ? '30' : '00'
+                  >{`${Math.floor((index + 1) / 2)}:${
+                    (index + 1) % 2 ? '30' : '00'
                   }`}</MenuItem>
                 );
+              else if (startTime !== '' && data && index > Number(startTime))
+                return (
+                  <MenuItem
+                    value={index}
+                    key={selectDate.getMilliseconds() + '' + index}
+                  >{`${Math.floor((index + 1) / 2)}:${
+                    (index + 1) % 2 ? '30' : '00'
+                  }`}</MenuItem>
+                );
+              // else if (startTime !== '' && index > Number(startTime) && !data)
+              //   return <></>;
             })}
           </Select>
         </FormControl>
       </ThemeProvider>
+      <Button
+        text="제출"
+        onClick={() => {
+          if (startTime === '' || endTime === '')
+            alert('시작시간과 끝시간을 모두 선택해주세요');
+          else console.log(startTime + ' ' + endTime);
+        }}
+      ></Button>
     </>
   );
 }
