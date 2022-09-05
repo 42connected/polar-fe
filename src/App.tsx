@@ -9,7 +9,7 @@ import NotFound from './containers/not-found/not-found';
 import ReportForm from './containers/reports/report-form';
 import LoadingStore from './states/loading/LoadingStore';
 import Footer from './components/footer';
-import Header from './components/header';
+import Header from './components/header/header';
 import MainPage from './containers/main-page/main-page';
 import ApplyPage from './containers/apply-page/apply-page';
 import ReportDetail from './containers/report-detail/report-detail';
@@ -22,6 +22,9 @@ import UserJoinStore from './states/user-join/UserJoinStore';
 import { UserJoin } from './containers/user-join/user-join';
 import ErrorStore from './states/error/ErrorStore';
 import { Error } from './containers/error/error';
+import MentorInfoModal, {
+  ModalType,
+} from './containers/signup/mentor-info-modal';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}

@@ -8,6 +8,7 @@ import {
   setCookie,
   TOKEN_LIST,
 } from '../../context/cookies';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
 const Background = styled.div`
   display: flex;
@@ -18,13 +19,17 @@ const Background = styled.div`
 `;
 
 export function Login() {
-  const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const code = params.get('code');
 
   useEffect(() => {
+    if (ErrorStore.isError === true) {
+      return;
+    }
     axios
-      .get(`${process.env.REACT_APP_BASE_LOGIN_CALLBACK_URL}?code=${code}`)
+      .get(`${process.env.REACT_APP_BASE_LOGIN_CALLBACK_URL}?code=${code}`, {
+        withCredentials: true,
+      })
       .then(res => {
         setCookie(
           TOKEN_LIST.ACCESS_TOKEN,
@@ -46,10 +51,10 @@ export function Login() {
           res?.data?.user?.join,
           DEFAULT_COOKIE_OPTION,
         );
-        navigate(-1);
+        document.location.href = `${process.env.REACT_APP_ORIGIN}`;
       })
-      .catch(() => {
-        navigate(-1);
+      .catch(err => {
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
       });
   });
 

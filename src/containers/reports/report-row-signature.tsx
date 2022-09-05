@@ -9,20 +9,26 @@ import { observer } from 'mobx-react-lite';
 import { REPORT_STATE } from './report-form';
 
 const Left = styled.div`
-  ${defaultTheme.fontSize.sizeSmall};
-  ${defaultTheme.font.sebangGothic};
   display: flex;
   width: 25%;
   align-items: center;
   flex-direction: column;
+  ${defaultTheme.fontSize.sizeSmall};
+  ${defaultTheme.font.sebangGothic};
+  @media screen and (max-width: 800px) {
+    font-size: 1rem;
+  }
 `;
 
 const ReportSummaryTitle = styled.div`
-  ${defaultTheme.fontSize.sizeExtraSmall};
-  ${defaultTheme.font.nanumGothic};
   width: 100%;
   margin: 20px 0px 0px 40px;
   justify-content: left;
+  ${defaultTheme.fontSize.sizeExtraSmall};
+  ${defaultTheme.font.nanumGothic};
+  @media screen and (max-width: 800px) {
+    ${defaultTheme.fontSize.sizeSmall};
+  }
 `;
 
 const ReportQuestion = styled.div`
@@ -102,10 +108,16 @@ const Right = styled.div`
 
 const RightTitle = styled.div`
   width: 100%;
-  ${defaultTheme.fontSize.sizeMedium};
-  ${defaultTheme.font.sebangGothic};
   margin: 20px 0px 0px 15px;
   justify-content: left;
+  ${defaultTheme.fontSize.sizeMedium};
+  ${defaultTheme.font.sebangGothic};
+  @media screen and (max-width: 900px) {
+    ${defaultTheme.fontSize.sizeExtraSmall};
+  }
+  @media screen and (max-width: 800px) {
+    ${defaultTheme.fontSize.sizeSmall};
+  }
 `;
 
 const SignatureTitleContainer = styled.div`
@@ -117,11 +129,17 @@ const SignatureTitleContainer = styled.div`
 `;
 
 const SignatureTitle = styled.div`
-  ${defaultTheme.fontSize.sizeMedium};
-  ${defaultTheme.font.sebangGothic};
   display: flex;
   justify-content: left;
   align-items: center;
+  ${defaultTheme.fontSize.sizeMedium};
+  ${defaultTheme.font.sebangGothic};
+  @media screen and (max-width: 900px) {
+    ${defaultTheme.fontSize.sizeExtraSmall};
+  }
+  @media screen and (max-width: 800px) {
+    ${defaultTheme.fontSize.sizeSmall};
+  }
 `;
 
 const FixableIcon = styled.div`

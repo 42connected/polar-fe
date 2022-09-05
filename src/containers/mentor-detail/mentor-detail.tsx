@@ -1,5 +1,7 @@
 import {
   faAngleDown,
+  faAngleLeft,
+  faAngleRight,
   faPencil,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
@@ -11,88 +13,71 @@ import Button from '../../components/button';
 import { InputCounter } from '../../components/input-counter';
 import ButtonBoxComponent from '../../components/mentor-detail/button-box';
 import TimeTableMuiComponent from '../../components/mentor-detail/mui-table';
+import SelectKeywords from '../../components/mentor-detail/select-keywords';
 import TagInputBoxComponent from '../../components/mentor-detail/tag-input-box';
-import ReportSummaryInputComponent from '../../components/report-summery-input';
-import {
-  axiosInstance,
-  axiosWithData,
-  axiosWithNoData,
-  AXIOS_METHOD_WITH_DATA,
-  AXIOS_METHOD_WITH_NO_DATA,
-} from '../../context/axios-interface';
+import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
+import { TwoButtonModal } from '../../components/modal/two-button-modal.tsx/two-button-modal';
+import PageNationComponent from '../../components/page-nation';
+import { axiosInstance } from '../../context/axios-interface';
 import { getCookie, TOKEN_LIST } from '../../context/cookies';
 import { appointmentsInterface } from '../../interface/mentor-detail/appointments.interface';
 import { CommentProps } from '../../interface/mentor-detail/comment-props.interface';
 import { CommentsWithPageProps } from '../../interface/mentor-detail/comments-with-page.interface';
 import { mentorAvailableTimeInterface } from '../../interface/mentor-detail/mentor-available-time.interface';
 import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
-import { MentoringLogProps } from '../../interface/mentor-detail/mentoringLogProps';
 import AuthStore, { User } from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
 import MarkdownRender from './markdownRender';
+import { ModalBackground } from '../../components/modal/modal-styled';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
+import MentorInfoModal, { ModalType } from '../signup/mentor-info-modal';
 
 function MentorDetail() {
-  const mockMentoringLog: MentoringLogProps[] = [
-    {
-      topic: 'nestjs 프로젝트',
-      state: '확정',
-      meetingAt: new Date(),
-    },
-    {
-      topic: 'nestjs',
-      state: '완료',
-      meetingAt: new Date(),
-    },
-    {
-      topic: '백앤드 진로상담',
-      state: '확정',
-      meetingAt: new Date(),
-    },
-  ];
-
   const mockMentorAvailableTime =
     '[[],[{"startHour":6,"startMinute":0,"endHour":10,"endMinute":0},{"startHour":10,"startMinute":0,"endHour":11,"endMinute":0}],[],[],[{"startHour":6,"startMinute":30,"endHour":9,"endMinute":0}],[],[{"startHour":6,"startMinute":30,"endHour":9,"endMinute":0}]]';
   const mockMentorAvailableTimeToArray = JSON.parse(mockMentorAvailableTime);
 
-  const appointmentsTest = [
-    {
-      startDate: new Date(2018, 5, 25, 9, 30),
-      endDate: new Date(2018, 5, 25, 11, 30),
-    },
-    {
-      startDate: new Date(2018, 5, 25, 12, 0),
-      endDate: new Date(2018, 5, 25, 13, 0),
-    },
-  ];
-
   const [mentorIntroduction, setMentorIntroduction] = useState<string>('');
   const [mentor, setMentor] = useState<MentorDetailProps | null>(null);
-  const [mentoringLog, setMentoringLog] =
-    useState<MentoringLogProps[]>(mockMentoringLog);
+
   const [isActiveMentorDetail, setIsActiveMentorDetail] =
     useState<boolean>(false);
-  const [comments, setComments] = useState<CommentsWithPageProps | null>(null);
-  const [appointments, setAppointments] =
-    useState<appointmentsInterface[]>(appointmentsTest);
+  const [comments, setComments] = useState<CommentProps[]>([]);
+  const [appointments, setAppointments] = useState<appointmentsInterface[]>([]);
   const [isActivateIntroductionEdit, setIsActivateIntroductionEdit] =
     useState<boolean>(false);
   const [isActivateMentor, setIsActivateMentor] = useState<boolean>(false);
   const [inputComment, setInputComment] = useState<string>('');
   const [mentorTags, setMentorTags] = useState<string[]>([]);
-  const [isActivateMentorInfoEdit, setIsActivateMentorInfoEdit] =
+  const [isActivateMentorMarkdownEdit, setIsActivateMentorMarkdownEdit] =
     useState<boolean>(false);
-  const [mentorInfo, setMentorInfo] = useState<string>('');
+  const [mentorMarkdown, setMentorMarkdown] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
+  const [take, setTake] = useState<number>(5);
+  const [page, setPage] = useState<number>(1);
+  const [maxPage, setMaxPage] = useState<number>(1);
+  const [isActivateDeleteModal, setIsActivateDeleteModal] =
+    useState<boolean>(false);
+  const [isActivateCommentSubmit, setIsActivateCommentSubmit] =
+    useState<boolean>(false);
+  const [isActivateApplyModal, setIsActivateApplyModal] =
+    useState<boolean>(false);
+  const [userCommentId, setUserCommentId] = useState<string>('');
+  const [isActivateCommentDeleteModal, setIsActivateCommentDeleteModal] =
+    useState<boolean>(false);
+  const [isActivateMentorTimeEditModal, setIsActivateMentorTimeEditModal] =
+    useState<boolean>(false);
+  const [
+    isActivateMentorMarkDownEditModal,
+    setIsActivateMentorMarkDownEditModal,
+  ] = useState<boolean>(false);
+  const [isActivateMentorTimeModal, setIsActivateMentorTimeModal] =
+    useState<boolean>(false);
 
-  //2018, 5, 25 화요일
-  //const date2 = new Date('1995-12-17T03:24:00');
-  // Sun Dec 17 1995 03:24:00 GMT...
-  //2018-06-28
-  // console.log(mockMentorAvailableTimeToArray);
-
-  const setMentorAvailableTimeData = () => {
+  const setMentorAvailableTimeData = (metorAvailableTimeData: string) => {
+    const mentorAvailableTimeDataToArray = JSON.parse(metorAvailableTimeData);
     const appointmentsData: appointmentsInterface[] = [];
-    mockMentorAvailableTimeToArray.forEach(
+    mentorAvailableTimeDataToArray?.forEach(
       (data: mentorAvailableTimeInterface[], index: number) => {
         if (data.length !== 0) {
           data.forEach(data2 => {
@@ -125,36 +110,47 @@ function MentorDetail() {
   const getParams = useParams();
   useEffect(() => {
     const params = {
-      page: 1,
-      take: 5,
+      page: page,
+      take: take,
     };
-    //axiosInstance.get(`/mentors/${getParams.intraId}`)
-    axiosWithNoData(
-      AXIOS_METHOD_WITH_NO_DATA.GET,
-      `/mentors/${getParams.intraId}`,
-    ).then(result => {
-      console.log('mentor', result.data);
-      result.data.tags = ['aaaa', 'bbbb', 'cccccccccc'];
-      setMentor(result.data);
-      setMentorTags(result.data.tags);
-      setMentorIntroduction(
-        result.data?.introduction ? result.data.introduction : '',
-      );
-      setMentorInfo(result.data?.info ? result.data.info : '');
-    });
-    //axiosInstance
-    //  .get(`/comments/${getParams.intraId}`, { params })
-    axiosWithNoData(
-      AXIOS_METHOD_WITH_NO_DATA.GET,
-      `/comments/${getParams.intraId}`,
-      { params },
-    ).then(result => {
-      console.log('comments', result.data);
-      setComments(result.data);
-    });
+    axiosInstance
+      .get(`/mentors/${getParams.intraId}`)
+      .then(result => {
+        setMentor(result.data);
+        setMentorTags(result.data.tags);
+        setMentorIntroduction(
+          result.data?.introduction
+            ? result.data.introduction
+            : result.data?.introduction,
+        );
+        console.log(result.data);
+        setMentorMarkdown(
+          result.data?.markdownContent
+            ? result.data.markdownContent
+            : result.data?.markdownContent,
+        );
+        console.log(result.data.availableTime);
+        const appointmentsData = setMentorAvailableTimeData(
+          mockMentorAvailableTime,
+        );
+        console.log(appointmentsData);
 
-    const appointmentsData = setMentorAvailableTimeData();
-    setAppointments(appointmentsData);
+        setAppointments(appointmentsData);
+      })
+      .catch(err => {
+        // ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+        console.log(err);
+      });
+    axiosInstance
+      .get(`/comments/${getParams.intraId}`, { params })
+      .then(result => {
+        setComments(result.data.comments);
+        setMaxPage(Math.ceil(result.data.totalCount / take));
+      })
+      .catch(err => {
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+      });
+
     const user: User = {
       intraId: AuthStore.getUserIntraId(),
       role: AuthStore.getUserRole(),
@@ -162,124 +158,92 @@ function MentorDetail() {
     setUser(user);
   }, []);
 
-  useEffect(() => {
+  const handleSubmitIntroductionTags = () => {
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
     const config = {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
-    const data = { introduction: mentorIntroduction };
-    axiosWithData(
-      AXIOS_METHOD_WITH_DATA.PACTH,
-      `/mentors/${getParams.intraId}`,
-      data,
-      config,
-    );
-    //axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
-  }, [isActivateIntroductionEdit]);
-  useEffect(() => {
-    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
-    const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    };
-    const data = { introduction: mentorIntroduction };
-    axiosWithData(
-      AXIOS_METHOD_WITH_DATA.PACTH,
-      `/mentors/${getParams.intraId}`,
-      data,
-      config,
-    );
-    //axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
-  }, [mentorTags]);
+    const data = { introduction: mentorIntroduction, tags: mentorTags };
+    axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
+  };
 
-  useEffect(() => {
-    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
-    const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    };
-    const data = { isActive: isActivateMentor };
-    axiosWithData(
-      AXIOS_METHOD_WITH_DATA.PACTH,
-      `/mentors/${getParams.intraId}`,
-      data,
-      config,
-    );
-    //axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
-  }, [isActivateMentor]);
-
-  useEffect(() => {
-    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
-    const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    };
-    const data = { markdownContent: mentorInfo };
-    axiosWithData(
-      AXIOS_METHOD_WITH_DATA.PACTH,
-      `/mentors/${getParams.intraId}`,
-      data,
-      config,
-    );
-    //axiosInstance.patch(`/mentors/${getParams.intraId}`, data, config);
-  }, [isActivateMentorInfoEdit]);
-
-  const AddHashtag = mentorTags.map(tag => {
+  const AddHashtag = mentorTags?.map(tag => {
     return <div>{tag.padStart(tag.length + 1, '#')}</div>;
   });
 
   const handleCommentSubmit = () => {
     if (inputComment !== '') {
+      const params = {
+        page: 1,
+        take: page * take,
+      };
       const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
       const config = {
         headers: { Authorization: `Bearer ${accessToken}` },
       };
       const data = { content: inputComment };
-      axiosWithData(
-        AXIOS_METHOD_WITH_DATA.POST,
-        `/comments/${getParams.intraId}`,
-        data,
-        config,
-      );
-      //axiosInstance.post(`/comments/${getParams.intraId}`, data, config);
-      setInputComment('');
-      //axiosInstance.get(`/comments/${getParams.intraId}`)
-      axiosWithNoData(
-        AXIOS_METHOD_WITH_NO_DATA.GET,
-        `/comments/${getParams.intraId}`,
-      ).then(result => {
-        setComments(result.data.comments);
-      });
+      axiosInstance
+        .post(`/comments/${getParams.intraId}`, data, config)
+        .then(() => {
+          axiosInstance
+            .get(`/comments/${getParams.intraId}`, { params })
+            .then(result => {
+              setComments(result.data.comments);
+              setMaxPage(Math.ceil(result.data.totalCount / take));
+            })
+            .catch(err => {
+              // ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+            });
+          setInputComment('');
+        });
     }
   };
 
-  const mentoringLogList = mentoringLog.map(log => {
-    const makeDate = `${log.meetingAt.getFullYear().toString().slice(-2)}/${
-      log.meetingAt.getMonth() + 1
-    }/${log.meetingAt.getDay()}`;
-    return (
-      <MenuBox2>
-        <div>{log.topic}</div>
-        <div>{log.state}</div>
-        <div>{makeDate}</div>
-      </MenuBox2>
-    );
-  });
-
-  const deleteComment = (commentId: any) => {
+  const handleSubmitMentorMarkdown = () => {
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
     const config = {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
-    axiosWithNoData(
-      AXIOS_METHOD_WITH_NO_DATA.DELETE,
-      `/comments/${commentId}`,
-      config,
-    );
-    //axiosInstance.delete(`/comments/${commentId}`, config);
-    //axiosInstance.get(`/comments/${getParams.intraId}`)
-    axiosWithNoData(
-      AXIOS_METHOD_WITH_NO_DATA.GET,
-      `/comments/${getParams.intraId}`,
-    ).then(result => {
-      setComments(result.data.comments);
+    const data = { markdownContent: mentorMarkdown };
+    axiosInstance
+      .patch(`/mentors/${getParams.intraId}`, data, config)
+      .then(() => {
+        axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
+          setMentor(result.data);
+          setMentorTags(result.data.tags);
+          setMentorIntroduction(
+            result.data?.introduction
+              ? result.data.introduction
+              : result.data?.introduction,
+          );
+          setMentorMarkdown(
+            result.data?.markdownContent
+              ? result.data.markdownContent
+              : result.data?.markdownContent,
+          );
+        });
+      })
+      .catch(err => {
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+      });
+  };
+
+  const deleteComment = (commentId: any) => {
+    const params = {
+      page: 1,
+      take: take * page,
+    };
+    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
+    const config = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    axiosInstance.delete(`/comments/${commentId}`, config).then(() => {
+      axiosInstance
+        .get(`/comments/${getParams.intraId}`, { params })
+        .then(result => {
+          setComments(result.data.comments);
+          setMaxPage(Math.ceil(result.data.totalCount / take));
+        });
     });
   };
 
@@ -292,27 +256,48 @@ function MentorDetail() {
             <MentorName>
               <div className="mentor-name">{mentor?.name} 멘토</div>
               <div className="mentor-intra">{mentor?.intraId}</div>
+              {user?.intraId === mentor?.intraId && user && mentor ? (
+                <FontAwesomeIcon
+                  icon={faPencil}
+                  className="icon"
+                  size="lg"
+                  onClick={() => {
+                    setIsActivateMentorTimeEditModal(
+                      !isActivateMentorTimeEditModal,
+                    );
+                  }}
+                />
+              ) : null}
             </MentorName>
-            <Button
-              fontFrame={theme.fontFrame.subTitleSmall}
-              borderWidth="1px"
-              text={`멘토링 ${isActivateMentor ? '가능' : '불가능'}`}
-              backgroundColor={theme.colors.polarBackground}
-              color={theme.colors.polarSimpleMain}
-              width="12rem"
-              height="2.5rem"
-              borderRadius="20px"
-              onClick={() => setIsActivateMentor(!isActivateMentor)}
-            />
+            <MentorActivateContainer>
+              <Button
+                fontFrame={theme.fontFrame.subTitleSmall}
+                borderWidth="1px"
+                text={`멘토링 ${isActivateMentor ? '가능' : '불가능'}`}
+                backgroundColor={theme.colors.polarBackground}
+                color={theme.colors.polarSimpleMain}
+                width="12rem"
+                height="2.5rem"
+                borderRadius="20px"
+                isUnActivated={true}
+              />
+
+              {isActivateMentorTimeEditModal && (
+                <MentorInfoModal
+                  intraId={getParams.intraId || ''}
+                  modalType={ModalType.MENTOR_INFO}
+                />
+              )}
+            </MentorActivateContainer>
           </MentorInfoContent>
         </MentorInfo>
-        {mentor?.isActive ? (
+        {mentor?.isActive && user?.role == 'cadet' ? (
           <Link to={`/apply-page/${mentor?.intraId}`}>
             <Button
               text="멘토링 신청하기"
               width="21rem"
               height="6rem"
-              background-color={theme.colors.polarSimpleMain}
+              backgroundColor={theme.colors.polarSimpleMain}
               color={theme.colors.backgoundWhite}
             />
           </Link>
@@ -321,8 +306,25 @@ function MentorDetail() {
             text="멘토링 신청하기"
             width="21rem"
             height="6rem"
-            background-color={theme.colors.polarSimpleMain}
+            backgroundColor={theme.colors.grayThree}
             color={theme.colors.backgoundWhite}
+            isUnActivated={true}
+            onClick={() => {
+              setIsActivateApplyModal(true);
+            }}
+          />
+        )}
+        {isActivateApplyModal && (
+          <OneButtonModal
+            Text="멘토링 신청이 불가능합니다."
+            TitleText="멘토링 신청"
+            XButtonFunc={() => {
+              setIsActivateApplyModal(false);
+            }}
+            ButtonFunc={() => {
+              setIsActivateApplyModal(false);
+            }}
+            ButtonText="확인"
           />
         )}
       </MentorHeader>
@@ -371,25 +373,15 @@ function MentorDetail() {
                       );
                     }}
                   />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faPencil}
-                    className="icon"
-                    size="xs"
-                    onClick={() => {
-                      setIsActivateIntroductionEdit(
-                        !isActivateIntroductionEdit,
-                      );
-                    }}
-                  />
-                )}
+                ) : null}
               </MenuBox>
               {isActivateIntroductionEdit ? (
                 <>
                   <InputCounter
                     value={mentorIntroduction}
                     setter={setMentorIntroduction}
-                    disabled={false}
+                    countDisabled={false}
+                    inputDisabled={false}
                     maxLength={150}
                     width={'100%'}
                     fontSize={theme.fontFrame.bodyMiddle}
@@ -402,17 +394,6 @@ function MentorDetail() {
                     setter={setMentorTags}
                     value={mentorTags}
                   />
-                  <ButtonBox>
-                    <Button
-                      text="편집완료"
-                      borderRadius="20px"
-                      onClick={() => {
-                        setIsActivateIntroductionEdit(
-                          !isActivateIntroductionEdit,
-                        );
-                      }}
-                    />
-                  </ButtonBox>
                 </>
               ) : (
                 <>
@@ -420,6 +401,42 @@ function MentorDetail() {
                   <MentorTags>{AddHashtag}</MentorTags>
                 </>
               )}
+              <SelectKeywords isActivatedEdit={isActivateIntroductionEdit} />
+              <ButtonBox>
+                {isActivateDeleteModal && (
+                  <TwoButtonModal
+                    Text="수정하시겠습니까?"
+                    TitleText="수정"
+                    XButtonFunc={() => {
+                      setIsActivateDeleteModal(false);
+                    }}
+                    Button1Func={() => {
+                      try {
+                        setIsActivateDeleteModal(false);
+                        setIsActivateIntroductionEdit(false);
+                      } catch (e) {
+                        // ErrorStore
+                      }
+                      handleSubmitIntroductionTags();
+                    }}
+                    Button2Func={() => {
+                      setIsActivateDeleteModal(false);
+                      setIsActivateIntroductionEdit(false);
+                    }}
+                    Button1Text="네"
+                    Button2Text="아니요"
+                  />
+                )}
+                {isActivateIntroductionEdit && (
+                  <Button
+                    text="수정완료"
+                    borderRadius="20px"
+                    onClick={() => {
+                      setIsActivateDeleteModal(true);
+                    }}
+                  />
+                )}
+              </ButtonBox>
             </MentorBody1Right1>
             <MentorBody1Right2>
               <MenuBox1>
@@ -427,7 +444,7 @@ function MentorDetail() {
                 <div>상태</div>
                 <div>일시</div>
               </MenuBox1>
-              {mentoringLogList}
+              <PageNationComponent />
             </MentorBody1Right2>
           </MentorBody1Right>
         </MentorBody1>
@@ -436,9 +453,18 @@ function MentorDetail() {
             <div>
               가능 시간
               {user?.intraId === mentor?.intraId && user && mentor ? (
-                <FontAwesomeIcon icon={faPencil} size={'xs'} className="icon" />
-              ) : (
-                <FontAwesomeIcon icon={faPencil} size={'xs'} className="icon" />
+                <FontAwesomeIcon
+                  icon={faPencil}
+                  size={'xs'}
+                  className="icon"
+                  onClick={() => setIsActivateMentorTimeModal(true)}
+                />
+              ) : null}
+              {isActivateMentorTimeModal && (
+                <MentorInfoModal
+                  intraId={getParams.intraId || ''}
+                  modalType={ModalType.AVAILABLE_TIME}
+                />
               )}
             </div>
             {mentor?.createdAt ? (
@@ -476,18 +502,21 @@ function MentorDetail() {
                     className="icon"
                     size="xs"
                     onClick={() => {
-                      setIsActivateMentorInfoEdit(!isActivateMentorInfoEdit);
+                      setIsActivateMentorMarkdownEdit(
+                        !isActivateMentorMarkdownEdit,
+                      );
                     }}
                   />
                 ) : null}
               </MenuBox>
 
-              {isActivateMentorInfoEdit ? (
+              {isActivateMentorMarkdownEdit ? (
                 <>
                   <InputCounter
-                    value={mentorInfo}
-                    setter={setMentorInfo}
-                    disabled={false}
+                    value={mentorMarkdown}
+                    setter={setMentorMarkdown}
+                    countDisabled={false}
+                    inputDisabled={false}
                     maxLength={10000}
                     width={'100%'}
                     height={'50rem'}
@@ -501,21 +530,97 @@ function MentorDetail() {
                       backgroundColor={theme.colors.polarSimpleMain}
                       borderRadius="20px"
                       onClick={() => {
-                        setIsActivateMentorInfoEdit(!isActivateMentorInfoEdit);
+                        setIsActivateMentorMarkDownEditModal(true);
                       }}
+                      Button1Text="네"
+                      Button2Text="아니요"
                     />
+                    {isActivateMentorMarkDownEditModal && (
+                      <TwoButtonModal
+                        Text="수정하시겠습니까?"
+                        TitleText="수정"
+                        XButtonFunc={() => {
+                          setIsActivateMentorMarkDownEditModal(false);
+                        }}
+                        Button1Func={() => {
+                          try {
+                            handleSubmitMentorMarkdown();
+                          } catch (err) {
+                            // ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+                          }
+                          setIsActivateMentorMarkDownEditModal(false);
+                          setIsActivateMentorMarkdownEdit(false);
+                        }}
+                        Button2Func={() => {
+                          setIsActivateMentorMarkDownEditModal(false);
+                          setIsActivateMentorMarkdownEdit(false);
+                        }}
+                        Button1Text="네"
+                        Button2Text="아니요"
+                      />
+                    )}
                   </SubmitButton>
                 </>
               ) : (
-                <MarkdownRender markdown={mentorInfo} />
+                <MarkdownRender markDown={mentorMarkdown} />
               )}
             </>
           ) : null}
         </MentorBody3>
         <MentorCommets>
           <MenuBox>댓글</MenuBox>
+          {user?.intraId ? (
+            <ReplyContainer>
+              <Comment>
+                <InputUserContent>{user.intraId}</InputUserContent>
+                <InputCounter
+                  value={inputComment}
+                  setter={setInputComment}
+                  countDisabled={true}
+                  inputDisabled={false}
+                  maxLength={300}
+                  width={'100%'}
+                  height={'6rem'}
+                />
+                <SubmitButton>
+                  <Button
+                    text="제출하기"
+                    width="12rem"
+                    height="3.5rem"
+                    backgroundColor={
+                      inputComment.length
+                        ? theme.colors.polarSimpleMain
+                        : theme.colors.grayThree
+                    }
+                    borderRadius="20px"
+                    onClick={() => {
+                      {
+                        user.role === 'cadet'
+                          ? handleCommentSubmit()
+                          : setIsActivateCommentSubmit(true);
+                      }
+                    }}
+                    isUnActivated={inputComment.length === 0}
+                  />
+                  {isActivateCommentSubmit && (
+                    <OneButtonModal
+                      TitleText="댓글 작성"
+                      Text="댓글은 cadet만 작성할 수 있습니다."
+                      XButtonFunc={() => {
+                        setIsActivateCommentSubmit(false);
+                      }}
+                      ButtonFunc={() => {
+                        setIsActivateCommentSubmit(false);
+                      }}
+                      ButtonText="확인"
+                    />
+                  )}
+                </SubmitButton>
+              </Comment>
+            </ReplyContainer>
+          ) : null}
           <MentorCommetsContent>
-            {comments?.comments?.map((comment: CommentProps) => {
+            {comments?.map((comment: CommentProps) => {
               return (
                 <Comment>
                   <img src={comment?.cadets?.profileImage} />
@@ -533,54 +638,104 @@ function MentorDetail() {
                           7,
                         )}.${mentor?.updatedAt.substring(8, 10)}`}</div>
                       ) : null}
-                      {user?.intraId === comment?.cadets?.intraId &&
-                      user &&
-                      comment?.cadets ? (
+                      {user?.intraId === comment?.cadets?.intraId && user ? (
                         <FontAwesomeIcon
                           icon={faXmark}
                           className="icon"
                           color={'red'}
                           onClick={() => {
-                            deleteComment(comment?.id);
+                            setUserCommentId(comment.id);
+                            setIsActivateDeleteModal(true);
                           }}
                         />
                       ) : null}
                     </div>
                     <div>{comment?.content}</div>
                   </UserContent>
+                  {isActivateCommentDeleteModal && (
+                    <TwoButtonModal
+                      TitleText="댓글 삭제"
+                      Text="정말로 댓글을 삭제하시겠습니까?"
+                      XButtonFunc={() => {
+                        setIsActivateDeleteModal(false);
+                      }}
+                      Button1Func={() => {
+                        setIsActivateDeleteModal(false);
+                      }}
+                      Button1Text="확인"
+                      Button2Func={() => {
+                        deleteComment(userCommentId);
+                        setIsActivateDeleteModal(false);
+                      }}
+                      Button2Text="취소"
+                    />
+                  )}
                 </Comment>
               );
             })}
+            {maxPage <= page ? null : (
+              <CommentPageNation
+                onClick={() => {
+                  const params = {
+                    page: page + 1,
+                    take: take,
+                  };
+                  axiosInstance
+                    .get(`/comments/${getParams.intraId}`, { params })
+                    .then(response => {
+                      if (response.data.comments !== 0) {
+                        setComments([...comments, ...response.data.comments]);
+                      }
+                      setMaxPage(Math.ceil(response.data.total / take));
+                      if (response.data.total > page * take) {
+                        setPage(page + 1);
+                      }
+                    })
+                    .catch(error => {
+                      console.log(error);
+                    });
+                }}
+              >
+                댓글 더보기
+              </CommentPageNation>
+            )}
           </MentorCommetsContent>
-          <InputCounter
-            value={inputComment}
-            setter={setInputComment}
-            disabled={false}
-            maxLength={300}
-            width={'100%'}
-          />
-          <SubmitButton>
-            <Button
-              text="제출하기"
-              width="12rem"
-              height="3.5rem"
-              backgroundColor={theme.colors.polarSimpleMain}
-              borderRadius="20px"
-              onClick={() => {
-                handleCommentSubmit();
-              }}
-            />
-          </SubmitButton>
         </MentorCommets>
       </MentorBody>
     </MentorDetailTag>
   );
 }
 
+const MentorActivateContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  .icon {
+    margin-left: 1rem;
+    cursor: pointer;
+  }
+`;
+
+const InputUserContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ${theme.fontFrame.titleSmall}
+  margin-right: 1rem;
+`;
+
+const ReplyContainer = styled.div`
+  border-bottom: 1px solid ${theme.colors.polarSimpleMain};
+`;
+
+const CommentPageNation = styled.div`
+  cursor: pointer;
+`;
 const ButtonBox = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 1rem;
 `;
 
 const MenuBox3 = styled.div`
@@ -620,6 +775,10 @@ const UserContent = styled.div`
   flex-direction: column;
   justify-content: space-around;
   margin-left: 1.5rem;
+  .inputCommentName {
+    font-weight: 900;
+    margin-right: 1rem;
+  }
   div:first-child {
     display: flex;
     text-align: end;
@@ -648,6 +807,7 @@ const UserContent = styled.div`
 const Comment = styled.div`
   display: flex;
   margin: 2rem;
+  position: relative;
   img {
     width: 5rem;
     height: 5rem;
@@ -660,43 +820,16 @@ const TimTableScroll = styled.div`
   height: 70rem;
 `;
 
-const MenuBox2 = styled.div`
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(1, 1fr);
-  border-bottom: 1px solid ${theme.colors.grayFive};
-  width: 100%;
-  height: 3rem;
-  box-sizing: border-box;
-  overflow-wrap: break-word;
-
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-
-  div:nth-child(2) {
-    color: ${theme.colors.polarSimpleMain};
-  }
-`;
-
 const MentorCommetsContent = styled.div``;
 
 const SubmitButton = styled.div`
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  margin-left: 1rem;
 `;
 
 const MentorCommets = styled.div`
   margin-top: 5%;
-  /* .submitButton {
-    display: flex;
-    justify-content: flex-end;
-  } */
 `;
 
 const MentorBody3Toggle = styled.div`
@@ -715,8 +848,6 @@ const MentorBody3 = styled.div`
   margin-top: 10%;
 `;
 
-const MenuBoxHead = styled.div``;
-
 const MentorBody2 = styled.div`
   margin-top: 10%;
 `;
@@ -730,6 +861,7 @@ const MenuBox1 = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(1, 1fr);
+  font-weight: 700;
   div {
     display: flex;
     justify-content: center;
@@ -867,6 +999,10 @@ const MentorName = styled.div`
     margin-left: 1rem;
     ${theme.fontFrame.titleSmall};
   }
+  .icon {
+    margin-left: 0.5rem;
+    cursor: pointer;
+  }
   margin-bottom: 0.5rem;
 `;
 
@@ -892,15 +1028,19 @@ const MenuBox = styled.div`
   letter-spacing: 0.1rem;
   margin-bottom: 1.3rem;
   padding-bottom: 0.5rem;
-  .icon {
-    margin-left: 1rem;
-    margin-bottom: 2%;
-    cursor: pointer;
-  }
 `;
 const MentorDetailTag = styled.div`
   ${theme.font.nanumGothic};
   background-color: ${theme.colors.backgoundWhite};
+  .icon {
+    margin-left: 0.5rem;
+    cursor: pointer;
+  }
 `;
 
 export default MentorDetail;
+// TODO: alert 바꾸기
+// TODO: error alert
+// TODO: 존재하지 않은 mentor있을때 redirect
+// TODO: loading 처리
+// TODO: change grid to flex

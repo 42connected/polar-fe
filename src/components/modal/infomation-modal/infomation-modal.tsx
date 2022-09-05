@@ -40,7 +40,6 @@ export function InfomationModal(props: InfomationModalProps) {
           <ModalTitle>{props.TitleText}</ModalTitle>
           <FontAwesomeIcon
             icon={faX}
-            size="2x"
             style={{ opacity: 0.3, cursor: 'pointer' }}
             onClick={() => props.XButtonFunc()}
           />

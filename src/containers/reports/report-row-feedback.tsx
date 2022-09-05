@@ -9,20 +9,34 @@ import defaultTheme from '../../styles/theme';
 
 const ReportRowContentTitie = styled.div`
   width: 100%;
-  ${defaultTheme.fontSize.sizeMedium};
-  ${defaultTheme.font.sebangGothic};
   margin: 20px 0px 0px 15px;
   justify-content: left;
+  ${defaultTheme.fontSize.sizeMedium};
+  ${defaultTheme.font.sebangGothic};
+  @media screen and (max-width: 900px) {
+    ${defaultTheme.fontSize.sizeExtraSmall};
+  }
+  @media screen and (max-width: 800px) {
+    ${defaultTheme.fontSize.sizeSmall};
+  }
 `;
 
 const ReportFeedbackRow = styled.div`
-  ${defaultTheme.fontSize.sizeExtraSmall};
-  ${defaultTheme.font.nanumGothic};
   display: flex;
-  width: 50%;
+  width: 400px;
   margin: 10px;
   justify-content: space-between;
   align-items: center;
+  ${defaultTheme.fontSize.sizeExtraSmall};
+  ${defaultTheme.font.nanumGothic};
+  @media screen and (max-width: 900px) {
+    width: 350px;
+    ${defaultTheme.fontSize.sizeSmall};
+  }
+  @media screen and (max-width: 800px) {
+    width: 300px;
+    font-size: 1rem;
+  }
 `;
 
 interface ReportRowFeedbackProps {

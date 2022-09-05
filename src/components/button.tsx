@@ -16,14 +16,16 @@ export interface ButtonProps
   font?: string;
   boxShadow?: string;
   backgroundColor?: string;
+  hoverBackgroundColor?: string;
   onClick?: () => void;
+  isUnActivated?: boolean;
 }
 
 const ButtonStyle = styled.button<ButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  ${props => (props.isUnActivated ? `cursor: default` : `cursor: pointer`)};
   border-radius: ${props => props.borderRadius ?? '1rem'};
   border-width: ${props => props.borderWidth ?? '0rem'};
   border-style: solid;
@@ -47,6 +49,9 @@ const ButtonStyle = styled.button<ButtonProps>`
       props.backgroundColor
         ? darken(props.backgroundColor, 0.15)
         : darken(theme.colors.polarBrightMain, 0.15)};
+  }
+  &:hover {
+    background-color: ${props => props.hoverBackgroundColor ?? ''};
   }
 `;
 

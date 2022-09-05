@@ -1,15 +1,22 @@
+import SelectList from './selectList';
+import deleteButtonImage from '../../assets/signup/deleteButton.png';
 import {
   BodyBigFont,
   DeleteButtonImage,
   TimeTableContainer,
-} from '../../containers/signup/signup-mentor';
-import SelectList from './selectList';
-import deleteButtonImage from '../../assets/signup/deleteButton.png';
-import { IndexInfo } from 'typescript';
+} from '../../containers/signup/signup-style';
 
-const days: string[] = ['월', '화', '수', '목', '금', '토', '일'];
+const days: string[] = ['일', '월', '화', '수', '목', '금', '토'];
 
 const hours: string[] = [
+  '00시',
+  '01시',
+  '02시',
+  '03시',
+  '04시',
+  '05시',
+  '06시',
+  '07시',
   '08시',
   '09시',
   '10시',
@@ -26,14 +33,6 @@ const hours: string[] = [
   '21시',
   '22시',
   '23시',
-  '00시',
-  '01시',
-  '02시',
-  '03시',
-  '04시',
-  '05시',
-  '06시',
-  '07시',
 ];
 
 const minutes: string[] = ['00분', '30분'];

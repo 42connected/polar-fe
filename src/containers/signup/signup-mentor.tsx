@@ -1,7 +1,5 @@
-import styled from '@emotion/styled';
 import { debounce, Switch } from '@mui/material';
 import axios from 'axios';
-import defaultTheme from '../../styles/theme';
 import singupImage from '../../assets/signup/signup.png';
 import addButtonImage from '../../assets/signup/addButton.png';
 import { useEffect, useRef, useState } from 'react';
@@ -11,212 +9,37 @@ import LoadingStore from '../../states/loading/LoadingStore';
 import { Navigate } from 'react-router-dom';
 import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
 import AuthStore from '../../states/auth/AuthStore';
-import theme from '../../styles/theme';
 import UserJoinStore from '../../states/user-join/UserJoinStore';
-
-export const ContainersPc = styled.div`
-  display: grid;
-  background: white;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr auto;
-  grid-column-gap: 10rem;
-  justify-items: center;
-`;
-
-export const ContainersMobile = styled.div`
-  display: grid;
-  background: white;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr auto;
-  grid-column-gap: 10rem;
-  justify-items: center;
-  -webkit-transform: scale(0.7);
-  transform: scale(0.7);
-  transform-origin: left top;
-  padding-left: 2rem;
-`;
-
-export const RequiredWrapper = styled.div`
-  display: grid;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 100px;
-  padding-top: 4rem;
-  width: 400px;
-  padding-left: 2rem;
-`;
-
-export const OptionWrapper = styled.div`
-  padding-top: 4rem;
-  align-items: center;
-  justify-content: left;
-  padding-bottom: 100px;
-  margin-top: 3rem;
-  margin-right: 0rem;
-`;
-
-export const HeadLetters = styled.h1`
-  ${defaultTheme.font.sebangGothic};
-  font-size: 2.5rem;
-  font-weight: 400;
-  padding-left: 10rem;
-  padding-bottom: 20px;
-  border-bottom: 1px solid;
-`;
-
-const SingupImage = styled.img`
-  width: 35rem;
-  height: 18.5rem;
-`;
-
-const NameTitle = styled.h2`
-  font-weight: 400;
-  font-size: 2rem;
-  ${defaultTheme.font.sebangGothic};
-  padding-left: 20px;
-  padding-bottom: 5px;
-`;
-
-export const InfoInput = styled.input`
-  width: 27rem;
-  height: 3rem;
-  border-radius: 20px;
-  margin-left: 20px;
-  margin-bottom: 10px;
-  padding-left: 3rem;
-  background: ${theme.colors.polarBackground};
-  border: none;
-  border-right: 0px;
-  border-top: 0px;
-  font-size: 19;
-  ${theme.font.sebangGothic};
-  ${theme.fontWeight.weightSmall};
-  ${theme.fontSize.sizeExtraSmall};
-`;
-
-export const EmailInput = styled.input`
-  width: 27rem;
-  height: 3rem;
-  border-radius: 20px;
-  margin-left: 20px;
-  margin-bottom: 10px;
-  border: none;
-  border-right: 0px;
-  border-top: 0px;
-`;
-
-export const CertificationSendingButton = styled.button`
-  justify-content: center;
-  margin-left: 240px;
-  width: 70.19px;
-  height: 35.11px;
-  background: ${defaultTheme.colors.polarSimpleMain};
-  color: WHITE;
-  padding-top: 1rem;
-  border: none;
-  cursor: pointer;
-  font-size: 27px;
-  border-radius: 20px;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 18px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-`;
-
-const Button = styled.button`
-  justify-content: center;
-  margin-left: 70px;
-  width: 138.19px;
-  height: 39.11px;
-  background: ${defaultTheme.fontColor.blueColor};
-  color: WHITE;
-  padding: 1rem;
-  border: none;
-  cursor: pointer;
-  font-size: 27px;
-  border-radius: 20px;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 18px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-`;
-
-export const TimeTableContainer = styled.ul`
-  display: grid;
-  justify-content: right;
-  grid-template-columns: 18% 8rem 8rem 5% 8rem 8rem 3%;
-  grid-template-rows: 4rem;
-  grid-gap: 4px;
-  list-style-type: none;
-  margin-right: 2rem;
-`;
-
-const ColumnDays = styled.li`
-  grid-column-start: 1;
-  grid-column-end: 2;
-  padding-left: 20px;
-`;
-
-const ColumnName = styled.li`
-  grid-column-start: 2;
-  grid-column-end: 7;
-  padding-left: 150px;
-`;
-
-const ColumnLine = styled.li`
-  grid-column-start: 1;
-  grid-column-end: 8;
-  padding: 0px, 0px, 0px, 0px;
-  margin: 0px, 0ox, 0px, 0px;
-  border-top: 0.5px solid;
-`;
-
-const AddButtonImage = styled.img`
-  width: 1.7rem;
-  height: 1.5rem;
-  cursor: pointer;
-  margin-top: 1.5rem;
-`;
-
-export const DeleteButtonImage = styled.img`
-  width: 1.3rem;
-  height: 1.1rem;
-  cursor: pointer;
-  margin-top: 1.2rem;
-  background-color: black;
-`;
-
-export const BodyBigFont = styled.p`
-  ${defaultTheme.fontFrame.bodyMiddle};
-  ${defaultTheme.font.sebangGothic};
-`;
-
-export const ToggleContainer = styled.p`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 1px;
-  gap: 5rem;
-  margin-top: 10rem;
-  margin-bottom: 8rem;
-`;
-
-const BodySmallFont = styled.p`
-  font-size: 1.8rem;
-  font-family: NanumGothic;
-  font-weight: 400;
-`;
-
-const ResultMessage = styled.p`
-  font-family: NanumGothic;
-  font-weight: 400;
-  font-size: 1.4rem;
-  padding-top: 0rem;
-  margin-top: 0rem;
-  padding-left: 1.6rem;
-`;
+import {
+  AddButtonImage,
+  BodyBigFont,
+  BodySmallFont,
+  Button,
+  CertificationSendingButton,
+  ColumnDays,
+  ColumnLine,
+  ColumnName,
+  ContainersMobile,
+  ContainersPc,
+  HeadLetters,
+  InfoInput,
+  NameTitle,
+  OptionWrapper,
+  RequiredWrapper,
+  ResultMessage,
+  SingupImage,
+  TimeTableContainer,
+  ToggleContainer,
+} from './signup-style';
+import {
+  OneButtonModal,
+  OneButtonModalProps,
+} from '../../components/modal/one-button-modal/one-button-modal';
+import {
+  DEFAULT_COOKIE_OPTION,
+  setCookie,
+  TOKEN_LIST,
+} from '../../context/cookies';
 
 interface AddColumnsProps {
   rows: IRows[];
@@ -271,11 +94,25 @@ const SignUpMentor = () => {
       date: [0, 0, 0, 0, 0],
     },
   ]);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [oneButtonModalProps, setOneButtonModalProps] =
+    useState<OneButtonModalProps>({
+      TitleText: '',
+      Text: 'ss',
+      XButtonFunc: () => {
+        setIsError(false);
+      },
+      ButtonText: '',
+      ButtonBg: '',
+      ButtonFunc: () => {
+        setIsError(false);
+      },
+    });
 
   useEffect(() => {
     UserJoinStore.off();
     MentorStore.getMentor(AuthStore.getUserIntraId());
-    window.screen.width <= 500 ? setIsMobile(true) : setIsMobile(false);
+    window.innerWidth <= 500 ? setIsMobile(true) : setIsMobile(false);
 
     window.addEventListener('resize', handleResize);
     return () => {
@@ -418,24 +255,72 @@ const SignUpMentor = () => {
 
   async function joinMentorServer(rows: IRows[]) {
     if (!name) {
-      alert('이름을 입력하세요');
+      setOneButtonModalProps({
+        TitleText: '이름을 입력하세요',
+        Text: '이름을 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       return;
     }
 
     if (!slackId) {
-      alert('Slack ID를 입력하세요');
+      setOneButtonModalProps({
+        TitleText: 'Slack ID를 입력하세요',
+        Text: 'Slack ID를 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       return;
     }
 
     if (!alreadyRegistered && !isCodeSucess) {
-      alert('e-mail 인증을 완료해주세요');
+      setOneButtonModalProps({
+        TitleText: 'e-mail 인증을 완료해주세요',
+        Text: 'e-mail 인증을 완료해주세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       return;
     }
 
     LoadingStore.on();
 
     if (!(await validateRows(rows))) {
-      alert('가능시간에 빈 칸이 있습니다');
+      setOneButtonModalProps({
+        TitleText: '가능시간 빈 칸',
+        Text: '가능시간에 빈 칸이 있습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       LoadingStore.off();
       return;
     }
@@ -447,11 +332,35 @@ const SignUpMentor = () => {
     );
 
     if (resultVaildation === AvailableTimeError.INPUT_ERROR) {
-      alert('가능시간은 시작 시간으로부터 1시간 이상이어야 합니다');
+      setOneButtonModalProps({
+        TitleText: '올바르지 않은 가능시간',
+        Text: '가능시간은 시작 시간으로부터 1시간 이상이어야 합니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       LoadingStore.off();
       return;
     } else if (resultVaildation === AvailableTimeError.OVERLAP_ERROR) {
-      alert('선택하신 가능시간 간에 중복이 있습니다');
+      setOneButtonModalProps({
+        TitleText: '가능시간 간 중복',
+        Text: '선택하신 가능시간 간에 중복이 있습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       LoadingStore.off();
       return;
     }
@@ -469,17 +378,58 @@ const SignUpMentor = () => {
           availableTime: availableTime,
           isActive: checked,
         },
+        {
+          withCredentials: true,
+        },
       );
 
       if (response.status === 200) {
-        alert('제출에 성공하셨습니다');
+        setOneButtonModalProps({
+          TitleText: '제출에 성공하셨습니다',
+          Text: '제출에 성공하셨습니다',
+          XButtonFunc: () => {
+            setIsError(false);
+          },
+          ButtonText: '확인',
+          ButtonFunc: () => {
+            setIsError(false);
+          },
+        });
+
+        setIsError(true);
+
+        setCookie(TOKEN_LIST.JOIN, 'true', DEFAULT_COOKIE_OPTION);
 
         setIsRedirection(true);
       } else {
-        alert('제출에 실패하셨습니다');
+        setOneButtonModalProps({
+          TitleText: '제출에 실패하셨습니다',
+          Text: '제출에 실패하셨습니다',
+          XButtonFunc: () => {
+            setIsError(false);
+          },
+          ButtonText: '확인',
+          ButtonFunc: () => {
+            setIsError(false);
+          },
+        });
+
+        setIsError(true);
       }
     } catch (err) {
-      alert('제출에 실패하셨습니다');
+      setOneButtonModalProps({
+        TitleText: '제출에 실패하셨습니다',
+        Text: '제출에 실패하셨습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
     } finally {
       LoadingStore.off();
     }
@@ -500,9 +450,9 @@ const SignUpMentor = () => {
     if (checked) {
       rows.map(row => {
         const temp: IAvailableDate = {
-          startHour: (row.date[1] + 8) % 24,
+          startHour: row.date[1] % 24,
           startMinute: row.date[2] ? 30 : 0,
-          endHour: (row.date[3] + 8) % 24,
+          endHour: row.date[3] % 24,
           endMinute: row.date[4] ? 30 : 0,
         };
         availableTime[row.date[0]].push(temp);
@@ -514,7 +464,18 @@ const SignUpMentor = () => {
 
   async function SendEmail(email: string) {
     if (!email) {
-      alert('Email을 입력하세요');
+      setOneButtonModalProps({
+        TitleText: '이메일을 입력하세요',
+        Text: '이메일을 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+      setIsError(true);
       return;
     }
 
@@ -556,7 +517,19 @@ const SignUpMentor = () => {
 
   async function certificateEmail(code: string) {
     if (!code) {
-      alert('인증코드를 입력하세요');
+      setOneButtonModalProps({
+        TitleText: '인증코드를 입력하세요',
+        Text: '인증코드를 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
       return;
     }
 
@@ -743,6 +716,7 @@ const SignUpMentor = () => {
               제출
               {isRedirection && <Navigate to="/" />}
             </Button>
+            {isError && <OneButtonModal {...oneButtonModalProps} />}
           </OptionWrapper>
         </ContainersPc>
       )}
@@ -898,6 +872,7 @@ const SignUpMentor = () => {
               제출
               {isRedirection && <Navigate to="/" />}
             </Button>
+            {isError && <OneButtonModal {...oneButtonModalProps} />}
           </OptionWrapper>
         </ContainersMobile>
       )}
