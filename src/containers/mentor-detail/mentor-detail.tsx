@@ -74,7 +74,7 @@ function MentorDetail() {
   const [isActivateMentorTimeModal, setIsActivateMentorTimeModal] =
     useState<boolean>(false);
 
-  const setMentorAvailableTimeData = (metorAvailableTimeData: string) => {
+  const setMentorAvailableTimeData = async (metorAvailableTimeData: string) => {
     const mentorAvailableTimeDataToArray = JSON.parse(metorAvailableTimeData);
     const appointmentsData: appointmentsInterface[] = [];
     mentorAvailableTimeDataToArray?.forEach(
@@ -104,7 +104,7 @@ function MentorDetail() {
         }
       },
     );
-    return appointmentsData;
+    setAppointments(appointmentsData);
   };
 
   const getParams = useParams();
@@ -123,19 +123,12 @@ function MentorDetail() {
             ? result.data.introduction
             : result.data?.introduction,
         );
-        console.log(result.data);
         setMentorMarkdown(
           result.data?.markdownContent
             ? result.data.markdownContent
             : result.data?.markdownContent,
         );
-        console.log(result.data.availableTime);
-        const appointmentsData = setMentorAvailableTimeData(
-          mockMentorAvailableTime,
-        );
-        console.log(appointmentsData);
-
-        setAppointments(appointmentsData);
+        setMentorAvailableTimeData(mockMentorAvailableTime);
       })
       .catch(err => {
         // ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
@@ -145,7 +138,7 @@ function MentorDetail() {
       .get(`/comments/${getParams.intraId}`, { params })
       .then(result => {
         setComments(result.data.comments);
-        setMaxPage(Math.ceil(result.data.totalCount / take));
+        setMaxPage(Math.ceil(result.data.total / take));
       })
       .catch(err => {
         ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
@@ -189,7 +182,7 @@ function MentorDetail() {
             .get(`/comments/${getParams.intraId}`, { params })
             .then(result => {
               setComments(result.data.comments);
-              setMaxPage(Math.ceil(result.data.totalCount / take));
+              setMaxPage(Math.ceil(result.data.total / take));
             })
             .catch(err => {
               // ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
@@ -242,7 +235,7 @@ function MentorDetail() {
         .get(`/comments/${getParams.intraId}`, { params })
         .then(result => {
           setComments(result.data.comments);
-          setMaxPage(Math.ceil(result.data.totalCount / take));
+          setMaxPage(Math.ceil(result.data.total / take));
         });
     });
   };
@@ -618,6 +611,24 @@ function MentorDetail() {
             </ReplyContainer>
           ) : null}
           <MentorCommetsContent>
+            {isActivateCommentDeleteModal && (
+              <TwoButtonModal
+                TitleText="댓글 삭제"
+                Text="정말로 댓글을 삭제하시겠습니까?"
+                XButtonFunc={() => {
+                  setIsActivateCommentDeleteModal(false);
+                }}
+                Button1Func={() => {
+                  setIsActivateCommentDeleteModal(false);
+                  deleteComment(userCommentId);
+                }}
+                Button1Text="확인"
+                Button2Func={() => {
+                  setIsActivateCommentDeleteModal(false);
+                }}
+                Button2Text="취소"
+              />
+            )}
             {comments?.map((comment: CommentProps) => {
               return (
                 <Comment>
@@ -643,31 +654,13 @@ function MentorDetail() {
                           color={'red'}
                           onClick={() => {
                             setUserCommentId(comment.id);
-                            setIsActivateDeleteModal(true);
+                            setIsActivateCommentDeleteModal(true);
                           }}
                         />
                       ) : null}
                     </div>
                     <div>{comment?.content}</div>
                   </UserContent>
-                  {isActivateCommentDeleteModal && (
-                    <TwoButtonModal
-                      TitleText="댓글 삭제"
-                      Text="정말로 댓글을 삭제하시겠습니까?"
-                      XButtonFunc={() => {
-                        setIsActivateDeleteModal(false);
-                      }}
-                      Button1Func={() => {
-                        setIsActivateDeleteModal(false);
-                      }}
-                      Button1Text="확인"
-                      Button2Func={() => {
-                        deleteComment(userCommentId);
-                        setIsActivateDeleteModal(false);
-                      }}
-                      Button2Text="취소"
-                    />
-                  )}
                 </Comment>
               );
             })}
