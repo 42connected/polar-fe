@@ -7,10 +7,11 @@ import { InputCounter } from './apply-input-counter';
 import axios, { AxiosError } from 'axios';
 import { PostApply } from './apply-interface';
 import { axiosInstance } from '../../context/axios-interface';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 import { defaultTheme } from 'react-select';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
 const Wrapper = styled.div`
   .modal {
@@ -355,35 +356,6 @@ const MovMiddleText3 = styled.div`
   margin-bottom: -2rem;
 `;
 
-const TextBox1 = styled.textarea`
-  box-shadow: ${theme.shadow.buttonShadow};
-  width: 50rem;
-  height: 6rem;
-  border-radius: 20px;
-  ${theme.font.sebangGothic};
-  ${theme.fontSize.sizeExtraSmall};
-`;
-
-const TextBox2 = styled.textarea`
-  box-shadow: ${theme.shadow.buttonShadow};
-  width: 50rem;
-  height: 31rem;
-  border-radius: 20px;
-  ${theme.fontSize.sizeExtraSmall};
-  ${theme.font.sebangGothic};
-`;
-
-const ModalView = styled.div.attrs(props => ({
-  role: 'dialog',
-}))`
-  text-align: center;
-  text-decoration: none;
-  padding: 30px 90px;
-  background-color: white;
-  border-radius: 30px;
-  color: #4000c7;
-`;
-
 const ApplyButton = styled.button`
   margin-top: 4rem;
   box-shadow: ${theme.shadow.buttonShadow};
@@ -478,137 +450,154 @@ const ApplyPage = () => {
     setErrorModal(true);
   };
 
-  return (
-    <div className="applypage">
-      {errorModal && (
-        <OneButtonModal
-          TitleText="⚠️ 42폴라 경고"
-          Text={errorModalMsg}
-          XButtonFunc={() => {
-            setErrorModal(false);
-          }}
-          ButtonText="닫기"
-          ButtonBg="gray"
-          ButtonFunc={() => {
-            setErrorModal(false);
-          }}
-        />
-      )}
-      {!isMobile ? ( //pc
-        <div>
-          <ApplyContainer>
-            <Chooseplan>
-              <Line1> </Line1>
-              <MainText>일정 선택하기</MainText>
-              <Line2> </Line2>
-              <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
-              <Wrapper>
-                <PlanButton1 onClick={openModal}> 가능시간1</PlanButton1>
-                <Modal
-                  open={modalOpen}
-                  close={closeModal}
-                  header="멘토링 일정 선택"
-                ></Modal>
-                <PlanButton2 onClick={openModal}> 가능시간2</PlanButton2>
-                <Modal
-                  open={modalOpen}
-                  close={closeModal}
-                  header="멘토링 일정 선택"
-                ></Modal>
-                <PlanButton2 onClick={openModal}> 가능시간3 </PlanButton2>
-                <BottomSize></BottomSize>
-                <Modal
-                  open={modalOpen}
-                  close={closeModal}
-                  header="멘토링 일정 선택"
-                ></Modal>
-              </Wrapper>
-            </Chooseplan>
-            <Content>
-              <Line1> </Line1>
-              <MainText2>신청 정보</MainText2>
-              <Line2> </Line2>
-              <MiddleText2> * 주제 </MiddleText2>
-              <InputCounter
-                setter={setTopic}
-                value={topic}
-                maxLength={150}
-                width="50rem"
-                disabled={false}
-                height="2.6rem"
-              />
-              <MiddleText3> * 궁금한 점 </MiddleText3>
-              <InputCounter
-                setter={setQuestion}
-                value={question}
-                maxLength={500}
-                width="50rem"
-                disabled={false}
-                height="12rem"
-              />
-              <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
-            </Content>
-          </ApplyContainer>
-        </div>
-      ) : (
-        <div>
-          <MovApplyContainer>
-            <MovChooseplan>
-              <MovLine1> </MovLine1>
-              <MainText>일정 선택하기</MainText>
-              <MovLine2> </MovLine2>
-              <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
-              <Wrapper>
-                <MovPlanButton1 onClick={openModal}> 가능시간1</MovPlanButton1>
-                <Modal
-                  open={modalOpen}
-                  close={closeModal}
-                  header="멘토링 일정 선택"
-                ></Modal>
-                <MovPlanButton2 onClick={openModal}> 가능시간2</MovPlanButton2>
-                <Modal
-                  open={modalOpen}
-                  close={closeModal}
-                  header="멘토링 일정 선택"
-                ></Modal>
-                <MovPlanButton2 onClick={openModal}> 가능시간3</MovPlanButton2>
-                <Modal
-                  open={modalOpen}
-                  close={closeModal}
-                  header="멘토링 일정 선택"
-                ></Modal>
-              </Wrapper>
-            </MovChooseplan>
-            <MovContent>
-              <MovLine1> </MovLine1>
-              <MainText2>신청 정보</MainText2>
-              <MovLine2> </MovLine2>
-              <MovMiddleText2> * 주제 </MovMiddleText2>
-              <InputCounter
-                setter={setTopic}
-                value={topic}
-                maxLength={150}
-                width="40rem"
-                disabled={false}
-                height="4rem"
-              />
-              <MovMiddleText3> * 궁금한 점 </MovMiddleText3>
-              <InputCounter
-                setter={setQuestion}
-                value={question}
-                maxLength={800}
-                width="40rem"
-                disabled={false}
-                height="20rem"
-              />
-              <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
-            </MovContent>
-          </MovApplyContainer>
-        </div>
-      )}
-      ;
-    </div>
-  );
+  if (!AuthStore.getAccessToken()) {
+    ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
+    AuthStore.Login();
+    return <></>;
+  } else if (AuthStore.getUserRole() !== USER_ROLES.CADET) {
+    ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
+    return <Navigate to="/" />;
+  } else
+    return (
+      <div>
+        {errorModal && (
+          <OneButtonModal
+            TitleText="⚠️ 42폴라 경고"
+            Text={errorModalMsg}
+            XButtonFunc={() => {
+              setErrorModal(false);
+            }}
+            ButtonText="닫기"
+            ButtonBg="gray"
+            ButtonFunc={() => {
+              setErrorModal(false);
+            }}
+          />
+        )}
+        {!isMobile ? ( //pc
+          <div>
+            <ApplyContainer>
+              <Chooseplan>
+                <Line1> </Line1>
+                <MainText>일정 선택하기</MainText>
+                <Line2> </Line2>
+                <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
+                <Wrapper>
+                  <PlanButton1 onClick={openModal}> 가능시간1</PlanButton1>
+                  <Modal
+                    open={modalOpen}
+                    close={closeModal}
+                    header="멘토링 일정 선택"
+                  ></Modal>
+                  <PlanButton2 onClick={openModal}> 가능시간2</PlanButton2>
+                  <Modal
+                    open={modalOpen}
+                    close={closeModal}
+                    header="멘토링 일정 선택"
+                  ></Modal>
+                  <PlanButton2 onClick={openModal}> 가능시간3 </PlanButton2>
+                  <BottomSize></BottomSize>
+                  <Modal
+                    open={modalOpen}
+                    close={closeModal}
+                    header="멘토링 일정 선택"
+                  ></Modal>
+                </Wrapper>
+              </Chooseplan>
+              <Content>
+                <Line1> </Line1>
+                <MainText2>신청 정보</MainText2>
+                <Line2> </Line2>
+                <MiddleText2> * 주제 </MiddleText2>
+                <InputCounter
+                  setter={setTopic}
+                  value={topic}
+                  maxLength={150}
+                  width="50rem"
+                  disabled={false}
+                  height="2.6rem"
+                />
+                <MiddleText3> * 궁금한 점 </MiddleText3>
+                <InputCounter
+                  setter={setQuestion}
+                  value={question}
+                  maxLength={500}
+                  width="50rem"
+                  disabled={false}
+                  height="12rem"
+                />
+                <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
+              </Content>
+            </ApplyContainer>
+          </div>
+        ) : (
+          <div>
+            <MovApplyContainer>
+              <MovChooseplan>
+                <MovLine1> </MovLine1>
+                <MainText>일정 선택하기</MainText>
+                <MovLine2> </MovLine2>
+                <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
+                <Wrapper>
+                  <MovPlanButton1 onClick={openModal}>
+                    {' '}
+                    가능시간1
+                  </MovPlanButton1>
+                  <Modal
+                    open={modalOpen}
+                    close={closeModal}
+                    header="멘토링 일정 선택"
+                  ></Modal>
+                  <MovPlanButton2 onClick={openModal}>
+                    {' '}
+                    가능시간2
+                  </MovPlanButton2>
+                  <Modal
+                    open={modalOpen}
+                    close={closeModal}
+                    header="멘토링 일정 선택"
+                  ></Modal>
+                  <MovPlanButton2 onClick={openModal}>
+                    {' '}
+                    가능시간3
+                  </MovPlanButton2>
+                  <Modal
+                    open={modalOpen}
+                    close={closeModal}
+                    header="멘토링 일정 선택"
+                  ></Modal>
+                </Wrapper>
+              </MovChooseplan>
+              <MovContent>
+                <MovLine1> </MovLine1>
+                <MainText2>신청 정보</MainText2>
+                <MovLine2> </MovLine2>
+                <MovMiddleText2> * 주제 </MovMiddleText2>
+                <InputCounter
+                  setter={setTopic}
+                  value={topic}
+                  maxLength={150}
+                  width="40rem"
+                  disabled={false}
+                  height="4rem"
+                />
+                <MovMiddleText3> * 궁금한 점 </MovMiddleText3>
+                <InputCounter
+                  setter={setQuestion}
+                  value={question}
+                  maxLength={800}
+                  width="40rem"
+                  disabled={false}
+                  height="20rem"
+                />
+                <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
+              </MovContent>
+            </MovApplyContainer>
+          </div>
+        )}
+        ;
+      </div>
+    );
 };
 
 export default ApplyPage;
