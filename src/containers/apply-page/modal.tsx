@@ -5,13 +5,16 @@ import { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
+import ApplyCalendar from '../../components/apply-page/apply-calendar';
 
 const CalendarStyle = styled.div`
   display: flex;
+  flex-direction: column;
   text-align: center;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 1.2rem;
+  margin-top: 2rem;
 `;
 
 const Modal = (props: { open: any; close: any; header: any }) => {
@@ -28,13 +31,10 @@ const Modal = (props: { open: any; close: any; header: any }) => {
               &times;
             </button>
           </header>
-          - 멘토링 일정 선택
           <CalendarStyle>
-            <Calendar onChange={onChange} value={value} />
+            <ApplyCalendar />
           </CalendarStyle>
-          <div className="text-gray-500 mt-4">
-            {moment(value).format('YYYY년 MM월 DD일')}
-          </div>
+
           <footer>
             <button className="close" onClick={close}>
               close

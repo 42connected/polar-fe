@@ -69,6 +69,14 @@ const CalendarDiv = styled.div`
   }
 `;
 
+const InputDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+`;
+
 interface availableTimeType {
   startHour: number;
   startMinute: number;
@@ -294,40 +302,42 @@ function ApplyCalendar() {
           locale={'ko-KR'}
         />
       </CalendarDiv>
-      <ThemeProvider theme={muiTheme}>
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
-          <InputLabel>StartTime</InputLabel>
-          <Select
-            value={startTime}
-            onChange={(event: SelectChangeEvent) =>
-              setStartTime(event.target.value)
-            }
-            label="StartTime"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {GetStartTimeMenuList()}
-          </Select>
-        </FormControl>
-      </ThemeProvider>
-      <ThemeProvider theme={muiTheme}>
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
-          <InputLabel>EndTime</InputLabel>
-          <Select
-            value={endTime}
-            onChange={(event: SelectChangeEvent) =>
-              setEndTime(event.target.value)
-            }
-            label="EndTime"
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {GetEndTimeMenuList()}
-          </Select>
-        </FormControl>
-      </ThemeProvider>
+      <InputDiv>
+        <ThemeProvider theme={muiTheme}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+            <InputLabel>StartTime</InputLabel>
+            <Select
+              value={startTime}
+              onChange={(event: SelectChangeEvent) =>
+                setStartTime(event.target.value)
+              }
+              label="StartTime"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {GetStartTimeMenuList()}
+            </Select>
+          </FormControl>
+        </ThemeProvider>
+        <ThemeProvider theme={muiTheme}>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+            <InputLabel>EndTime</InputLabel>
+            <Select
+              value={endTime}
+              onChange={(event: SelectChangeEvent) =>
+                setEndTime(event.target.value)
+              }
+              label="EndTime"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {GetEndTimeMenuList()}
+            </Select>
+          </FormControl>
+        </ThemeProvider>
+      </InputDiv>
       <Button
         text="제출"
         onClick={() => {
