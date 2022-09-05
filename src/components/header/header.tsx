@@ -178,8 +178,9 @@ const movimagestyle = {
 const Header = () => {
   let mdlinks = '/mentor-detail/';
   let mlinks = '/mentors/mentorings/';
-  const [isLogin, setIsLogin] = useState<string>('로그인');
+  const [isClick, setIsClick] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   const handleResize: any = debounce(() => {
     if (window.innerWidth < 600) setIsMobile(true);
     else setIsMobile(false);
@@ -196,10 +197,20 @@ const Header = () => {
   useEffect(() => {
     window.screen.width <= 600 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
+    {
+      AuthStore.getAccessToken() ? setIsLogin(true) : setIsLogin(false);
+    }
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    {
+      AuthStore.getAccessToken() ? setIsLogin(true) : setIsLogin(false);
+    }
+  }, [isClick]);
+
   return (
     <div>
       {isMobile ? ( //mobile
@@ -211,23 +222,23 @@ const Header = () => {
                 polar
               </MovLogoButton>
             </Link>
-            {AuthStore.getAccessToken() ? (
+            {isLogin ? (
               <MovLoginButton
                 onClick={() => {
-                  setIsLogin('로그인');
+                  setIsClick(!isClick);
                   AuthStore.Logout();
                 }}
               >
-                {isLogin}
+                로그아웃
               </MovLoginButton>
             ) : (
               <MovLoginButton
                 onClick={() => {
-                  setIsLogin('로그아웃');
+                  setIsClick(!isClick);
                   AuthStore.Login();
                 }}
               >
-                {isLogin}
+                로그인
               </MovLoginButton>
             )}
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
@@ -299,23 +310,23 @@ const Header = () => {
                 polar
               </LogoButton>
             </Link>
-            {AuthStore.getAccessToken() ? (
+            {isLogin ? (
               <LoginButton
                 onClick={() => {
-                  setIsLogin('로그인');
+                  setIsClick(!isClick);
                   AuthStore.Logout();
                 }}
               >
-                {isLogin}
+                로그아웃
               </LoginButton>
             ) : (
               <LoginButton
                 onClick={() => {
-                  setIsLogin('로그아웃');
+                  setIsClick(!isClick);
                   AuthStore.Login();
                 }}
               >
-                {isLogin}
+                로그인
               </LoginButton>
             )}
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
@@ -330,7 +341,7 @@ const Header = () => {
                 >
                   <SuggestionButton>건의사항</SuggestionButton>
                   <Link to={'/cadets/mentorings'}>
-                    <MovMyMentoringButton>마이페이지</MovMyMentoringButton>
+                    <MyMentoringButton>마이페이지</MyMentoringButton>
                   </Link>
                 </a>
               </div>
