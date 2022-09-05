@@ -107,9 +107,9 @@ export const getDayToString = (meetingAt: Date): string => {
     return '-';
   }
 
-  return `${startTime.getFullYear()}.${startTime.getMonth()}.${startTime.getDate()} (${
-    date[startTime.getDay()]
-  })`;
+  return `${startTime.getFullYear()}.${
+    startTime.getMonth() + 1
+  }.${startTime.getDate()} (${date[startTime.getDay()]})`;
 };
 
 /**
