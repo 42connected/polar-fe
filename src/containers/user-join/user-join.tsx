@@ -80,7 +80,7 @@ const Box = styled.div`
   text-align: center;
   flex-direction: column;
   width: 400px;
-  padding: 20px 0px;
+  padding: 30px 0px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: ${defaultTheme.colors.polarGray};
   border-radius: 10px;
@@ -105,7 +105,7 @@ const Button = styled.button`
   text-align: center;
   align-items: center;
   text-decoration: none;
-  height: 40px;
+  height: 35px;
   background-color: ${defaultTheme.colors.polarSimpleMain};
   color: #ffffff;
   width: 40%;
@@ -127,15 +127,6 @@ export function UserJoin() {
   return (
     <Background>
       <Box>
-        <XButton>
-          <FontAwesomeIcon
-            icon={faX}
-            style={{ opacity: 0.2 }}
-            onClick={() => {
-              UserJoinStore.off();
-            }}
-          />
-        </XButton>
         안녕하세요 {userName}님 👋
         <br />
         <br />
