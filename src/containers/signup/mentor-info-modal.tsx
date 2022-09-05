@@ -9,6 +9,8 @@ export enum ModalType {
 interface MentorInfoModalProps {
   intraId: string;
   modalType: ModalType;
+  setter: (b: boolean) => void;
+  value: boolean;
 }
 
 export function MentorInfoModal(props: MentorInfoModalProps) {
@@ -18,8 +20,8 @@ export function MentorInfoModal(props: MentorInfoModalProps) {
     <div>
       <ApplyModal
         intraId={props.intraId}
-        applyModal={applyModal}
-        setApplyModal={setApplyModal}
+        applyModal={props.value}
+        setApplyModal={props.setter}
         modalType={props.modalType}
       />
     </div>

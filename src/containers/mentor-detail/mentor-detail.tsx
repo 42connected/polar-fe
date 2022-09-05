@@ -279,6 +279,8 @@ function MentorDetail() {
                 <MentorInfoModal
                   intraId={getParams.intraId || ''}
                   modalType={ModalType.MENTOR_INFO}
+                  setter={setIsActivateMentorTimeEditModal}
+                  value={isActivateMentorTimeEditModal}
                 />
               )}
             </MentorActivateContainer>
@@ -457,6 +459,8 @@ function MentorDetail() {
                 <MentorInfoModal
                   intraId={getParams.intraId || ''}
                   modalType={ModalType.AVAILABLE_TIME}
+                  setter={setIsActivateMentorTimeModal}
+                  value={isActivateMentorTimeModal}
                 />
               )}
             </div>
