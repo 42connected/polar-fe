@@ -148,6 +148,7 @@ function DataRoom() {
         },
         body: JSON.stringify(data),
       });
+      //FIX ME: response에 오류 메세지 있는 지 확인하기
       const blob = await res.blob();
       const newBlob = new Blob([blob]);
       const blobUrl = window.URL.createObjectURL(newBlob);

@@ -127,6 +127,10 @@ const SimpleComponent = (props: {
   return (
     <div ref={printRef}>
       {reportDatas?.map((reportdata: reportsPro, index: number, origin) => {
+        const meetingAt = [
+          new Date(reportdata?.mentoringLogs.meetingAt[0]),
+          new Date(reportdata?.mentoringLogs.meetingAt[1]),
+        ];
         return (
           <div key={index}>
             <ReportContainer index={index}>
@@ -140,19 +144,21 @@ const SimpleComponent = (props: {
               <NoneValue2></NoneValue2>
               <SubTitle2>날짜</SubTitle2>
               <DateBox>
-                {(reportdata?.mentoringLogs.meetingAt[0] + '').substring(0, 10)}
+                {reportdata?.mentoringLogs
+                  ? meetingAt[0].toLocaleDateString('ko-KR')
+                  : ''}
               </DateBox>
               <SubTitle8>시간</SubTitle8>
               <TimeBox>
-                {(reportdata?.mentoringLogs.meetingAt[0] + '').substring(
-                  11,
-                  16,
-                )}{' '}
-                ~{' '}
-                {(reportdata?.mentoringLogs.meetingAt[1] + '').substring(
-                  11,
-                  16,
-                )}
+                {reportdata?.mentoringLogs
+                  ? meetingAt[0].getHours().toString().padStart(2, '0') +
+                    ':' +
+                    meetingAt[0].getMinutes().toString().padStart(2, '0') +
+                    '~' +
+                    meetingAt[1].getHours().toString().padStart(2, '0') +
+                    ':' +
+                    meetingAt[1].getMinutes().toString().padStart(2, '0')
+                  : ''}
               </TimeBox>
               <SubTitle3>장소</SubTitle3>
               <PlaceBox>{reportdata?.place}</PlaceBox>
