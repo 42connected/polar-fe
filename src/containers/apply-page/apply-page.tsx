@@ -539,28 +539,19 @@ const ApplyPage = () => {
                 <MovLine2> </MovLine2>
                 <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
                 <Wrapper>
-                  <MovPlanButton1 onClick={openModal}>
-                    {' '}
-                    가능시간1
-                  </MovPlanButton1>
+                  <MovPlanButton1 onClick={openModal}>가능시간1</MovPlanButton1>
                   <Modal
                     open={modalOpen}
                     close={closeModal}
                     header="멘토링 일정 선택"
                   ></Modal>
-                  <MovPlanButton2 onClick={openModal}>
-                    {' '}
-                    가능시간2
-                  </MovPlanButton2>
+                  <MovPlanButton2 onClick={openModal}>가능시간2</MovPlanButton2>
                   <Modal
                     open={modalOpen}
                     close={closeModal}
                     header="멘토링 일정 선택"
                   ></Modal>
-                  <MovPlanButton2 onClick={openModal}>
-                    {' '}
-                    가능시간3
-                  </MovPlanButton2>
+                  <MovPlanButton2 onClick={openModal}>가능시간3</MovPlanButton2>
                   <Modal
                     open={modalOpen}
                     close={closeModal}
