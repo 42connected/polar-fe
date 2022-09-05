@@ -53,9 +53,10 @@ import {
   SignText,
 } from './reportStyled';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { debounce } from '@mui/material';
 import LoadingStore from '../../states/loading/LoadingStore';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
 const ReportpageStyle = styled.div<{
   height: number;
@@ -302,63 +303,63 @@ const ReportDetail = () => {
     };
   }, []);
 
-  return (
-    <div>
-      {AuthStore.getAccessToken() ? (
-        AuthStore.getUserRole() === USER_ROLES.BOCAL ? (
-          isMobile ? (
-            <ReportpageStyle2 height={reportDatas.length}>
-              <ImgBody>
-                <SimpleComponent
-                  printRef={componentRef}
-                  reportDatas={reportDatas}
-                />
-              </ImgBody>
-              <ReactToPrint
-                content={() => componentRef.current}
-                trigger={() => (
-                  <ButtonBody>
-                    <PrintButton ref={buttonRef}>출력</PrintButton>
-                  </ButtonBody>
-                )}
-                onAfterPrint={() => {
-                  if (isAutoPrint) {
-                    navigate('/data-room');
-                  }
-                }}
+  if (!AuthStore.getAccessToken()) {
+    ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
+    AuthStore.Login();
+    return <></>;
+  } else if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
+    ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
+    return <Navigate to="/" />;
+  } else
+    return (
+      <div>
+        {isMobile ? (
+          <ReportpageStyle2 height={reportDatas.length}>
+            <ImgBody>
+              <SimpleComponent
+                printRef={componentRef}
+                reportDatas={reportDatas}
               />
-            </ReportpageStyle2>
-          ) : (
-            <ReportpageStyle height={reportDatas.length}>
-              <ImgBody>
-                <SimpleComponent
-                  printRef={componentRef}
-                  reportDatas={reportDatas}
-                />
-              </ImgBody>
-              <ReactToPrint
-                content={() => componentRef.current}
-                trigger={() => (
-                  <ButtonBody>
-                    <PrintButton ref={buttonRef}>출력</PrintButton>
-                  </ButtonBody>
-                )}
-                onAfterPrint={() => {
-                  if (isAutoPrint) {
-                    navigate('/data-room');
-                  }
-                }}
-              />
-            </ReportpageStyle>
-          )
+            </ImgBody>
+            <ReactToPrint
+              content={() => componentRef.current}
+              trigger={() => (
+                <ButtonBody>
+                  <PrintButton ref={buttonRef}>출력</PrintButton>
+                </ButtonBody>
+              )}
+              onAfterPrint={() => {
+                if (isAutoPrint) {
+                  navigate('/data-room');
+                }
+              }}
+            />
+          </ReportpageStyle2>
         ) : (
-          <></>
-        )
-      ) : (
-        <></>
-      )}
-    </div>
-  );
+          <ReportpageStyle height={reportDatas.length}>
+            <ImgBody>
+              <SimpleComponent
+                printRef={componentRef}
+                reportDatas={reportDatas}
+              />
+            </ImgBody>
+            <ReactToPrint
+              content={() => componentRef.current}
+              trigger={() => (
+                <ButtonBody>
+                  <PrintButton ref={buttonRef}>출력</PrintButton>
+                </ButtonBody>
+              )}
+              onAfterPrint={() => {
+                if (isAutoPrint) {
+                  navigate('/data-room');
+                }
+              }}
+            />
+          </ReportpageStyle>
+        )}
+      </div>
+    );
 };
 
 export default ReportDetail;
