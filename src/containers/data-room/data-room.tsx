@@ -159,7 +159,7 @@ function DataRoom() {
         'download',
         `mentoring-data_${new Date()
           .toLocaleDateString('ko-KR')
-          .replace(' ', '')}.xlsx`,
+          .replaceAll(' ', '')}xlsx`,
       );
       document.body.appendChild(link);
       link.click();
