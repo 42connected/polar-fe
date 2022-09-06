@@ -18,9 +18,6 @@ const Left = styled.div`
   flex-direction: column;
   ${defaultTheme.fontSize.sizeSmall};
   ${defaultTheme.font.sebangGothic};
-  @media screen and (max-width: 800px) {
-    font-size: 1rem;
-  }
 `;
 
 const ReportSummaryTitle = styled.div`
@@ -29,9 +26,6 @@ const ReportSummaryTitle = styled.div`
   justify-content: left;
   ${defaultTheme.fontSize.sizeExtraSmall};
   ${defaultTheme.font.nanumGothic};
-  @media screen and (max-width: 800px) {
-    ${defaultTheme.fontSize.sizeSmall};
-  }
 `;
 
 const ReportQuestion = styled.div`
@@ -82,18 +76,6 @@ const ImageContainer = styled.div`
   padding: 5px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  @media screen and (max-width: 900px) {
-    width: 60px;
-    height: 60px;
-  }
-  @media screen and (max-width: 800px) {
-    width: 40px;
-    height: 40px;
-  }
-  @media screen and (max-width: 600px) {
-    width: 30px;
-    height: 30px;
-  }
 `;
 
 const SignatureContainer = styled.div`
@@ -106,18 +88,6 @@ const SignatureContainer = styled.div`
   padding: 5px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  @media screen and (max-width: 900px) {
-    width: 150px;
-    height: 150px;
-  }
-  @media screen and (max-width: 800px) {
-    width: 100px;
-    height: 100px;
-  }
-  @media screen and (max-width: 600px) {
-    width: 75px;
-    height: 75px;
-  }
 `;
 
 const UploadFileBox = styled.img`
@@ -165,12 +135,6 @@ const RightTitle = styled.div`
   justify-content: left;
   ${defaultTheme.fontSize.sizeMedium};
   ${defaultTheme.font.sebangGothic};
-  @media screen and (max-width: 900px) {
-    ${defaultTheme.fontSize.sizeExtraSmall};
-  }
-  @media screen and (max-width: 800px) {
-    ${defaultTheme.fontSize.sizeSmall};
-  }
 `;
 
 const SignatureTitleContainer = styled.div`
@@ -187,12 +151,6 @@ const SignatureTitle = styled.div`
   align-items: center;
   ${defaultTheme.fontSize.sizeMedium};
   ${defaultTheme.font.sebangGothic};
-  @media screen and (max-width: 900px) {
-    ${defaultTheme.fontSize.sizeExtraSmall};
-  }
-  @media screen and (max-width: 800px) {
-    ${defaultTheme.fontSize.sizeSmall};
-  }
 `;
 
 export function ReportRowSignature() {

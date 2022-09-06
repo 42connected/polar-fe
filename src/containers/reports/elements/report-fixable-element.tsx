@@ -17,12 +17,6 @@ const Content = styled.div`
   width: 100%;
   ${defaultTheme.font.nanumGothic};
   ${defaultTheme.fontSize.sizeExtraSmall};
-  @media screen and (max-width: 900px) {
-    ${defaultTheme.fontSize.sizeSmall};
-  }
-  @media screen and (max-width: 800px) {
-    font-size: 1rem;
-  }
 `;
 
 const FixableIcon = styled.div`
