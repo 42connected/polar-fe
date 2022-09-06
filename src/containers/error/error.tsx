@@ -9,18 +9,13 @@ interface ErrorProps {
 }
 
 export function Error(props: ErrorProps) {
-  const navigate = useNavigate();
   return (
     <OneButtonModal
       TitleText={props.TitleText}
       Text={props.errorMsg}
-      XButtonFunc={() => {
-        ErrorStore.off();
-      }}
-      ButtonText="뒤로 가기"
+      ButtonText="닫기"
       ButtonFunc={() => {
         ErrorStore.off();
-        navigate(-1);
       }}
       ButtonBg={defaultTheme.colors.Red}
     />
