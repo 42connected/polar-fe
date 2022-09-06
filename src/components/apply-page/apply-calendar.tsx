@@ -218,35 +218,62 @@ function ApplyCalendar() {
     setEndTime('');
   }, [selectDate]);
 
-  function GetMenuList() {
+  function GetStartTimeMenuList() {
     let index = 0;
-    for (const data of schedule[selectDate.getDate() - 1]?.array) {
-      if (
-        startTime === '' &&
-        data &&
-        index > 0 &&
-        schedule[selectDate.getDate() - 1]?.array[index - 1]
-      )
-        return (
-          <MenuItem
-            value={index}
-            key={selectDate.getMilliseconds() + '' + index}
-          >{`${Math.floor((index + 1) / 2)}:${
-            (index + 1) % 2 ? '30' : '00'
-          }`}</MenuItem>
-        );
-      else if (startTime !== '' && data && index > Number(startTime))
-        return (
-          <MenuItem
-            value={index}
-            key={selectDate.getMilliseconds() + '' + index}
-          >{`${Math.floor((index + 1) / 2)}:${
-            (index + 1) % 2 ? '30' : '00'
-          }`}</MenuItem>
-        );
-      else if (startTime !== '' && index > Number(startTime) && !data) break;
-      index++;
+    const returnValue = [];
+    if (schedule[selectDate.getDate() - 1]) {
+      for (const data of schedule[selectDate.getDate() - 1].array) {
+        if (
+          data &&
+          index < 47 &&
+          schedule[selectDate.getDate() - 1]?.array[index + 1]
+        ) {
+          returnValue.push(
+            <MenuItem
+              key={selectDate.getMilliseconds() + '' + index}
+              value={index}
+            >{`${Math.floor(index / 2)}:${index % 2 ? '30' : '00'}`}</MenuItem>,
+          );
+        }
+        index++;
+      }
     }
+    return returnValue;
+  }
+
+  function GetEndTimeMenuList() {
+    let index = 0;
+    const returnValue = [];
+    if (schedule[selectDate.getDate() - 1]) {
+      for (const data of schedule[selectDate.getDate() - 1].array) {
+        if (
+          startTime === '' &&
+          data &&
+          index > 0 &&
+          schedule[selectDate.getDate() - 1]?.array[index - 1]
+        )
+          returnValue.push(
+            <MenuItem
+              value={index}
+              key={selectDate.getMilliseconds() + '' + index}
+            >{`${Math.floor((index + 1) / 2)}:${
+              (index + 1) % 2 ? '30' : '00'
+            }`}</MenuItem>,
+          );
+        else if (startTime !== '' && data && index > Number(startTime))
+          returnValue.push(
+            <MenuItem
+              value={index}
+              key={selectDate.getMilliseconds() + '' + index}
+            >{`${Math.floor((index + 1) / 2)}:${
+              (index + 1) % 2 ? '30' : '00'
+            }`}</MenuItem>,
+          );
+        else if (startTime !== '' && index > Number(startTime) && !data) break;
+        index++;
+      }
+    }
+    return returnValue;
   }
 
   return (
@@ -280,24 +307,7 @@ function ApplyCalendar() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {schedule[selectDate.getDate() - 1]?.array.map(
-              (data: boolean, index: number) => {
-                if (
-                  data &&
-                  index < 37 &&
-                  schedule[selectDate.getDate() - 1]?.array[index + 1]
-                ) {
-                  return (
-                    <MenuItem
-                      key={selectDate.getMilliseconds() + '' + index}
-                      value={index}
-                    >{`${Math.floor(index / 2)}:${
-                      index % 2 ? '30' : '00'
-                    }`}</MenuItem>
-                  );
-                }
-              },
-            )}
+            {GetStartTimeMenuList()}
           </Select>
         </FormControl>
       </ThemeProvider>
@@ -314,33 +324,7 @@ function ApplyCalendar() {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {schedule[selectDate.getDate() - 1]?.array.map((data, index) => {
-              if (
-                startTime === '' &&
-                data &&
-                index > 0 &&
-                schedule[selectDate.getDate() - 1]?.array[index - 1]
-              )
-                return (
-                  <MenuItem
-                    value={index}
-                    key={selectDate.getMilliseconds() + '' + index}
-                  >{`${Math.floor((index + 1) / 2)}:${
-                    (index + 1) % 2 ? '30' : '00'
-                  }`}</MenuItem>
-                );
-              else if (startTime !== '' && data && index > Number(startTime))
-                return (
-                  <MenuItem
-                    value={index}
-                    key={selectDate.getMilliseconds() + '' + index}
-                  >{`${Math.floor((index + 1) / 2)}:${
-                    (index + 1) % 2 ? '30' : '00'
-                  }`}</MenuItem>
-                );
-              // else if (startTime !== '' && index > Number(startTime) && !data)
-              //   return <></>;
-            })}
+            {GetEndTimeMenuList()}
           </Select>
         </FormControl>
       </ThemeProvider>
@@ -349,7 +333,16 @@ function ApplyCalendar() {
         onClick={() => {
           if (startTime === '' || endTime === '')
             alert('시작시간과 끝시간을 모두 선택해주세요');
-          else console.log(startTime + ' ' + endTime);
+          else
+            console.log(
+              Math.floor(Number(startTime) / 2) +
+                ':' +
+                (Number(startTime) % 2 ? '30' : '00') +
+                ' ' +
+                Math.floor(Number(endTime + 1) / 2) +
+                ':' +
+                (Number(endTime + 1) % 2 ? '30' : '00'),
+            );
         }}
       ></Button>
     </>
