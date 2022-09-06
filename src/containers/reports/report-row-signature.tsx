@@ -1,12 +1,15 @@
 import { ReportRowContainer } from './row-styled';
 import styled from '@emotion/styled';
-import { faRotateRight } from '@fortawesome/free-solid-svg-icons';
+import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import defaultTheme from '../../styles/theme';
 import ReportStore from '../../states/repoort/ReportStore';
-import { observer } from 'mobx-react-lite';
 import { REPORT_STATE } from './report-form';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
+import AuthStore from '../../states/auth/AuthStore';
+import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
+import { CanvasModal } from './canvas-modal';
 
 const Left = styled.div`
   display: flex;
@@ -41,21 +44,6 @@ const ReportQuestion = styled.div`
   white-space: pre-line;
 `;
 
-const CanvasContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0px 10px;
-  width: 80%;
-  height: 200px;
-  padding: 5px;
-  background-color: #f6f6f6;
-  border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  vertical-align: top;
-  resize: none;
-`;
-
 const UploadFileContainer = styled.div`
   display: grid;
   place-items: center;
@@ -63,8 +51,30 @@ const UploadFileContainer = styled.div`
   grid-template-columns: repeat(2, 1fr);
 `;
 
-const UploadFileBox = styled.img`
+const DeleteImgButton = styled.div`
+  position: absolute;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  top: -1rem;
+  right: -1rem;
+  width: 2rem;
+  height: 2rem;
+  z-index: 100;
+  background-color: white;
+  color: red;
+  border-radius: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
   width: 80px;
@@ -72,7 +82,50 @@ const UploadFileBox = styled.img`
   padding: 5px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  margin: 10px 0px;
+  @media screen and (max-width: 900px) {
+    width: 60px;
+    height: 60px;
+  }
+  @media screen and (max-width: 800px) {
+    width: 40px;
+    height: 40px;
+  }
+  @media screen and (max-width: 600px) {
+    width: 30px;
+    height: 30px;
+  }
+`;
+
+const SignatureContainer = styled.div`
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  @media screen and (max-width: 900px) {
+    width: 150px;
+    height: 150px;
+  }
+  @media screen and (max-width: 800px) {
+    width: 100px;
+    height: 100px;
+  }
+  @media screen and (max-width: 600px) {
+    width: 75px;
+    height: 75px;
+  }
+`;
+
+const UploadFileBox = styled.img`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 `;
 
 const ButtonRow = styled.div`
@@ -142,184 +195,11 @@ const SignatureTitle = styled.div`
   }
 `;
 
-const FixableIcon = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 10px;
-  &:hover {
-    color: gray;
-  }
-`;
+export function ReportRowSignature() {
+  const [deleteModal, setDeleteModal] = useState<boolean>(false);
+  const [imageIndex, setImageIndex] = useState<number>(-1);
+  const [signatureBlock, setSignatureBlock] = useState<boolean>(false);
 
-const UploadFile = styled.div`
-  display: flex;
-  width: 80%;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-interface Coordinate {
-  x: number;
-  y: number;
-}
-
-// TODO: REFACTOR
-const ReportRowSignature = observer(() => {
-  const [signatureConfirm, setSignatureConfirm] = useState(false);
-  const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(
-    undefined,
-  );
-  const [isPainting, setIsPainting] = useState(false);
-  const [uploadImage, setUploadImage] = useState<string[]>([]);
-
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  const getCoordinates = (event: MouseEvent): Coordinate | undefined => {
-    if (!canvasRef.current) {
-      return;
-    }
-
-    const canvas: HTMLCanvasElement = canvasRef.current;
-    return {
-      x: event.pageX - canvas.offsetLeft,
-      y: event.pageY - canvas.offsetTop,
-    };
-  };
-
-  const drawLine = (
-    originalMousePosition: Coordinate,
-    newMousePosition: Coordinate,
-  ) => {
-    if (!canvasRef.current) {
-      return;
-    }
-    const canvas: HTMLCanvasElement = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-
-    if (ctx) {
-      ctx.lineJoin = 'round';
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = 'black';
-      ctx.beginPath();
-      ctx.moveTo(originalMousePosition.x, originalMousePosition.y);
-      ctx.lineTo(newMousePosition.x, newMousePosition.y);
-      ctx.closePath();
-      ctx.stroke();
-    }
-  };
-
-  const startPaint = useCallback((event: MouseEvent) => {
-    const coordinates = getCoordinates(event);
-    if (coordinates) {
-      setIsPainting(true);
-      setMousePosition(coordinates);
-    }
-  }, []);
-
-  const paint = useCallback(
-    (event: MouseEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      if (isPainting) {
-        const newMousePosition = getCoordinates(event);
-        if (mousePosition && newMousePosition) {
-          drawLine(mousePosition, newMousePosition);
-          setMousePosition(newMousePosition);
-        }
-      }
-    },
-    [isPainting, mousePosition],
-  );
-
-  const stopPaint = useCallback(() => {
-    setIsPainting(false);
-  }, []);
-
-  useEffect(() => {
-    if (!canvasRef.current) {
-      return;
-    }
-    const canvas: HTMLCanvasElement = canvasRef.current;
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    /*
-    워터마크 ...
-    */
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      return;
-    }
-    ctx.fillStyle = '#999';
-    ctx.textAlign = 'center';
-    ctx.fillText('서명을 그려주세요', canvas.width / 2, canvas.height / 2);
-    canvas.addEventListener('mousedown', watermark, false);
-  }, []);
-
-  useEffect(() => {
-    if (!canvasRef.current) {
-      return;
-    }
-    const canvas: HTMLCanvasElement = canvasRef.current;
-    canvas.addEventListener('mousedown', startPaint);
-    canvas.addEventListener('mousemove', paint);
-    canvas.addEventListener('mouseup', stopPaint);
-    canvas.addEventListener('mouseleave', stopPaint);
-    return () => {
-      canvas.removeEventListener('mousedown', startPaint);
-      canvas.removeEventListener('mousemove', paint);
-      canvas.removeEventListener('mouseup', stopPaint);
-      canvas.removeEventListener('mouseleave', stopPaint);
-    };
-  }, [startPaint, paint, stopPaint]);
-
-  const clearCanvas = () => {
-    if (!canvasRef.current) {
-      return;
-    }
-    const canvas: HTMLCanvasElement = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      return;
-    }
-    ctx.save();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.restore();
-  };
-
-  const saveCanvasImg = () => {
-    if (!canvasRef.current) {
-      return;
-    }
-    const canvas: HTMLCanvasElement = canvasRef.current;
-    canvas.toBlob(blob => {
-      if (!blob) {
-        return;
-      }
-      const sign = new File([blob], 'signature.png', { type: 'image/png' });
-      ReportStore.save.append('signature', sign);
-    });
-  };
-
-  function watermark() {
-    if (!canvasRef.current) {
-      return;
-    }
-    const canvas: HTMLCanvasElement = canvasRef.current;
-    canvas.removeEventListener('mousedown', watermark, false);
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      return;
-    }
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
-
-  /*
-   * 파일 업로드
-   */
   const UploadMentoringImg = () => {
     const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -328,18 +208,27 @@ const ReportRowSignature = observer(() => {
         if (!e.target.files) {
           return;
         }
+        if (ReportStore.report.imageUrl.length >= 2) {
+          ErrorStore.on(
+            '사진 파일은 최대 2개까지 업로드 할 수 있습니다.',
+            ERROR_DEFAULT_VALUE.TITLE,
+          );
+          return;
+        }
         if (e.target.files[0].size > 3000000) {
-          alert('3MB 이상 파일은 업로드할 수 없습니다');
+          ErrorStore.on(
+            '3MB 이상 사진 파일은 업로드할 수 없습니다.',
+            ERROR_DEFAULT_VALUE.TITLE,
+          );
           return;
         }
-        if (ReportStore.save.getAll('image').length > 2) {
-          alert('사진은 최대 3장까지 업로드 할 수 있습니다');
-          return;
-        }
-        ReportStore.save.append('image', e.target.files[0]);
-        const fileName = e.target.files[0].name;
-        if (e.target.files[0])
-          setUploadImage(uploadImage => [...uploadImage, fileName]);
+        const img = new FormData();
+        img.append('image', e.target.files[0]);
+        ReportStore.uploadImage(
+          ReportStore.report.id,
+          AuthStore.getAccessToken(),
+          img,
+        );
       },
 
       [],
@@ -361,116 +250,96 @@ const ReportRowSignature = observer(() => {
           onChange={onUploadImage}
           style={{ display: 'none' }}
         />
-        {uploadImage.length > 0 ? (
-          <Button
-            onClick={() => {
-              setUploadImage([]);
-              ReportStore.save.delete('image');
-            }}
-          >
-            전체 취소
-          </Button>
-        ) : (
-          <></>
+        {ReportStore.report.status !== REPORT_STATE.EDIT_IMPOSSIBLE && (
+          <Button onClick={uploadImg}>가져오기</Button>
         )}
-        {ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ? (
-          <>
-            <Button onClick={uploadImg}>가져오기</Button>
-          </>
-        ) : null}
       </>
     );
   };
 
   return (
     <ReportRowContainer>
+      {signatureBlock && (
+        <CanvasModal
+          CloseFunc={() => {
+            setSignatureBlock(false);
+          }}
+        />
+      )}
+      {deleteModal && (
+        <OneButtonModal
+          TitleText="⚠️ 삭제 확인"
+          Text={`정말 삭제하시겠습니까?\n삭제된 파일은 복구할 수 없습니다.`}
+          XButtonFunc={() => {
+            setDeleteModal(false);
+          }}
+          ButtonFunc={() => {
+            ReportStore.deleteImage(
+              ReportStore.report.id,
+              AuthStore.getAccessToken(),
+              imageIndex,
+            );
+          }}
+          ButtonText="확인"
+          ButtonBg={defaultTheme.colors.Red}
+        />
+      )}
       <Left>
         <SignatureTitleContainer>
           <SignatureTitle>서명란</SignatureTitle>
-          {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE ? null : (
-            <FixableIcon
+        </SignatureTitleContainer>
+        <SignatureContainer>
+          {ReportStore.report.signatureUrl ? (
+            <UploadFileBox src={ReportStore.report.signatureUrl} />
+          ) : (
+            '서명 필요'
+          )}
+        </SignatureContainer>
+        {ReportStore.report.status !== REPORT_STATE.EDIT_IMPOSSIBLE && (
+          <ButtonRow>
+            {ReportStore.report.signatureUrl && (
+              <Button
+                onClick={() => {
+                  ReportStore.deleteSign(
+                    ReportStore.report.id,
+                    AuthStore.getAccessToken(),
+                  );
+                }}
+              >
+                삭제
+              </Button>
+            )}
+            <Button
               onClick={() => {
-                if (!signatureConfirm) {
-                  clearCanvas();
-                } else {
-                  alert('확인 상태에서는 서명을 초기화 할 수 없습니다');
-                }
+                setSignatureBlock(true);
               }}
             >
-              <FontAwesomeIcon icon={faRotateRight} />
-            </FixableIcon>
-          )}
-        </SignatureTitleContainer>
-        {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE ? (
-          <>
-            <UploadFileBox src={ReportStore.report.signatureUrl} />
-          </>
-        ) : (
-          <>
-            <CanvasContainer>
-              <canvas ref={canvasRef} />
-            </CanvasContainer>
-            <ButtonRow>
-              {signatureConfirm ? (
-                <>
-                  <Button
-                    onClick={() => {
-                      setSignatureConfirm(false);
-                      if (!canvasRef.current) {
-                        return;
-                      }
-                      const canvas: HTMLCanvasElement = canvasRef.current;
-                      canvas.addEventListener('mousedown', startPaint);
-                      canvas.addEventListener('mousemove', paint);
-                      canvas.addEventListener('mouseup', stopPaint);
-                      canvas.addEventListener('mouseleave', stopPaint);
-                    }}
-                  >
-                    취소
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    onClick={() => {
-                      saveCanvasImg();
-                      setSignatureConfirm(true);
-                      if (!canvasRef.current) {
-                        return;
-                      }
-                      const canvas: HTMLCanvasElement = canvasRef.current;
-                      canvas.removeEventListener('mousedown', startPaint);
-                      canvas.removeEventListener('mousemove', paint);
-                      canvas.removeEventListener('mouseup', stopPaint);
-                      canvas.removeEventListener('mouseleave', stopPaint);
-                    }}
-                  >
-                    확인
-                  </Button>
-                </>
-              )}
-            </ButtonRow>
-          </>
+              열기
+            </Button>
+          </ButtonRow>
         )}
+
         <SignatureTitleContainer>
           <SignatureTitle>증빙사진</SignatureTitle>
         </SignatureTitleContainer>
         <UploadFileContainer>
-          {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE
-            ? ReportStore?.report?.imageUrl?.map((e, i) => (
-                <UploadFileBox src={e} key={i} />
-              ))
-            : null}
+          {ReportStore?.report?.imageUrl?.map((e, i) => (
+            <ImageContainer key={i}>
+              <UploadFileBox src={e} />
+              {ReportStore.report.status !== REPORT_STATE.EDIT_IMPOSSIBLE && (
+                <DeleteImgButton
+                  onClick={() => {
+                    setImageIndex(i);
+                    setDeleteModal(true);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faX} />
+                </DeleteImgButton>
+              )}
+            </ImageContainer>
+          ))}
         </UploadFileContainer>
-        {uploadImage.map((e, i) => (
-          <UploadFile key={i}>
-            <div key={i}>
-              {i + 1}. {e}
-            </div>
-          </UploadFile>
-        ))}
         <ButtonRow>{UploadMentoringImg()}</ButtonRow>
-        <br />* 제출 시 업로드 된 파일만 최종 적용됩니다.
       </Left>
 
       <Right>
@@ -486,6 +355,4 @@ const ReportRowSignature = observer(() => {
       </Right>
     </ReportRowContainer>
   );
-});
-
-export default ReportRowSignature;
+}

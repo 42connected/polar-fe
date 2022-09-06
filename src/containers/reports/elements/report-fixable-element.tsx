@@ -81,7 +81,7 @@ export function ReportFixableElement(props: ReportFixableElementProps) {
                 setIsEdit(false);
               }}
             >
-              <FontAwesomeIcon icon={faCheck} />
+              <FontAwesomeIcon icon={faCheck} size="2x" />
             </FixableIcon>
           </>
         ) : (
@@ -93,7 +93,7 @@ export function ReportFixableElement(props: ReportFixableElementProps) {
                   setIsEdit(true);
                 }}
               >
-                <FontAwesomeIcon icon={faPencil} />
+                <FontAwesomeIcon icon={faPencil} size="2x" />
               </FixableIcon>
             )}
           </>
