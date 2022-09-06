@@ -205,7 +205,10 @@ export function ReportRowSignature() {
           type="file"
           accept="image/*"
           ref={inputRef}
-          onChange={onUploadImage}
+          onChange={event => {
+            onUploadImage(event);
+            event.target.value = '';
+          }}
           style={{ display: 'none' }}
         />
         {ReportStore.report.status !== REPORT_STATE.EDIT_IMPOSSIBLE && (
