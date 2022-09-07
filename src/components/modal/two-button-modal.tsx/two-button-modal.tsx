@@ -11,6 +11,7 @@ import {
   XButton,
 } from '../modal-styled';
 import theme from '../../../styles/theme';
+import { useEffect } from 'react';
 
 interface TwoButtonModalProps {
   TitleText: string;
@@ -25,6 +26,13 @@ interface TwoButtonModalProps {
 }
 
 export function TwoButtonModal(props: TwoButtonModalProps) {
+  useEffect(() => {
+    document.body.style.overflow = `hidden`;
+    return () => {
+      document.body.style.overflow = `auto`;
+    };
+  }, []);
+
   return (
     <ModalBackground>
       <ModalBox>
