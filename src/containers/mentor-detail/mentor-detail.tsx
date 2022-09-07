@@ -461,9 +461,13 @@ function MentorDetail() {
               )}
             </div>
             {mentor?.createdAt ? (
-              <div>update: {mentor?.updatedAt?.substring(0, 10)}</div>
+              <div style={{ color: `${theme.colors.fontGray}` }}>
+                update: {mentor?.updatedAt?.substring(0, 10)}
+              </div>
             ) : (
-              <div>create: {mentor?.createdAt?.substring(0, 10)}</div>
+              <div style={{ color: `${theme.colors.fontGray}` }}>
+                create: {mentor?.createdAt?.substring(0, 10)}
+              </div>
             )}
           </MenuBox3>
           <TimTableScroll>
@@ -745,7 +749,6 @@ const MenuBox3 = styled.div`
   letter-spacing: 0.1rem;
   margin-bottom: 1.3rem;
   div:last-child {
-    color: ${theme.colors.fontGray};
     margin-bottom: 0.5rem;
     padding-left: 0.3rem;
     font-size: 1rem;
