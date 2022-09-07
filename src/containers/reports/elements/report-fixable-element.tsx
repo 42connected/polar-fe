@@ -80,7 +80,14 @@ export function ReportFixableElement(props: ReportFixableElementProps) {
           </>
         ) : (
           <>
-            <Content>{props.content ? props.content : '(입력 필요)'}</Content>
+            <Content
+              style={{
+                color: props.content || defaultTheme.colors.polarSimpleMain,
+                fontWeight: props.content || 'bold',
+              }}
+            >
+              {props.content ? props.content : '(입력 필요)'}
+            </Content>
             {props.isEditPossible && (
               <FixableIcon
                 onClick={() => {

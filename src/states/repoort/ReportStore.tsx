@@ -171,7 +171,7 @@ class ReportStore {
       },
     )
       .then(res => {
-        window.location.reload();
+        this.Initializer(reportId, token);
       })
       .catch(err => {
         ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
@@ -191,7 +191,7 @@ class ReportStore {
       },
     )
       .then(res => {
-        window.location.reload();
+        this.Initializer(reportId, token);
       })
       .catch(err => {
         ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
@@ -214,7 +214,7 @@ class ReportStore {
       },
     )
       .then(res => {
-        window.location.reload();
+        this.Initializer(reportId, token);
       })
       .catch(err => {
         ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);

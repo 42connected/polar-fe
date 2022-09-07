@@ -12,7 +12,6 @@ import styled from 'styled-components';
 import Button from '../../components/button';
 import { InputCounter } from '../../components/input-counter';
 import ButtonBoxComponent from '../../components/mentor-detail/button-box';
-import TimeTableMuiComponent from '../../components/mentor-detail/mui-table';
 import SelectKeywords from '../../components/mentor-detail/select-keywords';
 import TagInputBoxComponent from '../../components/mentor-detail/tag-input-box';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
@@ -31,6 +30,7 @@ import MarkdownRender from './markdownRender';
 import { ModalBackground } from '../../components/modal/modal-styled';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import MentorInfoModal, { ModalType } from '../signup/mentor-info-modal';
+import MyTableComponents from '../../components/mentor-detail/my-table';
 
 function MentorDetail() {
   const mockMentorAvailableTime =
@@ -77,33 +77,35 @@ function MentorDetail() {
   const setMentorAvailableTimeData = async (metorAvailableTimeData: string) => {
     const mentorAvailableTimeDataToArray = JSON.parse(metorAvailableTimeData);
     const appointmentsData: appointmentsInterface[] = [];
+    const today = new Date();
+    const todayDay = today.getDay();
+    const todayMonth = today.getMonth();
+    const todayYear = today.getFullYear();
     mentorAvailableTimeDataToArray?.forEach(
       (data: mentorAvailableTimeInterface[], index: number) => {
-        if (data.length !== 0) {
+        if (data?.length !== 0) {
           data.forEach(data2 => {
-            let day = 25 + index;
-            if (index === 6) {
-              day = 24;
-            }
-            const startDate = new Date(
-              2018,
-              5,
-              day,
+            const start = new Date(
+              todayYear,
+              todayMonth,
+              index,
               data2.startHour,
               data2.startMinute,
             );
-            const endDate = new Date(
-              2018,
-              5,
-              day,
+            const end = new Date(
+              todayYear,
+              todayMonth,
+              index,
               data2.endHour,
               data2.endMinute,
             );
-            appointmentsData.push({ startDate, endDate });
+
+            appointmentsData.push({ start, end });
           });
         }
       },
     );
+    console.log(appointmentsData);
     setAppointments(appointmentsData);
   };
 
@@ -279,6 +281,8 @@ function MentorDetail() {
                 <MentorInfoModal
                   intraId={getParams.intraId || ''}
                   modalType={ModalType.MENTOR_INFO}
+                  setter={setIsActivateMentorTimeEditModal}
+                  value={isActivateMentorTimeEditModal}
                 />
               )}
             </MentorActivateContainer>
@@ -457,20 +461,22 @@ function MentorDetail() {
                 <MentorInfoModal
                   intraId={getParams.intraId || ''}
                   modalType={ModalType.AVAILABLE_TIME}
+                  setter={setIsActivateMentorTimeModal}
+                  value={isActivateMentorTimeModal}
                 />
               )}
             </div>
             {mentor?.createdAt ? (
-              <div>update: {mentor?.updatedAt?.substring(0, 10)}</div>
+              <div style={{ color: `${theme.colors.fontGray}` }}>
+                update: {mentor?.updatedAt?.substring(0, 10)}
+              </div>
             ) : (
-              <div>create: {mentor?.createdAt?.substring(0, 10)}</div>
+              <div style={{ color: `${theme.colors.fontGray}` }}>
+                create: {mentor?.createdAt?.substring(0, 10)}
+              </div>
             )}
           </MenuBox3>
-          <TimTableScroll>
-            <TimeTableMuiComponent
-              appointments={appointments}
-            ></TimeTableMuiComponent>
-          </TimTableScroll>
+          <MyTableComponents appointments={appointments} />
         </MentorBody2>
         <MentorBody3>
           <MentorBody3Toggle
@@ -745,7 +751,6 @@ const MenuBox3 = styled.div`
   letter-spacing: 0.1rem;
   margin-bottom: 1.3rem;
   div:last-child {
-    color: ${theme.colors.fontGray};
     margin-bottom: 0.5rem;
     padding-left: 0.3rem;
     font-size: 1rem;
