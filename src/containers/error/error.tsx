@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 import ErrorStore from '../../states/error/ErrorStore';
 import defaultTheme from '../../styles/theme';
