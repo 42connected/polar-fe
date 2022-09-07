@@ -15,7 +15,7 @@ import theme from '../../../styles/theme';
 export interface OneButtonModalProps {
   TitleText: string;
   Text: string;
-  XButtonFunc: () => any;
+  XButtonFunc?: () => any;
   ButtonText: string;
   ButtonBg?: string;
   ButtonFunc: () => any;
@@ -27,19 +27,21 @@ export function OneButtonModal(props: OneButtonModalProps) {
       <ModalBox>
         <XButton>
           <ModalTitle>{props.TitleText}</ModalTitle>
-          <FontAwesomeIcon
-            icon={faX}
-            size="2x"
-            style={{ opacity: 0.3, cursor: 'pointer' }}
-            onClick={() => props.XButtonFunc()}
-          />
+          {props.XButtonFunc && (
+            <FontAwesomeIcon
+              icon={faX}
+              size="2x"
+              style={{ opacity: 0.3, cursor: 'pointer' }}
+              onClick={() => props.XButtonFunc && props.XButtonFunc()}
+            />
+          )}
         </XButton>
         <ModalBody>{sliceMoreInfoStr(props.Text, 120)}</ModalBody>
         <ModalButtonContainer>
           <ModalButton
             onClick={props.ButtonFunc}
             style={{
-              backgroundColor: props.ButtonBg && theme.colors.polarSimpleMain,
+              backgroundColor: props.ButtonBg || theme.colors.polarSimpleMain,
             }}
           >
             {sliceMoreInfoStr(props.ButtonText, 6)}
