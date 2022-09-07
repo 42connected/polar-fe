@@ -64,8 +64,8 @@ export function CanvasModal(props: CanvasModalProps) {
 
     const canvas: HTMLCanvasElement = canvasRef.current;
     return {
-      x: event.pageX - canvas.offsetLeft,
-      y: event.pageY - canvas.offsetTop,
+      x: event.pageX - canvas.offsetLeft - window.scrollX,
+      y: event.pageY - canvas.offsetTop - window.scrollY,
     };
   };
 
