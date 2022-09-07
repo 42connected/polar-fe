@@ -227,6 +227,7 @@ class ReportStore {
     await axiosWithData(
       AXIOS_METHOD_WITH_DATA.POST,
       `/reports/${mentoringLogId}`,
+      {},
       {
         headers: {
           Authorization: `bearer ${token}`,
