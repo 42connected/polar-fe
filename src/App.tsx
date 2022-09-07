@@ -25,6 +25,7 @@ import { Error } from './containers/error/error';
 import MentorInfoModal, {
   ModalType,
 } from './containers/signup/mentor-info-modal';
+import MyTableComponents from './components/mentor-detail/my-table';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -45,6 +46,7 @@ const App = observer(() => {
         <ScrollToTop />
         <Header />
         <Routes>
+          <Route path="/test" element={<MyTableComponents />} />
           <Route path="/data-room" element={<DataRoom />} />
           <Route path="/cadets/mentorings" element={<CadetMentornig />} />
           <Route path="/mentor-lists/:category" element={<MentorList />} />
