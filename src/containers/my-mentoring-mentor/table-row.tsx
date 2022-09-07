@@ -94,10 +94,9 @@ const getDayToShortString = (meetingAt: Date): string => {
     return '-';
   }
 
-  return `${startTime
-    .getFullYear()
-    .toString()
-    .substring(2)}.${startTime.getMonth()}.${startTime.getDate()}
+  return `${startTime.getFullYear().toString().substring(2)}.${
+    startTime.getMonth() + 1
+  }.${startTime.getDate()}
   `;
 };
 

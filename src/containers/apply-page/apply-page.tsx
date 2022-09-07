@@ -7,10 +7,11 @@ import { InputCounter } from './apply-input-counter';
 import axios, { AxiosError } from 'axios';
 import { PostApply } from './apply-interface';
 import { axiosInstance } from '../../context/axios-interface';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 import { defaultTheme } from 'react-select';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
 const Wrapper = styled.div`
   .modal {
@@ -106,7 +107,7 @@ const ApplyContainer = styled.div`
   width: 100%;
   display: grid;
   grid-template-rows: 80rem;
-  grid-template-columns: 85rem 85rem;
+  grid-template-columns: 75rem 75rem;
   transition: all 0.25s ease-in-out;
   grid-template-areas: 'time applyText';
   text-align: center;
@@ -126,7 +127,7 @@ const MovApplyContainer = styled.div`
   width: 100%;
   display: grid;
   grid-template-rows: 70rem 70rem;
-  grid-template-columns: 80rem;
+  grid-template-columns: 45rem;
   transition: all 0.25s ease-in-out;
   grid-template-areas:
     'time '
@@ -192,44 +193,95 @@ const MovContent = styled.div`
 `;
 
 const PlanButton1 = styled.button`
-  padding-left: 12rem;
+  padding-left: 11rem;
   box-shadow: ${theme.shadow.buttonShadow};
   text-align: center;
+  align-items: center;
   ${theme.font.sebangGothic};
-  ${theme.fontSize.sizeExtraLarge};
-  font-size: 3rem;
+  font-size: 2rem;
   color: ${theme.fontColor.whiteColor};
   background-color: ${theme.colors.polarSimpleMain};
   margin-top: 4rem;
   border-radius: 20px;
-  width: 36rem;
-  height: 12rem;
+  width: 30rem;
+  height: 8rem;
   cursor: pointer;
   line-height: 12.5rem;
   border: none;
 `;
+
+const MovPlanButton1 = styled.button`
+  padding-left: 8rem;
+  box-shadow: ${theme.shadow.buttonShadow};
+  text-align: center;
+  align-items: center;
+  ${theme.font.sebangGothic};
+  font-size: 2rem;
+  color: ${theme.fontColor.whiteColor};
+  background-color: ${theme.colors.polarSimpleMain};
+  margin-top: 4rem;
+  border-radius: 20px;
+  width: 24rem;
+  height: 8rem;
+  cursor: pointer;
+  line-height: 12.5rem;
+  border: none;
+`;
+
 const PlanButton2 = styled.button`
-  padding-left: 12rem;
+  padding-left: 11rem;
   box-shadow: ${theme.shadow.buttonShadow};
   ${theme.font.sebangGothic};
-  ${theme.fontSize.sizeExtraLarge};
-  font-size: 3rem;
+  font-size: 2rem;
   text-align: center;
+  align-items: center;
   line-height: 12.5rem;
   color: ${theme.fontColor.whiteColor};
   background-color: ${theme.colors.polarBrightMain};
   margin-top: 4rem;
   border-radius: 20px;
-  width: 36rem;
-  height: 12rem;
+  width: 30rem;
+  height: 8rem;
   cursor: pointer;
   border: none;
 `;
+
+const MovPlanButton2 = styled.button`
+  padding-left: 8rem;
+  box-shadow: ${theme.shadow.buttonShadow};
+  ${theme.font.sebangGothic};
+  font-size: 2rem;
+  text-align: center;
+  align-items: center;
+  line-height: 12.5rem;
+  color: ${theme.fontColor.whiteColor};
+  background-color: ${theme.colors.polarBrightMain};
+  margin-top: 4rem;
+  border-radius: 20px;
+  width: 24rem;
+  height: 8rem;
+  cursor: pointer;
+  border: none;
+`;
+
+const BottomSize = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
 const Line1 = styled.div`
   text-align: center;
   align-items: center;
   border-top: 0.3rem solid #000000;
-  width: 70rem;
+  width: 60rem;
+`;
+
+const MovLine1 = styled.div`
+  text-align: center;
+  align-items: center;
+  border-top: 0.3rem solid #000000;
+  width: 45rem;
+  margin-left: 2%;
+  margin-right: 2%;
 `;
 
 const Line2 = styled.div`
@@ -237,23 +289,29 @@ const Line2 = styled.div`
   text-align: center;
   align-items: center;
   border-top: 0.1rem solid #000000;
-  width: 70rem;
+  width: 60rem;
+`;
+
+const MovLine2 = styled.div`
+  margin-top: 2rem;
+  text-align: center;
+  align-items: center;
+  border-top: 0.1rem solid #000000;
+  width: 45rem;
 `;
 
 const MainText = styled.div`
   margin-top: 2rem;
-  margin-left: -50%;
   text-align: center;
   ${theme.font.sebangGothic};
-  ${theme.fontSize.sizeLarge};
+  ${theme.fontSize.sizeExtraMedium};
 `;
 
 const MainText2 = styled.div`
   margin-top: 2rem;
   text-align: center;
-  margin-left: -50%;
   ${theme.font.sebangGothic};
-  ${theme.fontSize.sizeLarge};
+  ${theme.fontSize.sizeExtraMedium};
 `;
 
 const MiddleText = styled.div`
@@ -272,6 +330,16 @@ const MiddleText2 = styled.div`
   margin-bottom: -2rem;
 `;
 
+const MovMiddleText2 = styled.div`
+  ${theme.fontSize.sizeExtraSmall};
+  font-weight: 400;
+  color: ${theme.colors.grayTwo};
+  text-align: left;
+  margin-right: 84%;
+  margin-top: 4rem;
+  margin-bottom: -2rem;
+`;
+
 const MiddleText3 = styled.div`
   ${theme.fontSize.sizeExtraSmall};
   font-weight: 400;
@@ -280,46 +348,25 @@ const MiddleText3 = styled.div`
   margin-bottom: -2rem;
 `;
 
-const TextBox1 = styled.textarea`
-  box-shadow: ${theme.shadow.buttonShadow};
-  width: 50rem;
-  height: 6rem;
-  border-radius: 20px;
-  ${theme.font.sebangGothic};
+const MovMiddleText3 = styled.div`
   ${theme.fontSize.sizeExtraSmall};
-`;
-
-const TextBox2 = styled.textarea`
-  box-shadow: ${theme.shadow.buttonShadow};
-  width: 50rem;
-  height: 31rem;
-  border-radius: 20px;
-  ${theme.fontSize.sizeExtraSmall};
-  ${theme.font.sebangGothic};
-`;
-
-const ModalView = styled.div.attrs(props => ({
-  role: 'dialog',
-}))`
-  text-align: center;
-  text-decoration: none;
-  padding: 30px 90px;
-  background-color: white;
-  border-radius: 30px;
-  color: #4000c7;
+  font-weight: 400;
+  color: ${theme.colors.grayTwo};
+  margin-right: 78%;
+  margin-bottom: -2rem;
 `;
 
 const ApplyButton = styled.button`
   margin-top: 4rem;
   box-shadow: ${theme.shadow.buttonShadow};
   text-align: center;
-  ${theme.fontSize.sizeMedium};
+  ${theme.fontSize.sizeExtraSmall};
   ${theme.font.sebangGothic};
   color: ${theme.fontColor.titleColor};
   background-color: ${theme.colors.backgoundWhite};
   border-radius: 20px;
-  width: 12rem;
-  height: 4.5rem;
+  width: 9rem;
+  height: 3.5rem;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -403,136 +450,145 @@ const ApplyPage = () => {
     setErrorModal(true);
   };
 
-  return (
-    <div className="applypage">
-      {errorModal && (
-        <OneButtonModal
-          TitleText="⚠️ 42폴라 경고"
-          Text={errorModalMsg}
-          XButtonFunc={() => {
-            setErrorModal(false);
-          }}
-          ButtonText="닫기"
-          ButtonBg="gray"
-          ButtonFunc={() => {
-            setErrorModal(false);
-          }}
-        />
-      )}
-      {!isMobile ? ( //pc
-        <div>
-          <ApplyContainer>
-            <Chooseplan>
-              <Line1> </Line1>
-              <MainText>일정 선택하기</MainText>
-              <Line2> </Line2>
-              <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
-              <Wrapper>
-                <PlanButton1 onClick={openModal}> 가능시간1</PlanButton1>
-                <Modal
-                  open={modalOpen}
-                  close={closeModal}
-                  header="멘토링 일정 선택"
-                ></Modal>
-                <PlanButton2 onClick={openModal}> 가능시간2</PlanButton2>
-                <Modal
-                  open={modalOpen}
-                  close={closeModal}
-                  header="멘토링 일정 선택"
-                ></Modal>
-                <PlanButton2 onClick={openModal}> 가능시간3</PlanButton2>
-                <Modal
-                  open={modalOpen}
-                  close={closeModal}
-                  header="멘토링 일정 선택"
-                ></Modal>
-              </Wrapper>
-            </Chooseplan>
-            <Content>
-              <Line1> </Line1>
-              <MainText2>신청 정보</MainText2>
-              <Line2> </Line2>
-              <MiddleText2> * 주제 </MiddleText2>
-              <InputCounter
-                setter={setTopic}
-                value={topic}
-                maxLength={150}
-                width="50rem"
-                disabled={false}
-                height="4rem"
-              />
-              <MiddleText3> * 궁금한 점 </MiddleText3>
-              <InputCounter
-                setter={setQuestion}
-                value={question}
-                maxLength={150}
-                width="50rem"
-                disabled={false}
-                height="20rem"
-              />
-              <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
-            </Content>
-          </ApplyContainer>
-        </div>
-      ) : (
-        <div>
-          <MovApplyContainer>
-            <MovChooseplan>
-              <Line1> </Line1>
-              <MainText>일정 선택하기</MainText>
-              <Line2> </Line2>
-              <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
-              <Wrapper>
-                <PlanButton1 onClick={openModal}> 가능시간1</PlanButton1>
-                <Modal
-                  open={modalOpen}
-                  close={closeModal}
-                  header="멘토링 일정 선택"
-                ></Modal>
-                <PlanButton2 onClick={openModal}> 가능시간2</PlanButton2>
-                <Modal
-                  open={modalOpen}
-                  close={closeModal}
-                  header="멘토링 일정 선택"
-                ></Modal>
-                <PlanButton2 onClick={openModal}> 가능시간3</PlanButton2>
-                <Modal
-                  open={modalOpen}
-                  close={closeModal}
-                  header="멘토링 일정 선택"
-                ></Modal>
-              </Wrapper>
-            </MovChooseplan>
-            <MovContent>
-              <Line1> </Line1>
-              <MainText2>신청 정보</MainText2>
-              <Line2> </Line2>
-              <MiddleText2> * 주제 </MiddleText2>
-              <InputCounter
-                setter={setTopic}
-                value={topic}
-                maxLength={150}
-                width="50rem"
-                disabled={false}
-                height="4rem"
-              />
-              <MiddleText3> * 궁금한 점 </MiddleText3>
-              <InputCounter
-                setter={setQuestion}
-                value={question}
-                maxLength={800}
-                width="50rem"
-                disabled={false}
-                height="20rem"
-              />
-              <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
-            </MovContent>
-          </MovApplyContainer>
-        </div>
-      )}
-      ;
-    </div>
-  );
+  if (!AuthStore.getAccessToken()) {
+    ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
+    AuthStore.Login();
+    return <></>;
+  } else if (AuthStore.getUserRole() !== USER_ROLES.CADET) {
+    ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
+    return <Navigate to="/" />;
+  } else
+    return (
+      <div>
+        {errorModal && (
+          <OneButtonModal
+            TitleText="⚠️ 42폴라 경고"
+            Text={errorModalMsg}
+            XButtonFunc={() => {
+              setErrorModal(false);
+            }}
+            ButtonText="닫기"
+            ButtonBg="gray"
+            ButtonFunc={() => {
+              setErrorModal(false);
+            }}
+          />
+        )}
+        {!isMobile ? ( //pc
+          <div>
+            <ApplyContainer>
+              <Chooseplan>
+                <Line1> </Line1>
+                <MainText>일정 선택하기</MainText>
+                <Line2> </Line2>
+                <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
+                <Wrapper>
+                  <PlanButton1 onClick={openModal}> 가능시간1</PlanButton1>
+                  <Modal
+                    open={modalOpen}
+                    close={closeModal}
+                    header="멘토링 일정 선택"
+                  ></Modal>
+                  <PlanButton2 onClick={openModal}> 가능시간2</PlanButton2>
+                  <Modal
+                    open={modalOpen}
+                    close={closeModal}
+                    header="멘토링 일정 선택"
+                  ></Modal>
+                  <PlanButton2 onClick={openModal}> 가능시간3 </PlanButton2>
+                  <BottomSize></BottomSize>
+                  <Modal
+                    open={modalOpen}
+                    close={closeModal}
+                    header="멘토링 일정 선택"
+                  ></Modal>
+                </Wrapper>
+              </Chooseplan>
+              <Content>
+                <Line1> </Line1>
+                <MainText2>신청 정보</MainText2>
+                <Line2> </Line2>
+                <MiddleText2> * 주제 </MiddleText2>
+                <InputCounter
+                  setter={setTopic}
+                  value={topic}
+                  maxLength={150}
+                  width="50rem"
+                  disabled={false}
+                  height="2.6rem"
+                />
+                <MiddleText3> * 궁금한 점 </MiddleText3>
+                <InputCounter
+                  setter={setQuestion}
+                  value={question}
+                  maxLength={500}
+                  width="50rem"
+                  disabled={false}
+                  height="12rem"
+                />
+                <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
+              </Content>
+            </ApplyContainer>
+          </div>
+        ) : (
+          <div>
+            <MovApplyContainer>
+              <MovChooseplan>
+                <MovLine1> </MovLine1>
+                <MainText>일정 선택하기</MainText>
+                <MovLine2> </MovLine2>
+                <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
+                <Wrapper>
+                  <MovPlanButton1 onClick={openModal}>가능시간1</MovPlanButton1>
+                  <Modal
+                    open={modalOpen}
+                    close={closeModal}
+                    header="멘토링 일정 선택"
+                  ></Modal>
+                  <MovPlanButton2 onClick={openModal}>가능시간2</MovPlanButton2>
+                  <Modal
+                    open={modalOpen}
+                    close={closeModal}
+                    header="멘토링 일정 선택"
+                  ></Modal>
+                  <MovPlanButton2 onClick={openModal}>가능시간3</MovPlanButton2>
+                  <Modal
+                    open={modalOpen}
+                    close={closeModal}
+                    header="멘토링 일정 선택"
+                  ></Modal>
+                </Wrapper>
+              </MovChooseplan>
+              <MovContent>
+                <MovLine1> </MovLine1>
+                <MainText2>신청 정보</MainText2>
+                <MovLine2> </MovLine2>
+                <MovMiddleText2> * 주제 </MovMiddleText2>
+                <InputCounter
+                  setter={setTopic}
+                  value={topic}
+                  maxLength={150}
+                  width="40rem"
+                  disabled={false}
+                  height="4rem"
+                />
+                <MovMiddleText3> * 궁금한 점 </MovMiddleText3>
+                <InputCounter
+                  setter={setQuestion}
+                  value={question}
+                  maxLength={800}
+                  width="40rem"
+                  disabled={false}
+                  height="20rem"
+                />
+                <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
+              </MovContent>
+            </MovApplyContainer>
+          </div>
+        )}
+        ;
+      </div>
+    );
 };
 
 export default ApplyPage;
