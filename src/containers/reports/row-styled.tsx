@@ -15,12 +15,6 @@ export const ReportRowTitle = styled.div`
   align-items: center;
   ${defaultTheme.fontSize.sizeMedium};
   ${defaultTheme.font.sebangGothic};
-  @media screen and (max-width: 900px) {
-    ${defaultTheme.fontSize.sizeExtraSmall};
-  }
-  @media screen and (max-width: 800px) {
-    ${defaultTheme.fontSize.sizeSmall};
-  }
 `;
 
 export const ReportRowContent = styled.div`
