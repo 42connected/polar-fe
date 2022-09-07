@@ -10,6 +10,7 @@ import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import AuthStore from '../../states/auth/AuthStore';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 import { CanvasModal } from './canvas-modal';
+import { observer } from 'mobx-react-lite';
 
 const Left = styled.div`
   display: flex;
@@ -153,7 +154,7 @@ const SignatureTitle = styled.div`
   ${defaultTheme.font.sebangGothic};
 `;
 
-export function ReportRowSignature() {
+export const ReportRowSignature = observer(() => {
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [imageIndex, setImageIndex] = useState<number>(-1);
   const [signatureBlock, setSignatureBlock] = useState<boolean>(false);
@@ -235,6 +236,7 @@ export function ReportRowSignature() {
             setDeleteModal(false);
           }}
           ButtonFunc={() => {
+            setDeleteModal(false);
             ReportStore.deleteImage(
               ReportStore.report.id,
               AuthStore.getAccessToken(),
@@ -316,4 +318,4 @@ export function ReportRowSignature() {
       </Right>
     </ReportRowContainer>
   );
-}
+});
