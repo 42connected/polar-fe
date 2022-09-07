@@ -1,43 +1,46 @@
-import { appointmentsInterface } from '../../interface/mentor-detail/appointments.interface';
-import { useTable } from 'react-table';
-import { useMemo } from 'react';
+import Calendar from '@toast-ui/react-calendar';
+import '@toast-ui/calendar/dist/toastui-calendar.min.css';
+import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 
-function MyTableComponents({ data }: any) {
-  const columns = useMemo(
-    () => [
-      {
-        startDate: new Date(2018, 5, 29, 14, 30),
-        endDate: new Date(2018, 5, 29, 15, 0),
-        // location: 'Room 2',
-      },
-      {
-        // title: 'Website Re-Design Plan',
-        startDate: new Date(2018, 5, 25, 9, 30),
-        endDate: new Date(2018, 5, 25, 11, 30),
-        // id: 0,
-        // location: 'Room 1',
-      },
-      {
-        // title: 'Book Flights to San Fran for Sales Trip',
-        startDate: new Date(2018, 5, 25, 12, 0),
-        endDate: new Date(2018, 5, 25, 13, 0),
-        // id: 1,
-        // location: 'Room 1',
-      },
-      {
-        startDate: new Date(2018, 5, 24, 12, 0),
-        endDate: new Date(2018, 5, 24, 13, 0),
-      },
-    ],
-    [],
-  );
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+function MyTableComponent(props) {
+  const [appointmentsData, setAppointmentsData] = useState([]);
+  const { appointments } = props;
+  useEffect(() => {
+    console.log(appointments);
+    setAppointmentsData(appointments);
+  }, [appointments]);
+
   return (
-    <div>
-      <table></table>
-    </div>
+    <>
+      <Calendar
+        height="900px"
+        calendars={[
+          {
+            id: '0',
+            name: 'Private',
+            bgColor: '#9e5fff',
+            borderColor: '#9e5fff',
+          },
+          {
+            id: '1',
+            name: 'Company',
+            bgColor: '#00a9ff',
+            borderColor: '#00a9ff',
+          },
+        ]}
+        isReadOnly={true}
+        month={{
+          startDayOfWeek: 0,
+        }}
+        events={appointmentsData}
+        view="week"
+        week={{
+          taskView: false,
+        }}
+      />
+    </>
   );
 }
 
-export default MyTableComponents;
+export default MyTableComponent;

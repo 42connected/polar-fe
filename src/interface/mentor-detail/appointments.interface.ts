@@ -1,4 +1,4 @@
 export interface appointmentsInterface {
-  startDate: Date;
-  endDate: Date;
+  start: Date;
+  end: Date;
 }
