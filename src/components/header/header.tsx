@@ -1,12 +1,11 @@
 import { debounce } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../../assets/image/logo/logo.png';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import theme from '../../styles/theme';
-import { HeaderLogin } from './login';
 
 const HeaderStyle = styled.header`
   position: relative;
@@ -187,7 +186,13 @@ const Header = () => {
   }, 10);
 
   const AlertDetail = () => {
-    return alert('카뎃은 자동 로그아웃됩니다!\n 9월 3째주 comming soon~ :)');
+    return (
+      ErrorStore.on(
+        '카뎃은 자동 로그아웃됩니다!\n 9월 3째주 comming soon~ :)',
+        ERROR_DEFAULT_VALUE.TITLE,
+      ),
+      AuthStore.Logout()
+    );
   };
 
   if (AuthStore.getUserRole()) {
@@ -243,10 +248,7 @@ const Header = () => {
             )}
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
-                {/* <div>
-                  {AlertDetail()}
-                  <Link to={'/'}>{AuthStore.Logout()}</Link>
-                </div> */}
+                {/*<div>{AlertDetail()}</div>*/}
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
@@ -332,7 +334,7 @@ const Header = () => {
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
                 {/* <div>
-                  {AuthStore.Logout()}
+                  {AlertDetail()}
                 </div> */}
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
