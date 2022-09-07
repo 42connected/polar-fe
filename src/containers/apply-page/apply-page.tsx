@@ -12,6 +12,8 @@ import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 import { defaultTheme } from 'react-select';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
+import { ApplyCalendarModal } from '../../components/apply-page/apply-calendar-modal';
+import LoadingStore from '../../states/loading/LoadingStore';
 
 const Wrapper = styled.div`
   .modal {
@@ -193,10 +195,12 @@ const MovContent = styled.div`
 `;
 
 const PlanButton1 = styled.button`
-  padding-left: 11rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: ${theme.shadow.buttonShadow};
   text-align: center;
-  align-items: center;
+  flex-wrap: wrap;
   ${theme.font.sebangGothic};
   font-size: 2rem;
   color: ${theme.fontColor.whiteColor};
@@ -206,7 +210,6 @@ const PlanButton1 = styled.button`
   width: 30rem;
   height: 8rem;
   cursor: pointer;
-  line-height: 12.5rem;
   border: none;
 `;
 
@@ -229,13 +232,16 @@ const MovPlanButton1 = styled.button`
 `;
 
 const PlanButton2 = styled.button`
-  padding-left: 11rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  word-break: break-all;
+  white-space: pre-wrap;
   box-shadow: ${theme.shadow.buttonShadow};
   ${theme.font.sebangGothic};
   font-size: 2rem;
   text-align: center;
-  align-items: center;
-  line-height: 12.5rem;
   color: ${theme.fontColor.whiteColor};
   background-color: ${theme.colors.polarBrightMain};
   margin-top: 4rem;
@@ -385,6 +391,15 @@ const ApplyPage = () => {
   const [role, setRole] = useState<string>('');
   const [errorModal, setErrorModal] = useState<boolean>(false);
   const [errorModalMsg, setErrorModalMsg] = useState<string>('');
+  const [firstModalOpen, setFirstModalOpen] = useState(false);
+  const [secondModalOpen, setSecondModalOpen] = useState(false);
+  const [thirdModalOpen, setThirdModalOpen] = useState(false);
+  const [firstStartTime, setFirstStartTime] = useState<Date>();
+  const [firstEndTime, setFirstEndTime] = useState<Date>();
+  const [secondStartTime, setSecondStartTime] = useState<Date>();
+  const [secondEndTime, setSecondEndTime] = useState<Date>();
+  const [thirdStartTime, setThirdStartTime] = useState<Date>();
+  const [thirdEndTime, setThirdEndTime] = useState<Date>();
 
   const openModal = () => {
     setModalOpen(true);
@@ -411,6 +426,7 @@ const ApplyPage = () => {
 
   const postApply = async () => {
     try {
+      LoadingStore.on();
       await axiosInstance.post(
         `cadets/mentorings/apply/${mentorId}`,
         postData,
@@ -423,6 +439,8 @@ const ApplyPage = () => {
     } catch (err) {
       setErrorModalMsg('요청 에러 발생');
       setErrorModal(true);
+    } finally {
+      LoadingStore.off();
     }
   };
 
@@ -436,9 +454,30 @@ const ApplyPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (firstStartTime && firstEndTime) {
+      postData.requestTime1 = [firstStartTime, firstEndTime];
+      console.log(postData);
+    }
+  }, [firstStartTime, firstEndTime]);
+
+  useEffect(() => {
+    if (secondStartTime && secondEndTime) {
+      postData.requestTime2 = [secondStartTime, secondEndTime];
+      console.log(postData);
+    }
+  }, [secondStartTime, secondEndTime]);
+
+  useEffect(() => {
+    if (thirdStartTime && thirdEndTime) {
+      postData.requestTime3 = [thirdStartTime, thirdEndTime];
+      console.log(postData);
+    }
+  }, [thirdStartTime, thirdEndTime]);
+
   const ClickEvent = () => {
-    if (requestTime.length <= 0) {
-      setErrorModalMsg('신청 시간을 선택해주세요');
+    if (!(firstStartTime && firstEndTime)) {
+      setErrorModalMsg('첫번째 가능시간은 필수로 입력되어야 합니다.');
     } else if (topic.length <= 0) {
       setErrorModalMsg('주제를 입력해주세요');
     } else if (question.length <= 0) {
@@ -450,7 +489,10 @@ const ApplyPage = () => {
     setErrorModal(true);
   };
 
-  if (!AuthStore.getAccessToken()) {
+  if (mentorId === undefined) {
+    ErrorStore.on('잘못된 접근입니다.', ERROR_DEFAULT_VALUE.TITLE);
+    return <Navigate to="/" />;
+  } else if (!AuthStore.getAccessToken()) {
     ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
     AuthStore.Login();
     return <></>;
@@ -483,25 +525,106 @@ const ApplyPage = () => {
                 <Line2> </Line2>
                 <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
                 <Wrapper>
-                  <PlanButton1 onClick={openModal}> 가능시간1</PlanButton1>
-                  <Modal
-                    open={modalOpen}
-                    close={closeModal}
-                    header="멘토링 일정 선택"
-                  ></Modal>
-                  <PlanButton2 onClick={openModal}> 가능시간2</PlanButton2>
-                  <Modal
-                    open={modalOpen}
-                    close={closeModal}
-                    header="멘토링 일정 선택"
-                  ></Modal>
-                  <PlanButton2 onClick={openModal}> 가능시간3 </PlanButton2>
+                  <PlanButton1
+                    onClick={() => {
+                      setFirstModalOpen(true);
+                    }}
+                  >
+                    {firstStartTime && firstEndTime
+                      ? firstStartTime.toLocaleDateString() +
+                        '  ' +
+                        firstStartTime
+                          .toTimeString()
+                          .slice(
+                            0,
+                            firstStartTime.toTimeString().lastIndexOf(':'),
+                          ) +
+                        '~' +
+                        firstEndTime
+                          .toTimeString()
+                          .slice(
+                            0,
+                            firstEndTime.toTimeString().lastIndexOf(':'),
+                          )
+                      : '가능시간1'}
+                  </PlanButton1>
+                  {firstModalOpen && (
+                    <ApplyCalendarModal
+                      XButtonFunc={() => {
+                        setFirstModalOpen(false);
+                      }}
+                      mentorIntraId={mentorId}
+                      setStartDateTime={setFirstStartTime}
+                      setEndDateTime={setFirstEndTime}
+                    ></ApplyCalendarModal>
+                  )}
+                  <PlanButton2
+                    onClick={() => {
+                      setSecondModalOpen(true);
+                    }}
+                  >
+                    {secondStartTime && secondEndTime
+                      ? secondStartTime.toLocaleDateString() +
+                        '  ' +
+                        secondStartTime
+                          .toTimeString()
+                          .slice(
+                            0,
+                            secondStartTime.toTimeString().lastIndexOf(':'),
+                          ) +
+                        '~' +
+                        secondEndTime
+                          .toTimeString()
+                          .slice(
+                            0,
+                            secondEndTime.toTimeString().lastIndexOf(':'),
+                          )
+                      : '가능시간2'}
+                  </PlanButton2>
+                  {secondModalOpen && (
+                    <ApplyCalendarModal
+                      XButtonFunc={() => {
+                        setSecondModalOpen(false);
+                      }}
+                      mentorIntraId={mentorId}
+                      setStartDateTime={setSecondStartTime}
+                      setEndDateTime={setSecondEndTime}
+                    ></ApplyCalendarModal>
+                  )}
+                  <PlanButton2
+                    onClick={() => {
+                      setThirdModalOpen(true);
+                    }}
+                  >
+                    {thirdStartTime && thirdEndTime
+                      ? thirdStartTime.toLocaleDateString() +
+                        '  ' +
+                        thirdStartTime
+                          .toTimeString()
+                          .slice(
+                            0,
+                            thirdStartTime.toTimeString().lastIndexOf(':'),
+                          ) +
+                        '~' +
+                        thirdEndTime
+                          .toTimeString()
+                          .slice(
+                            0,
+                            thirdEndTime.toTimeString().lastIndexOf(':'),
+                          )
+                      : '가능시간3'}
+                  </PlanButton2>
                   <BottomSize></BottomSize>
-                  <Modal
-                    open={modalOpen}
-                    close={closeModal}
-                    header="멘토링 일정 선택"
-                  ></Modal>
+                  {thirdModalOpen && (
+                    <ApplyCalendarModal
+                      XButtonFunc={() => {
+                        setThirdModalOpen(false);
+                      }}
+                      mentorIntraId={mentorId}
+                      setStartDateTime={setThirdStartTime}
+                      setEndDateTime={setThirdEndTime}
+                    ></ApplyCalendarModal>
+                  )}
                 </Wrapper>
               </Chooseplan>
               <Content>
@@ -544,18 +667,27 @@ const ApplyPage = () => {
                     open={modalOpen}
                     close={closeModal}
                     header="멘토링 일정 선택"
+                    mentorIntraId={mentorId}
+                    setStartDateTime={setFirstStartTime}
+                    setEndDateTime={setFirstEndTime}
                   ></Modal>
                   <MovPlanButton2 onClick={openModal}>가능시간2</MovPlanButton2>
                   <Modal
                     open={modalOpen}
                     close={closeModal}
                     header="멘토링 일정 선택"
+                    mentorIntraId={mentorId}
+                    setStartDateTime={setSecondStartTime}
+                    setEndDateTime={setSecondEndTime}
                   ></Modal>
                   <MovPlanButton2 onClick={openModal}>가능시간3</MovPlanButton2>
                   <Modal
                     open={modalOpen}
                     close={closeModal}
                     header="멘토링 일정 선택"
+                    mentorIntraId={mentorId}
+                    setStartDateTime={setThirdStartTime}
+                    setEndDateTime={setThirdEndTime}
                   ></Modal>
                 </Wrapper>
               </MovChooseplan>

@@ -22,7 +22,6 @@ import UserJoinStore from './states/user-join/UserJoinStore';
 import { UserJoin } from './containers/user-join/user-join';
 import ErrorStore from './states/error/ErrorStore';
 import { Error } from './containers/error/error';
-import ApplyCalendar from './components/apply-page/apply-calendar';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}
@@ -62,7 +61,6 @@ const App = observer(() => {
           <Route path="/mentor-detail/:intraId" element={<MentorDetail />} />
           <Route path="/mentors/join" element={<SignUpMentor />} />
           <Route path="/cadets/join" element={<SignUpCadet />} />
-          <Route path="/test" element={<ApplyCalendar />} />
         </Routes>
         <Footer />
       </Router>

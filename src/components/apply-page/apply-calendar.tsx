@@ -16,6 +16,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
 import Button from '../button';
+import LoadingStore from '../../states/loading/LoadingStore';
+import { ApplyCalendarModalProps } from './apply-calendar-modal';
 
 const muiTheme = createTheme({
   palette: {
@@ -67,6 +69,15 @@ const CalendarDiv = styled.div`
       background-color: ${theme.colors.polarSimpleMain};
     }
   }
+  .react-calendar__tile--hasActive {
+    background-color: ${lighten(theme.colors.polarBrightMain, 0.4)};
+    &:enabled:hover {
+      background-color: ${lighten(theme.colors.polarBrightMain, 0.3)};
+    }
+    &:enabled:focus {
+      background-color: ${lighten(theme.colors.polarBrightMain, 0.3)};
+    }
+  }
 `;
 
 const InputDiv = styled.div`
@@ -89,9 +100,9 @@ interface scheduleType {
   array: boolean[];
 }
 
-const mentorIntraId = 'm-engeng';
-
-function ApplyCalendar() {
+function ApplyCalendar(props: ApplyCalendarModalProps) {
+  const { XButtonFunc, mentorIntraId, setStartDateTime, setEndDateTime } =
+    props;
   const [selectDate, onChange] = useState(new Date());
   const [availableTime, setAvailableTime] = useState(new Array(7).fill([]));
   const [requestTime, setRequestTime] = useState(new Array(new Array()));
@@ -100,6 +111,8 @@ function ApplyCalendar() {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [getMonthArray, setGetMonthArray] = useState(false);
+  const [getAvailableTime, setGetAvailableTime] = useState(false);
+  const today = new Date();
 
   useEffect(() => {
     axiosWithNoData(
@@ -112,44 +125,51 @@ function ApplyCalendar() {
       },
     ).then(response => {
       setAvailableTime(response.data);
+      setGetAvailableTime(true);
     });
   }, []);
 
   useEffect(() => {
-    setGetMonthArray(false);
-    setSchedule([]);
-    axiosWithNoData(
-      AXIOS_METHOD_WITH_NO_DATA.GET,
-      `/calendar/request-times/${mentorIntraId}?date=${
-        selectDate.getFullYear() +
-        '-' +
-        (selectDate.getMonth() + 1).toString().padStart(2, '0')
-      }`,
-      {
-        headers: {
-          Authorization: `bearer ${AuthStore.getAccessToken()}`,
+    if (getAvailableTime) {
+      LoadingStore.on();
+      setGetMonthArray(false);
+      setSchedule([]);
+      axiosWithNoData(
+        AXIOS_METHOD_WITH_NO_DATA.GET,
+        `/calendar/request-times/${mentorIntraId}?date=${
+          activeDate.getFullYear() +
+          '-' +
+          (activeDate.getMonth() + 1).toString().padStart(2, '0')
+        }`,
+        {
+          headers: {
+            Authorization: `bearer ${AuthStore.getAccessToken()}`,
+          },
         },
-      },
-    )
-      .then(response => setRequestTime(response.data))
-      .then(() => {
-        const maxDate: number = new Date(
-          selectDate.getFullYear(),
-          selectDate.getMonth() + 1,
-          0,
-        ).getDate();
-        const array: scheduleType[] = new Array(maxDate);
-        for (let i = 0; i < maxDate; i++) {
-          const element: scheduleType = {
-            array: new Array<boolean>(48).fill(false),
-            able: false,
-          };
-          array[i] = element;
-        }
-        setSchedule(array);
-        setGetMonthArray(true);
-      });
-  }, [activeDate]);
+      )
+        .then(response => {
+          console.log(response.data);
+          setRequestTime(response.data);
+        })
+        .then(() => {
+          const maxDate: number = new Date(
+            activeDate.getFullYear(),
+            activeDate.getMonth() + 1,
+            0,
+          ).getDate();
+          const array: scheduleType[] = new Array(maxDate);
+          for (let i = 0; i < maxDate; i++) {
+            const element: scheduleType = {
+              array: new Array<boolean>(48).fill(false),
+              able: false,
+            };
+            array[i] = element;
+          }
+          setSchedule(array);
+          setGetMonthArray(true);
+        });
+    }
+  }, [activeDate, getAvailableTime]);
 
   useEffect(() => {
     if (getMonthArray === true) {
@@ -211,13 +231,16 @@ function ApplyCalendar() {
         resolve(schedule);
       });
 
-      setInitSchedule.then(() =>
-        setRealSchedule.then(() =>
-          refineSchedule.then(() =>
-            setAble.then(data => setSchedule([...schedule])),
-          ),
-        ),
-      );
+      setInitSchedule.then(data => {
+        setRealSchedule.then(data => {
+          refineSchedule.then(data => {
+            setAble.then(data => {
+              setSchedule([...schedule]);
+            });
+          });
+        });
+      });
+      LoadingStore.off();
     }
   }, [getMonthArray]);
 
@@ -295,9 +318,11 @@ function ApplyCalendar() {
               setActiveDate(data.activeStartDate);
           }}
           value={selectDate}
-          tileDisabled={({ date }) =>
-            schedule[date.getDate() - 1]?.able === false ||
-            date.getMonth() !== activeDate.getMonth()
+          tileDisabled={({ date, view }) =>
+            view === 'month' &&
+            (schedule[date.getDate() - 1]?.able === false ||
+              date.getMonth() !== activeDate.getMonth() ||
+              date.getDate() < today.getDate())
           }
           locale={'ko-KR'}
         />
@@ -343,16 +368,19 @@ function ApplyCalendar() {
         onClick={() => {
           if (startTime === '' || endTime === '')
             alert('시작시간과 끝시간을 모두 선택해주세요');
-          else
-            console.log(
-              Math.floor(Number(startTime) / 2) +
-                ':' +
-                (Number(startTime) % 2 ? '30' : '00') +
-                ' ' +
-                Math.floor(Number(endTime + 1) / 2) +
-                ':' +
-                (Number(endTime + 1) % 2 ? '30' : '00'),
-            );
+          else {
+            const startDate = new Date(selectDate);
+            startDate.setHours(Math.floor(Number(startTime) / 2));
+            startDate.setMinutes(Number(startTime) % 2 ? 30 : 0);
+            const endDate = new Date(selectDate);
+            endDate.setHours(Math.floor((Number(endTime) + 1) / 2));
+            endDate.setMinutes((Number(endTime) + 1) % 2 ? 30 : 0);
+            console.log(startDate);
+            console.log(endDate);
+            setStartDateTime(startDate);
+            setEndDateTime(endDate);
+            XButtonFunc();
+          }
         }}
       ></Button>
     </>

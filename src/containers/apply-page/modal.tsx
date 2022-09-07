@@ -17,8 +17,22 @@ const CalendarStyle = styled.div`
   margin-top: 2rem;
 `;
 
-const Modal = (props: { open: any; close: any; header: any }) => {
-  const { open, close, header } = props;
+const Modal = (props: {
+  open: any;
+  close: any;
+  header: any;
+  mentorIntraId: string;
+  setStartDateTime: (date: Date) => void;
+  setEndDateTime: (date: Date) => void;
+}) => {
+  const {
+    open,
+    close,
+    header,
+    mentorIntraId,
+    setStartDateTime,
+    setEndDateTime,
+  } = props;
   const [value, onChange] = useState(new Date());
 
   return (
@@ -31,9 +45,7 @@ const Modal = (props: { open: any; close: any; header: any }) => {
               &times;
             </button>
           </header>
-          <CalendarStyle>
-            <ApplyCalendar />
-          </CalendarStyle>
+          <CalendarStyle></CalendarStyle>
 
           <footer>
             <button className="close" onClick={close}>
