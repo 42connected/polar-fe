@@ -88,14 +88,14 @@ function MentorDetail() {
             const start = new Date(
               todayYear,
               todayMonth,
-              todayDay,
+              index,
               data2.startHour,
               data2.startMinute,
             );
             const end = new Date(
               todayYear,
               todayMonth,
-              todayDay,
+              index,
               data2.endHour,
               data2.endMinute,
             );
