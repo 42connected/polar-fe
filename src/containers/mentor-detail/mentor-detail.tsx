@@ -83,7 +83,7 @@ function MentorDetail() {
     const todayYear = today.getFullYear();
     mentorAvailableTimeDataToArray?.forEach(
       (data: mentorAvailableTimeInterface[], index: number) => {
-        if (data.length !== 0) {
+        if (data?.length !== 0) {
           data.forEach(data2 => {
             const start = new Date(
               todayYear,
