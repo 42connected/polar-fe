@@ -1,10 +1,8 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
-import { faX } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCookie, TOKEN_LIST } from '../../context/cookies';
-import UserJoinStore from '../../states/user-join/UserJoinStore';
 import defaultTheme from '../../styles/theme';
 
 const Fade = keyframes`
@@ -123,6 +121,13 @@ export function UserJoin() {
   const userName = getCookie(TOKEN_LIST.INTRA_ID);
   const role = getCookie(TOKEN_LIST.USER_ROLE);
   const url = `/${role}s/join`;
+
+  useEffect(() => {
+    document.body.style.overflow = `hidden`;
+    return () => {
+      document.body.style.overflow = `auto`;
+    };
+  }, []);
 
   return (
     <Background>

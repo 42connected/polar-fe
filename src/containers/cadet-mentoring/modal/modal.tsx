@@ -1,5 +1,6 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
+import { useEffect } from 'react';
 import { MentoringLog } from '../../../interfaces/cadet-mentoring/mentoring-log.interface';
 import { ApplyDetailModal } from './apply-detail-modal';
 
@@ -68,6 +69,13 @@ export interface ApplyDetailModalContainerProps {
 }
 
 export function ApplyModal(props: ApplyDetailModalContainerProps) {
+  useEffect(() => {
+    document.body.style.overflow = `hidden`;
+    return () => {
+      document.body.style.overflow = `auto`;
+    };
+  }, []);
+
   return (
     <>
       {props.log && (
