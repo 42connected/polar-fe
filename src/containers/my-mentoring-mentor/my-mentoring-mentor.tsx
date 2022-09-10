@@ -94,7 +94,7 @@ const MyMentoringMentor = observer(() => {
   const { intraId } = useParams<string>();
   const [log, setLog] = useState<MentoringLogs>();
   const [applyModal, setApplyModal] = useState<boolean>(false);
-  const [isDoneToGetLogs, setIsDoneToGetLogs] = useState<boolean>(false);
+  const [isInit, setIsInit] = useState<boolean>(false);
 
   useEffect(() => {
     async function initLog() {
@@ -102,7 +102,7 @@ const MyMentoringMentor = observer(() => {
         AuthStore.getAccessToken(),
         parseInt(pageNumber || INITIAL_PAGE),
       );
-      setIsDoneToGetLogs(true);
+      setIsInit(true);
     }
     initLog();
   }, [pageNumber]);
@@ -156,7 +156,7 @@ const MyMentoringMentor = observer(() => {
           ))}
         </Container>
       </Bottom>
-      {isDoneToGetLogs && (
+      {isInit && (
         <PaginationContainer>
           <ThemeProvider theme={muiTheme}>
             <Pagination
