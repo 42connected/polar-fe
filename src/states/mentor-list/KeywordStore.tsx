@@ -1,6 +1,5 @@
-import { makeObservable, observable, action } from 'mobx';
+import { makeObservable, observable, action, runInAction } from 'mobx';
 import {
-  axiosInstance,
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
 } from '../../context/axios-interface';
@@ -52,7 +51,9 @@ class KeywordStore {
     )
       .then(res =>
         res?.data?.map((e: string) => {
-          this.keywords.push(e);
+          runInAction(() => {
+            this.keywords.push(e);
+          });
         }),
       )
       .catch(err => {
