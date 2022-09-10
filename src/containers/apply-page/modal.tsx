@@ -21,7 +21,7 @@ const Modal = (props: {
   open: any;
   close: any;
   header: any;
-  mentorIntraId: string;
+  mentorIntraId: string | undefined;
   setStartDateTime: (date: Date) => void;
   setEndDateTime: (date: Date) => void;
 }) => {

@@ -3,7 +3,7 @@ import theme from '../../styles/theme';
 
 const Input = styled.textarea<InputCounterProps>`
   margin-top: 3rem;
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: ${theme.colors.graySix};
   width: ${props => props.width ?? '80%'};
   height: ${props => props.height ?? '100px'};
   padding: 10px;
