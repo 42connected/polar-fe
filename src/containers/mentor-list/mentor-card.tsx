@@ -5,6 +5,7 @@ import defaultProfile from '../../assets/image/defaultProfileImage.png';
 import { sliceMoreInfoStr } from '../my-mentoring-mentor/email';
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,6 +15,17 @@ const Container = styled.div`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+`;
+
+const ActiveDot = styled.div`
+  position: absolute;
+  display: flex;
+  top: 1rem;
+  right: 1rem;
+  border-radius: 100%;
+  width: 1.2rem;
+  height: 1.2rem;
+  opacity: 0.3;
 `;
 
 const InfoContainer = styled.div`
@@ -94,11 +106,15 @@ export interface CardProps {
   tags: string[] | null;
   profileImage: string;
   introduction: string;
+  isActive: boolean;
 }
 
 export function MentorCard(props: CardProps) {
   return (
     <Container>
+      <ActiveDot
+        style={{ backgroundColor: props.isActive ? 'green' : 'red' }}
+      />
       <InfoContainer>
         <ProfileImg
           src={props.profileImage ? props.profileImage : defaultProfile}
