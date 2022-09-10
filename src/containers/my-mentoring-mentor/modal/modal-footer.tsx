@@ -1,4 +1,6 @@
 import styled from '@emotion/styled';
+import { useState } from 'react';
+import { TwoButtonModal } from '../../../components/modal/two-button-modal.tsx/two-button-modal';
 import {
   axiosWithData,
   AXIOS_METHOD_WITH_DATA,
@@ -105,88 +107,116 @@ export function ModalFooter(props: ModalFooterProps) {
     LoadingStore.off();
   };
 
-  /** Return */
-  if (props.isReject) {
-    return (
-      <ModalFooterContainer>
-        <Button
-          style={{ backgroundColor: defaultTheme.colors.Red }}
-          onClick={() => {
-            if (props?.rejectReason?.length < 1) {
-              ErrorStore.on(
-                '취소 사유를 입력해주세요',
-                ERROR_DEFAULT_VALUE.TITLE,
-              );
-              return;
-            }
-            rejectMentoring(
-              props.id,
-              props.rejectReason,
-              AuthStore.getAccessToken(),
-            );
-          }}
-        >
-          거절
-        </Button>
-        <Button
-          style={{ backgroundColor: 'gray' }}
-          onClick={() => {
-            props.setIsReject(false);
-          }}
-        >
-          취소
-        </Button>
-      </ModalFooterContainer>
-    );
-  }
+  const finishMentoring = async (mentoringLogId: string, token: string) => {
+    LoadingStore.on();
+    await axiosWithData(
+      AXIOS_METHOD_WITH_DATA.PACTH,
+      `/mentoring-logs/done`,
+      {
+        mentoringLogId: mentoringLogId,
+      },
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      },
+    )
+      .then(() => {
+        props.setModalText('해당 멘토링이 완료되었습니다.');
+        props.setModal(true);
+      })
+      .catch(err => {
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
+      });
+    LoadingStore.off();
+  };
 
-  if (props.status === '대기중') {
-    return (
-      <ModalFooterContainer>
-        <Button
-          style={{ backgroundColor: defaultTheme.colors.polarSimpleMain }}
-          onClick={() => {
-            if (!props?.selectedTime) {
-              ErrorStore.on(
-                '멘토링 가능한 시간을 선택해주세요',
-                ERROR_DEFAULT_VALUE.TITLE,
+  return (
+    <>
+      {props.isReject && (
+        <ModalFooterContainer>
+          <Button
+            style={{ backgroundColor: defaultTheme.colors.Red }}
+            onClick={() => {
+              if (props?.rejectReason?.length < 1) {
+                ErrorStore.on(
+                  '취소 사유를 입력해주세요',
+                  ERROR_DEFAULT_VALUE.TITLE,
+                );
+                return;
+              }
+              rejectMentoring(
+                props.id,
+                props.rejectReason,
+                AuthStore.getAccessToken(),
               );
-              return;
-            }
-            approveMentoring(
-              props.id,
-              props.selectedTime,
-              AuthStore.getAccessToken(),
-            );
-          }}
-        >
-          수락
-        </Button>
-        <Button
-          style={{ backgroundColor: 'gray' }}
-          onClick={() => {
-            props.setIsReject(true);
-          }}
-        >
-          거절
-        </Button>
-      </ModalFooterContainer>
-    );
-  }
+            }}
+          >
+            거절
+          </Button>
+          <Button
+            style={{ backgroundColor: 'gray' }}
+            onClick={() => {
+              props.setIsReject(false);
+            }}
+          >
+            취소
+          </Button>
+        </ModalFooterContainer>
+      )}
 
-  if (props.status === '확정') {
-    return (
-      <ModalFooterContainer>
-        <Button
-          style={{ backgroundColor: 'gray' }}
-          onClick={() => {
-            props.setIsReject(true);
-          }}
-        >
-          거절
-        </Button>
-      </ModalFooterContainer>
-    );
-  }
-  return <></>;
+      {props.status === '대기중' && !props.isReject && (
+        <ModalFooterContainer>
+          <Button
+            style={{ backgroundColor: defaultTheme.colors.polarSimpleMain }}
+            onClick={() => {
+              if (!props?.selectedTime) {
+                ErrorStore.on(
+                  '멘토링 가능한 시간을 선택해주세요',
+                  ERROR_DEFAULT_VALUE.TITLE,
+                );
+                return;
+              }
+              approveMentoring(
+                props.id,
+                props.selectedTime,
+                AuthStore.getAccessToken(),
+              );
+            }}
+          >
+            수락
+          </Button>
+          <Button
+            style={{ backgroundColor: 'gray' }}
+            onClick={() => {
+              props.setIsReject(true);
+            }}
+          >
+            거절
+          </Button>
+        </ModalFooterContainer>
+      )}
+
+      {props.status === '확정' && !props.isReject && (
+        <ModalFooterContainer>
+          <Button
+            style={{ backgroundColor: defaultTheme.colors.polarSimpleMain }}
+            onClick={() => {
+              finishMentoring(props.id, AuthStore.getAccessToken());
+            }}
+          >
+            완료
+          </Button>
+          <Button
+            style={{ backgroundColor: 'gray' }}
+            onClick={() => {
+              props.setIsReject(true);
+            }}
+          >
+            거절
+          </Button>
+        </ModalFooterContainer>
+      )}
+    </>
+  );
 }
