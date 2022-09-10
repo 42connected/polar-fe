@@ -5,7 +5,6 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
-import { useState } from 'react';
 import defaultTheme from '../../../../styles/theme';
 import { getDayToString, getTimeToString } from '../../../reports/report-form';
 
@@ -41,15 +40,15 @@ export function isValidTime(time: Date): boolean {
 function isTimeover(time: Date): boolean {
   const now = new Date();
   const requestTime = new Date(time);
+  const LIMIT_TIME_MINUTE = 10;
+
   if (!isValidTime(now) || !isValidTime(requestTime)) {
     return true;
   }
-
-  if (now.getFullYear() < requestTime.getFullYear()) return true;
-  if (now.getMonth() < requestTime.getMonth()) return true;
-  if (now.getDate() < requestTime.getDate()) return true;
-  if (now.getHours() < requestTime.getHours()) return true;
-  if (now.getMinutes() < requestTime.getMinutes() + 10) return true;
+  now.setMinutes(now.getMinutes() + LIMIT_TIME_MINUTE);
+  if (now > requestTime) {
+    return true;
+  }
   return false;
 }
 
@@ -75,7 +74,7 @@ export const selectTime = (
         <FormControl variant="standard" sx={{ minWidth: 200 }}>
           <Select value={selectedTimeIndex} onChange={handleChange}>
             {times.map((e, i) => (
-              <MenuItem value={i} disabled={isTimeover(e[0])}>
+              <MenuItem value={i} disabled={isTimeover(e[0])} key={i}>
                 {`${getDayToString(e[0])} ${getTimeToString(e)}`}
               </MenuItem>
             ))}
