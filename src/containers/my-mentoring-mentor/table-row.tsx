@@ -7,6 +7,7 @@ import {
   START_TIME,
 } from '../reports/report-form';
 import { sliceMoreInfoStr } from './email';
+import { isValidTime } from './modal/wait/select-time';
 import { ReportButton } from './report-button';
 import { StatusButton } from './status-button';
 
@@ -88,9 +89,8 @@ const getDayToShortString = (meetingAt: Date): string => {
   if (!meetingAt) {
     return '-';
   }
-  const FAILED_TO_MAKE_NEW_DATE = -1;
   const startTime: Date = new Date(meetingAt);
-  if (startTime.toString().indexOf('Invalid Date') > FAILED_TO_MAKE_NEW_DATE) {
+  if (!isValidTime(startTime)) {
     return '-';
   }
 

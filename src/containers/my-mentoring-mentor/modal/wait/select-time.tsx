@@ -29,6 +29,30 @@ export const Container = styled.div`
   ${defaultTheme.fontSize.sizeSmall};
 `;
 
+export function isValidTime(time: Date): boolean {
+  const FAILED_TO_MAKE_NEW_DATE = -1;
+
+  if (time.toString().indexOf('Invalid Date') > FAILED_TO_MAKE_NEW_DATE) {
+    return false;
+  }
+  return true;
+}
+
+function isTimeover(time: Date): boolean {
+  const now = new Date();
+  const requestTime = new Date(time);
+  if (!isValidTime(now) || !isValidTime(requestTime)) {
+    return true;
+  }
+
+  if (now.getFullYear() < requestTime.getFullYear()) return true;
+  if (now.getMonth() < requestTime.getMonth()) return true;
+  if (now.getDate() < requestTime.getDate()) return true;
+  if (now.getHours() < requestTime.getHours()) return true;
+  if (now.getMinutes() < requestTime.getMinutes() + 10) return true;
+  return false;
+}
+
 export const selectTime = (
   requestTime: Date[][],
   selectedTimeIndex: string,
@@ -42,9 +66,7 @@ export const selectTime = (
     setSelectedTimeIndex(event.target.value);
   };
 
-  const times = requestTime
-    .filter(e => e?.length > 0)
-    .map(e => `${getDayToString(e[0])} ${getTimeToString(e)}`);
+  const times = requestTime.filter(e => e?.length === 2);
 
   return (
     <Container>
@@ -52,11 +74,11 @@ export const selectTime = (
       {times?.length !== 0 ? (
         <FormControl variant="standard" sx={{ minWidth: 200 }}>
           <Select value={selectedTimeIndex} onChange={handleChange}>
-            {times
-              .filter(e => e)
-              .map((e, i) => (
-                <MenuItem value={i}>{e}</MenuItem>
-              ))}
+            {times.map((e, i) => (
+              <MenuItem value={i} disabled={isTimeover(e[0])}>
+                {`${getDayToString(e[0])} ${getTimeToString(e)}`}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       ) : (
