@@ -46,7 +46,7 @@ function isTimeover(time: Date): boolean {
     return true;
   }
   now.setMinutes(now.getMinutes() + LIMIT_TIME_MINUTE);
-  if (now > requestTime) {
+  if (now.getTime() > requestTime.getTime()) {
     return true;
   }
   return false;
