@@ -149,12 +149,22 @@ const ReportForm = observer(() => {
         return;
       }
       await ReportStore.Initializer(reportId, AuthStore.getAccessToken());
-      setTopic(ReportStore?.report?.topic);
-      setContent(ReportStore?.report?.content);
-      setFeedbackMessage(ReportStore?.report?.feedbackMessage);
-      setFeedback1(ReportStore?.report?.feedback1);
-      setFeedback2(ReportStore?.report?.feedback2);
-      setFeedback3(ReportStore?.report?.feedback3);
+      ReportStore?.report?.topic && setTopic(ReportStore?.report?.topic);
+
+      ReportStore?.report?.content && setContent(ReportStore.report.content);
+
+      ReportStore?.report?.feedbackMessage &&
+        setFeedbackMessage(ReportStore.report.feedbackMessage);
+
+      ReportStore?.report?.feedback1 &&
+        setFeedback1(ReportStore?.report?.feedback1);
+
+      ReportStore?.report?.feedback2 &&
+        setFeedback2(ReportStore?.report?.feedback2);
+
+      ReportStore?.report?.feedback3 &&
+        setFeedback3(ReportStore?.report?.feedback3);
+
       setPlace(ReportStore?.report?.place);
       setIsLoaded(true);
     }
