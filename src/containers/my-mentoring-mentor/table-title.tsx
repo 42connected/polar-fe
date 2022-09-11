@@ -92,10 +92,6 @@ export function TableTitle() {
         <InfomationModal
           TitleText={'🌟 42폴라 안내'}
           Text={text}
-          XButtonFunc={() => {
-            setText('');
-            setModal(false);
-          }}
           ButtonText={'닫기'}
           ButtonBg={defaultTheme.colors.polarSimpleMain}
           ButtonFunc={() => {
