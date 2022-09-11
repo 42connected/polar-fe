@@ -37,7 +37,6 @@ export function TwoButtonModal(props: TwoButtonModalProps) {
     <ModalBackground>
       <ModalBox>
         <XButton>
-          <ModalTitle>{props.TitleText}</ModalTitle>
           {props.XButtonFunc && (
             <FontAwesomeIcon
               icon={faX}
@@ -47,6 +46,7 @@ export function TwoButtonModal(props: TwoButtonModalProps) {
             />
           )}
         </XButton>
+        <ModalTitle>{props.TitleText}</ModalTitle>
         <ModalBody>{sliceMoreInfoStr(props.Text, 120)}</ModalBody>
         <ModalButtonContainer>
           <ModalButton

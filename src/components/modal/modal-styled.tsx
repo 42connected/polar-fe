@@ -61,6 +61,7 @@ export const ModalBackground = styled.div`
 `;
 
 export const ModalBox = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,7 +76,8 @@ export const ModalBox = styled.div`
 
 export const ModalTitle = styled.div`
   display: flex;
-  justify-content: right;
+  width: 100%;
+  justify-content: left;
   align-items: center;
   text-align: center;
   ${defaultTheme.font.sebangGothic};
@@ -83,10 +85,12 @@ export const ModalTitle = styled.div`
 `;
 
 export const XButton = styled.div`
+  position: absolute;
   display: flex;
-  width: 100%;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  top: 2rem;
+  right: 2rem;
 `;
 
 export const ModalBody = styled.div`
