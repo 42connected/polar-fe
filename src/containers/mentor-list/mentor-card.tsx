@@ -25,7 +25,6 @@ const ActiveDot = styled.div`
   border-radius: 100%;
   width: 1.2rem;
   height: 1.2rem;
-  opacity: 0.4;
 `;
 
 const InfoContainer = styled.div`
@@ -113,7 +112,10 @@ export function MentorCard(props: CardProps) {
   return (
     <Container>
       <ActiveDot
-        style={{ backgroundColor: props.isActive ? 'green' : 'gray' }}
+        style={{
+          backgroundColor: props.isActive ? 'green' : 'gray',
+          opacity: props.isActive ? '0.4' : '0.2',
+        }}
       />
       <InfoContainer>
         <ProfileImg
