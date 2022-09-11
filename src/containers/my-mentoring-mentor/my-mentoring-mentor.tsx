@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import defaultTheme from '../../styles/theme';
 import { TableTitle } from './table-title';
-import { TableRow } from './table-row';
+import { TableColumnLine, TableRow } from './table-row';
 import MentorLogStore, {
   LOGS_PER_PAGE,
   MentoringLogs,
@@ -107,6 +107,14 @@ const MyMentoringMentor = observer(() => {
     initLog();
   }, [pageNumber]);
 
+  const RenderEmptyLine = () => {
+    const result = [];
+    for (let i = 0; i + MentorLogStore?.logs?.length < 15; ++i) {
+      result.push(<TableColumnLine />);
+    }
+    return result;
+  };
+
   useEffect(() => {
     if (!intraId) {
       return;
@@ -154,6 +162,7 @@ const MyMentoringMentor = observer(() => {
               setLog={setLog}
             />
           ))}
+          {RenderEmptyLine()}
         </Container>
       </Bottom>
       {isInit && (
