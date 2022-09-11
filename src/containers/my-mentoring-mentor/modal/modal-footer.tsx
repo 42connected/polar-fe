@@ -217,6 +217,10 @@ export function ModalFooter(props: ModalFooterProps) {
           </Button>
         </ModalFooterContainer>
       )}
+
+      {props.status !== '확정' && props.status !== '대기중' && (
+        <ModalFooterContainer />
+      )}
     </>
   );
 }
