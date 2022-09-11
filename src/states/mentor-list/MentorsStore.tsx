@@ -31,6 +31,7 @@ export interface MentorSimpleInfo {
   tags: string[];
   profileImage: string;
   introduction: string;
+  isActive: boolean;
 }
 
 class MentorsStore {
