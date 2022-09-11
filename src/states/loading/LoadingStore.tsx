@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 
 class LoadingStore {
   isLoding: boolean;
@@ -12,11 +12,13 @@ class LoadingStore {
     this.isLoding = false;
   }
 
-  on(timeoutSec = 10) {
+  on() {
     this.isLoding = true;
     setTimeout(() => {
-      this.isLoding = false;
-    }, 1000 * timeoutSec);
+      runInAction(() => {
+        this.isLoding = false;
+      });
+    }, 5000);
   }
 
   off() {
