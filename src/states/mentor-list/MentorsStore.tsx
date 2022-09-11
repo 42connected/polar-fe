@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import qs from 'qs';
 import {
   axiosWithNoData,
@@ -73,7 +73,9 @@ class MentorsStore {
       },
     )
       .then(res => {
-        this.mentorsList = res.data;
+        runInAction(() => {
+          this.mentorsList = res.data;
+        });
       })
       .catch(err => {
         ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
