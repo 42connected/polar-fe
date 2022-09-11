@@ -153,6 +153,7 @@ const MentorList = observer(() => {
                 profileImage={e.mentor.profileImage}
                 introduction={e.mentor.introduction}
                 intraId={e.mentor.intraId}
+                isActive={e.mentor.isActive}
               />
             );
           })}

@@ -18,11 +18,14 @@ const TitleContainer = styled.div`
   margin-bottom: 10px;
 `;
 
-interface ApplyClendarModalProps {
+export interface ApplyCalendarModalProps {
   XButtonFunc: () => void;
+  mentorIntraId: string;
+  setStartDateTime: (date: Date) => void;
+  setEndDateTime: (date: Date) => void;
 }
 
-export function ApplyClendarModal(props: ApplyClendarModalProps) {
+export function ApplyCalendarModal(props: ApplyCalendarModalProps) {
   useEffect(() => {
     document.body.style.overflow = `hidden`;
     return () => {
@@ -39,12 +42,12 @@ export function ApplyClendarModal(props: ApplyClendarModalProps) {
           </ModalTitle>
           <FontAwesomeIcon
             icon={faX}
-            size="2x"
+            size="1x"
             style={{ opacity: 0.3, cursor: 'pointer' }}
             onClick={props.XButtonFunc}
           />
         </TitleContainer>
-        <ApplyCalendar />
+        <ApplyCalendar {...props} />
         <ModalButtonContainer></ModalButtonContainer>
       </ModalBox>
     </ModalBackground>

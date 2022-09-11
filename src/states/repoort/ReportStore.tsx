@@ -1,4 +1,4 @@
-import { makeObservable, observable } from 'mobx';
+import { makeObservable, observable, runInAction } from 'mobx';
 import {
   axiosWithData,
   axiosWithNoData,
@@ -200,7 +200,6 @@ class ReportStore {
   }
 
   async uploadImage(reportId: string, token: string, img: FormData) {
-    console.log('img -> ', img.get('signature'));
     LoadingStore.on();
     await axiosWithData(
       AXIOS_METHOD_WITH_DATA.PACTH,
@@ -213,7 +212,7 @@ class ReportStore {
         },
       },
     )
-      .then(res => {
+      .then(() => {
         this.Initializer(reportId, token);
       })
       .catch(err => {
@@ -227,6 +226,7 @@ class ReportStore {
     await axiosWithData(
       AXIOS_METHOD_WITH_DATA.POST,
       `/reports/${mentoringLogId}`,
+      {},
       {
         headers: {
           Authorization: `bearer ${token}`,
@@ -254,7 +254,9 @@ class ReportStore {
       },
     )
       .then(res => {
-        this.report = res.data;
+        runInAction(() => {
+          this.report = res.data;
+        });
       })
       .catch(err => {
         ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);

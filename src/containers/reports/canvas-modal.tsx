@@ -50,6 +50,13 @@ interface CanvasModalProps {
 }
 
 export function CanvasModal(props: CanvasModalProps) {
+  useEffect(() => {
+    document.body.style.overflow = `hidden`;
+    return () => {
+      document.body.style.overflow = `auto`;
+    };
+  }, []);
+
   const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(
     undefined,
   );

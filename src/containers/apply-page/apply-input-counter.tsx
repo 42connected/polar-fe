@@ -11,6 +11,7 @@ const Input = styled.textarea<InputCounterProps>`
   border: 1px solid rgba(0, 0, 0, 0.1);
   vertical-align: top;
   resize: none;
+  ${theme.font.nanumGothic};
   &:focus {
     outline: none;
   }
