@@ -7,12 +7,11 @@ function MyTableComponent(props) {
   const [appointmentsData, setAppointmentsData] = useState([]);
   const { appointments } = props;
   useEffect(() => {
-    console.log(appointments);
     setAppointmentsData(appointments);
   }, [appointments]);
 
   return (
-    <>
+    <Container>
       <Calendar
         height="900px"
         calendars={[
@@ -37,10 +36,30 @@ function MyTableComponent(props) {
         view="week"
         week={{
           taskView: false,
+          dayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
         }}
       />
-    </>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  .toastui-calendar-day-name__date {
+    visibility: hidden;
+  }
+  .toastui-calendar-day-name__name {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  .toastui-calendar-allday {
+    display: none;
+  }
+  .toastui-calendar-day-view
+    .toastui-calendar-panel:not(.toastui-calendar-time),
+  .toastui-calendar-week-view
+    .toastui-calendar-panel:not(.toastui-calendar-time) {
+    overflow-y: hidden;
+  }
+`;
 
 export default MyTableComponent;
