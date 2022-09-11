@@ -328,7 +328,6 @@ function MentorDetail() {
                 text="멘토링 신청하기"
                 width="21rem"
                 height="6rem"
-                backgroundColor={theme.colors.grayThree}
                 color={theme.colors.backgoundWhite}
                 isUnActivated={true}
                 onClick={() => {
@@ -338,7 +337,7 @@ function MentorDetail() {
             )}
             {isActivateApplyModal && (
               <OneButtonModal
-                Text="멘토링 신청이 불가능합니다."
+                Text="멘티만 신청 가능합니다."
                 TitleText="멘토링 신청"
                 XButtonFunc={() => {
                   setIsActivateApplyModal(false);
