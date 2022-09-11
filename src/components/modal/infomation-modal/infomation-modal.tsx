@@ -41,9 +41,7 @@ export function InfomationModal(props: InfomationModalProps) {
   return (
     <ModalBackground>
       <ModalBox>
-        <XButton>
-          <ModalTitle>{props.TitleText}</ModalTitle>
-        </XButton>
+        <ModalTitle>{props.TitleText}</ModalTitle>
         <ModalInfoBody>{sliceMoreInfoStr(props.Text, 500)}</ModalInfoBody>
         <ModalButtonContainer>
           <ModalButton
