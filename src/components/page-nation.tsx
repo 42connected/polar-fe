@@ -134,10 +134,14 @@ const MenuBoxLog = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(1, 1fr);
+  /* word-break: keep-all; */
   div {
     display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 0.2rem 0;
   }
   .status {
     color: ${props => props.theme.colors.polarSimpleMain};
