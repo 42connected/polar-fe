@@ -85,6 +85,7 @@ export function Wait(props: WaitProps) {
         title={'멘토 Intra ID'}
         titleColor={'black'}
         content={props?.mentor?.intraId}
+        link={`${process.env.REACT_APP_ORIGIN}/mentor-detail/${props?.mentor?.intraId}`}
       />
       <ModalInfoElement
         title={'멘토링 주제'}
