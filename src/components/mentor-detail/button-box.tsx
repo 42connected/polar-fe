@@ -18,7 +18,7 @@ function ButtonBoxComponent(props: ButtonBoxProps) {
   };
   return (
     <ButtonBox>
-      {props.items.map((item, index) => (
+      {props.items?.map((item, index) => (
         <Box
           key={index}
           onClick={() => {
