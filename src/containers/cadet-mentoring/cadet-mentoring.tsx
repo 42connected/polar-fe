@@ -67,8 +67,8 @@ const CadetMentornig = observer(() => {
       <NoneDrag>
         <Header url={url} setUrl={setUrl}></Header>
         <MentorCards>
-          {logs.map(log => {
-            return <MentorCard log={log}></MentorCard>;
+          {logs.map((log, i) => {
+            return <MentorCard log={log} key={i}></MentorCard>;
           })}
         </MentorCards>
       </NoneDrag>
