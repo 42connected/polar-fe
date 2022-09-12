@@ -218,9 +218,9 @@ export function ModalFooter(props: ModalFooterProps) {
         </ModalFooterContainer>
       )}
 
-      {props.status !== '확정' && props.status !== '대기중' && (
-        <ModalFooterContainer />
-      )}
+      {props.status !== '확정' &&
+        props.status !== '대기중' &&
+        !props.isReject && <ModalFooterContainer />}
     </>
   );
 }

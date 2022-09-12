@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import {
-  axiosInstance,
   axiosWithData,
   AXIOS_METHOD_WITH_DATA,
 } from '../../../context/axios-interface';
@@ -39,21 +38,7 @@ const rejectMentoring = async (
   token: string,
 ) => {
   LoadingStore.on();
-  console.log(token);
 
-  //await axiosInstance
-  //  .patch(
-  //    `/mentoring-logs/reject`,
-  //    {
-  //      mentoringLogId: mentoringLogId,
-  //      rejectMessage: rejectMessage,
-  //    },
-  //    {
-  //      headers: {
-  //        Authorization: `bearer ${token}`,
-  //      },
-  //    },
-  //  )
   await axiosWithData(
     AXIOS_METHOD_WITH_DATA.PACTH,
     `/mentoring-logs/reject`,
@@ -87,9 +72,9 @@ interface ModalFooterProps {
 }
 
 export function ModalFooter(props: ModalFooterProps) {
-  if (props.status === '대기중') {
-    if (props.isReject) {
-      return (
+  return (
+    <>
+      {props.isReject && (
         <ModalFooterContainer>
           <Button
             style={{ backgroundColor: defaultTheme.colors.Red }}
@@ -116,63 +101,25 @@ export function ModalFooter(props: ModalFooterProps) {
             취소
           </Button>
         </ModalFooterContainer>
-      );
-    }
-    return (
-      <ModalFooterContainer>
-        <Button
-          style={{ backgroundColor: 'gray' }}
-          onClick={() => {
-            props.setIsReject(true);
-          }}
-        >
-          거절
-        </Button>
-      </ModalFooterContainer>
-    );
-  } else if (props.status === '확정') {
-    if (props.isReject) {
-      return (
-        <ModalFooterContainer>
-          <Button
-            style={{ backgroundColor: defaultTheme.colors.Red }}
-            onClick={() => {
-              if (props?.rejectReason?.length < 1) {
-                alert('취소 사유를 입력해주세요');
-                return;
-              }
-              rejectMentoring(
-                props.id,
-                props.rejectReason,
-                AuthStore.getAccessToken(),
-              );
-            }}
-          >
-            거절
-          </Button>
-          <Button
-            style={{ backgroundColor: 'gray' }}
-            onClick={() => {
-              props.setIsReject(false);
-            }}
-          >
-            취소
-          </Button>
-        </ModalFooterContainer>
-      );
-    }
-    return (
-      <ModalFooterContainer>
-        <Button
-          style={{ backgroundColor: 'gray' }}
-          onClick={() => {
-            props.setIsReject(true);
-          }}
-        >
-          거절
-        </Button>
-      </ModalFooterContainer>
-    );
-  }
-  return <></>;
+      )}
+
+      {(props.status === '대기중' || props.status === '확정') &&
+        !props.isReject && (
+          <ModalFooterContainer>
+            <Button
+              style={{ backgroundColor: 'gray' }}
+              onClick={() => {
+                props.setIsReject(true);
+              }}
+            >
+              거절
+            </Button>
+          </ModalFooterContainer>
+        )}
+
+      {props.status !== '대기중' &&
+        props.status !== '확정' &&
+        !props.isReject && <ModalFooterContainer />}
+    </>
+  );
 }
