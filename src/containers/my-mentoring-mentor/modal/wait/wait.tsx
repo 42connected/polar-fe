@@ -43,19 +43,16 @@ export function Wait(props: WaitProps) {
         title={'멘토링 구분'}
         titleColor={'black'}
         content={props?.cadet?.isCommon ? '공통과정' : '심화과정'}
-        link={''}
       />
       <ModalInfoElement
         title={'카뎃 이름'}
         titleColor={'black'}
         content={props?.cadet?.name}
-        link={''}
       />
       <ModalInfoElement
         title={'카뎃 Intra ID'}
         titleColor={'black'}
         content={props?.cadet?.intraId}
-        link={''}
       />
       <ModalInfoElement
         title={'카뎃 이력서'}
@@ -71,13 +68,11 @@ export function Wait(props: WaitProps) {
         title={'멘토링 주제'}
         titleColor={'black'}
         content={props?.mentoringTopic}
-        link={''}
       />
       <ModalInfoElement
         title={props.isReject ? '거절 사유' : '질문 내용'}
         titleColor={defaultTheme?.colors?.polarSimpleMain}
         content={''}
-        link={''}
       />
       {props.isReject ? (
         <InputCounter

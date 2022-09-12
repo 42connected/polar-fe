@@ -72,7 +72,6 @@ export function Wait(props: WaitProps) {
               title={'신청 시간'}
               titleColor={'black'}
               content={formatRequestTimes(time)}
-              link={''}
             />
           );
         }
@@ -81,25 +80,21 @@ export function Wait(props: WaitProps) {
         title={'멘토 이름'}
         titleColor={'black'}
         content={props?.mentor?.name}
-        link={''}
       />
       <ModalInfoElement
         title={'멘토 Intra ID'}
         titleColor={'black'}
         content={props?.mentor?.intraId}
-        link={''}
       />
       <ModalInfoElement
         title={'멘토링 주제'}
         titleColor={'black'}
         content={props?.mentoringTopic}
-        link={''}
       />
       <ModalInfoElement
         title={props.isReject ? '거절 사유' : '질문 내용'}
         titleColor={defaultTheme?.colors?.polarSimpleMain}
         content={''}
-        link={''}
       />
       {props.isReject ? (
         <InputCounter

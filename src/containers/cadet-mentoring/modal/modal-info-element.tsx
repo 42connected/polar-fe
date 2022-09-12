@@ -31,14 +31,14 @@ interface ModalInfoElementProps {
   title: string;
   titleColor: string;
   content: string;
-  link: string;
+  link?: string;
 }
 
 export function ModalInfoElement(props: ModalInfoElementProps) {
   return (
     <Container>
       <Title style={{ color: `${props.titleColor}` }}>{props.title}</Title>
-      {props.link !== '' ? (
+      {props.link ? (
         <LinkContent href={props.link} target="_blank">
           {props.content}
         </LinkContent>

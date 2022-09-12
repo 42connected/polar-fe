@@ -36,26 +36,22 @@ export function Confirm(props: ConfirmProps) {
         title={'멘토 이름'}
         titleColor={'black'}
         content={props?.mentor?.name}
-        link={''}
       />
       <ModalInfoElement
         title={'멘토 Intra ID'}
         titleColor={'black'}
         content={props?.mentor?.intraId}
-        link={''}
       />
       <ModalInfoElement
         title={'멘토링 주제'}
         titleColor={'black'}
         content={props?.mentoringTopic}
-        link={''}
       />
       {props.rejectMessage ? (
         <ModalInfoElement
           title={'거절 사유'}
           titleColor={'black'}
           content={props?.rejectMessage}
-          link={''}
         />
       ) : (
         <></>
@@ -64,7 +60,6 @@ export function Confirm(props: ConfirmProps) {
         title={props.isReject ? '취소 사유' : '질문 내용'}
         titleColor={defaultTheme.colors.polarSimpleMain}
         content={''}
-        link={''}
       />
       {props.isReject ? (
         <InputCounter
