@@ -120,12 +120,21 @@ export function Header(props: ResumeProps) {
                 onClick={() => {
                   setIsEdit(!isEdit);
                 }}
+                style={{ cursor: 'pointer' }}
               />
-              <FontAwesomeIcon icon={faCheck} onClick={() => save()} />
+              <FontAwesomeIcon
+                icon={faCheck}
+                style={{ cursor: 'pointer' }}
+                onClick={() => save()}
+              />
             </DoubleButton>
           </>
         ) : (
-          <FontAwesomeIcon icon={faPencil} onClick={() => setIsEdit(!isEdit)} />
+          <FontAwesomeIcon
+            icon={faPencil}
+            style={{ cursor: 'pointer' }}
+            onClick={() => setIsEdit(!isEdit)}
+          />
         )}
       </Resume>
     </Container>
