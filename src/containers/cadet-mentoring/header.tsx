@@ -76,15 +76,6 @@ export function Header(props: ResumeProps) {
           },
         },
       );
-      //axiosInstance.post(
-      //  '/cadets',
-      //  { resumeUrl },
-      //  {
-      //    headers: {
-      //      Authorization: `Bearer ${AuthStore.getAccessToken()}`,
-      //    },
-      //  },
-      //);
     } catch (err) {
       console.log(err);
       return err;

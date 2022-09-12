@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { MentorCard } from '../../components/mentoring-log-card';
 import {
-  axiosInstance,
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
 } from '../../context/axios-interface';
@@ -15,7 +14,6 @@ import AuthStore from '../../states/auth/AuthStore';
 const NoneDrag = styled.div`
   display: flex;
   width: 100%;
-  /* height: min-content; */
   flex-direction: column;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -50,11 +48,6 @@ const CadetMentornig = observer(() => {
           },
         },
       );
-      //const save = await axiosInstance.get('/cadets/mentorings', {
-      //  headers: {
-      //    Authorization: `Bearer ${AuthStore.getAccessToken()}`,
-      //  },
-      //});
       setLogs(save.data.mentorings);
       setUrl(save.data.resumeUrl);
       console.log(save.data);
