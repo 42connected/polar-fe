@@ -4,6 +4,9 @@ import {
   AXIOS_METHOD_WITH_DATA,
 } from '../../../context/axios-interface';
 import AuthStore from '../../../states/auth/AuthStore';
+import ErrorStore, {
+  ERROR_DEFAULT_VALUE,
+} from '../../../states/error/ErrorStore';
 import LoadingStore from '../../../states/loading/LoadingStore';
 import defaultTheme from '../../../styles/theme';
 
@@ -32,36 +35,6 @@ const Button = styled.div`
   cursor: pointer;
 `;
 
-const rejectMentoring = async (
-  mentoringLogId: string,
-  rejectMessage: string,
-  token: string,
-) => {
-  LoadingStore.on();
-
-  await axiosWithData(
-    AXIOS_METHOD_WITH_DATA.PACTH,
-    `/mentoring-logs/reject`,
-    {
-      mentoringLogId: mentoringLogId,
-      rejectMessage: rejectMessage,
-    },
-    {
-      headers: {
-        Authorization: `bearer ${token}`,
-      },
-    },
-  )
-    .then(() => {
-      alert('거절 요청 성공');
-      window.location.reload();
-    })
-    .catch(err => {
-      alert(`${err?.response?.data?.message}`);
-    });
-  LoadingStore.off();
-};
-
 interface ModalFooterProps {
   id: string;
   status: string;
@@ -69,9 +42,41 @@ interface ModalFooterProps {
   setIsReject: (b: boolean) => void;
   rejectReason: string;
   selectedTime: Date[] | null;
+  setModal: (b: boolean) => void;
+  setModalText: (s: string) => void;
 }
 
 export function ModalFooter(props: ModalFooterProps) {
+  const rejectMentoring = async (
+    mentoringLogId: string,
+    rejectMessage: string,
+    token: string,
+  ) => {
+    LoadingStore.on();
+
+    await axiosWithData(
+      AXIOS_METHOD_WITH_DATA.PACTH,
+      `/mentoring-logs/reject`,
+      {
+        mentoringLogId: mentoringLogId,
+        rejectMessage: rejectMessage,
+      },
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      },
+    )
+      .then(() => {
+        props.setModalText('해당 멘토링이 취소되었습니다.');
+        props.setModal(true);
+      })
+      .catch(err => {
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
+      });
+    LoadingStore.off();
+  };
+
   return (
     <>
       {props.isReject && (
@@ -80,7 +85,10 @@ export function ModalFooter(props: ModalFooterProps) {
             style={{ backgroundColor: defaultTheme.colors.Red }}
             onClick={() => {
               if (props?.rejectReason?.length < 1) {
-                alert('취소 사유를 입력해주세요');
+                ErrorStore.on(
+                  '취소 사유를 입력해주세요',
+                  ERROR_DEFAULT_VALUE.TITLE,
+                );
                 return;
               }
               rejectMentoring(

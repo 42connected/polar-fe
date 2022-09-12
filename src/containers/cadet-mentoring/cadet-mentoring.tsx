@@ -10,6 +10,7 @@ import { Header } from './header';
 import LoadingStore from '../../states/loading/LoadingStore';
 import { MentoringLog } from '../../interfaces/cadet-mentoring/mentoring-log.interface';
 import AuthStore from '../../states/auth/AuthStore';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
 const NoneDrag = styled.div`
   display: flex;
@@ -50,11 +51,10 @@ const CadetMentornig = observer(() => {
       );
       setLogs(save.data.mentorings);
       setUrl(save.data.resumeUrl);
-      console.log(save.data);
       LoadingStore.off();
-    } catch (e) {
-      console.log(e);
-      return e;
+    } catch (err) {
+      ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+      return err;
     }
   };
 
