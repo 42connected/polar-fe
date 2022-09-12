@@ -100,6 +100,7 @@ export function Header(props: ResumeProps) {
         <TextInput
           className="resumeUrl"
           value={props.url}
+          placeholder="📝 이력서 URL을 넣어주세요"
           disabled={!isEdit}
           onChange={e => {
             props.setUrl(e.target.value);
