@@ -53,7 +53,7 @@ const CadetMentornig = observer(() => {
       setUrl(save.data.resumeUrl);
       LoadingStore.off();
     } catch (err) {
-      ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+      console.log(err);
       return err;
     }
   };
