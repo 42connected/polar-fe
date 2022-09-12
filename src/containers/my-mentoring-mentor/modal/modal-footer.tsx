@@ -1,6 +1,4 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
-import { TwoButtonModal } from '../../../components/modal/two-button-modal.tsx/two-button-modal';
 import {
   axiosWithData,
   AXIOS_METHOD_WITH_DATA,
