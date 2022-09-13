@@ -7,19 +7,16 @@ const FooterStyle = styled.footer`
   bottom: 0;
   width: 100%;
   height: 12rem;
-  padding-top: 1rem;
   font-size: 1.3rem;
   ${theme.font.sebangGothic};
   color: ${theme.colors.backgoundWhite};
 `;
 const FooterBody = styled.footer`
   text-align: center;
-  margin-top: -0.5rem;
 `;
 const FooterLastBody = styled.footer`
   text-align: center;
   padding-bottom: 3rem;
-  margin-left: -2rem;
 `;
 const FooterLeftBody = styled.footer`
   padding-top: 2.5rem;

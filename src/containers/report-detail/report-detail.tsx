@@ -58,7 +58,7 @@ import { debounce } from '@mui/material';
 import LoadingStore from '../../states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
-const ReportpageStyle = styled.div<{
+const ReportpageStyle = styled.body<{
   height: number;
 }>`
   background-color: ${theme.colors.backgoundWhite};
