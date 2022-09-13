@@ -493,7 +493,7 @@ function MentorDetail() {
                     />
                   )}
                 </div>
-                {mentor?.createdAt ? (
+                {mentor?.updatedAt ? (
                   <div
                     style={{
                       color: `${theme.colors.fontGray}`,
