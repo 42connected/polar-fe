@@ -108,7 +108,10 @@ const Footer = () => {
         <FooterBody>문의 polarpolar@42seoul.co.kr</FooterBody>
         <FooterLastBody>
           Logo Designed by
-          <Atag href="https://www.freepik.com/"> Freepik</Atag>
+          <Atag href="https://www.freepik.com/" target="_blank">
+            {' '}
+            Freepik
+          </Atag>
         </FooterLastBody>
       </div>
     </FooterStyle>

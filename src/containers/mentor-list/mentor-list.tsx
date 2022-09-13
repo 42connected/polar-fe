@@ -47,6 +47,7 @@ const SearchContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  margin-top: 10px;
 `;
 
 const Text = styled.div`
@@ -74,7 +75,6 @@ const SearchBox = styled.input`
   background-color: #ffffff;
   color: black;
   padding: 10px 15px 10px 15px;
-  margin-top: 10px;
   &:hover {
     background-color: #f6f6f6;
   }
@@ -87,9 +87,9 @@ const Search = styled.div`
   display: flex;
   width: 50%;
   justify-content: right;
-  margin: auto;
+  align-items: center;
   @media screen and (max-width: 500px) {
-    width: 45%;
+    width: 40%;
   }
 `;
 
@@ -126,7 +126,7 @@ const MentorList = observer(() => {
           </TextContainer>
           <Search>
             <SearchBox
-              placeholder={'멘토 이름, 멘토 인트라 아이디'}
+              placeholder={'이름, 인트라 아이디'}
               onChange={e => {
                 setSearch(e.target.value);
               }}
