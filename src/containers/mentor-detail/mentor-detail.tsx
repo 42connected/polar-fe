@@ -528,12 +528,26 @@ function MentorDetail() {
                     />
                   )}
                 </div>
-                {mentor?.createdAt ? (
-                  <div style={{ color: `${theme.colors.fontGray}` }}>
+                {mentor?.updatedAt ? (
+                  <div
+                    style={{
+                      color: `${theme.colors.fontGray}`,
+                      marginBottom: '0.5rem',
+                      paddingLeft: '0.3rem',
+                      fontSize: '1rem',
+                    }}
+                  >
                     update: {mentor?.updatedAt?.substring(0, 10)}
                   </div>
                 ) : (
-                  <div style={{ color: `${theme.colors.fontGray}` }}>
+                  <div
+                    style={{
+                      color: `${theme.colors.fontGray}`,
+                      marginBottom: '0.5rem',
+                      paddingLeft: '0.3rem',
+                      fontSize: '1rem',
+                    }}
+                  >
                     create: {mentor?.createdAt?.substring(0, 10)}
                   </div>
                 )}
@@ -816,11 +830,6 @@ const MenuBox3 = styled.div`
   font-weight: 900;
   letter-spacing: 0.1rem;
   margin-bottom: 1.3rem;
-  div:last-child {
-    margin-bottom: 0.5rem;
-    padding-left: 0.3rem;
-    font-size: 1rem;
-  }
   .icon {
     margin-left: 0.5rem;
     cursor: pointer;
