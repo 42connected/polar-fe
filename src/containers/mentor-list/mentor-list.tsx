@@ -68,7 +68,7 @@ const SearchBox = styled.input`
   ${defaultTheme.font.nanumGothic};
   ${defaultTheme.fontSize.sizeSmall};
   border-radius: 30px;
-  width: 200px;
+  width: 15rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   text-align: left;
   text-decoration: none;
@@ -80,6 +80,7 @@ const SearchBox = styled.input`
   }
   @media screen and (max-width: 500px) {
     font-size: 1rem;
+    width: 10rem;
   }
 `;
 
