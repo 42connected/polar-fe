@@ -5,10 +5,8 @@ import { lighten } from '@mui/material';
 import styled from 'styled-components';
 import { axiosInstance } from '../../context/axios-interface';
 import LoadingStore from '../../states/loading/LoadingStore';
-import Button from '../button';
 import AuthStore from '../../states/auth/AuthStore';
 import { useParams } from 'react-router-dom';
-import ButtonBoxComponent from './button-box';
 
 const styles = {
   control: (base: any) => ({
