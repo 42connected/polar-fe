@@ -115,18 +115,22 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
   const today = new Date();
 
   useEffect(() => {
-    axiosWithNoData(
-      AXIOS_METHOD_WITH_NO_DATA.GET,
-      `/calendar/available-times/${mentorIntraId}`,
-      {
-        headers: {
-          Authorization: `bearer ${AuthStore.getAccessToken()}`,
+    try {
+      axiosWithNoData(
+        AXIOS_METHOD_WITH_NO_DATA.GET,
+        `/calendar/available-times/${mentorIntraId}`,
+        {
+          headers: {
+            Authorization: `bearer ${AuthStore.getAccessToken()}`,
+          },
         },
-      },
-    ).then(response => {
-      setAvailableTime(response.data);
-      setGetAvailableTime(true);
-    });
+      ).then(response => {
+        setAvailableTime(response.data);
+        setGetAvailableTime(true);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   useEffect(() => {
@@ -134,40 +138,44 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
       LoadingStore.on();
       setGetMonthArray(false);
       setSchedule([]);
-      axiosWithNoData(
-        AXIOS_METHOD_WITH_NO_DATA.GET,
-        `/calendar/request-times/${mentorIntraId}?date=${
-          activeDate.getFullYear() +
-          '-' +
-          (activeDate.getMonth() + 1).toString().padStart(2, '0')
-        }`,
-        {
-          headers: {
-            Authorization: `bearer ${AuthStore.getAccessToken()}`,
+      try {
+        axiosWithNoData(
+          AXIOS_METHOD_WITH_NO_DATA.GET,
+          `/calendar/request-times/${mentorIntraId}?date=${
+            activeDate.getFullYear() +
+            '-' +
+            (activeDate.getMonth() + 1).toString().padStart(2, '0')
+          }`,
+          {
+            headers: {
+              Authorization: `bearer ${AuthStore.getAccessToken()}`,
+            },
           },
-        },
-      )
-        .then(response => {
-          console.log(response.data);
-          setRequestTime(response.data);
-        })
-        .then(() => {
-          const maxDate: number = new Date(
-            activeDate.getFullYear(),
-            activeDate.getMonth() + 1,
-            0,
-          ).getDate();
-          const array: scheduleType[] = new Array(maxDate);
-          for (let i = 0; i < maxDate; i++) {
-            const element: scheduleType = {
-              array: new Array<boolean>(48).fill(false),
-              able: false,
-            };
-            array[i] = element;
-          }
-          setSchedule(array);
-          setGetMonthArray(true);
-        });
+        )
+          .then(response => {
+            console.log(response.data);
+            setRequestTime(response.data);
+          })
+          .then(() => {
+            const maxDate: number = new Date(
+              activeDate.getFullYear(),
+              activeDate.getMonth() + 1,
+              0,
+            ).getDate();
+            const array: scheduleType[] = new Array(maxDate);
+            for (let i = 0; i < maxDate; i++) {
+              const element: scheduleType = {
+                array: new Array<boolean>(48).fill(false),
+                able: false,
+              };
+              array[i] = element;
+            }
+            setSchedule(array);
+            setGetMonthArray(true);
+          });
+      } catch (err) {
+        console.log(err);
+      }
     }
   }, [activeDate, getAvailableTime]);
 

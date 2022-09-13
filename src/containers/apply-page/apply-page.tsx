@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { useEffect, useState } from 'react';
 import Modal from './modal';
-import { debounce } from '@mui/material';
+import { Button, debounce } from '@mui/material';
 import { InputCounter } from './apply-input-counter';
 import axios, { AxiosError } from 'axios';
 import { PostApply } from './apply-interface';
@@ -379,6 +379,32 @@ const ApplyButton = styled.button`
   border: none;
 `;
 
+const ButtonDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const DateDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const HourDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+type RequestErrorResponse = {
+  message: string;
+  path: string;
+  statusCode: number;
+  timestamp: Date;
+};
+
 const ApplyPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -400,6 +426,13 @@ const ApplyPage = () => {
   const [secondEndTime, setSecondEndTime] = useState<Date>();
   const [thirdStartTime, setThirdStartTime] = useState<Date>();
   const [thirdEndTime, setThirdEndTime] = useState<Date>();
+  const [postData, setPostData] = useState<PostApply>({
+    topic: topic,
+    content: question,
+    requestTime1: [new Date(), new Date()],
+    requestTime2: null,
+    requestTime3: null,
+  });
 
   const openModal = () => {
     setModalOpen(true);
@@ -413,20 +446,11 @@ const ApplyPage = () => {
     else setIsMobile(false);
   }, 10);
 
-  const postData: PostApply = {
-    topic: topic,
-    content: question,
-    requestTime1: [
-      new Date('2022-08-25T06:30:00Z'),
-      new Date('2022-08-25T08:30:00Z'),
-    ],
-    requestTime2: null,
-    requestTime3: null,
-  };
-
   const postApply = async () => {
     try {
       LoadingStore.on();
+      console.log('requestData:');
+      console.log(postData);
       await axiosInstance.post(
         `cadets/mentorings/apply/${mentorId}`,
         postData,
@@ -438,7 +462,13 @@ const ApplyPage = () => {
       );
     } catch (err) {
       setErrorModalMsg('요청 에러 발생');
+      if (axios.isAxiosError(err)) {
+        setErrorModalMsg(
+          `${(err.response?.data as RequestErrorResponse).message}`,
+        );
+      }
       setErrorModal(true);
+      console.log(err);
     } finally {
       LoadingStore.off();
     }
@@ -457,23 +487,28 @@ const ApplyPage = () => {
   useEffect(() => {
     if (firstStartTime && firstEndTime) {
       postData.requestTime1 = [firstStartTime, firstEndTime];
-      console.log(postData);
     }
   }, [firstStartTime, firstEndTime]);
 
   useEffect(() => {
     if (secondStartTime && secondEndTime) {
       postData.requestTime2 = [secondStartTime, secondEndTime];
-      console.log(postData);
     }
   }, [secondStartTime, secondEndTime]);
 
   useEffect(() => {
     if (thirdStartTime && thirdEndTime) {
       postData.requestTime3 = [thirdStartTime, thirdEndTime];
-      console.log(postData);
     }
   }, [thirdStartTime, thirdEndTime]);
+
+  useEffect(() => {
+    postData.content = question;
+  }, [question]);
+
+  useEffect(() => {
+    postData.topic = topic;
+  }, [topic]);
 
   const ClickEvent = () => {
     if (!(firstStartTime && firstEndTime)) {
@@ -718,7 +753,6 @@ const ApplyPage = () => {
             </MovApplyContainer>
           </div>
         )}
-        ;
       </div>
     );
 };

@@ -5,6 +5,7 @@ import defaultProfile from '../../assets/image/defaultProfileImage.png';
 import { sliceMoreInfoStr } from '../my-mentoring-mentor/email';
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,6 +15,16 @@ const Container = styled.div`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+`;
+
+const ActiveDot = styled.div`
+  position: absolute;
+  display: flex;
+  top: 1rem;
+  right: 1rem;
+  border-radius: 100%;
+  width: 1.2rem;
+  height: 1.2rem;
 `;
 
 const InfoContainer = styled.div`
@@ -42,7 +53,7 @@ const ProfileName = styled.div`
 
 const ProfileTag = styled.div`
   ${defaultTheme.font.nanumGothic};
-  ${defaultTheme.fontSize.sizeSmall};
+  font-size: 1rem;
   color: rgba(0, 0, 0, 0.5);
 `;
 
@@ -94,28 +105,32 @@ export interface CardProps {
   tags: string[] | null;
   profileImage: string;
   introduction: string;
+  isActive: boolean;
 }
 
 export function MentorCard(props: CardProps) {
   return (
     <Container>
+      <ActiveDot
+        style={{
+          backgroundColor: props.isActive ? 'green' : 'gray',
+          opacity: props.isActive ? '0.4' : '0.2',
+        }}
+      />
       <InfoContainer>
         <ProfileImg
           src={props.profileImage ? props.profileImage : defaultProfile}
         />
         <ProfileRight>
           <ProfileName>{props.name} 멘토</ProfileName>
-          {props.tags ? (
-            props?.tags?.map((e, i) => {
-              if (i < 3) {
-                return <ProfileTag key={i}>#{e.slice(0, 5)}</ProfileTag>;
-              }
-              if (i === 3) {
-                return <ProfileTag key={i}>....</ProfileTag>;
-              }
-            })
-          ) : (
-            <></>
+          {props.tags &&
+            props.tags
+              ?.filter((e, i) => i < 3)
+              .map((e, i) => (
+                <ProfileTag key={i}>#{sliceMoreInfoStr(e, 6)}</ProfileTag>
+              ))}
+          {props.tags && props.tags?.length > 3 && (
+            <ProfileTag>....</ProfileTag>
           )}
         </ProfileRight>
       </InfoContainer>

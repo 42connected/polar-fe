@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { InputCounter } from '../../../../components/input-counter';
 import defaultTheme from '../../../../styles/theme';
-import { ModalInfoElement } from '../modal-info-element';
+import { ModalInfoElement } from '../../../my-mentoring-mentor/modal/modal-info-element';
 import { constTime } from './const-time';
 
 const Container = styled.div`
@@ -36,26 +36,23 @@ export function Confirm(props: ConfirmProps) {
         title={'멘토 이름'}
         titleColor={'black'}
         content={props?.mentor?.name}
-        link={''}
       />
       <ModalInfoElement
         title={'멘토 Intra ID'}
         titleColor={'black'}
         content={props?.mentor?.intraId}
-        link={''}
+        link={`${process.env.REACT_APP_ORIGIN}/mentor-detail/${props?.mentor?.intraId}`}
       />
       <ModalInfoElement
         title={'멘토링 주제'}
         titleColor={'black'}
         content={props?.mentoringTopic}
-        link={''}
       />
       {props.rejectMessage ? (
         <ModalInfoElement
           title={'거절 사유'}
           titleColor={'black'}
           content={props?.rejectMessage}
-          link={''}
         />
       ) : (
         <></>
@@ -64,7 +61,6 @@ export function Confirm(props: ConfirmProps) {
         title={props.isReject ? '취소 사유' : '질문 내용'}
         titleColor={defaultTheme.colors.polarSimpleMain}
         content={''}
-        link={''}
       />
       {props.isReject ? (
         <InputCounter

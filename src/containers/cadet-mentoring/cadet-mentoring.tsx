@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { MentorCard } from '../../components/mentoring-log-card';
 import {
-  axiosInstance,
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
 } from '../../context/axios-interface';
@@ -52,18 +51,12 @@ const CadetMentornig = observer(() => {
           },
         },
       );
-      //const save = await axiosInstance.get('/cadets/mentorings', {
-      //  headers: {
-      //    Authorization: `Bearer ${AuthStore.getAccessToken()}`,
-      //  },
-      //});
       setLogs(save.data.mentorings);
       setUrl(save.data.resumeUrl);
-      console.log(save.data);
       LoadingStore.off();
-    } catch (e) {
-      console.log(e);
-      return e;
+    } catch (err) {
+      console.log(err);
+      return err;
     }
   };
 
@@ -84,8 +77,8 @@ const CadetMentornig = observer(() => {
       <NoneDrag>
         <Header url={url} setUrl={setUrl}></Header>
         <MentorCards>
-          {logs.map(log => {
-            return <MentorCard log={log}></MentorCard>;
+          {logs.map((log, i) => {
+            return <MentorCard log={log} key={i}></MentorCard>;
           })}
         </MentorCards>
       </NoneDrag>

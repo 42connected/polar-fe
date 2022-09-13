@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
 import defaultTheme from '../../styles/theme';
 import { TableTitle } from './table-title';
-import { TableRow } from './table-row';
+import { TableColumnLine, TableRow } from './table-row';
 import MentorLogStore, {
   LOGS_PER_PAGE,
   MentoringLogs,
@@ -95,7 +95,7 @@ const MyMentoringMentor = observer(() => {
   const { intraId } = useParams<string>();
   const [log, setLog] = useState<MentoringLogs>();
   const [applyModal, setApplyModal] = useState<boolean>(false);
-  const [isDoneToGetLogs, setIsDoneToGetLogs] = useState<boolean>(false);
+  const [isInit, setIsInit] = useState<boolean>(false);
 
   useEffect(() => {
     async function initLog() {
@@ -103,10 +103,18 @@ const MyMentoringMentor = observer(() => {
         AuthStore.getAccessToken(),
         parseInt(pageNumber || INITIAL_PAGE),
       );
-      setIsDoneToGetLogs(true);
+      setIsInit(true);
     }
     initLog();
   }, [pageNumber]);
+
+  const RenderEmptyLine = () => {
+    const result = [];
+    for (let i = 0; i + MentorLogStore?.logs?.length < 15; ++i) {
+      result.push(<TableColumnLine />);
+    }
+    return result;
+  };
 
   useEffect(() => {
     if (!intraId) {

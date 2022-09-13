@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import {
   axiosWithData,
   axiosWithNoData,
@@ -36,11 +36,11 @@ class MentorStore {
   constructor() {
     makeObservable(this, {
       mentor: observable,
-      setEmail: action.bound,
-      verifyEmail: action.bound,
-      changeEmail: action.bound,
-      clearMentor: action.bound,
-      getMentor: action.bound,
+      setEmail: action,
+      verifyEmail: action,
+      changeEmail: action,
+      clearMentor: action,
+      getMentor: action,
     });
     this.mentor = { id: '', intraId: '', email: '' };
   }
@@ -100,7 +100,9 @@ class MentorStore {
     LoadingStore.on();
     await axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, `/mentors/${intraId}`)
       .then(res => {
-        this.mentor = res.data;
+        runInAction(() => {
+          this.mentor = res.data;
+        });
         return true;
       })
       .catch(err => {

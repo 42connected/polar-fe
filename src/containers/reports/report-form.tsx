@@ -13,6 +13,7 @@ import { observer } from 'mobx-react-lite';
 import AuthStore from '../../states/auth/AuthStore';
 import { ReportRowWrite } from './report-row-write';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
+import { isValidTime } from '../my-mentoring-mentor/modal/wait/select-time';
 
 export const REPORT_STATE = {
   EDIT_POSSIBLE: '작성중',
@@ -98,10 +99,9 @@ export const getDayToString = (meetingAt: Date): string => {
   if (!meetingAt) {
     return '-';
   }
-  const FAILED_TO_MAKE_NEW_DATE = -1;
   const date: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const startTime: Date = new Date(meetingAt);
-  if (startTime.toString().indexOf('Invalid Date') > FAILED_TO_MAKE_NEW_DATE) {
+  if (!isValidTime(startTime)) {
     return '-';
   }
 
@@ -122,11 +122,7 @@ export const getTimeToString = (meetingAt: Date[]): string => {
   }
   const startTime: Date = new Date(meetingAt[START_TIME]);
   const endTime: Date = new Date(meetingAt[END_TIME]);
-
-  if (
-    startTime.toString().indexOf('Invalid Date') > -1 ||
-    endTime.toString().indexOf('Invalid Date') > -1
-  ) {
+  if (!isValidTime(startTime) || !isValidTime(endTime)) {
     return '';
   }
 
@@ -153,12 +149,22 @@ const ReportForm = observer(() => {
         return;
       }
       await ReportStore.Initializer(reportId, AuthStore.getAccessToken());
-      setTopic(ReportStore?.report?.topic);
-      setContent(ReportStore?.report?.content);
-      setFeedbackMessage(ReportStore?.report?.feedbackMessage);
-      setFeedback1(ReportStore?.report?.feedback1);
-      setFeedback2(ReportStore?.report?.feedback2);
-      setFeedback3(ReportStore?.report?.feedback3);
+      ReportStore?.report?.topic && setTopic(ReportStore?.report?.topic);
+
+      ReportStore?.report?.content && setContent(ReportStore.report.content);
+
+      ReportStore?.report?.feedbackMessage &&
+        setFeedbackMessage(ReportStore.report.feedbackMessage);
+
+      ReportStore?.report?.feedback1 &&
+        setFeedback1(ReportStore?.report?.feedback1);
+
+      ReportStore?.report?.feedback2 &&
+        setFeedback2(ReportStore?.report?.feedback2);
+
+      ReportStore?.report?.feedback3 &&
+        setFeedback3(ReportStore?.report?.feedback3);
+
       setPlace(ReportStore?.report?.place);
       setIsLoaded(true);
     }
@@ -197,7 +203,7 @@ const ReportForm = observer(() => {
         />
       )}
       {isLoaded && (
-        <Container component="main" maxWidth="lg">
+        <Container component="main" maxWidth="lg" fixed={true}>
           <Title title={'보고서 작성'} />
           <ReportContainer>
             <ReportInfoContainer>
