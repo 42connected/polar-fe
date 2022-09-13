@@ -203,7 +203,7 @@ const ReportForm = observer(() => {
         />
       )}
       {isLoaded && (
-        <Container component="main" maxWidth="lg">
+        <Container component="main" maxWidth="lg" fixed={true}>
           <Title title={'보고서 작성'} />
           <ReportContainer>
             <ReportInfoContainer>
