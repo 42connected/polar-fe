@@ -149,9 +149,8 @@ function MentorDetail() {
   }, []);
 
   const handleSubmitIntroductionTags = () => {
-    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
     const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: { Authorization: `bearer ${AuthStore.getAccessToken()}` },
     };
     const data = { introduction: mentorIntroduction, tags: mentorTags };
     axiosInstance
@@ -168,6 +167,27 @@ function MentorDetail() {
         });
       })
       .catch(err => {
+        console.log(err);
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+      });
+  };
+
+  const handleSubmitIntroductionTagsNo = () => {
+    axiosInstance
+      .get(`/mentors/${getParams.intraId}`)
+      .then(() => {
+        axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
+          setMentor(result.data);
+          setMentorTags(result.data?.tags ? result.data.tags : []);
+          setMentorIntroduction(
+            result.data?.introduction
+              ? result.data.introduction
+              : '소개글이 없습니다.',
+          );
+        });
+      })
+      .catch(err => {
+        console.log(err);
         ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
       });
   };
@@ -207,7 +227,7 @@ function MentorDetail() {
   const handleSubmitMentorMarkdown = () => {
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
     const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: { Authorization: `bearer ${accessToken}` },
     };
     const data = { markdownContent: mentorMarkdown };
     axiosInstance
@@ -227,6 +247,20 @@ function MentorDetail() {
               : result.data?.markdownContent,
           );
         });
+      })
+      .catch(err => {
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+      });
+  };
+  const handleSubmitMentorMarkdownNo = () => {
+    axiosInstance
+      .get(`/mentors/${getParams.intraId}`)
+      .then(result => {
+        setMentorMarkdown(
+          result.data?.markdownContent
+            ? result.data.markdownContent
+            : result.data?.markdownContent,
+        );
       })
       .catch(err => {
         ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
@@ -445,6 +479,7 @@ function MentorDetail() {
                         Button2Func={() => {
                           setIsActivateDeleteModal(false);
                           setIsActivateIntroductionEdit(false);
+                          handleSubmitIntroductionTagsNo();
                         }}
                         Button1Text="네"
                         Button2Text="아니요"
@@ -570,6 +605,7 @@ function MentorDetail() {
                         Button2Func={() => {
                           setIsActivateMentorMarkDownEditModal(false);
                           setIsActivateMentorMarkdownEdit(false);
+                          handleSubmitMentorMarkdownNo();
                         }}
                         Button1Text="네"
                         Button2Text="아니요"
@@ -972,11 +1008,9 @@ const MentorHowToContent = styled.div`
   footer {
     color: ${theme.colors.polarSimpleMain};
     font-size: 1.3rem;
-    position: absolute;
     display: flex;
     flex-direction: column;
-    top: 100%;
-    left: 5%;
+    margin-left: 4rem;
   }
 `;
 

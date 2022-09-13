@@ -15,7 +15,6 @@ interface MentorInfoModalProps {
 
 export function MentorInfoModal(props: MentorInfoModalProps) {
   const [applyModal, setApplyModal] = useState<boolean>(true);
-
   return (
     <div>
       <ApplyModal
