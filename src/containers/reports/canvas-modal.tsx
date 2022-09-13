@@ -4,15 +4,41 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ModalBackground,
-  ModalBox,
   ModalButton,
   ModalButtonContainer,
-  ModalTitle,
-  XButton,
 } from '../../components/modal/modal-styled';
 import AuthStore from '../../states/auth/AuthStore';
 import ReportStore from '../../states/repoort/ReportStore';
 import defaultTheme from '../../styles/theme';
+
+const CanvasModalBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  padding: 20px;
+`;
+
+const CanvasTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
+const CanvasModalTitle = styled.div`
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  text-align: center;
+  ${defaultTheme.font.sebangGothic};
+  ${defaultTheme.fontSize.sizeExtraSmall};
+`;
 
 const CanvasContainer = styled.div`
   display: flex;
@@ -212,9 +238,9 @@ export function CanvasModal(props: CanvasModalProps) {
 
   return (
     <ModalBackground>
-      <ModalBox>
-        <XButton>
-          <ModalTitle>
+      <CanvasModalBox>
+        <CanvasTop>
+          <CanvasModalTitle>
             ✏️ 서명란{' '}
             <FixableIcon
               onClick={() => {
@@ -223,14 +249,14 @@ export function CanvasModal(props: CanvasModalProps) {
             >
               <FontAwesomeIcon icon={faRotateRight} />
             </FixableIcon>
-          </ModalTitle>
+          </CanvasModalTitle>
           <FontAwesomeIcon
             icon={faX}
             size="2x"
             style={{ opacity: 0.3, cursor: 'pointer' }}
             onClick={() => props.CloseFunc()}
           />
-        </XButton>
+        </CanvasTop>
         <CanvasContainer>
           <canvas ref={canvasRef} />
         </CanvasContainer>
@@ -247,7 +273,7 @@ export function CanvasModal(props: CanvasModalProps) {
             저장
           </ModalButton>
         </ModalButtonContainer>
-      </ModalBox>
+      </CanvasModalBox>
     </ModalBackground>
   );
 }

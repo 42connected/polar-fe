@@ -1,14 +1,11 @@
 import {
-  faAngleDown,
-  faAngleLeft,
-  faAngleRight,
   faPencil,
   faUserAstronaut,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../components/button';
 import { InputCounter } from '../../components/input-counter';
@@ -22,23 +19,17 @@ import { axiosInstance } from '../../context/axios-interface';
 import { getCookie, TOKEN_LIST } from '../../context/cookies';
 import { appointmentsInterface } from '../../interface/mentor-detail/appointments.interface';
 import { CommentProps } from '../../interface/mentor-detail/comment-props.interface';
-import { CommentsWithPageProps } from '../../interface/mentor-detail/comments-with-page.interface';
 import { mentorAvailableTimeInterface } from '../../interface/mentor-detail/mentor-available-time.interface';
 import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
 import AuthStore, { User } from '../../states/auth/AuthStore';
 import theme from '../../styles/theme';
 import MarkdownRender from './markdownRender';
-import { ModalBackground } from '../../components/modal/modal-styled';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import MentorInfoModal, { ModalType } from '../signup/mentor-info-modal';
 import MyTableComponents from '../../components/mentor-detail/my-table';
 import NotFound from '../not-found/not-found';
 
 function MentorDetail() {
-  const mockMentorAvailableTime =
-    '[[],[{"startHour":6,"startMinute":0,"endHour":10,"endMinute":0},{"startHour":10,"startMinute":0,"endHour":11,"endMinute":0}],[],[],[{"startHour":6,"startMinute":30,"endHour":9,"endMinute":0}],[],[{"startHour":6,"startMinute":30,"endHour":9,"endMinute":0}]]';
-  const mockMentorAvailableTimeToArray = JSON.parse(mockMentorAvailableTime);
-
   const [mentorIntroduction, setMentorIntroduction] = useState<string>('');
   const [mentor, setMentor] = useState<MentorDetailProps | null>(null);
   const [error, setError] = useState<boolean>(false);
@@ -132,7 +123,7 @@ function MentorDetail() {
             : result.data?.markdownContent,
         );
         if (result.data?.isActive) {
-          setMentorAvailableTimeData(mockMentorAvailableTime);
+          setMentorAvailableTimeData(result.data?.availableTime);
         }
       })
       .catch(err => {
