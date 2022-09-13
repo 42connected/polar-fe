@@ -35,14 +35,14 @@ export const MainContainer = styled.body`
 `;
 
 export const MainContainer2 = styled.div`
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: ${theme.colors.polarBackground};
   left: 0;
   ${theme.fontSize.sizeSmall};
   ${theme.font.sebangGothic};
   height: calc(100% - 220px);
   width: 100%;
   display: grid;
-  grid-template-rows: 500px 150px 150px 150px;
+  grid-template-rows: 500px 150px 100px 180px;
   grid-template-columns: 400px;
   grid-template-areas:
     'img'
@@ -83,7 +83,7 @@ export const MainImageStyle = styled.div`
 
 export const MainImageStyle2 = styled.div`
   box-sizing: border-box;
-  background-color: ${theme.colors.polarBackground};
+  background-color: ${theme.colors.backgoundWhite};
   border-radius: 10%;
   height: 40rem;
   width: 40rem;
@@ -205,7 +205,7 @@ export const ClickContainer2 = styled.div`
   text-align: center;
   justify-content: center;
   align-items: center;
-  grid-column-gap: 2rem;
+  grid-column-gap: 1rem;
 `;
 
 export const IconImageStyle = styled.div<{
@@ -230,7 +230,7 @@ export const IconImageStyle2 = styled.div<{
   display: flex;
   border-radius: 50%;
   overflow: hidden;
-  margin-top: 5rem;
+  margin-top: 3rem;
   grid-column-start: colStart;
   grid-row-start: rowStart;
   text-align: center;
