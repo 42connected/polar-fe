@@ -58,7 +58,7 @@ import { debounce } from '@mui/material';
 import LoadingStore from '../../states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
-const ReportpageStyle = styled.div<{
+const ReportpageStyle = styled.body<{
   height: number;
 }>`
   background-color: ${theme.colors.backgoundWhite};
@@ -275,7 +275,7 @@ const ReportDetail = () => {
         `/reports/${reportId}`,
         {
           headers: {
-            Authorization: `bearer ${AuthStore.getAccessToken()}`,
+            Authorization: `bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0tZW5nZW5nIiwicm9sZSI6ImJvY2FsIiwiaWF0IjoxNjYzMDUwNTAzLCJleHAiOjE2NjMxMzY5MDN9.Z1yCa0qf1RzHJVRFHMQNiBrmQUtUZ2gtut9BBeTkO24`,
           },
         },
       );
