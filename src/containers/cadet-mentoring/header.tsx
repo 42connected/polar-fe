@@ -1,10 +1,14 @@
 import styled from '@emotion/styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import defaultTheme from '../../styles/theme';
-import { faCheck, faPencil, faX } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCheck,
+  faLink,
+  faPencil,
+  faX,
+} from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import {
-  axiosInstance,
   axiosWithData,
   AXIOS_METHOD_WITH_DATA,
 } from '../../context/axios-interface';
@@ -76,15 +80,6 @@ export function Header(props: ResumeProps) {
           },
         },
       );
-      //axiosInstance.post(
-      //  '/cadets',
-      //  { resumeUrl },
-      //  {
-      //    headers: {
-      //      Authorization: `Bearer ${AuthStore.getAccessToken()}`,
-      //    },
-      //  },
-      //);
     } catch (err) {
       console.log(err);
       return err;
@@ -100,6 +95,7 @@ export function Header(props: ResumeProps) {
         <TextInput
           className="resumeUrl"
           value={props.url}
+          placeholder="📝 이력서 URL을 넣어주세요"
           disabled={!isEdit}
           onChange={e => {
             props.setUrl(e.target.value);
@@ -112,19 +108,37 @@ export function Header(props: ResumeProps) {
           }}
         />
         {isEdit ? (
-          <>
-            <DoubleButton>
+          <DoubleButton>
+            <FontAwesomeIcon
+              icon={faX}
+              onClick={() => {
+                setIsEdit(!isEdit);
+              }}
+              style={{ cursor: 'pointer' }}
+            />
+            <FontAwesomeIcon
+              icon={faCheck}
+              style={{ cursor: 'pointer' }}
+              onClick={() => save()}
+            />
+          </DoubleButton>
+        ) : (
+          <DoubleButton>
+            <FontAwesomeIcon
+              icon={faPencil}
+              style={{ cursor: 'pointer' }}
+              onClick={() => setIsEdit(!isEdit)}
+            />
+            {props.url && (
               <FontAwesomeIcon
-                icon={faX}
+                icon={faLink}
+                style={{ cursor: 'pointer' }}
                 onClick={() => {
-                  setIsEdit(!isEdit);
+                  window.open(props.url);
                 }}
               />
-              <FontAwesomeIcon icon={faCheck} onClick={() => save()} />
-            </DoubleButton>
-          </>
-        ) : (
-          <FontAwesomeIcon icon={faPencil} onClick={() => setIsEdit(!isEdit)} />
+            )}
+          </DoubleButton>
         )}
       </Resume>
     </Container>

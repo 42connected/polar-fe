@@ -35,7 +35,6 @@ export const LOGS_PER_PAGE = 15;
 class MentorLogStore {
   logs: MentoringLogs[];
   total: number;
-  curPage: number;
 
   constructor() {
     makeObservable(this, {
@@ -45,13 +44,11 @@ class MentorLogStore {
     });
     this.logs = [];
     this.total = 0;
-    this.curPage = 0;
   }
 
   clearLogs() {
     this.logs = [];
     this.total = 0;
-    this.curPage = 0;
   }
 
   async Initializer(token: string, page: number) {
