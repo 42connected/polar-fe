@@ -171,9 +171,10 @@ const MyMentoringMentor = observer(() => {
                 setLog={setLog}
               />
             ))}
+            {RenderEmptyLine()}
           </Container>
         </Bottom>
-        {isDoneToGetLogs && (
+        {isInit && (
           <PaginationContainer>
             <ThemeProvider theme={muiTheme}>
               <Pagination

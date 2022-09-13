@@ -64,26 +64,26 @@ const CadetMentornig = observer(() => {
     getKeywords();
   }, []);
 
-  /*if (!AuthStore.getAccessToken()) {
+  if (!AuthStore.getAccessToken()) {
     ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
     AuthStore.Login();
     return <></>;
   } else if (AuthStore.getUserRole() !== USER_ROLES.CADET) {
     ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
     return <Navigate to="/" />;
-  } else*/
-  return (
-    <>
-      <NoneDrag>
-        <Header url={url} setUrl={setUrl}></Header>
-        <MentorCards>
-          {logs.map((log, i) => {
-            return <MentorCard log={log} key={i}></MentorCard>;
-          })}
-        </MentorCards>
-      </NoneDrag>
-    </>
-  );
+  } else
+    return (
+      <>
+        <NoneDrag>
+          <Header url={url} setUrl={setUrl}></Header>
+          <MentorCards>
+            {logs.map((log, i) => {
+              return <MentorCard log={log} key={i}></MentorCard>;
+            })}
+          </MentorCards>
+        </NoneDrag>
+      </>
+    );
 });
 
 export default CadetMentornig;
