@@ -935,7 +935,6 @@ const MentorBody1Right = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  grid-area: right;
 `;
 const MentorBody1Right2 = styled.div`
   display: flex;
@@ -975,14 +974,7 @@ const MentorBody1Right1 = styled.div`
 
 const MentorBody1 = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  grid-template-areas:
-    'left left left right right'
-    'left left left right right'
-    'left left left right right'
-    'left left left right right'
-    'left left left right right';
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
   grid-column-gap: 3rem;
   ${theme.fontSize.sizeSmall};
 `;
@@ -1015,7 +1007,7 @@ const MentorHowToContent = styled.div`
 `;
 
 const MentorBody1Left = styled.div`
-  grid-area: left;
+  margin-bottom: 10%;
 `;
 
 const MentorHeader = styled.div`
