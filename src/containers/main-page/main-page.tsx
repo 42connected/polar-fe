@@ -178,7 +178,7 @@ const MainPage = () => {
                           <IconButton>
                             <FontAwesomeIcon
                               icon={image[index]}
-                              size="3x"
+                              size="2x"
                               color="black"
                             />
                           </IconButton>
@@ -208,7 +208,7 @@ const MainPage = () => {
                           <IconButton>
                             <FontAwesomeIcon
                               icon={image[index - 4]}
-                              size="3x"
+                              size="2x"
                               color="black"
                             />
                           </IconButton>
