@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { useEffect, useState } from 'react';
-import Modal from './modal';
 import { Button, debounce } from '@mui/material';
 import { InputCounter } from './apply-input-counter';
 import axios, { AxiosError } from 'axios';
@@ -461,8 +460,6 @@ const ApplyPage = () => {
   const postApply = async () => {
     try {
       LoadingStore.on();
-      console.log('requestData:');
-      console.log(postData);
       await axiosInstance
         .post(`cadets/mentorings/apply/${mentorId}`, postData, {
           headers: {
@@ -470,7 +467,6 @@ const ApplyPage = () => {
           },
         })
         .then(res => {
-          console.log(res);
           if (res.status === 201) {
             setSuccessModal(true);
           }
@@ -483,7 +479,6 @@ const ApplyPage = () => {
         );
       }
       setErrorModal(true);
-      console.log(err);
     } finally {
       LoadingStore.off();
     }
@@ -529,7 +524,6 @@ const ApplyPage = () => {
         setSecondEndTime(undefined);
       } else postData.requestTime1 = [];
     }
-    console.log(postData);
   }, [firstStartTime, firstEndTime]);
 
   useEffect(() => {
@@ -543,7 +537,6 @@ const ApplyPage = () => {
         setThirdEndTime(undefined);
       } else postData.requestTime2 = null;
     }
-    console.log(postData);
   }, [secondStartTime, secondEndTime]);
 
   useEffect(() => {
@@ -576,7 +569,6 @@ const ApplyPage = () => {
       filledSlot += 1;
     }
 
-    console.log(props.slot + ' ' + filledSlot);
     if (props.slot > filledSlot + 1) {
       if (filledSlot === 0) {
         startTime = setFirstStartTime;
@@ -626,8 +618,7 @@ const ApplyPage = () => {
 
   if (isLoading) {
     return <></>;
-  } else if (mentorId === undefined) {
-    //isActive === false
+  } else if (mentorId === undefined || isActive === false) {
     ErrorStore.on('잘못된 접근입니다.', ERROR_DEFAULT_VALUE.TITLE);
     return <Navigate to="/" />;
   } else if (!token) {

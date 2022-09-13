@@ -153,7 +153,6 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
           },
         )
           .then(response => {
-            console.log(response.data);
             setRequestTime(response.data);
           })
           .then(() => {
@@ -241,7 +240,6 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
             ? 1
             : 0);
 
-        console.log(available);
         for (let i = 0; i <= available; i++)
           schedule[today.getDate() - 1].array[i] = false;
         resolve(schedule);
@@ -416,8 +414,6 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
             const endDate = new Date(selectDate);
             endDate.setHours(Math.floor((Number(endTime) + 1) / 2));
             endDate.setMinutes((Number(endTime) + 1) % 2 ? 30 : 0);
-            console.log(startDate);
-            console.log(endDate);
             setStartDateTime(startDate);
             setEndDateTime(endDate);
             XButtonFunc();
