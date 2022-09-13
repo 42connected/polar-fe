@@ -153,7 +153,6 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
           },
         )
           .then(response => {
-            console.log(response.data);
             setRequestTime(response.data);
           })
           .then(() => {
@@ -229,6 +228,23 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
         resolve(schedule);
       });
 
+      const setTodaySchedule = new Promise((resolve, reject) => {
+        const today = new Date();
+        const available: number =
+          today.getHours() * 2 +
+          (today.getMinutes() > 30
+            ? today.getMinutes() - 30 > 0
+              ? 2
+              : 1
+            : today.getMinutes() > 0
+            ? 1
+            : 0);
+
+        for (let i = 0; i <= available; i++)
+          schedule[today.getDate() - 1].array[i] = false;
+        resolve(schedule);
+      });
+
       const setAble = new Promise((resolve, reject) => {
         schedule.forEach(day => {
           if (
@@ -242,8 +258,23 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
       setInitSchedule.then(data => {
         setRealSchedule.then(data => {
           refineSchedule.then(data => {
-            setAble.then(data => {
-              setSchedule([...schedule]);
+            setTodaySchedule.then(data => {
+              setAble.then(data => {
+                setSchedule([...schedule]);
+                const maxDate: number = new Date(
+                  selectDate.getFullYear(),
+                  selectDate.getMonth() + 1,
+                  0,
+                ).getDate();
+                if (schedule[selectDate.getDate() - 1].able === false)
+                  for (let i = selectDate.getDate(); i < maxDate; i++) {
+                    if (schedule[i].able === true) {
+                      selectDate.setDate(i + 1);
+                      onChange(new Date(selectDate));
+                      break;
+                    }
+                  }
+              });
             });
           });
         });
@@ -383,8 +414,6 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
             const endDate = new Date(selectDate);
             endDate.setHours(Math.floor((Number(endTime) + 1) / 2));
             endDate.setMinutes((Number(endTime) + 1) % 2 ? 30 : 0);
-            console.log(startDate);
-            console.log(endDate);
             setStartDateTime(startDate);
             setEndDateTime(endDate);
             XButtonFunc();
