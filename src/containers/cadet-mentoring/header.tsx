@@ -1,10 +1,14 @@
 import styled from '@emotion/styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import defaultTheme from '../../styles/theme';
-import { faCheck, faPencil, faX } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCheck,
+  faLink,
+  faPencil,
+  faX,
+} from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import {
-  axiosInstance,
   axiosWithData,
   AXIOS_METHOD_WITH_DATA,
 } from '../../context/axios-interface';
@@ -104,28 +108,37 @@ export function Header(props: ResumeProps) {
           }}
         />
         {isEdit ? (
-          <>
-            <DoubleButton>
-              <FontAwesomeIcon
-                icon={faX}
-                onClick={() => {
-                  setIsEdit(!isEdit);
-                }}
-                style={{ cursor: 'pointer' }}
-              />
-              <FontAwesomeIcon
-                icon={faCheck}
-                style={{ cursor: 'pointer' }}
-                onClick={() => save()}
-              />
-            </DoubleButton>
-          </>
+          <DoubleButton>
+            <FontAwesomeIcon
+              icon={faX}
+              onClick={() => {
+                setIsEdit(!isEdit);
+              }}
+              style={{ cursor: 'pointer' }}
+            />
+            <FontAwesomeIcon
+              icon={faCheck}
+              style={{ cursor: 'pointer' }}
+              onClick={() => save()}
+            />
+          </DoubleButton>
         ) : (
-          <FontAwesomeIcon
-            icon={faPencil}
-            style={{ cursor: 'pointer' }}
-            onClick={() => setIsEdit(!isEdit)}
-          />
+          <DoubleButton>
+            <FontAwesomeIcon
+              icon={faPencil}
+              style={{ cursor: 'pointer' }}
+              onClick={() => setIsEdit(!isEdit)}
+            />
+            {props.url && (
+              <FontAwesomeIcon
+                icon={faLink}
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  window.open(props.url);
+                }}
+              />
+            )}
+          </DoubleButton>
         )}
       </Resume>
     </Container>
