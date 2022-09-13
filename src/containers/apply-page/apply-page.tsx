@@ -20,6 +20,7 @@ import LoadingStore from '../../states/loading/LoadingStore';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
+import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
 
 const Wrapper = styled.div`
   .modal {
@@ -375,8 +376,8 @@ const ApplyButton = styled.button`
   text-align: center;
   ${theme.fontSize.sizeExtraSmall};
   ${theme.font.sebangGothic};
-  color: ${theme.fontColor.titleColor};
-  background-color: ${theme.colors.graySix};
+  color: ${theme.fontColor.whiteColor};
+  background-color: ${theme.colors.polarSimpleMain};
   border-radius: 20px;
   width: 9rem;
   height: 3.5rem;
@@ -432,7 +433,7 @@ const ApplyPage = () => {
   const { mentorId } = useParams();
   const [token, setToken] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
-  const [isActive, setIsActive] = useState<boolean>(false);
+  const [isActive, setIsActive] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorModal, setErrorModal] = useState<boolean>(false);
   const [errorModalMsg, setErrorModalMsg] = useState<string>('');
@@ -485,7 +486,7 @@ const ApplyPage = () => {
   };
 
   useEffect(() => {
-    console.log(isLoading);
+    console.log('isLoading' + isLoading);
   }, [isLoading]);
 
   useEffect(() => {
@@ -495,8 +496,11 @@ const ApplyPage = () => {
     try {
       axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, `mentors/${mentorId}`)
         .then(response => {
-          const { active } = response.data;
-          if (active === true) setIsActive(active);
+          const { isActive }: MentorDetailProps = response.data;
+          console.log(isActive);
+          if (isActive !== true) {
+            setIsActive(false);
+          }
         })
         .finally(() => {
           LoadingStore.off();
