@@ -249,7 +249,7 @@ export function ModalFooter(props: ModalFooterProps) {
 
       if (response.status === 200) {
         setOneButtonModalProps({
-          TitleText: '제출에 성공하셨습니다',
+          TitleText: '제출 성공',
           Text: '제출에 성공하셨습니다',
           XButtonFunc: () => {
             setIsError(false);
@@ -264,7 +264,7 @@ export function ModalFooter(props: ModalFooterProps) {
         props.setApplyModal(false);
       } else {
         setOneButtonModalProps({
-          TitleText: '제출에 실패하셨습니다',
+          TitleText: '제출 실패',
           Text: '제출에 실패하셨습니다',
           XButtonFunc: () => {
             setIsError(false);
@@ -279,7 +279,7 @@ export function ModalFooter(props: ModalFooterProps) {
       }
     } catch (err) {
       setOneButtonModalProps({
-        TitleText: '제출에 실패하셨습니다',
+        TitleText: '제출 실패',
         Text: '제출에 실패하셨습니다',
         XButtonFunc: () => {
           setIsError(false);
@@ -374,7 +374,7 @@ export function ModalFooter(props: ModalFooterProps) {
 
       if (response.status === 200) {
         setOneButtonModalProps({
-          TitleText: '제출에 성공하셨습니다',
+          TitleText: '제출 성공',
           Text: '제출에 성공하셨습니다',
           XButtonFunc: () => {
             setIsError(false);
@@ -387,9 +387,10 @@ export function ModalFooter(props: ModalFooterProps) {
 
         setIsError(true);
         props.setApplyModal(false);
+        window.location.reload();
       } else {
         setOneButtonModalProps({
-          TitleText: '제출에 실패하셨습니다',
+          TitleText: '제출 실패',
           Text: '제출에 실패하셨습니다',
           XButtonFunc: () => {
             setIsError(false);
@@ -404,7 +405,7 @@ export function ModalFooter(props: ModalFooterProps) {
       }
     } catch (err) {
       setOneButtonModalProps({
-        TitleText: '제출에 실패하셨습니다',
+        TitleText: '제출 실패',
         Text: '제출에 실패하셨습니다',
         XButtonFunc: () => {
           setIsError(false);

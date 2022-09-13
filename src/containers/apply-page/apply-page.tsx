@@ -112,7 +112,7 @@ const ApplyContainer = styled.div`
   left: 0;
   ${theme.fontSize.sizeMedium};
   ${theme.font.sebangGothic};
-  height: 77vh;
+  height: calc(100vh - 220px);
   width: 100%;
   display: grid;
   grid-template-rows: 80rem;
@@ -124,7 +124,7 @@ const ApplyContainer = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background-color: ${theme.colors.polarBackground};
+  background-color: ${theme.colors.backgoundWhite};
   color: ${theme.colors.blackOne};
 `;
 
@@ -132,7 +132,7 @@ const MovApplyContainer = styled.div`
   left: 0;
   ${theme.fontSize.sizeMedium};
   ${theme.font.sebangGothic};
-  height: 200vh;
+  height: calc(100% - 220px);
   width: 100%;
   display: grid;
   grid-template-rows: 70rem 70rem;
@@ -146,7 +146,7 @@ const MovApplyContainer = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background-color: ${theme.colors.polarBackground};
+  background-color: ${theme.colors.backgoundWhite};
   color: ${theme.colors.blackOne};
 `;
 
@@ -339,7 +339,7 @@ const MiddleText2 = styled.div`
   ${theme.fontSize.sizeExtraSmall};
   font-weight: 400;
   color: ${theme.colors.grayTwo};
-  margin-left: -55%;
+  margin-left: -61.5%;
   margin-top: 4rem;
   margin-bottom: -2rem;
 `;
@@ -358,7 +358,7 @@ const MiddleText3 = styled.div`
   ${theme.fontSize.sizeExtraSmall};
   font-weight: 400;
   color: ${theme.colors.grayTwo};
-  margin-left: -51.5%;
+  margin-left: -57%;
   margin-bottom: -2rem;
 `;
 
@@ -377,7 +377,7 @@ const ApplyButton = styled.button`
   ${theme.fontSize.sizeExtraSmall};
   ${theme.font.sebangGothic};
   color: ${theme.fontColor.titleColor};
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: ${theme.colors.graySix};
   border-radius: 20px;
   width: 9rem;
   height: 3.5rem;
@@ -454,7 +454,7 @@ const ApplyPage = () => {
   });
 
   const handleResize = debounce(() => {
-    if (window.innerWidth < 1070) setIsMobile(true);
+    if (window.innerWidth < 1370) setIsMobile(true);
     else setIsMobile(false);
   }, 10);
 
@@ -511,7 +511,7 @@ const ApplyPage = () => {
       console.log(error);
     }
 
-    window.innerWidth <= 1070 ? setIsMobile(true) : setIsMobile(false);
+    window.innerWidth <= 1370 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);

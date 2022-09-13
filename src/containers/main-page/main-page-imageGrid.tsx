@@ -62,7 +62,7 @@ export function MainImage(props: MainImageProps) {
     const timer = setInterval(() => {
       setCount(prev => (prev === TOTAL_SLIDES ? 0 : prev + 1));
       setIsLeft(!isleft);
-    }, 5000);
+    }, 5800);
 
     return () => {
       clearInterval(timer);

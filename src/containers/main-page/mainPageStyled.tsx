@@ -10,12 +10,12 @@ export interface keywordsLists {
   index: number;
 }
 
-export const MainContainer = styled.div`
-  background-color: ${theme.colors.backgoundWhite};
+export const MainContainer = styled.body`
+  background-color: ${theme.colors.polarBackground};
   left: 0;
   ${theme.fontSize.sizeMedium};
   ${theme.font.sebangGothic};
-  height: 77vh;
+  height: calc(100vh - 210px);
   width: 100%;
   display: grid;
   grid-template-rows: 130px 130px 130px;
@@ -35,11 +35,11 @@ export const MainContainer = styled.div`
 `;
 
 export const MainContainer2 = styled.div`
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: ${theme.colors.polarBackground};
   left: 0;
   ${theme.fontSize.sizeSmall};
   ${theme.font.sebangGothic};
-  height: 135vh;
+  height: calc(100% - 220px);
   width: 100%;
   display: grid;
   grid-template-rows: 500px 150px 150px 150px;
@@ -67,7 +67,7 @@ export const ImageBox = styled.div<{
 
 export const MainImageStyle = styled.div`
   box-sizing: border-box;
-  background-color: ${theme.colors.polarGray};
+  background-color: ${theme.colors.backgoundWhite};
   border-radius: 10%;
   height: 40rem;
   width: 60rem;
@@ -83,7 +83,7 @@ export const MainImageStyle = styled.div`
 
 export const MainImageStyle2 = styled.div`
   box-sizing: border-box;
-  background-color: ${theme.colors.polarGray};
+  background-color: ${theme.colors.backgoundWhite};
   border-radius: 10%;
   height: 40rem;
   width: 40rem;

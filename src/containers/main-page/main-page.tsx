@@ -43,7 +43,7 @@ const MainPage = () => {
   const slideRef = useRef(null);
 
   const handleResize = debounce(() => {
-    if (window.innerWidth < 1070) setIsMobile(true);
+    if (window.innerWidth < 1370) setIsMobile(true);
     else setIsMobile(false);
   }, 10);
   const getKeywords = async () => {
@@ -65,7 +65,7 @@ const MainPage = () => {
 
   useEffect(() => {
     getKeywords();
-    window.innerWidth <= 1070 ? setIsMobile(true) : setIsMobile(false);
+    window.innerWidth <= 1370 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -78,7 +78,7 @@ const MainPage = () => {
   };
 
   return (
-    <div className="main">
+    <>
       {!isMobile ? ( //pc
         <div>
           <MainContainer>
@@ -224,8 +224,7 @@ const MainPage = () => {
           </MainContainer2>
         </div>
       )}
-      ;
-    </div>
+    </>
   );
 };
 

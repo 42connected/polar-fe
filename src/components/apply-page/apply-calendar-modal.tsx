@@ -20,7 +20,7 @@ const TitleContainer = styled.div`
 
 export interface ApplyCalendarModalProps {
   XButtonFunc: () => void;
-  mentorIntraId: string;
+  mentorIntraId: string | undefined;
   setStartDateTime: (date: Date) => void;
   setEndDateTime: (date: Date) => void;
 }
