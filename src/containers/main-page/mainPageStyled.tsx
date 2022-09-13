@@ -42,7 +42,7 @@ export const MainContainer2 = styled.div`
   height: calc(100% - 220px);
   width: 100%;
   display: grid;
-  grid-template-rows: 500px 150px 150px 150px;
+  grid-template-rows: 500px 150px 100px 180px;
   grid-template-columns: 400px;
   grid-template-areas:
     'img'
@@ -205,7 +205,7 @@ export const ClickContainer2 = styled.div`
   text-align: center;
   justify-content: center;
   align-items: center;
-  grid-column-gap: 2rem;
+  grid-column-gap: 1rem;
 `;
 
 export const IconImageStyle = styled.div<{
@@ -230,7 +230,7 @@ export const IconImageStyle2 = styled.div<{
   display: flex;
   border-radius: 50%;
   overflow: hidden;
-  margin-top: 5rem;
+  margin-top: 3rem;
   grid-column-start: colStart;
   grid-row-start: rowStart;
   text-align: center;
