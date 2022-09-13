@@ -32,13 +32,13 @@ const Box = styled.div`
 `;
 
 const PageTitle = styled.div`
+  ${defaultTheme.font.sebangGothic};
+  ${defaultTheme.fontSize.sizeMedium};
   display: flex;
   justify-content: center;
   border-bottom: 0.5px solid;
   width: 90%;
   padding-bottom: 2.5rem;
-  ${defaultTheme.font.sebangGothic};
-  ${defaultTheme.fontSize.sizeMedium};
 `;
 
 const StatusBox = styled.div`

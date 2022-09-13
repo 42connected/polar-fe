@@ -149,9 +149,8 @@ function MentorDetail() {
   }, []);
 
   const handleSubmitIntroductionTags = () => {
-    const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
     const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: { Authorization: `bearer ${AuthStore.getAccessToken()}` },
     };
     const data = { introduction: mentorIntroduction, tags: mentorTags };
     axiosInstance
@@ -168,6 +167,27 @@ function MentorDetail() {
         });
       })
       .catch(err => {
+        console.log(err);
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+      });
+  };
+
+  const handleSubmitIntroductionTagsNo = () => {
+    axiosInstance
+      .get(`/mentors/${getParams.intraId}`)
+      .then(() => {
+        axiosInstance.get(`/mentors/${getParams.intraId}`).then(result => {
+          setMentor(result.data);
+          setMentorTags(result.data?.tags ? result.data.tags : []);
+          setMentorIntroduction(
+            result.data?.introduction
+              ? result.data.introduction
+              : '소개글이 없습니다.',
+          );
+        });
+      })
+      .catch(err => {
+        console.log(err);
         ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
       });
   };
@@ -207,7 +227,7 @@ function MentorDetail() {
   const handleSubmitMentorMarkdown = () => {
     const accessToken = getCookie(TOKEN_LIST.ACCESS_TOKEN);
     const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: { Authorization: `bearer ${accessToken}` },
     };
     const data = { markdownContent: mentorMarkdown };
     axiosInstance
@@ -227,6 +247,20 @@ function MentorDetail() {
               : result.data?.markdownContent,
           );
         });
+      })
+      .catch(err => {
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
+      });
+  };
+  const handleSubmitMentorMarkdownNo = () => {
+    axiosInstance
+      .get(`/mentors/${getParams.intraId}`)
+      .then(result => {
+        setMentorMarkdown(
+          result.data?.markdownContent
+            ? result.data.markdownContent
+            : result.data?.markdownContent,
+        );
       })
       .catch(err => {
         ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
@@ -445,6 +479,7 @@ function MentorDetail() {
                         Button2Func={() => {
                           setIsActivateDeleteModal(false);
                           setIsActivateIntroductionEdit(false);
+                          handleSubmitIntroductionTagsNo();
                         }}
                         Button1Text="네"
                         Button2Text="아니요"
@@ -493,12 +528,26 @@ function MentorDetail() {
                     />
                   )}
                 </div>
-                {mentor?.createdAt ? (
-                  <div style={{ color: `${theme.colors.fontGray}` }}>
+                {mentor?.updatedAt ? (
+                  <div
+                    style={{
+                      color: `${theme.colors.fontGray}`,
+                      marginBottom: '0.5rem',
+                      paddingLeft: '0.3rem',
+                      fontSize: '1rem',
+                    }}
+                  >
                     update: {mentor?.updatedAt?.substring(0, 10)}
                   </div>
                 ) : (
-                  <div style={{ color: `${theme.colors.fontGray}` }}>
+                  <div
+                    style={{
+                      color: `${theme.colors.fontGray}`,
+                      marginBottom: '0.5rem',
+                      paddingLeft: '0.3rem',
+                      fontSize: '1rem',
+                    }}
+                  >
                     create: {mentor?.createdAt?.substring(0, 10)}
                   </div>
                 )}
@@ -570,6 +619,7 @@ function MentorDetail() {
                         Button2Func={() => {
                           setIsActivateMentorMarkDownEditModal(false);
                           setIsActivateMentorMarkdownEdit(false);
+                          handleSubmitMentorMarkdownNo();
                         }}
                         Button1Text="네"
                         Button2Text="아니요"
@@ -780,11 +830,6 @@ const MenuBox3 = styled.div`
   font-weight: 900;
   letter-spacing: 0.1rem;
   margin-bottom: 1.3rem;
-  div:last-child {
-    margin-bottom: 0.5rem;
-    padding-left: 0.3rem;
-    font-size: 1rem;
-  }
   .icon {
     margin-left: 0.5rem;
     cursor: pointer;
@@ -899,7 +944,6 @@ const MentorBody1Right = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  grid-area: right;
 `;
 const MentorBody1Right2 = styled.div`
   display: flex;
@@ -939,14 +983,7 @@ const MentorBody1Right1 = styled.div`
 
 const MentorBody1 = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  grid-template-areas:
-    'left left left right right'
-    'left left left right right'
-    'left left left right right'
-    'left left left right right'
-    'left left left right right';
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
   grid-column-gap: 3rem;
   ${theme.fontSize.sizeSmall};
 `;
@@ -972,16 +1009,14 @@ const MentorHowToContent = styled.div`
   footer {
     color: ${theme.colors.polarSimpleMain};
     font-size: 1.3rem;
-    position: absolute;
     display: flex;
     flex-direction: column;
-    top: 100%;
-    left: 5%;
+    margin-left: 4rem;
   }
 `;
 
 const MentorBody1Left = styled.div`
-  grid-area: left;
+  margin-bottom: 10%;
 `;
 
 const MentorHeader = styled.div`
