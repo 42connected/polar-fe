@@ -14,20 +14,43 @@ const FooterStyle = styled.footer`
 const FooterBody = styled.footer`
   text-align: center;
 `;
-const FooterLastBody = styled.footer`
+const FooterLastBody = styled.div`
+  width: 100%;
   text-align: center;
   padding-bottom: 3rem;
 `;
-const FooterLeftBody = styled.footer`
+const FooterTextBody = styled.div`
   padding-top: 2.5rem;
-  margin-left: 4.5rem;
-  text-align: left;
 `;
-const GithubButton = styled.button`
+const FooterRightBody = styled.span`
+  float: right;
+  margin-right: 3%;
+  cursor: pointer;
+  display: inline-block;
+`;
+const FooterButtonOne = styled.span`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+`;
+const FooterButtonTwo = styled.span`
+  margin-left: 2rem;
+  background-color: transparent;
+  border: none;
+  color: ${theme.colors.backgoundWhite};
+  cursor: pointer;
+`;
+const FooterLeftBody = styled.span`
+  float: left;
+  margin-left: 3%;
+`;
+
+const GithubButton = styled.span`
   cursor: pointer;
   float: center;
-  margin-left: 7.5rem;
-  margin-top: -2rem;
+  margin-left: 1rem;
+  align-items: center;
+  align-content: center;
   background-color: transparent;
   color: ${theme.colors.backgoundWhite};
   border: none;
@@ -35,6 +58,11 @@ const GithubButton = styled.button`
 
 const Atag = styled.a`
   font-weight: bold;
+  text-decoration: none;
+  color: ${theme.colors.backgoundWhite};
+`;
+
+const AtagTwo = styled.a`
   text-decoration: none;
   color: ${theme.colors.backgoundWhite};
 `;
@@ -56,12 +84,24 @@ const Footer = () => {
           background: theme.colors.polarMain,
         }}
       >
-        <FooterLeftBody>
-          42서울 Polar
+        <FooterTextBody>
+          <FooterLeftBody>42서울 Polar</FooterLeftBody>
           <GithubButton onClick={githubClick}>
             <img src={github} style={imagestyle} className="App-logo" />
           </GithubButton>
-        </FooterLeftBody>
+          <FooterRightBody>
+            <FooterButtonOne>
+              <AtagTwo href="https://docs.google.com/forms/d/e/1FAIpQLSeNhqMlp2cFqMKQo664P0j_GiELhy_VNDSIClFenQJ3uoPa2Q/viewform?usp=send_form">
+                서비스 건의사항
+              </AtagTwo>
+            </FooterButtonOne>
+            <FooterButtonTwo>
+              <AtagTwo href="https://docs.google.com/forms/d/e/1FAIpQLSe7CJGFRImjU0NAtPwjWdjTz9-Chttx1gDf1rpvBZIhaUQ34A/viewform">
+                멘토제도 건의사항
+              </AtagTwo>
+            </FooterButtonTwo>
+          </FooterRightBody>
+        </FooterTextBody>
         <FooterBody>
           주소 서울시 강남구 개포로 416 이노베이션 아카데미
         </FooterBody>

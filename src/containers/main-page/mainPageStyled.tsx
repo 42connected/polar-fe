@@ -35,7 +35,7 @@ export const MainContainer = styled.body`
 `;
 
 export const MainContainer2 = styled.div`
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: ${theme.colors.polarBackground};
   left: 0;
   ${theme.fontSize.sizeSmall};
   ${theme.font.sebangGothic};
@@ -83,7 +83,7 @@ export const MainImageStyle = styled.div`
 
 export const MainImageStyle2 = styled.div`
   box-sizing: border-box;
-  background-color: ${theme.colors.polarBackground};
+  background-color: ${theme.colors.backgoundWhite};
   border-radius: 10%;
   height: 40rem;
   width: 40rem;
