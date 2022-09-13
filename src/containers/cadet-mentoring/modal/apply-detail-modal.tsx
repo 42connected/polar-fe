@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
+import { OneButtonModal } from '../../../components/modal/one-button-modal/one-button-modal';
 import defaultTheme from '../../../styles/theme';
 import { Confirm } from './confirm/confirm';
 import { ModalFooter } from './modal-footer';
@@ -94,9 +95,23 @@ export function ApplyDetailModal(props: ApplyDetailModalProps) {
   const [isReject, setIsReject] = useState<boolean>(false);
   const [rejectReason, setRejectReason] = useState<string>('');
   const [selectedTimeIndex, setSelectedTimeIndex] = useState<string>('');
+  const [modal, setModal] = useState<boolean>(false);
+  const [modalText, setModalText] = useState<string>('');
 
   return (
     <Box>
+      {modal && (
+        <OneButtonModal
+          TitleText="✅ 42폴라 알림"
+          Text={modalText}
+          ButtonText="닫기"
+          ButtonBg={`${defaultTheme.colors.polarSimpleMain}`}
+          ButtonFunc={() => {
+            setModal(false);
+            window.location.reload();
+          }}
+        />
+      )}
       <XButton>
         <FontAwesomeIcon
           icon={faX}
@@ -156,6 +171,8 @@ export function ApplyDetailModal(props: ApplyDetailModalProps) {
         setIsReject={setIsReject}
         rejectReason={rejectReason}
         selectedTime={props.requestTime[parseInt(selectedTimeIndex)]}
+        setModal={setModal}
+        setModalText={setModalText}
       />
     </Box>
   );
