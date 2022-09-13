@@ -275,7 +275,7 @@ const ReportDetail = () => {
         `/reports/${reportId}`,
         {
           headers: {
-            Authorization: `bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0tZW5nZW5nIiwicm9sZSI6ImJvY2FsIiwiaWF0IjoxNjYzMDUwNTAzLCJleHAiOjE2NjMxMzY5MDN9.Z1yCa0qf1RzHJVRFHMQNiBrmQUtUZ2gtut9BBeTkO24`,
+            Authorization: `bearer ${AuthStore.getAccessToken()}`,
           },
         },
       );
