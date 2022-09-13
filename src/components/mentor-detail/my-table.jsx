@@ -60,6 +60,9 @@ const Container = styled.div`
     .toastui-calendar-panel:not(.toastui-calendar-time) {
     overflow-y: hidden;
   }
+  .toastui-calendar-event-time-content {
+    background-color: ${props => props.theme.colors.polarBrightMain};
+  }
 `;
 
 export default MyTableComponent;
