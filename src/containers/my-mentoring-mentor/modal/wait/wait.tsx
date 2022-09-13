@@ -59,7 +59,7 @@ export function Wait(props: WaitProps) {
         titleColor={'black'}
         content={
           props?.cadet?.resumeUrl
-            ? `${props?.cadet?.resumeUrl.slice(0, 30)}...`
+            ? `${props?.cadet?.resumeUrl.slice(0, 25)}...`
             : '링크 없음'
         }
         link={props?.cadet?.resumeUrl ? props?.cadet?.resumeUrl : ''}
