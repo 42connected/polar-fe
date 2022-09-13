@@ -28,7 +28,6 @@ const NoneDrag = styled.div`
 const MentorCards = styled.div`
   display: grid;
   width: 90%;
-  height: 100%;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(350px, 380px));
   gap: 30px;
@@ -76,11 +75,15 @@ const CadetMentornig = observer(() => {
       <>
         <NoneDrag>
           <Header url={url} setUrl={setUrl}></Header>
-          <MentorCards>
-            {logs.map((log, i) => {
-              return <MentorCard log={log} key={i}></MentorCard>;
-            })}
-          </MentorCards>
+          {logs ? (
+            <MentorCards>
+              {logs.map((log, i) => {
+                return <MentorCard log={log} key={i}></MentorCard>;
+              })}
+            </MentorCards>
+          ) : (
+            '멘토링 없음'
+          )}
         </NoneDrag>
       </>
     );
