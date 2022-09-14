@@ -18,6 +18,7 @@ import { createTheme } from '@mui/material';
 import Button from '../button';
 import LoadingStore from '../../states/loading/LoadingStore';
 import { ApplyCalendarModalProps } from './apply-calendar-modal';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
 const muiTheme = createTheme({
   palette: {
@@ -125,11 +126,23 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
           },
         },
       ).then(response => {
-        setAvailableTime(response.data);
-        setGetAvailableTime(true);
+        if (response.status === 200) {
+          setAvailableTime(response.data);
+          setGetAvailableTime(true);
+        } else {
+          ErrorStore.on(
+            '멘토 데이터를 가져오는 중 오류가 발생하였습니다.\n 다시 시도해주세요.',
+            ERROR_DEFAULT_VALUE.TITLE,
+          );
+          props.XButtonFunc();
+        }
       });
     } catch (error) {
-      console.log(error);
+      ErrorStore.on(
+        '멘토 데이터를 가져오는 중 오류가 발생하였습니다.\n 다시 시도해주세요.',
+        ERROR_DEFAULT_VALUE.TITLE,
+      );
+      props.XButtonFunc();
     }
   }, []);
 
@@ -153,7 +166,14 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
           },
         )
           .then(response => {
-            setRequestTime(response.data);
+            if (response.status === 200) setRequestTime(response.data);
+            else {
+              ErrorStore.on(
+                '가능 시간 데이터를 가져오는 중 오류가 발생하였습니다.\n 다시 시도해주세요.',
+                ERROR_DEFAULT_VALUE.TITLE,
+              );
+              props.XButtonFunc();
+            }
           })
           .then(() => {
             const maxDate: number = new Date(
@@ -172,8 +192,12 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
             setSchedule(array);
             setGetMonthArray(true);
           });
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        ErrorStore.on(
+          '가능 시간 데이터를 가져오는 중 오류가 발생하였습니다.\n 다시 시도해주세요.',
+          ERROR_DEFAULT_VALUE.TITLE,
+        );
+        props.XButtonFunc();
       }
     }
   }, [activeDate, getAvailableTime]);

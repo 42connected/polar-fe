@@ -133,12 +133,13 @@ function DataRoom() {
 
   const getExcel = async () => {
     LoadingStore.on();
-    const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}/bocals/data-room/excel`;
+    const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}bocals/data-room/excel`;
     const data = {
       reportIds: selectedList,
     };
 
     if (selectedList.length === 0) {
+      LoadingStore.off();
       setErrorModalMsg('멘토링 정보를 하나 이상 선택해주세요.');
       setErrorModal(true);
       return;
@@ -153,25 +154,39 @@ function DataRoom() {
         },
         body: JSON.stringify(data),
       });
-      const blob = await res.blob();
-      const newBlob = new Blob([blob]);
-      const blobUrl = window.URL.createObjectURL(newBlob);
+      if (res.status === 201) {
+        const blob = await res.blob();
+        const newBlob = new Blob([blob]);
+        const blobUrl = window.URL.createObjectURL(newBlob);
 
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.setAttribute(
-        'download',
-        `mentoring-data_${new Date()
-          .toLocaleDateString('ko-KR')
-          .replaceAll(' ', '')}xlsx`,
-      );
-      document.body.appendChild(link);
-      link.click();
-      link?.parentNode?.removeChild(link);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.setAttribute(
+          'download',
+          `mentoring-data_${new Date()
+            .toLocaleDateString('ko-KR')
+            .replaceAll(' ', '')}xlsx`,
+        );
+        document.body.appendChild(link);
+        link.click();
+        link?.parentNode?.removeChild(link);
 
-      window.URL.revokeObjectURL(blobUrl);
+        window.URL.revokeObjectURL(blobUrl);
+      } else {
+        LoadingStore.off();
+        ErrorStore.on(
+          '엑셀 데이터를 가져오는 중 오류가 발생하였습니다.',
+          ERROR_DEFAULT_VALUE.TITLE,
+        );
+        return;
+      }
     } catch (error) {
-      console.log(error);
+      LoadingStore.off();
+      ErrorStore.on(
+        '엑셀 데이터를 가져오는 중 오류가 발생하였습니다.',
+        ERROR_DEFAULT_VALUE.TITLE,
+      );
+      return;
     }
 
     LoadingStore.off();
@@ -181,6 +196,7 @@ function DataRoom() {
     LoadingStore.on();
     let url = '/report-detail?autoPrint=true';
     if (selectedList.length === 0) {
+      LoadingStore.off();
       setErrorModalMsg('멘토링 정보를 하나 이상 선택해주세요.');
       setErrorModal(true);
       return;
