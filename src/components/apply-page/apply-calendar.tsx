@@ -385,7 +385,8 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
             view === 'month' &&
             (schedule[date.getDate() - 1]?.able === false ||
               date.getMonth() !== activeDate.getMonth() ||
-              date.getDate() < today.getDate())
+              (date.getMonth() === today.getMonth() &&
+                date.getDate() < today.getDate()))
           }
           locale={'ko-KR'}
         />
