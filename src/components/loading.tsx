@@ -17,7 +17,7 @@ export const Background = styled.div`
   right: 0;
   background-color: rgba(246, 246, 246, 0.3);
 
-  z-index: 1001;
+  z-index: 999;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
