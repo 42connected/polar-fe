@@ -687,7 +687,7 @@ const ApplyPage = () => {
             }}
           />
         )}
-        {!isMobile ? ( //pc
+        {!isMobile ? (
           <div>
             <ApplyContainer>
               <Chooseplan>
