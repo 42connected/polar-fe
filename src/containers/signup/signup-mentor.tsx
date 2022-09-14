@@ -307,6 +307,24 @@ const SignUpMentor = () => {
 
     LoadingStore.on();
 
+    if (rows?.length === 0 && checked) {
+      setOneButtonModalProps({
+        TitleText: '가능시간 입력',
+        Text: '입력하신 가능시간이 없습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+      LoadingStore.off();
+      return;
+    }
+
     if (!(await validateRows(rows))) {
       setOneButtonModalProps({
         TitleText: '가능시간 빈 칸',
