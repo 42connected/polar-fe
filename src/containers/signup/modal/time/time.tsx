@@ -56,7 +56,7 @@ export function Time(props: TimeProps) {
   useEffect(() => {
     const data = getRows(defaultAvailableTime);
     props.setRows(data);
-    props.setChecked(defaultChecked);
+    defaultChecked ? props.setChecked(defaultChecked) : props.setChecked(true);
   }, [defaultAvailableTime, defaultChecked]);
 
   function getRows(availableTimes: IAvailableDate[][]): IRows[] {
