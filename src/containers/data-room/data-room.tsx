@@ -133,7 +133,7 @@ function DataRoom() {
 
   const getExcel = async () => {
     LoadingStore.on();
-    const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}bocals/data-room/excel`;
+    const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}/bocals/data-room/excel`;
     const data = {
       reportIds: selectedList,
     };
