@@ -428,12 +428,11 @@ const ApplyPage = () => {
   const [modalOpen, setModalOpen] = useState<number>(0);
   const [isMobile, setIsMobile] = useState(false);
   const [topic, setTopic] = useState<string>('');
-  const [question, setQuestion] = useState<string>('');
-  const [done, setDone] = useState(false);
+  const [content, setContent] = useState<string>('');
   const { mentorId } = useParams();
   const [token, setToken] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
-  const [isActive, setIsActive] = useState<boolean>(true);
+  const [isActive, setIsActive] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorModal, setErrorModal] = useState<boolean>(false);
   const [errorModalMsg, setErrorModalMsg] = useState<string>('');
@@ -447,14 +446,14 @@ const ApplyPage = () => {
   const navigate = useNavigate();
   const [postData, setPostData] = useState<PostApply>({
     topic: topic,
-    content: question,
+    content: content,
     requestTime1: [new Date(), new Date()],
     requestTime2: null,
     requestTime3: null,
   });
 
   const handleResize = debounce(() => {
-    if (window.innerWidth < 1370) setIsMobile(true);
+    if (window.innerWidth < 1070) setIsMobile(true);
     else setIsMobile(false);
   }, 10);
 
@@ -497,9 +496,8 @@ const ApplyPage = () => {
       axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, `mentors/${mentorId}`)
         .then(response => {
           const { isActive }: MentorDetailProps = response.data;
-          console.log(isActive);
-          if (isActive !== true) {
-            setIsActive(false);
+          if (isActive === true) {
+            setIsActive(true);
           }
         })
         .finally(() => {
@@ -510,7 +508,7 @@ const ApplyPage = () => {
       console.log(error);
     }
 
-    window.innerWidth <= 1370 ? setIsMobile(true) : setIsMobile(false);
+    window.innerWidth <= 1070 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -551,8 +549,8 @@ const ApplyPage = () => {
   }, [thirdStartTime, thirdEndTime]);
 
   useEffect(() => {
-    postData.content = question;
-  }, [question]);
+    postData.content = content;
+  }, [content]);
 
   useEffect(() => {
     postData.topic = topic;
@@ -611,7 +609,7 @@ const ApplyPage = () => {
       setErrorModalMsg('첫번째 가능시간은 필수로 입력되어야 합니다.');
     } else if (topic.length <= 0) {
       setErrorModalMsg('주제를 입력해주세요');
-    } else if (question.length <= 0) {
+    } else if (content.length <= 0) {
       setErrorModalMsg('궁금한 점을 입력해주세요');
     } else {
       postApply();
@@ -846,8 +844,8 @@ const ApplyPage = () => {
                 />
                 <MiddleText3> * 궁금한 점 </MiddleText3>
                 <InputCounter
-                  setter={setQuestion}
-                  value={question}
+                  setter={setContent}
+                  value={content}
                   maxLength={500}
                   width="50rem"
                   disabled={false}
@@ -1038,8 +1036,8 @@ const ApplyPage = () => {
                 />
                 <MovMiddleText3> * 궁금한 점 </MovMiddleText3>
                 <InputCounter
-                  setter={setQuestion}
-                  value={question}
+                  setter={setContent}
+                  value={content}
                   maxLength={800}
                   width="40rem"
                   disabled={false}
