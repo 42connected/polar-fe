@@ -17,6 +17,7 @@ const NoneDrag = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  margin-bottom: 4rem;
 `;
 
 const Title = styled.div`
@@ -99,7 +100,7 @@ const CardContainer = styled.div`
   width: 100%;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(350px, 350px));
-  gap: 50px;
+  gap: 4rem;
 `;
 
 const MentorList = observer(() => {
