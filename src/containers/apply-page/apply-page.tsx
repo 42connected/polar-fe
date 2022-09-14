@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { useEffect, useState } from 'react';
-import Modal from './modal';
 import { Button, debounce } from '@mui/material';
 import { InputCounter } from './apply-input-counter';
 import axios, { AxiosError } from 'axios';
 import { PostApply } from './apply-interface';
-import { axiosInstance } from '../../context/axios-interface';
+import {
+  axiosInstance,
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
 import { Navigate, useParams } from 'react-router-dom';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
@@ -14,6 +17,10 @@ import { defaultTheme } from 'react-select';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import { ApplyCalendarModal } from '../../components/apply-page/apply-calendar-modal';
 import LoadingStore from '../../states/loading/LoadingStore';
+import { faX } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate } from 'react-router-dom';
+import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
 
 const Wrapper = styled.div`
   .modal {
@@ -105,7 +112,7 @@ const ApplyContainer = styled.div`
   left: 0;
   ${theme.fontSize.sizeMedium};
   ${theme.font.sebangGothic};
-  height: 77vh;
+  height: calc(100vh - 220px);
   width: 100%;
   display: grid;
   grid-template-rows: 80rem;
@@ -117,7 +124,7 @@ const ApplyContainer = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background-color: ${theme.colors.polarBackground};
+  background-color: ${theme.colors.backgoundWhite};
   color: ${theme.colors.blackOne};
 `;
 
@@ -125,7 +132,7 @@ const MovApplyContainer = styled.div`
   left: 0;
   ${theme.fontSize.sizeMedium};
   ${theme.font.sebangGothic};
-  height: 200vh;
+  height: calc(100% - 220px);
   width: 100%;
   display: grid;
   grid-template-rows: 70rem 70rem;
@@ -139,7 +146,7 @@ const MovApplyContainer = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background-color: ${theme.colors.polarBackground};
+  background-color: ${theme.colors.backgoundWhite};
   color: ${theme.colors.blackOne};
 `;
 
@@ -214,10 +221,12 @@ const PlanButton1 = styled.button`
 `;
 
 const MovPlanButton1 = styled.button`
-  padding-left: 8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: ${theme.shadow.buttonShadow};
   text-align: center;
-  align-items: center;
+  flex-wrap: wrap;
   ${theme.font.sebangGothic};
   font-size: 2rem;
   color: ${theme.fontColor.whiteColor};
@@ -227,7 +236,6 @@ const MovPlanButton1 = styled.button`
   width: 24rem;
   height: 8rem;
   cursor: pointer;
-  line-height: 12.5rem;
   border: none;
 `;
 
@@ -253,13 +261,13 @@ const PlanButton2 = styled.button`
 `;
 
 const MovPlanButton2 = styled.button`
-  padding-left: 8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   box-shadow: ${theme.shadow.buttonShadow};
   ${theme.font.sebangGothic};
   font-size: 2rem;
   text-align: center;
-  align-items: center;
-  line-height: 12.5rem;
   color: ${theme.fontColor.whiteColor};
   background-color: ${theme.colors.polarBrightMain};
   margin-top: 4rem;
@@ -331,7 +339,7 @@ const MiddleText2 = styled.div`
   ${theme.fontSize.sizeExtraSmall};
   font-weight: 400;
   color: ${theme.colors.grayTwo};
-  margin-left: -55%;
+  margin-left: -61.5%;
   margin-top: 4rem;
   margin-bottom: -2rem;
 `;
@@ -350,7 +358,7 @@ const MiddleText3 = styled.div`
   ${theme.fontSize.sizeExtraSmall};
   font-weight: 400;
   color: ${theme.colors.grayTwo};
-  margin-left: -51.5%;
+  margin-left: -57%;
   margin-bottom: -2rem;
 `;
 
@@ -368,8 +376,8 @@ const ApplyButton = styled.button`
   text-align: center;
   ${theme.fontSize.sizeExtraSmall};
   ${theme.font.sebangGothic};
-  color: ${theme.fontColor.titleColor};
-  background-color: ${theme.colors.backgoundWhite};
+  color: ${theme.fontColor.whiteColor};
+  background-color: ${theme.colors.polarSimpleMain};
   border-radius: 20px;
   width: 9rem;
   height: 3.5rem;
@@ -379,23 +387,34 @@ const ApplyButton = styled.button`
   border: none;
 `;
 
+const ApplyButtonDiv = styled.div`
+  position: relative;
+`;
+
 const ButtonDiv = styled.div`
   display: flex;
+  width: 100%;
+  height: 90%;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
 `;
 
 const DateDiv = styled.div`
   display: flex;
+  width: 90%;
   align-items: center;
-  justify-content: center;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  justify-content: space-between;
+  ${theme.fontFrame.bodyMiddle};
 `;
 
 const HourDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  ${theme.fontSize.sizeExtraMedium};
 `;
 
 type RequestErrorResponse = {
@@ -406,40 +425,32 @@ type RequestErrorResponse = {
 };
 
 const ApplyPage = () => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState<number>(0);
   const [isMobile, setIsMobile] = useState(false);
   const [topic, setTopic] = useState<string>('');
-  const [question, setQuestion] = useState<string>('');
-  const [requestTime, setRequestTime] = useState<Date[]>([]);
-  const [done, setDone] = useState(false);
+  const [content, setContent] = useState<string>('');
   const { mentorId } = useParams();
-  const [token, setToken] = useState<string>('');
-  const [role, setRole] = useState<string>('');
+  const [token, setToken] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorModal, setErrorModal] = useState<boolean>(false);
   const [errorModalMsg, setErrorModalMsg] = useState<string>('');
-  const [firstModalOpen, setFirstModalOpen] = useState(false);
-  const [secondModalOpen, setSecondModalOpen] = useState(false);
-  const [thirdModalOpen, setThirdModalOpen] = useState(false);
+  const [successModal, setSuccessModal] = useState<boolean>(false);
   const [firstStartTime, setFirstStartTime] = useState<Date>();
   const [firstEndTime, setFirstEndTime] = useState<Date>();
   const [secondStartTime, setSecondStartTime] = useState<Date>();
   const [secondEndTime, setSecondEndTime] = useState<Date>();
   const [thirdStartTime, setThirdStartTime] = useState<Date>();
   const [thirdEndTime, setThirdEndTime] = useState<Date>();
+  const navigate = useNavigate();
   const [postData, setPostData] = useState<PostApply>({
     topic: topic,
-    content: question,
+    content: content,
     requestTime1: [new Date(), new Date()],
     requestTime2: null,
     requestTime3: null,
   });
-
-  const openModal = () => {
-    setModalOpen(true);
-  };
-  const closeModal = () => {
-    setModalOpen(false);
-  };
 
   const handleResize = debounce(() => {
     if (window.innerWidth < 1070) setIsMobile(true);
@@ -449,17 +460,17 @@ const ApplyPage = () => {
   const postApply = async () => {
     try {
       LoadingStore.on();
-      console.log('requestData:');
-      console.log(postData);
-      await axiosInstance.post(
-        `cadets/mentorings/apply/${mentorId}`,
-        postData,
-        {
+      await axiosInstance
+        .post(`cadets/mentorings/apply/${mentorId}`, postData, {
           headers: {
             Authorization: `bearer ${token}`,
           },
-        },
-      );
+        })
+        .then(res => {
+          if (res.status === 201) {
+            setSuccessModal(true);
+          }
+        });
     } catch (err) {
       setErrorModalMsg('요청 에러 발생');
       if (axios.isAxiosError(err)) {
@@ -468,15 +479,35 @@ const ApplyPage = () => {
         );
       }
       setErrorModal(true);
-      console.log(err);
     } finally {
       LoadingStore.off();
     }
   };
 
   useEffect(() => {
+    console.log('isLoading' + isLoading);
+  }, [isLoading]);
+
+  useEffect(() => {
+    LoadingStore.on();
     setToken(AuthStore.getAccessToken());
     setRole(AuthStore.getUserRole());
+    try {
+      axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, `mentors/${mentorId}`)
+        .then(response => {
+          const { isActive }: MentorDetailProps = response.data;
+          if (isActive === true) {
+            setIsActive(true);
+          }
+        })
+        .finally(() => {
+          LoadingStore.off();
+          setIsLoading(false);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+
     window.innerWidth <= 1070 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
     return () => {
@@ -487,35 +518,98 @@ const ApplyPage = () => {
   useEffect(() => {
     if (firstStartTime && firstEndTime) {
       postData.requestTime1 = [firstStartTime, firstEndTime];
+    } else if (firstStartTime === undefined && firstEndTime === undefined) {
+      if (secondStartTime && secondEndTime) {
+        setFirstStartTime(new Date(secondStartTime));
+        setFirstEndTime(new Date(secondEndTime));
+        setSecondStartTime(undefined);
+        setSecondEndTime(undefined);
+      } else postData.requestTime1 = [];
     }
   }, [firstStartTime, firstEndTime]);
 
   useEffect(() => {
     if (secondStartTime && secondEndTime) {
       postData.requestTime2 = [secondStartTime, secondEndTime];
+    } else if (secondStartTime === undefined && secondEndTime === undefined) {
+      if (thirdStartTime && thirdEndTime) {
+        setSecondStartTime(new Date(thirdStartTime));
+        setSecondEndTime(new Date(thirdEndTime));
+        setThirdStartTime(undefined);
+        setThirdEndTime(undefined);
+      } else postData.requestTime2 = null;
     }
   }, [secondStartTime, secondEndTime]);
 
   useEffect(() => {
     if (thirdStartTime && thirdEndTime) {
       postData.requestTime3 = [thirdStartTime, thirdEndTime];
-    }
+    } else if (thirdStartTime === undefined && thirdEndTime === undefined)
+      postData.requestTime3 = null;
   }, [thirdStartTime, thirdEndTime]);
 
   useEffect(() => {
-    postData.content = question;
-  }, [question]);
+    postData.content = content;
+  }, [content]);
 
   useEffect(() => {
     postData.topic = topic;
   }, [topic]);
+
+  function setRequestTime(props: { slot: number }) {
+    let startTime: (date: Date) => void;
+    let endTime: (date: Date) => void;
+    let filledSlot = 0;
+
+    if (firstStartTime !== undefined) {
+      filledSlot += 1;
+    }
+    if (secondStartTime !== undefined) {
+      filledSlot += 1;
+    }
+    if (thirdStartTime !== undefined) {
+      filledSlot += 1;
+    }
+
+    if (props.slot > filledSlot + 1) {
+      if (filledSlot === 0) {
+        startTime = setFirstStartTime;
+        endTime = setFirstEndTime;
+      } else {
+        startTime = setSecondStartTime;
+        endTime = setSecondEndTime;
+      }
+    } else {
+      if (props.slot === 1) {
+        startTime = setFirstStartTime;
+        endTime = setFirstEndTime;
+      } else if (props.slot === 2) {
+        startTime = setSecondStartTime;
+        endTime = setSecondEndTime;
+      } else {
+        startTime = setThirdStartTime;
+        endTime = setThirdEndTime;
+      }
+    }
+    if (mentorId === undefined) return <></>;
+    return (
+      <ApplyCalendarModal
+        XButtonFunc={() => {
+          setModalOpen(0);
+        }}
+        mentorIntraId={mentorId}
+        setStartDateTime={startTime}
+        setEndDateTime={endTime}
+      ></ApplyCalendarModal>
+    );
+  }
 
   const ClickEvent = () => {
     if (!(firstStartTime && firstEndTime)) {
       setErrorModalMsg('첫번째 가능시간은 필수로 입력되어야 합니다.');
     } else if (topic.length <= 0) {
       setErrorModalMsg('주제를 입력해주세요');
-    } else if (question.length <= 0) {
+    } else if (content.length <= 0) {
       setErrorModalMsg('궁금한 점을 입력해주세요');
     } else {
       postApply();
@@ -524,14 +618,16 @@ const ApplyPage = () => {
     setErrorModal(true);
   };
 
-  if (mentorId === undefined) {
+  if (isLoading) {
+    return <></>;
+  } else if (mentorId === undefined || isActive === false) {
     ErrorStore.on('잘못된 접근입니다.', ERROR_DEFAULT_VALUE.TITLE);
     return <Navigate to="/" />;
-  } else if (!AuthStore.getAccessToken()) {
+  } else if (!token) {
     ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
     AuthStore.Login();
     return <></>;
-  } else if (AuthStore.getUserRole() !== USER_ROLES.CADET) {
+  } else if (role !== USER_ROLES.CADET) {
     ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
     return <Navigate to="/" />;
   } else
@@ -551,6 +647,21 @@ const ApplyPage = () => {
             }}
           />
         )}
+        {successModal && (
+          <OneButtonModal
+            TitleText="요청 완료"
+            Text="요청이 성공적으로 완료되었습니다"
+            XButtonFunc={() => {
+              setSuccessModal(false);
+              navigate('/cadets/mentorings');
+            }}
+            ButtonText="확인"
+            ButtonFunc={() => {
+              setSuccessModal(false);
+              navigate('/cadets/mentorings');
+            }}
+          />
+        )}
         {!isMobile ? ( //pc
           <div>
             <ApplyContainer>
@@ -560,106 +671,162 @@ const ApplyPage = () => {
                 <Line2> </Line2>
                 <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
                 <Wrapper>
-                  <PlanButton1
-                    onClick={() => {
-                      setFirstModalOpen(true);
-                    }}
-                  >
-                    {firstStartTime && firstEndTime
-                      ? firstStartTime.toLocaleDateString() +
-                        '  ' +
-                        firstStartTime
-                          .toTimeString()
-                          .slice(
-                            0,
-                            firstStartTime.toTimeString().lastIndexOf(':'),
-                          ) +
-                        '~' +
-                        firstEndTime
-                          .toTimeString()
-                          .slice(
-                            0,
-                            firstEndTime.toTimeString().lastIndexOf(':'),
-                          )
-                      : '가능시간1'}
-                  </PlanButton1>
-                  {firstModalOpen && (
-                    <ApplyCalendarModal
-                      XButtonFunc={() => {
-                        setFirstModalOpen(false);
+                  <ApplyButtonDiv>
+                    <PlanButton1
+                      onClick={() => {
+                        setModalOpen(1);
                       }}
-                      mentorIntraId={mentorId}
-                      setStartDateTime={setFirstStartTime}
-                      setEndDateTime={setFirstEndTime}
-                    ></ApplyCalendarModal>
-                  )}
-                  <PlanButton2
-                    onClick={() => {
-                      setSecondModalOpen(true);
-                    }}
-                  >
-                    {secondStartTime && secondEndTime
-                      ? secondStartTime.toLocaleDateString() +
-                        '  ' +
-                        secondStartTime
-                          .toTimeString()
-                          .slice(
-                            0,
-                            secondStartTime.toTimeString().lastIndexOf(':'),
-                          ) +
-                        '~' +
-                        secondEndTime
-                          .toTimeString()
-                          .slice(
-                            0,
-                            secondEndTime.toTimeString().lastIndexOf(':'),
-                          )
-                      : '가능시간2'}
-                  </PlanButton2>
-                  {secondModalOpen && (
-                    <ApplyCalendarModal
-                      XButtonFunc={() => {
-                        setSecondModalOpen(false);
+                    >
+                      {firstStartTime && firstEndTime ? (
+                        <ButtonDiv>
+                          <DateDiv>
+                            {firstStartTime.toLocaleDateString('ko-KR')}
+                          </DateDiv>
+                          <HourDiv>
+                            {firstStartTime
+                              .toTimeString()
+                              .slice(
+                                0,
+                                firstStartTime.toTimeString().lastIndexOf(':'),
+                              ) +
+                              '~' +
+                              firstEndTime
+                                .toTimeString()
+                                .slice(
+                                  0,
+                                  firstEndTime.toTimeString().lastIndexOf(':'),
+                                )}
+                          </HourDiv>
+                        </ButtonDiv>
+                      ) : (
+                        '가능시간1'
+                      )}
+                    </PlanButton1>
+                    {firstStartTime && firstEndTime ? (
+                      <FontAwesomeIcon
+                        icon={faX}
+                        size="sm"
+                        style={{
+                          opacity: 0.3,
+                          cursor: 'pointer',
+                          color: 'white',
+                          position: 'absolute',
+                          top: '1rem',
+                          right: '1rem',
+                        }}
+                        onClick={() => {
+                          setFirstStartTime(undefined);
+                          setFirstEndTime(undefined);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </ApplyButtonDiv>
+                  {modalOpen !== 0 && setRequestTime({ slot: modalOpen })}
+                  <ApplyButtonDiv>
+                    <PlanButton2
+                      onClick={() => {
+                        setModalOpen(2);
                       }}
-                      mentorIntraId={mentorId}
-                      setStartDateTime={setSecondStartTime}
-                      setEndDateTime={setSecondEndTime}
-                    ></ApplyCalendarModal>
-                  )}
-                  <PlanButton2
-                    onClick={() => {
-                      setThirdModalOpen(true);
-                    }}
-                  >
-                    {thirdStartTime && thirdEndTime
-                      ? thirdStartTime.toLocaleDateString() +
-                        '  ' +
-                        thirdStartTime
-                          .toTimeString()
-                          .slice(
-                            0,
-                            thirdStartTime.toTimeString().lastIndexOf(':'),
-                          ) +
-                        '~' +
-                        thirdEndTime
-                          .toTimeString()
-                          .slice(
-                            0,
-                            thirdEndTime.toTimeString().lastIndexOf(':'),
-                          )
-                      : '가능시간3'}
-                  </PlanButton2>
+                    >
+                      {secondStartTime && secondEndTime ? (
+                        <ButtonDiv>
+                          <DateDiv>
+                            {secondStartTime.toLocaleDateString('ko-KR')}
+                          </DateDiv>
+                          <HourDiv>
+                            {secondStartTime
+                              .toTimeString()
+                              .slice(
+                                0,
+                                secondStartTime.toTimeString().lastIndexOf(':'),
+                              ) +
+                              ' ~ ' +
+                              secondEndTime
+                                .toTimeString()
+                                .slice(
+                                  0,
+                                  secondEndTime.toTimeString().lastIndexOf(':'),
+                                )}
+                          </HourDiv>
+                        </ButtonDiv>
+                      ) : (
+                        '가능시간2'
+                      )}
+                    </PlanButton2>
+                    {secondStartTime && secondEndTime ? (
+                      <FontAwesomeIcon
+                        icon={faX}
+                        size="sm"
+                        style={{
+                          opacity: 0.3,
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: '1rem',
+                          right: '1rem',
+                        }}
+                        onClick={() => {
+                          setSecondStartTime(undefined);
+                          setSecondEndTime(undefined);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </ApplyButtonDiv>
+                  <ApplyButtonDiv>
+                    <PlanButton2
+                      onClick={() => {
+                        setModalOpen(3);
+                      }}
+                    >
+                      {thirdStartTime && thirdEndTime ? (
+                        <ButtonDiv>
+                          <DateDiv>
+                            {thirdStartTime.toLocaleDateString('ko-KR')}
+                          </DateDiv>
+                          <HourDiv>
+                            {thirdStartTime
+                              .toTimeString()
+                              .slice(
+                                0,
+                                thirdStartTime.toTimeString().lastIndexOf(':'),
+                              ) +
+                              ' ~ ' +
+                              thirdEndTime
+                                .toTimeString()
+                                .slice(
+                                  0,
+                                  thirdEndTime.toTimeString().lastIndexOf(':'),
+                                )}
+                          </HourDiv>
+                        </ButtonDiv>
+                      ) : (
+                        '가능시간3'
+                      )}
+                    </PlanButton2>
+                    {thirdStartTime && thirdEndTime ? (
+                      <FontAwesomeIcon
+                        icon={faX}
+                        size="sm"
+                        style={{
+                          opacity: 0.3,
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: '1rem',
+                          right: '1rem',
+                        }}
+                        onClick={() => {
+                          setThirdStartTime(undefined);
+                          setThirdEndTime(undefined);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </ApplyButtonDiv>
                   <BottomSize></BottomSize>
-                  {thirdModalOpen && (
-                    <ApplyCalendarModal
-                      XButtonFunc={() => {
-                        setThirdModalOpen(false);
-                      }}
-                      mentorIntraId={mentorId}
-                      setStartDateTime={setThirdStartTime}
-                      setEndDateTime={setThirdEndTime}
-                    ></ApplyCalendarModal>
-                  )}
                 </Wrapper>
               </Chooseplan>
               <Content>
@@ -677,8 +844,8 @@ const ApplyPage = () => {
                 />
                 <MiddleText3> * 궁금한 점 </MiddleText3>
                 <InputCounter
-                  setter={setQuestion}
-                  value={question}
+                  setter={setContent}
+                  value={content}
                   maxLength={500}
                   width="50rem"
                   disabled={false}
@@ -697,33 +864,161 @@ const ApplyPage = () => {
                 <MovLine2> </MovLine2>
                 <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
                 <Wrapper>
-                  <MovPlanButton1 onClick={openModal}>가능시간1</MovPlanButton1>
-                  <Modal
-                    open={modalOpen}
-                    close={closeModal}
-                    header="멘토링 일정 선택"
-                    mentorIntraId={mentorId}
-                    setStartDateTime={setFirstStartTime}
-                    setEndDateTime={setFirstEndTime}
-                  ></Modal>
-                  <MovPlanButton2 onClick={openModal}>가능시간2</MovPlanButton2>
-                  <Modal
-                    open={modalOpen}
-                    close={closeModal}
-                    header="멘토링 일정 선택"
-                    mentorIntraId={mentorId}
-                    setStartDateTime={setSecondStartTime}
-                    setEndDateTime={setSecondEndTime}
-                  ></Modal>
-                  <MovPlanButton2 onClick={openModal}>가능시간3</MovPlanButton2>
-                  <Modal
-                    open={modalOpen}
-                    close={closeModal}
-                    header="멘토링 일정 선택"
-                    mentorIntraId={mentorId}
-                    setStartDateTime={setThirdStartTime}
-                    setEndDateTime={setThirdEndTime}
-                  ></Modal>
+                  <ApplyButtonDiv>
+                    <MovPlanButton1
+                      onClick={() => {
+                        setModalOpen(1);
+                      }}
+                    >
+                      {firstStartTime && firstEndTime ? (
+                        <ButtonDiv>
+                          <DateDiv>
+                            {firstStartTime.toLocaleDateString('ko-KR')}
+                          </DateDiv>
+                          <HourDiv>
+                            {firstStartTime
+                              .toTimeString()
+                              .slice(
+                                0,
+                                firstStartTime.toTimeString().lastIndexOf(':'),
+                              ) +
+                              '~' +
+                              firstEndTime
+                                .toTimeString()
+                                .slice(
+                                  0,
+                                  firstEndTime.toTimeString().lastIndexOf(':'),
+                                )}
+                          </HourDiv>
+                        </ButtonDiv>
+                      ) : (
+                        '가능시간1'
+                      )}
+                    </MovPlanButton1>
+                    {firstStartTime && firstEndTime ? (
+                      <FontAwesomeIcon
+                        icon={faX}
+                        size="sm"
+                        style={{
+                          opacity: 0.3,
+                          cursor: 'pointer',
+                          color: 'white',
+                          position: 'absolute',
+                          top: '1rem',
+                          right: '1rem',
+                        }}
+                        onClick={() => {
+                          setFirstStartTime(undefined);
+                          setFirstEndTime(undefined);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </ApplyButtonDiv>
+                  {modalOpen !== 0 && setRequestTime({ slot: modalOpen })}
+                  <ApplyButtonDiv>
+                    <MovPlanButton2
+                      onClick={() => {
+                        setModalOpen(2);
+                      }}
+                    >
+                      {secondStartTime && secondEndTime ? (
+                        <ButtonDiv>
+                          <DateDiv>
+                            {secondStartTime.toLocaleDateString('ko-KR')}
+                          </DateDiv>
+                          <HourDiv>
+                            {secondStartTime
+                              .toTimeString()
+                              .slice(
+                                0,
+                                secondStartTime.toTimeString().lastIndexOf(':'),
+                              ) +
+                              ' ~ ' +
+                              secondEndTime
+                                .toTimeString()
+                                .slice(
+                                  0,
+                                  secondEndTime.toTimeString().lastIndexOf(':'),
+                                )}
+                          </HourDiv>
+                        </ButtonDiv>
+                      ) : (
+                        '가능시간2'
+                      )}
+                    </MovPlanButton2>
+                    {secondStartTime && secondEndTime ? (
+                      <FontAwesomeIcon
+                        icon={faX}
+                        size="sm"
+                        style={{
+                          opacity: 0.3,
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: '1rem',
+                          right: '1rem',
+                        }}
+                        onClick={() => {
+                          setSecondStartTime(undefined);
+                          setSecondEndTime(undefined);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </ApplyButtonDiv>
+                  <ApplyButtonDiv>
+                    <MovPlanButton2
+                      onClick={() => {
+                        setModalOpen(3);
+                      }}
+                    >
+                      {thirdStartTime && thirdEndTime ? (
+                        <ButtonDiv>
+                          <DateDiv>
+                            {thirdStartTime.toLocaleDateString('ko-KR')}
+                          </DateDiv>
+                          <HourDiv>
+                            {thirdStartTime
+                              .toTimeString()
+                              .slice(
+                                0,
+                                thirdStartTime.toTimeString().lastIndexOf(':'),
+                              ) +
+                              ' ~ ' +
+                              thirdEndTime
+                                .toTimeString()
+                                .slice(
+                                  0,
+                                  thirdEndTime.toTimeString().lastIndexOf(':'),
+                                )}
+                          </HourDiv>
+                        </ButtonDiv>
+                      ) : (
+                        '가능시간3'
+                      )}
+                    </MovPlanButton2>
+                    {thirdStartTime && thirdEndTime ? (
+                      <FontAwesomeIcon
+                        icon={faX}
+                        size="sm"
+                        style={{
+                          opacity: 0.3,
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: '1rem',
+                          right: '1rem',
+                        }}
+                        onClick={() => {
+                          setThirdStartTime(undefined);
+                          setThirdEndTime(undefined);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </ApplyButtonDiv>
                 </Wrapper>
               </MovChooseplan>
               <MovContent>
@@ -741,8 +1036,8 @@ const ApplyPage = () => {
                 />
                 <MovMiddleText3> * 궁금한 점 </MovMiddleText3>
                 <InputCounter
-                  setter={setQuestion}
-                  value={question}
+                  setter={setContent}
+                  value={content}
                   maxLength={800}
                   width="40rem"
                   disabled={false}

@@ -9,12 +9,14 @@ import {
 import { Header } from './header';
 import LoadingStore from '../../states/loading/LoadingStore';
 import { MentoringLog } from '../../interfaces/cadet-mentoring/mentoring-log.interface';
-import AuthStore from '../../states/auth/AuthStore';
+import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
+import { Navigate } from 'react-router-dom';
 
 const NoneDrag = styled.div`
   display: flex;
   width: 100%;
+  height: calc(100vh - 210px);
   flex-direction: column;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -26,7 +28,6 @@ const NoneDrag = styled.div`
 const MentorCards = styled.div`
   display: grid;
   width: 90%;
-  height: 100%;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(350px, 380px));
   gap: 30px;
@@ -62,18 +63,30 @@ const CadetMentornig = observer(() => {
     getKeywords();
   }, []);
 
-  return (
-    <>
-      <NoneDrag>
-        <Header url={url} setUrl={setUrl}></Header>
-        <MentorCards>
-          {logs.map((log, i) => {
-            return <MentorCard log={log} key={i}></MentorCard>;
-          })}
-        </MentorCards>
-      </NoneDrag>
-    </>
-  );
+  if (!AuthStore.getAccessToken()) {
+    ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
+    AuthStore.Login();
+    return <></>;
+  } else if (AuthStore.getUserRole() !== USER_ROLES.CADET) {
+    ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
+    return <Navigate to="/" />;
+  } else
+    return (
+      <>
+        <NoneDrag>
+          <Header url={url} setUrl={setUrl}></Header>
+          {logs ? (
+            <MentorCards>
+              {logs.map((log, i) => {
+                return <MentorCard log={log} key={i}></MentorCard>;
+              })}
+            </MentorCards>
+          ) : (
+            '멘토링 없음'
+          )}
+        </NoneDrag>
+      </>
+    );
 });
 
 export default CadetMentornig;
