@@ -62,6 +62,11 @@ const Container = styled.div`
   }
   .toastui-calendar-event-time-content {
     background-color: ${props => props.theme.colors.polarBrightMain};
+    color: ${props => props.theme.colors.grayFive};
+    padding-top: 0.5rem;
+  }
+  .toastui-calendar-event-time {
+    border-left: 1px solid ${props => props.theme.colors.grayFive};
   }
 `;
 
