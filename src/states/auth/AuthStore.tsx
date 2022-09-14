@@ -1,6 +1,5 @@
 import { action, makeObservable } from 'mobx';
 import {
-  axiosInstance,
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
 } from '../../context/axios-interface';
@@ -15,6 +14,7 @@ import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
 export interface User {
   intraId: string;
   role: string;
+  join: string;
 }
 
 export const USER_ROLES = {
@@ -92,6 +92,13 @@ class AuthStore {
    */
   getUserRole() {
     return getCookie(TOKEN_LIST.USER_ROLE);
+  }
+
+  /**
+   * @returns (쿠키)로그인 된 유저의 JOIN을 가져옴, 없으면 undefined
+   */
+  getUserJoin() {
+    return getCookie(TOKEN_LIST.JOIN);
   }
 }
 
