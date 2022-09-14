@@ -518,7 +518,14 @@ function MentorDetail() {
                   )}
                 </div>
                 {mentor?.updatedAt ? (
-                  <div style={{ color: `${theme.colors.fontGray}` }}>
+                  <div
+                    style={{
+                      color: `${theme.colors.fontGray}`,
+                      marginBottom: '0.5rem',
+                      paddingLeft: '0.3rem',
+                      fontSize: '1rem',
+                    }}
+                  >
                     update: {mentor?.updatedAt?.substring(0, 10)}
                   </div>
                 ) : (
