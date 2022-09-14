@@ -30,6 +30,7 @@ const NoneDrag = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  height: 100%;
 `;
 
 const Top = styled.div`
