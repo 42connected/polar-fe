@@ -61,10 +61,12 @@ const Text = styled.div`
 
 const TextContainer = styled.div`
   display: flex;
-  width: 50%;
 `;
 
 const SearchBox = styled.input`
+  display: flex;
+  justify-content: right;
+  align-items: center;
   ${defaultTheme.font.nanumGothic};
   ${defaultTheme.fontSize.sizeSmall};
   border-radius: 30px;
@@ -81,16 +83,6 @@ const SearchBox = styled.input`
   @media screen and (max-width: 500px) {
     font-size: 1rem;
     width: 10rem;
-  }
-`;
-
-const Search = styled.div`
-  display: flex;
-  width: 50%;
-  justify-content: right;
-  align-items: center;
-  @media screen and (max-width: 500px) {
-    width: 40%;
   }
 `;
 
@@ -125,24 +117,22 @@ const MentorList = observer(() => {
             </Text>
             <Text>명의 멘토님이 기다립니다.</Text>
           </TextContainer>
-          <Search>
-            <SearchBox
-              placeholder={'이름, 인트라 아이디'}
-              onChange={e => {
-                setSearch(e.target.value);
-              }}
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  MentorsStore.clear();
-                  MentorsStore.Initializer(
-                    category,
-                    KeywordStore.selected,
-                    search,
-                  );
-                }
-              }}
-            />
-          </Search>
+          <SearchBox
+            placeholder={'이름, 인트라 아이디'}
+            onChange={e => {
+              setSearch(e.target.value);
+            }}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                MentorsStore.clear();
+                MentorsStore.Initializer(
+                  category,
+                  KeywordStore.selected,
+                  search,
+                );
+              }
+            }}
+          />
         </SearchContainer>
         <CardContainer>
           {MentorsStore?.mentorsList?.mentors?.map((e, i) => {
