@@ -2,7 +2,7 @@ import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import defaultTheme from '../../styles/theme';
 
-const Fade = keyframes`
+export const Fade = keyframes`
   0% {
    opacity: 0;
   }

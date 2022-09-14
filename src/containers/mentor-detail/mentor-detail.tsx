@@ -109,9 +109,21 @@ function MentorDetail() {
       page: page,
       take: take,
     };
+    const user: User = {
+      intraId: AuthStore.getUserIntraId(),
+      role: AuthStore.getUserRole(),
+      join: AuthStore.getUserJoin(),
+    };
     axiosInstance
       .get(`/mentors/${getParams.intraId}`)
       .then(result => {
+        if (
+          user.join !== 'true' &&
+          user.role === 'mentor' &&
+          user.intraId === result.data?.intraId
+        ) {
+          UserJoinStore.on();
+        }
         setMentor(result.data);
         setMentorTags(result.data?.tags ? result.data.tags : []);
         setMentorIntroduction(
@@ -143,14 +155,6 @@ function MentorDetail() {
         ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
       });
 
-    const user: User = {
-      intraId: AuthStore.getUserIntraId(),
-      role: AuthStore.getUserRole(),
-      join: AuthStore.getUserJoin(),
-    };
-    if (user.join !== 'true' && user.role === 'mentor') {
-      UserJoinStore.on();
-    }
     setUser(user);
   }, []);
 
@@ -468,44 +472,17 @@ function MentorDetail() {
                   )}
                   <SelectKeywords
                     isActivatedEdit={isActivateIntroductionEdit}
+                    isActivateIntroductionEdit={isActivateIntroductionEdit}
+                    setIsActivateDeleteModal={setIsActivateDeleteModal}
+                    isActivateDeleteModal={isActivateDeleteModal}
+                    setIsActivateIntroductionEdit={
+                      setIsActivateIntroductionEdit
+                    }
+                    handleSubmitIntroductionTags={handleSubmitIntroductionTags}
+                    handleSubmitIntroductionTagsNo={
+                      handleSubmitIntroductionTagsNo
+                    }
                   />
-                  <ButtonBox>
-                    {isActivateDeleteModal && (
-                      <TwoButtonModal
-                        Text="수정하시겠습니까?"
-                        TitleText="수정"
-                        XButtonFunc={() => {
-                          setIsActivateDeleteModal(false);
-                        }}
-                        Button1Func={() => {
-                          try {
-                            setIsActivateDeleteModal(false);
-                            setIsActivateIntroductionEdit(false);
-                          } catch (e) {
-                            // ErrorStore
-                          }
-                          handleSubmitIntroductionTags();
-                        }}
-                        Button2Func={() => {
-                          setIsActivateDeleteModal(false);
-                          setIsActivateIntroductionEdit(false);
-                          handleSubmitIntroductionTagsNo();
-                        }}
-                        Button1Text="네"
-                        Button2Text="아니요"
-                        Button2bg={theme.colors.grayThree}
-                      />
-                    )}
-                    {isActivateIntroductionEdit && (
-                      <Button
-                        text="수정완료"
-                        borderRadius="20px"
-                        onClick={() => {
-                          setIsActivateDeleteModal(data => !data);
-                        }}
-                      />
-                    )}
-                  </ButtonBox>
                 </MentorBody1Right1>
                 <MentorBody1Right2>
                   <MenuBox1>
