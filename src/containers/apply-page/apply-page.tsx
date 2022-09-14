@@ -150,16 +150,6 @@ const MovApplyContainer = styled.div`
   color: ${theme.colors.blackOne};
 `;
 
-const ApplypageStyle = styled.body`
-  width: 100vw;
-  height: 120vh;
-  display: flex;
-  flex-direction: row;
-  text-align: center;
-  flex-wrap: wrap;
-  justify-content: center;
-  background-color: ${theme.colors.polarBackground};
-`;
 const Chooseplan = styled.div`
   display: flex;
   flex-flow: row;
@@ -448,7 +438,7 @@ const ApplyPage = () => {
   const [postData, setPostData] = useState<PostApply>({
     topic: topic,
     content: content,
-    requestTime1: [new Date(), new Date()],
+    requestTime1: [new Date().toUTCString(), new Date().toUTCString()],
     requestTime2: null,
     requestTime3: null,
   });
@@ -533,7 +523,10 @@ const ApplyPage = () => {
 
   useEffect(() => {
     if (firstStartTime && firstEndTime) {
-      postData.requestTime1 = [firstStartTime, firstEndTime];
+      postData.requestTime1 = [
+        firstStartTime.toUTCString(),
+        firstEndTime.toUTCString(),
+      ];
     } else if (firstStartTime === undefined && firstEndTime === undefined) {
       if (secondStartTime && secondEndTime) {
         setFirstStartTime(new Date(secondStartTime));
@@ -546,7 +539,10 @@ const ApplyPage = () => {
 
   useEffect(() => {
     if (secondStartTime && secondEndTime) {
-      postData.requestTime2 = [secondStartTime, secondEndTime];
+      postData.requestTime2 = [
+        secondStartTime.toUTCString(),
+        secondEndTime.toUTCString(),
+      ];
     } else if (secondStartTime === undefined && secondEndTime === undefined) {
       if (thirdStartTime && thirdEndTime) {
         setSecondStartTime(new Date(thirdStartTime));
@@ -559,7 +555,10 @@ const ApplyPage = () => {
 
   useEffect(() => {
     if (thirdStartTime && thirdEndTime) {
-      postData.requestTime3 = [thirdStartTime, thirdEndTime];
+      postData.requestTime3 = [
+        thirdStartTime.toUTCString(),
+        thirdEndTime.toUTCString(),
+      ];
     } else if (thirdStartTime === undefined && thirdEndTime === undefined)
       postData.requestTime3 = null;
   }, [thirdStartTime, thirdEndTime]);
