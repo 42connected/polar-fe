@@ -81,7 +81,7 @@ const Footer = () => {
       <div
         className="footerplus"
         style={{
-          background: theme.colors.polarMain,
+          background: theme.colors.polarSimpleMain,
         }}
       >
         <FooterTextBody>
