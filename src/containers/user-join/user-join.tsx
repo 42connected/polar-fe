@@ -63,7 +63,7 @@ const Background = styled.div`
   right: 0;
   background-color: rgba(246, 246, 246, 0.7);
 
-  z-index: 1002;
+  z-index: 1001;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

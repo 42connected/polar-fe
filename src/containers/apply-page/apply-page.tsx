@@ -150,16 +150,6 @@ const MovApplyContainer = styled.div`
   color: ${theme.colors.blackOne};
 `;
 
-const ApplypageStyle = styled.body`
-  width: 100vw;
-  height: 120vh;
-  display: flex;
-  flex-direction: row;
-  text-align: center;
-  flex-wrap: wrap;
-  justify-content: center;
-  background-color: ${theme.colors.polarBackground};
-`;
 const Chooseplan = styled.div`
   display: flex;
   flex-flow: row;
@@ -432,7 +422,8 @@ const ApplyPage = () => {
   const { mentorId } = useParams();
   const [token, setToken] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
-  const [isActive, setIsActive] = useState<boolean>(false);
+  const [active, setActive] = useState<boolean>(false);
+  const [isExist, setIsExist] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorModal, setErrorModal] = useState<boolean>(false);
   const [errorModalMsg, setErrorModalMsg] = useState<string>('');
@@ -447,7 +438,7 @@ const ApplyPage = () => {
   const [postData, setPostData] = useState<PostApply>({
     topic: topic,
     content: content,
-    requestTime1: [new Date(), new Date()],
+    requestTime1: [new Date().toUTCString(), new Date().toUTCString()],
     requestTime2: null,
     requestTime3: null,
   });
@@ -469,14 +460,18 @@ const ApplyPage = () => {
         .then(res => {
           if (res.status === 201) {
             setSuccessModal(true);
+          } else {
+            setErrorModalMsg('요청 에러 발생');
+            setErrorModal(true);
           }
         });
     } catch (err) {
-      setErrorModalMsg('요청 에러 발생');
       if (axios.isAxiosError(err)) {
         setErrorModalMsg(
           `${(err.response?.data as RequestErrorResponse).message}`,
         );
+      } else {
+        setErrorModalMsg('요청 에러 발생');
       }
       setErrorModal(true);
     } finally {
@@ -495,9 +490,12 @@ const ApplyPage = () => {
     try {
       axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, `mentors/${mentorId}`)
         .then(response => {
+          if (response.status === 200) {
+            setIsExist(true);
+          }
           const { isActive }: MentorDetailProps = response.data;
           if (isActive === true) {
-            setIsActive(true);
+            setActive(true);
           }
         })
         .finally(() => {
@@ -505,7 +503,15 @@ const ApplyPage = () => {
           setIsLoading(false);
         });
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        ErrorStore.on(
+          (error.response?.data as RequestErrorResponse).message,
+          ERROR_DEFAULT_VALUE.TITLE,
+        );
+      } else {
+        ErrorStore.on('요청 에러 발생', ERROR_DEFAULT_VALUE.TITLE);
+      }
+      navigate('/');
     }
 
     window.innerWidth <= 1070 ? setIsMobile(true) : setIsMobile(false);
@@ -517,7 +523,10 @@ const ApplyPage = () => {
 
   useEffect(() => {
     if (firstStartTime && firstEndTime) {
-      postData.requestTime1 = [firstStartTime, firstEndTime];
+      postData.requestTime1 = [
+        firstStartTime.toUTCString(),
+        firstEndTime.toUTCString(),
+      ];
     } else if (firstStartTime === undefined && firstEndTime === undefined) {
       if (secondStartTime && secondEndTime) {
         setFirstStartTime(new Date(secondStartTime));
@@ -530,7 +539,10 @@ const ApplyPage = () => {
 
   useEffect(() => {
     if (secondStartTime && secondEndTime) {
-      postData.requestTime2 = [secondStartTime, secondEndTime];
+      postData.requestTime2 = [
+        secondStartTime.toUTCString(),
+        secondEndTime.toUTCString(),
+      ];
     } else if (secondStartTime === undefined && secondEndTime === undefined) {
       if (thirdStartTime && thirdEndTime) {
         setSecondStartTime(new Date(thirdStartTime));
@@ -543,7 +555,10 @@ const ApplyPage = () => {
 
   useEffect(() => {
     if (thirdStartTime && thirdEndTime) {
-      postData.requestTime3 = [thirdStartTime, thirdEndTime];
+      postData.requestTime3 = [
+        thirdStartTime.toUTCString(),
+        thirdEndTime.toUTCString(),
+      ];
     } else if (thirdStartTime === undefined && thirdEndTime === undefined)
       postData.requestTime3 = null;
   }, [thirdStartTime, thirdEndTime]);
@@ -620,8 +635,17 @@ const ApplyPage = () => {
 
   if (isLoading) {
     return <></>;
-  } else if (mentorId === undefined || isActive === false) {
+  } else if (mentorId === undefined) {
     ErrorStore.on('잘못된 접근입니다.', ERROR_DEFAULT_VALUE.TITLE);
+    return <Navigate to="/" />;
+  } else if (isExist === false) {
+    ErrorStore.on('존재하지 않는 멘토입니다.', ERROR_DEFAULT_VALUE.TITLE);
+    return <Navigate to="/" />;
+  } else if (active === false) {
+    ErrorStore.on(
+      '멘토링이 가능하지 않은 멘토입니다.',
+      ERROR_DEFAULT_VALUE.TITLE,
+    );
     return <Navigate to="/" />;
   } else if (!token) {
     ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
@@ -662,7 +686,7 @@ const ApplyPage = () => {
             }}
           />
         )}
-        {!isMobile ? ( //pc
+        {!isMobile ? (
           <div>
             <ApplyContainer>
               <Chooseplan>

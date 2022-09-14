@@ -29,6 +29,7 @@ const NoneDrag = styled.div`
   -ms-user-select: none;
   user-select: none;
   background-color: ${defaultTheme.colors.polarGray};
+  padding-bottom: 3rem;
 `;
 
 const ReportContainer = styled.div`

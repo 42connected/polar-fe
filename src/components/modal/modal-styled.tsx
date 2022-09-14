@@ -2,7 +2,7 @@ import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import defaultTheme from '../../styles/theme';
 
-const Fade = keyframes`
+export const Fade = keyframes`
   0% {
    opacity: 0;
   }
@@ -52,7 +52,7 @@ export const ModalBackground = styled.div`
   right: 0;
   background-color: rgba(246, 246, 246, 0.7);
 
-  z-index: 1004;
+  z-index: 999;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

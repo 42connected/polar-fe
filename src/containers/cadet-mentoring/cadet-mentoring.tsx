@@ -11,18 +11,23 @@ import LoadingStore from '../../states/loading/LoadingStore';
 import { MentoringLog } from '../../interfaces/cadet-mentoring/mentoring-log.interface';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
-import { Navigate } from 'react-router-dom';
+import defaultTheme from '../../styles/theme';
 
 const NoneDrag = styled.div`
   display: flex;
   width: 100%;
-  height: calc(100vh - 210px);
   flex-direction: column;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   align-items: center;
+`;
+
+const NoMentoringText = styled.div`
+  ${defaultTheme.font.sebangGothic};
+  ${defaultTheme.fontSize.sizeMedium};
+  margin-top: 2rem;
 `;
 
 const MentorCards = styled.div`
@@ -38,7 +43,7 @@ const CadetMentornig = observer(() => {
   const [logs, setLogs] = useState<MentoringLog[]>([]);
   const [url, setUrl] = useState<string>('');
 
-  const getKeywords = async () => {
+  const tryGetCadetMentorings = async () => {
     LoadingStore.on();
     try {
       const save = await axiosWithNoData(
@@ -60,33 +65,30 @@ const CadetMentornig = observer(() => {
   };
 
   useEffect(() => {
-    getKeywords();
+    if (!AuthStore.getAccessToken()) {
+      ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
+      return;
+    } else if (AuthStore.getUserRole() !== USER_ROLES.CADET) {
+      ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
+      return;
+    }
+    tryGetCadetMentorings();
   }, []);
 
-  if (!AuthStore.getAccessToken()) {
-    ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
-    AuthStore.Login();
-    return <></>;
-  } else if (AuthStore.getUserRole() !== USER_ROLES.CADET) {
-    ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
-    return <Navigate to="/" />;
-  } else
-    return (
-      <>
-        <NoneDrag>
-          <Header url={url} setUrl={setUrl}></Header>
-          {logs ? (
-            <MentorCards>
-              {logs.map((log, i) => {
-                return <MentorCard log={log} key={i}></MentorCard>;
-              })}
-            </MentorCards>
-          ) : (
-            '멘토링 없음'
-          )}
-        </NoneDrag>
-      </>
-    );
+  return (
+    <NoneDrag>
+      <Header url={url} setUrl={setUrl}></Header>
+      {logs?.length ? (
+        <MentorCards>
+          {logs.map((log, i) => {
+            return <MentorCard log={log} key={i}></MentorCard>;
+          })}
+        </MentorCards>
+      ) : (
+        <NoMentoringText>현재 진행중인 멘토링이 없습니다.</NoMentoringText>
+      )}
+    </NoneDrag>
+  );
 });
 
 export default CadetMentornig;

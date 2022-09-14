@@ -14,6 +14,7 @@ import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import AuthStore from '../../states/auth/AuthStore';
 import DataRoomListElementMobile from './data-room-list-element-mobile';
 import LoadingStore from '../../states/loading/LoadingStore';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -84,29 +85,40 @@ function DataRoomList(
       url = url.concat(`&mentorIntra=${query.mentorIntra}`);
     if (query.mentorName) url = url.concat(`&mentorName=${query.mentorName}`);
 
-    axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, url, config)
-      .then(async response => {
-        const tmpOffset: number =
-          query.page * query.take > response.data.total
-            ? response.data.total % query.take
-            : query.take;
+    try {
+      axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, url, config)
+        .then(async response => {
+          if (response.status === 200) {
+            const tmpOffset: number =
+              query.page * query.take > response.data.total
+                ? response.data.total % query.take
+                : query.take;
 
-        if (tmpOffset < query.take)
-          setDatas(
-            response.data.reports.concat(
-              Array(query.take - tmpOffset).fill({}),
-            ),
-          );
-        else setDatas(response.data.reports);
-        setTotal(response.data.total);
-        setOffset(tmpOffset);
-      })
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        LoadingStore.off();
-      });
+            if (tmpOffset < query.take)
+              setDatas(
+                response.data.reports.concat(
+                  Array(query.take - tmpOffset).fill({}),
+                ),
+              );
+            else setDatas(response.data.reports);
+            setTotal(response.data.total);
+            setOffset(tmpOffset);
+          } else {
+            ErrorStore.on(
+              '데이터를 가져오는 중 오류가 발생하였습니다.',
+              ERROR_DEFAULT_VALUE.TITLE,
+            );
+          }
+        })
+        .finally(() => {
+          LoadingStore.off();
+        });
+    } catch (error) {
+      ErrorStore.on(
+        '데이터를 가져오는 중 오류가 발생하였습니다.',
+        ERROR_DEFAULT_VALUE.TITLE,
+      );
+    }
   }, [query, offset, setOffset, setTotal, total]);
 
   function onAscendingChange() {
