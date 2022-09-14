@@ -5,7 +5,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../components/button';
 import { InputCounter } from '../../components/input-counter';
@@ -28,6 +28,7 @@ import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import MentorInfoModal, { ModalType } from '../signup/mentor-info-modal';
 import MyTableComponents from '../../components/mentor-detail/my-table';
 import NotFound from '../not-found/not-found';
+import UserJoinStore from '../../states/user-join/UserJoinStore';
 
 function MentorDetail() {
   const [mentorIntroduction, setMentorIntroduction] = useState<string>('');
@@ -65,6 +66,7 @@ function MentorDetail() {
   ] = useState<boolean>(false);
   const [isActivateMentorTimeModal, setIsActivateMentorTimeModal] =
     useState<boolean>(false);
+  const navigate = useNavigate();
 
   const setMentorAvailableTimeData = async (metorAvailableTimeData: string) => {
     const mentorAvailableTimeDataToArray = JSON.parse(metorAvailableTimeData);
@@ -144,7 +146,11 @@ function MentorDetail() {
     const user: User = {
       intraId: AuthStore.getUserIntraId(),
       role: AuthStore.getUserRole(),
+      join: AuthStore.getUserJoin(),
     };
+    if (user.join !== 'true' && user.role === 'mentor') {
+      UserJoinStore.on();
+    }
     setUser(user);
   }, []);
 
@@ -338,7 +344,7 @@ function MentorDetail() {
                 </MentorActivateContainer>
               </MentorInfoContent>
             </MentorInfo>
-            {mentor?.isActive && user?.role == 'cadet' ? (
+            {mentor?.isActive ? (
               <Link to={`/apply-page/${mentor?.intraId}`}>
                 <Button
                   text="멘토링 신청하기"
@@ -356,13 +362,17 @@ function MentorDetail() {
                 color={theme.colors.backgoundWhite}
                 isUnActivated={true}
                 onClick={() => {
-                  setIsActivateApplyModal(true);
+                  setIsActivateApplyModal(!isActivateApplyModal);
                 }}
               />
             )}
             {isActivateApplyModal && (
               <OneButtonModal
-                Text="멘티만 신청 가능합니다."
+                Text={
+                  user?.role !== 'cadet'
+                    ? '멘티만 신청 가능합니다.'
+                    : '멘토님이 준비 중입니다.'
+                }
                 TitleText="멘토링 신청"
                 XButtonFunc={() => {
                   setIsActivateApplyModal(false);
@@ -491,7 +501,7 @@ function MentorDetail() {
                         text="수정완료"
                         borderRadius="20px"
                         onClick={() => {
-                          setIsActivateDeleteModal(true);
+                          setIsActivateDeleteModal(data => !data);
                         }}
                       />
                     )}
@@ -516,7 +526,9 @@ function MentorDetail() {
                       icon={faPencil}
                       size={'xs'}
                       className="icon"
-                      onClick={() => setIsActivateMentorTimeModal(true)}
+                      onClick={() =>
+                        setIsActivateMentorTimeModal(!isActivateMentorTimeModal)
+                      }
                     />
                   ) : null}
                   {isActivateMentorTimeModal && (
@@ -529,14 +541,7 @@ function MentorDetail() {
                   )}
                 </div>
                 {mentor?.updatedAt ? (
-                  <div
-                    style={{
-                      color: `${theme.colors.fontGray}`,
-                      marginBottom: '0.5rem',
-                      paddingLeft: '0.3rem',
-                      fontSize: '1rem',
-                    }}
-                  >
+                  <div style={{ color: `${theme.colors.fontGray}` }}>
                     update: {mentor?.updatedAt?.substring(0, 10)}
                   </div>
                 ) : (
@@ -597,7 +602,7 @@ function MentorDetail() {
                       backgroundColor={theme.colors.polarSimpleMain}
                       borderRadius="20px"
                       onClick={() => {
-                        setIsActivateMentorMarkDownEditModal(true);
+                        setIsActivateMentorMarkDownEditModal(data => !data);
                       }}
                     />
                     {isActivateMentorMarkDownEditModal && (
@@ -663,7 +668,7 @@ function MentorDetail() {
                           {
                             user.role === 'cadet'
                               ? handleCommentSubmit()
-                              : setIsActivateCommentSubmit(true);
+                              : setIsActivateCommentSubmit(data => !data);
                           }
                         }}
                         isUnActivated={inputComment.length === 0}
@@ -731,7 +736,7 @@ function MentorDetail() {
                               color={'red'}
                               onClick={() => {
                                 setUserCommentId(comment.id);
-                                setIsActivateCommentDeleteModal(true);
+                                setIsActivateCommentDeleteModal(data => !data);
                               }}
                             />
                           ) : null}

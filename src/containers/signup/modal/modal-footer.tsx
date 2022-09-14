@@ -299,6 +299,24 @@ export function ModalFooter(props: ModalFooterProps) {
   async function updateMentorTime(props: ModalFooterProps) {
     LoadingStore.on();
 
+    if (props.rows?.length === 0 && props.checked) {
+      setOneButtonModalProps({
+        TitleText: '가능시간 입력',
+        Text: '입력하신 가능시간이 없습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+      LoadingStore.off();
+      return;
+    }
+
     if (!(await validateRows(props.rows))) {
       setOneButtonModalProps({
         TitleText: '가능시간 빈 칸',
