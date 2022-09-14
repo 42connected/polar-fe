@@ -188,7 +188,7 @@ const Header = () => {
   const AlertDetail = () => {
     return (
       ErrorStore.on(
-        '카뎃은 자동 로그아웃됩니다!\n 9월 3째주 comming soon~ :)',
+        '카뎃은 자동 로그아웃됩니다!\n 9월 19~20일 comming soon~ :)',
         ERROR_DEFAULT_VALUE.TITLE,
       ),
       AuthStore.Logout()
@@ -213,6 +213,13 @@ const Header = () => {
   useEffect(() => {
     {
       AuthStore.getAccessToken() ? setIsLogin(true) : setIsLogin(false);
+    }
+
+    if (
+      AuthStore.getUserRole() &&
+      AuthStore.getUserRole() === USER_ROLES.CADET
+    ) {
+      AlertDetail();
     }
   }, [isClick]);
 
