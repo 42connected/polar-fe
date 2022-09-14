@@ -3,6 +3,11 @@ import { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../../assets/image/logo/logo.png';
+import {
+  DEFAULT_COOKIE_OPTION,
+  removeCookie,
+  TOKEN_LIST,
+} from '../../context/cookies';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import theme from '../../styles/theme';
@@ -186,13 +191,15 @@ const Header = () => {
   }, 10);
 
   const AlertDetail = () => {
-    return (
-      ErrorStore.on(
-        '카뎃은 자동 로그아웃됩니다!\n 9월 19~20일 comming soon~ :)',
-        ERROR_DEFAULT_VALUE.TITLE,
-      ),
-      AuthStore.Logout()
+    ErrorStore.on(
+      '카뎃은 자동 로그아웃됩니다!\n 9월 19~20일 comming soon~ :)',
+      ERROR_DEFAULT_VALUE.TITLE,
     );
+    removeCookie(TOKEN_LIST.ACCESS_TOKEN, DEFAULT_COOKIE_OPTION);
+    removeCookie(TOKEN_LIST.INTRA_ID, DEFAULT_COOKIE_OPTION);
+    removeCookie(TOKEN_LIST.USER_ROLE, DEFAULT_COOKIE_OPTION);
+    removeCookie(TOKEN_LIST.JOIN, DEFAULT_COOKIE_OPTION);
+    setIsLogin(false);
   };
 
   if (AuthStore.getUserRole()) {
