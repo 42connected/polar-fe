@@ -16,7 +16,6 @@ import defaultTheme from '../../styles/theme';
 const NoneDrag = styled.div`
   display: flex;
   width: 100%;
-  height: calc(100vh - 210px);
   flex-direction: column;
   -webkit-user-select: none;
   -moz-user-select: none;
