@@ -109,9 +109,21 @@ function MentorDetail() {
       page: page,
       take: take,
     };
+    const user: User = {
+      intraId: AuthStore.getUserIntraId(),
+      role: AuthStore.getUserRole(),
+      join: AuthStore.getUserJoin(),
+    };
     axiosInstance
       .get(`/mentors/${getParams.intraId}`)
       .then(result => {
+        if (
+          user.join !== 'true' &&
+          user.role === 'mentor' &&
+          user.intraId === result.data?.intraId
+        ) {
+          UserJoinStore.on();
+        }
         setMentor(result.data);
         setMentorTags(result.data?.tags ? result.data.tags : []);
         setMentorIntroduction(
@@ -143,14 +155,6 @@ function MentorDetail() {
         ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
       });
 
-    const user: User = {
-      intraId: AuthStore.getUserIntraId(),
-      role: AuthStore.getUserRole(),
-      join: AuthStore.getUserJoin(),
-    };
-    if (user.join !== 'true' && user.role === 'mentor') {
-      UserJoinStore.on();
-    }
     setUser(user);
   }, []);
 
