@@ -1,16 +1,16 @@
 import styled from '@emotion/styled';
 import { Container } from '@mui/system';
 import { observer } from 'mobx-react-lite';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
 import defaultTheme from '../../styles/theme';
 import { TableTitle } from './table-title';
-import { TableRow } from './table-row';
+import { TableColumnLine, TableRow } from './table-row';
 import MentorLogStore, {
   LOGS_PER_PAGE,
   MentoringLogs,
 } from '../../states/my-mentoring-mentor/MentorLogStore';
 import { useEffect, useState } from 'react';
-import AuthStore from '../../states/auth/AuthStore';
+import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { Email } from './email';
 import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
 import { ApplyModal } from './modal/modal';
@@ -21,14 +21,16 @@ import {
   ThemeProvider,
 } from '@mui/material';
 import theme from '../../styles/theme';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
 const NoneDrag = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 210px);
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  height: 100%;
 `;
 
 const Top = styled.div`
@@ -94,7 +96,7 @@ const MyMentoringMentor = observer(() => {
   const { intraId } = useParams<string>();
   const [log, setLog] = useState<MentoringLogs>();
   const [applyModal, setApplyModal] = useState<boolean>(false);
-  const [isDoneToGetLogs, setIsDoneToGetLogs] = useState<boolean>(false);
+  const [isInit, setIsInit] = useState<boolean>(false);
 
   useEffect(() => {
     async function initLog() {
@@ -102,10 +104,18 @@ const MyMentoringMentor = observer(() => {
         AuthStore.getAccessToken(),
         parseInt(pageNumber || INITIAL_PAGE),
       );
-      setIsDoneToGetLogs(true);
+      setIsInit(true);
     }
     initLog();
   }, [pageNumber]);
+
+  const RenderEmptyLine = () => {
+    const result = [];
+    for (let i = 0; i + MentorLogStore?.logs?.length < 15; ++i) {
+      result.push(<TableColumnLine />);
+    }
+    return result;
+  };
 
   useEffect(() => {
     if (!intraId) {
@@ -118,65 +128,74 @@ const MyMentoringMentor = observer(() => {
     };
   }, []);
 
-  return (
-    <NoneDrag>
-      <Top>
-        <ApplyModal
-          log={log}
-          applyModal={applyModal}
-          setApplyModal={setApplyModal}
-        />
-        <Container component="main" maxWidth="lg">
-          <InfoContainer>
-            <InfoTitle>{MentorStore?.mentor?.intraId}의 멘토링</InfoTitle>
-            <Email
-              email={MentorStore?.mentor?.email}
-              setEmail={MentorStore?.setEmail}
-            />
-          </InfoContainer>
-        </Container>
-      </Top>
-      <Bottom>
-        <Container component="main" maxWidth="lg">
-          <TableTitle />
-          {MentorLogStore.logs.map((e, i) => (
-            <TableRow
-              key={i}
-              user={e.cadet.intraId}
-              mentoringId={e.id}
-              topic={e.topic}
-              mentoringState={e.status}
-              report={e.report}
-              createdAt={e.createdAt}
-              meetingAt={e.meetingAt}
-              log={e}
-              setApplyModal={setApplyModal}
-              setLog={setLog}
-            />
-          ))}
-        </Container>
-      </Bottom>
-      {isDoneToGetLogs && (
-        <PaginationContainer>
-          <ThemeProvider theme={muiTheme}>
-            <Pagination
-              page={parseInt(pageNumber || INITIAL_PAGE)}
-              count={Math.trunc(MentorLogStore.total / LOGS_PER_PAGE) + 1}
-              renderItem={item => (
-                <PaginationItem
-                  component={Link}
-                  to={`/mentors/mentorings/${intraId}${`?page=${item.page}`}`}
-                  {...item}
-                />
-              )}
-              size="large"
-              color="primary"
-            />
-          </ThemeProvider>
-        </PaginationContainer>
-      )}
-    </NoneDrag>
-  );
+  if (!AuthStore.getAccessToken()) {
+    ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
+    AuthStore.Login();
+    return <></>;
+  } else if (AuthStore.getUserRole() !== USER_ROLES.MENTOR) {
+    ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
+    return <Navigate to="/" />;
+  } else
+    return (
+      <NoneDrag>
+        <Top>
+          <ApplyModal
+            log={log}
+            applyModal={applyModal}
+            setApplyModal={setApplyModal}
+          />
+          <Container component="main" maxWidth="lg">
+            <InfoContainer>
+              <InfoTitle>{MentorStore?.mentor?.intraId}의 멘토링</InfoTitle>
+              <Email
+                email={MentorStore?.mentor?.email}
+                setEmail={MentorStore?.setEmail}
+              />
+            </InfoContainer>
+          </Container>
+        </Top>
+        <Bottom>
+          <Container component="main" maxWidth="lg">
+            <TableTitle />
+            {MentorLogStore.logs.map((e, i) => (
+              <TableRow
+                key={i}
+                user={e.cadet.intraId}
+                mentoringId={e.id}
+                topic={e.topic}
+                mentoringState={e.status}
+                report={e.report}
+                createdAt={e.createdAt}
+                meetingAt={e.meetingAt}
+                log={e}
+                setApplyModal={setApplyModal}
+                setLog={setLog}
+              />
+            ))}
+            {RenderEmptyLine()}
+          </Container>
+        </Bottom>
+        {isInit && (
+          <PaginationContainer>
+            <ThemeProvider theme={muiTheme}>
+              <Pagination
+                page={parseInt(pageNumber || INITIAL_PAGE)}
+                count={Math.trunc(MentorLogStore.total / LOGS_PER_PAGE) + 1}
+                renderItem={item => (
+                  <PaginationItem
+                    component={Link}
+                    to={`/mentors/mentorings/${intraId}${`?page=${item.page}`}`}
+                    {...item}
+                  />
+                )}
+                size="large"
+                color="primary"
+              />
+            </ThemeProvider>
+          </PaginationContainer>
+        )}
+      </NoneDrag>
+    );
 });
 
 export default MyMentoringMentor;

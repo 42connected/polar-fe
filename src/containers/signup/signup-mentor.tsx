@@ -40,6 +40,7 @@ import {
   setCookie,
   TOKEN_LIST,
 } from '../../context/cookies';
+import theme from '../../styles/theme';
 
 interface AddColumnsProps {
   rows: IRows[];
@@ -306,6 +307,24 @@ const SignUpMentor = () => {
     }
 
     LoadingStore.on();
+
+    if (rows?.length === 0 && checked) {
+      setOneButtonModalProps({
+        TitleText: '가능시간 입력',
+        Text: '입력하신 가능시간이 없습니다',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+      LoadingStore.off();
+      return;
+    }
 
     if (!(await validateRows(rows))) {
       setOneButtonModalProps({
@@ -580,15 +599,26 @@ const SignUpMentor = () => {
               ></InfoInput>
             </div>
 
-            <div style={{ paddingBottom: '5px' }}>
-              <NameTitle>슬랙 ID</NameTitle>
+            <div style={{ paddingBottom: '5px', paddingTop: '15px' }}>
+              <NameTitle>슬랙 닉네임</NameTitle>
               <InfoInput
                 type="text"
                 onChange={onSlackChange}
                 maxLength={100}
-                placeholder="카뎃과의 연락에 사용됩니다."
+                placeholder="42Slack 닉네임과 같게 입력해주세요."
                 color="blue"
               ></InfoInput>
+              <div
+                style={{
+                  color: `${theme.colors.fontGray}`,
+                  marginBottom: '0rem',
+                  paddingLeft: '12rem',
+                  paddingBottom: '0rem',
+                  fontSize: '1.5rem',
+                }}
+              >
+                * 카뎃과의 연락에 사용됩니다
+              </div>
             </div>
             <>
               {alreadyRegistered && (
@@ -736,15 +766,26 @@ const SignUpMentor = () => {
               ></InfoInput>
             </div>
 
-            <div style={{ paddingBottom: '5px' }}>
+            <div style={{ paddingBottom: '5px', paddingTop: '15px' }}>
               <NameTitle>슬랙 ID</NameTitle>
               <InfoInput
                 type="text"
                 onChange={onSlackChange}
                 maxLength={100}
-                placeholder="카뎃과의 연락에 사용됩니다."
+                placeholder="42Slack 닉네임과 같게 입력해주세요."
                 color="blue"
               ></InfoInput>
+              <div
+                style={{
+                  color: `${theme.colors.fontGray}`,
+                  marginBottom: '0rem',
+                  paddingLeft: '12rem',
+                  paddingBottom: '0rem',
+                  fontSize: '1.5rem',
+                }}
+              >
+                * 카뎃과의 연락에 사용됩니다
+              </div>
             </div>
             <>
               {alreadyRegistered && (

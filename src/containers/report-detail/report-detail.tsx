@@ -53,11 +53,12 @@ import {
   SignText,
 } from './reportStyled';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { debounce } from '@mui/material';
 import LoadingStore from '../../states/loading/LoadingStore';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
-const ReportpageStyle = styled.div<{
+const ReportpageStyle = styled.body<{
   height: number;
 }>`
   background-color: ${theme.colors.backgoundWhite};
@@ -127,6 +128,10 @@ const SimpleComponent = (props: {
   return (
     <div ref={printRef}>
       {reportDatas?.map((reportdata: reportsPro, index: number, origin) => {
+        const meetingAt = [
+          new Date(reportdata?.mentoringLogs.meetingAt[0]),
+          new Date(reportdata?.mentoringLogs.meetingAt[1]),
+        ];
         return (
           <div key={index}>
             <ReportContainer index={index}>
@@ -140,19 +145,21 @@ const SimpleComponent = (props: {
               <NoneValue2></NoneValue2>
               <SubTitle2>날짜</SubTitle2>
               <DateBox>
-                {(reportdata?.mentoringLogs.meetingAt[0] + '').substring(0, 10)}
+                {reportdata?.mentoringLogs
+                  ? meetingAt[0].toLocaleDateString('ko-KR')
+                  : ''}
               </DateBox>
               <SubTitle8>시간</SubTitle8>
               <TimeBox>
-                {(reportdata?.mentoringLogs.meetingAt[0] + '').substring(
-                  11,
-                  16,
-                )}{' '}
-                ~{' '}
-                {(reportdata?.mentoringLogs.meetingAt[1] + '').substring(
-                  11,
-                  16,
-                )}
+                {reportdata?.mentoringLogs
+                  ? meetingAt[0].getHours().toString().padStart(2, '0') +
+                    ':' +
+                    meetingAt[0].getMinutes().toString().padStart(2, '0') +
+                    '~' +
+                    meetingAt[1].getHours().toString().padStart(2, '0') +
+                    ':' +
+                    meetingAt[1].getMinutes().toString().padStart(2, '0')
+                  : ''}
               </TimeBox>
               <SubTitle3>장소</SubTitle3>
               <PlaceBox>{reportdata?.place}</PlaceBox>
@@ -296,63 +303,63 @@ const ReportDetail = () => {
     };
   }, []);
 
-  return (
-    <div>
-      {AuthStore.getAccessToken() ? (
-        AuthStore.getUserRole() === USER_ROLES.BOCAL ? (
-          isMobile ? (
-            <ReportpageStyle2 height={reportDatas.length}>
-              <ImgBody>
-                <SimpleComponent
-                  printRef={componentRef}
-                  reportDatas={reportDatas}
-                />
-              </ImgBody>
-              <ReactToPrint
-                content={() => componentRef.current}
-                trigger={() => (
-                  <ButtonBody>
-                    <PrintButton ref={buttonRef}>출력</PrintButton>
-                  </ButtonBody>
-                )}
-                onAfterPrint={() => {
-                  if (isAutoPrint) {
-                    navigate('/data-room');
-                  }
-                }}
+  if (!AuthStore.getAccessToken()) {
+    ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
+    AuthStore.Login();
+    return <></>;
+  } else if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
+    ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
+    return <Navigate to="/" />;
+  } else
+    return (
+      <div>
+        {isMobile ? (
+          <ReportpageStyle2 height={reportDatas.length}>
+            <ImgBody>
+              <SimpleComponent
+                printRef={componentRef}
+                reportDatas={reportDatas}
               />
-            </ReportpageStyle2>
-          ) : (
-            <ReportpageStyle height={reportDatas.length}>
-              <ImgBody>
-                <SimpleComponent
-                  printRef={componentRef}
-                  reportDatas={reportDatas}
-                />
-              </ImgBody>
-              <ReactToPrint
-                content={() => componentRef.current}
-                trigger={() => (
-                  <ButtonBody>
-                    <PrintButton ref={buttonRef}>출력</PrintButton>
-                  </ButtonBody>
-                )}
-                onAfterPrint={() => {
-                  if (isAutoPrint) {
-                    navigate('/data-room');
-                  }
-                }}
-              />
-            </ReportpageStyle>
-          )
+            </ImgBody>
+            <ReactToPrint
+              content={() => componentRef.current}
+              trigger={() => (
+                <ButtonBody>
+                  <PrintButton ref={buttonRef}>출력</PrintButton>
+                </ButtonBody>
+              )}
+              onAfterPrint={() => {
+                if (isAutoPrint) {
+                  navigate('/data-room');
+                }
+              }}
+            />
+          </ReportpageStyle2>
         ) : (
-          <></>
-        )
-      ) : (
-        <></>
-      )}
-    </div>
-  );
+          <ReportpageStyle height={reportDatas.length}>
+            <ImgBody>
+              <SimpleComponent
+                printRef={componentRef}
+                reportDatas={reportDatas}
+              />
+            </ImgBody>
+            <ReactToPrint
+              content={() => componentRef.current}
+              trigger={() => (
+                <ButtonBody>
+                  <PrintButton ref={buttonRef}>출력</PrintButton>
+                </ButtonBody>
+              )}
+              onAfterPrint={() => {
+                if (isAutoPrint) {
+                  navigate('/data-room');
+                }
+              }}
+            />
+          </ReportpageStyle>
+        )}
+      </div>
+    );
 };
 
 export default ReportDetail;

@@ -17,12 +17,6 @@ const Content = styled.div`
   width: 100%;
   ${defaultTheme.font.nanumGothic};
   ${defaultTheme.fontSize.sizeExtraSmall};
-  @media screen and (max-width: 900px) {
-    ${defaultTheme.fontSize.sizeSmall};
-  }
-  @media screen and (max-width: 800px) {
-    font-size: 1rem;
-  }
 `;
 
 const FixableIcon = styled.div`
@@ -81,19 +75,26 @@ export function ReportFixableElement(props: ReportFixableElementProps) {
                 setIsEdit(false);
               }}
             >
-              <FontAwesomeIcon icon={faCheck} />
+              <FontAwesomeIcon icon={faCheck} size="2x" />
             </FixableIcon>
           </>
         ) : (
           <>
-            <Content>{props.content ? props.content : '(입력 필요)'}</Content>
+            <Content
+              style={{
+                color: props.content || defaultTheme.colors.polarSimpleMain,
+                fontWeight: props.content || 'bold',
+              }}
+            >
+              {props.content ? props.content : '(입력 필요)'}
+            </Content>
             {props.isEditPossible && (
               <FixableIcon
                 onClick={() => {
                   setIsEdit(true);
                 }}
               >
-                <FontAwesomeIcon icon={faPencil} />
+                <FontAwesomeIcon icon={faPencil} size="2x" />
               </FixableIcon>
             )}
           </>

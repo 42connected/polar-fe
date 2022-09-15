@@ -45,10 +45,9 @@ export function refineMeetingAt(rawDate: Date[]) {
             '(' +
             week[date[0].getDay()] +
             ') ' +
-            dateString[0].slice(
-              dateString[0].indexOf('오') + 3,
-              dateString[0].lastIndexOf(':'),
-            )}
+            date[0]
+              .toTimeString()
+              .slice(0, date[0].toTimeString().lastIndexOf(':'))}
         </Div>
         <ColoredDiv>
           {'(' +

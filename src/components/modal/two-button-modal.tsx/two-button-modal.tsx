@@ -11,11 +11,12 @@ import {
   XButton,
 } from '../modal-styled';
 import theme from '../../../styles/theme';
+import { useEffect } from 'react';
 
 interface TwoButtonModalProps {
   TitleText: string;
   Text: string;
-  XButtonFunc: () => void;
+  XButtonFunc?: () => void;
   Button1Text: string;
   Button1Func: () => void;
   Button1bg?: string;
@@ -25,18 +26,27 @@ interface TwoButtonModalProps {
 }
 
 export function TwoButtonModal(props: TwoButtonModalProps) {
+  useEffect(() => {
+    document.body.style.overflow = `hidden`;
+    return () => {
+      document.body.style.overflow = `auto`;
+    };
+  }, []);
+
   return (
     <ModalBackground>
       <ModalBox>
         <XButton>
-          <ModalTitle>{props.TitleText}</ModalTitle>
-          <FontAwesomeIcon
-            icon={faX}
-            size="2x"
-            style={{ opacity: 0.3, cursor: 'pointer' }}
-            onClick={() => props.XButtonFunc()}
-          />
+          {props.XButtonFunc && (
+            <FontAwesomeIcon
+              icon={faX}
+              size="2x"
+              style={{ opacity: 0.3, cursor: 'pointer' }}
+              onClick={() => props.XButtonFunc && props.XButtonFunc()}
+            />
+          )}
         </XButton>
+        <ModalTitle>{props.TitleText}</ModalTitle>
         <ModalBody>{sliceMoreInfoStr(props.Text, 120)}</ModalBody>
         <ModalButtonContainer>
           <ModalButton

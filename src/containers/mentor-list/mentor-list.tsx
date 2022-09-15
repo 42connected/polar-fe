@@ -17,6 +17,7 @@ const NoneDrag = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  margin-bottom: 4rem;
 `;
 
 const Title = styled.div`
@@ -47,6 +48,7 @@ const SearchContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  margin-top: 10px;
 `;
 
 const Text = styled.div`
@@ -60,36 +62,28 @@ const Text = styled.div`
 
 const TextContainer = styled.div`
   display: flex;
-  width: 50%;
 `;
 
 const SearchBox = styled.input`
+  display: flex;
+  justify-content: right;
+  align-items: center;
   ${defaultTheme.font.nanumGothic};
   ${defaultTheme.fontSize.sizeSmall};
   border-radius: 30px;
-  width: 200px;
+  width: 15rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   text-align: left;
   text-decoration: none;
   background-color: #ffffff;
   color: black;
   padding: 10px 15px 10px 15px;
-  margin-top: 10px;
   &:hover {
     background-color: #f6f6f6;
   }
   @media screen and (max-width: 500px) {
     font-size: 1rem;
-  }
-`;
-
-const Search = styled.div`
-  display: flex;
-  width: 50%;
-  justify-content: right;
-  margin: auto;
-  @media screen and (max-width: 500px) {
-    width: 45%;
+    width: 10rem;
   }
 `;
 
@@ -98,7 +92,7 @@ const CardContainer = styled.div`
   width: 100%;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(350px, 350px));
-  gap: 50px;
+  gap: 4rem;
 `;
 
 const MentorList = observer(() => {
@@ -124,24 +118,22 @@ const MentorList = observer(() => {
             </Text>
             <Text>명의 멘토님이 기다립니다.</Text>
           </TextContainer>
-          <Search>
-            <SearchBox
-              placeholder={'멘토 이름, 멘토 인트라 아이디'}
-              onChange={e => {
-                setSearch(e.target.value);
-              }}
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  MentorsStore.clear();
-                  MentorsStore.Initializer(
-                    category,
-                    KeywordStore.selected,
-                    search,
-                  );
-                }
-              }}
-            />
-          </Search>
+          <SearchBox
+            placeholder={'이름, 인트라 아이디'}
+            onChange={e => {
+              setSearch(e.target.value);
+            }}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                MentorsStore.clear();
+                MentorsStore.Initializer(
+                  category,
+                  KeywordStore.selected,
+                  search,
+                );
+              }
+            }}
+          />
         </SearchContainer>
         <CardContainer>
           {MentorsStore?.mentorsList?.mentors?.map((e, i) => {
@@ -153,6 +145,7 @@ const MentorList = observer(() => {
                 profileImage={e.mentor.profileImage}
                 introduction={e.mentor.introduction}
                 intraId={e.mentor.intraId}
+                isActive={e.mentor.isActive}
               />
             );
           })}

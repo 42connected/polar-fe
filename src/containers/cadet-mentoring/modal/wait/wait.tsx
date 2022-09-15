@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { InputCounter } from '../../../../components/input-counter';
 import defaultTheme from '../../../../styles/theme';
-import { ModalInfoElement } from '../modal-info-element';
+import { ModalInfoElement } from '../../../my-mentoring-mentor/modal/modal-info-element';
 
 const Container = styled.div`
   display: flex;
@@ -38,7 +38,7 @@ const getDurationTime = (meetingAt: Date[]): string => {
 
 const formatDate = (date: Date): string => {
   const year = date.getFullYear();
-  const month = date.getMonth().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
 
   return `${year}.${month}.${day}`;
@@ -72,7 +72,6 @@ export function Wait(props: WaitProps) {
               title={'신청 시간'}
               titleColor={'black'}
               content={formatRequestTimes(time)}
-              link={''}
             />
           );
         }
@@ -81,25 +80,22 @@ export function Wait(props: WaitProps) {
         title={'멘토 이름'}
         titleColor={'black'}
         content={props?.mentor?.name}
-        link={''}
       />
       <ModalInfoElement
         title={'멘토 Intra ID'}
         titleColor={'black'}
         content={props?.mentor?.intraId}
-        link={''}
+        link={`${process.env.REACT_APP_ORIGIN}/mentor-detail/${props?.mentor?.intraId}`}
       />
       <ModalInfoElement
         title={'멘토링 주제'}
         titleColor={'black'}
         content={props?.mentoringTopic}
-        link={''}
       />
       <ModalInfoElement
         title={props.isReject ? '거절 사유' : '질문 내용'}
         titleColor={defaultTheme?.colors?.polarSimpleMain}
         content={''}
-        link={''}
       />
       {props.isReject ? (
         <InputCounter

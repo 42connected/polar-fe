@@ -3,7 +3,7 @@ import theme from '../../styles/theme';
 
 const Input = styled.textarea<InputCounterProps>`
   margin-top: 3rem;
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: ${theme.colors.graySix};
   width: ${props => props.width ?? '80%'};
   height: ${props => props.height ?? '100px'};
   padding: 10px;
@@ -11,6 +11,7 @@ const Input = styled.textarea<InputCounterProps>`
   border: 1px solid rgba(0, 0, 0, 0.1);
   vertical-align: top;
   resize: none;
+  ${theme.font.nanumGothic};
   &:focus {
     outline: none;
   }

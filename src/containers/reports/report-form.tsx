@@ -3,18 +3,17 @@ import Container from '@mui/material/Container';
 import { Title } from './title';
 import { ReportElement } from './elements/report-element';
 import { ReportRowFeedback } from './report-row-feedback';
-import ReportRowSignature from './report-row-signature';
+import { ReportRowSignature } from './report-row-signature';
 import { ReportFixableElement } from './elements/report-fixable-element';
 import { useEffect, useState } from 'react';
 import defaultTheme from '../../styles/theme';
 import { useParams } from 'react-router-dom';
-import ReportStore, {
-  ReportSaveFormdata,
-} from '../../states/repoort/ReportStore';
+import ReportStore from '../../states/repoort/ReportStore';
 import { observer } from 'mobx-react-lite';
 import AuthStore from '../../states/auth/AuthStore';
 import { ReportRowWrite } from './report-row-write';
-import { TwoButtonModal } from '../../components/modal/two-button-modal.tsx/two-button-modal';
+import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
+import { isValidTime } from '../my-mentoring-mentor/modal/wait/select-time';
 
 export const REPORT_STATE = {
   EDIT_POSSIBLE: '작성중',
@@ -30,6 +29,7 @@ const NoneDrag = styled.div`
   -ms-user-select: none;
   user-select: none;
   background-color: ${defaultTheme.colors.polarGray};
+  padding-bottom: 3rem;
 `;
 
 const ReportContainer = styled.div`
@@ -100,16 +100,15 @@ export const getDayToString = (meetingAt: Date): string => {
   if (!meetingAt) {
     return '-';
   }
-  const FAILED_TO_MAKE_NEW_DATE = -1;
   const date: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const startTime: Date = new Date(meetingAt);
-  if (startTime.toString().indexOf('Invalid Date') > FAILED_TO_MAKE_NEW_DATE) {
+  if (!isValidTime(startTime)) {
     return '-';
   }
 
-  return `${startTime.getFullYear()}.${startTime.getMonth()}.${startTime.getDate()} (${
-    date[startTime.getDay()]
-  })`;
+  return `${startTime.getFullYear()}.${
+    startTime.getMonth() + 1
+  }.${startTime.getDate()} (${date[startTime.getDay()]})`;
 };
 
 /**
@@ -124,11 +123,7 @@ export const getTimeToString = (meetingAt: Date[]): string => {
   }
   const startTime: Date = new Date(meetingAt[START_TIME]);
   const endTime: Date = new Date(meetingAt[END_TIME]);
-
-  if (
-    startTime.toString().indexOf('Invalid Date') > -1 ||
-    endTime.toString().indexOf('Invalid Date') > -1
-  ) {
+  if (!isValidTime(startTime) || !isValidTime(endTime)) {
     return '';
   }
 
@@ -139,6 +134,7 @@ export const getTimeToString = (meetingAt: Date[]): string => {
 
 const ReportForm = observer(() => {
   const { reportId } = useParams<string>();
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [topic, setTopic] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [feedbackMessage, setFeedbackMessage] = useState<string>('');
@@ -154,149 +150,152 @@ const ReportForm = observer(() => {
         return;
       }
       await ReportStore.Initializer(reportId, AuthStore.getAccessToken());
-      setTopic(ReportStore?.report?.topic);
-      setContent(ReportStore?.report?.content);
-      setFeedbackMessage(ReportStore?.report?.feedbackMessage);
-      setFeedback1(ReportStore?.report?.feedback1);
-      setFeedback2(ReportStore?.report?.feedback2);
-      setFeedback3(ReportStore?.report?.feedback3);
+      ReportStore?.report?.topic && setTopic(ReportStore?.report?.topic);
+
+      ReportStore?.report?.content && setContent(ReportStore.report.content);
+
+      ReportStore?.report?.feedbackMessage &&
+        setFeedbackMessage(ReportStore.report.feedbackMessage);
+
+      ReportStore?.report?.feedback1 &&
+        setFeedback1(ReportStore?.report?.feedback1);
+
+      ReportStore?.report?.feedback2 &&
+        setFeedback2(ReportStore?.report?.feedback2);
+
+      ReportStore?.report?.feedback3 &&
+        setFeedback3(ReportStore?.report?.feedback3);
+
       setPlace(ReportStore?.report?.place);
+      setIsLoaded(true);
     }
     Initialize();
   }, []);
 
-  const getSaveFormdate = (): ReportSaveFormdata => {
-    return {
-      place: place,
-      topic: topic,
-      content: content,
-      feedbackMessage: feedbackMessage,
-      feedback1: feedback1,
-      feedback2: feedback2,
-      feedback3: feedback3,
-    };
-  };
+  function setReportRequestDto() {
+    ReportStore.setPlace(place);
+    ReportStore.setTopic(topic);
+    ReportStore.setContent(content);
+    ReportStore.setFeedback1(feedback1);
+    ReportStore.setFeedback2(feedback2);
+    ReportStore.setFeedback3(feedback3);
+    ReportStore.setFeedbackMessage(feedbackMessage);
+  }
 
   return (
     <NoneDrag>
       {modal && (
-        <TwoButtonModal
+        <OneButtonModal
           TitleText="📝 레포트 제출 확인"
           Text={`정말 제출하시겠습니까?\n제출 이후에는 레포트를 수정할 수 없습니다.`}
           XButtonFunc={() => {
             setModal(false);
           }}
-          Button1Text="확인"
-          Button1bg={defaultTheme.colors.polarSimpleMain}
-          Button1Func={() => {
+          ButtonText="확인"
+          ButtonBg={defaultTheme.colors.polarSimpleMain}
+          ButtonFunc={() => {
             if (!reportId) {
               return;
             }
-            ReportStore.saveDone(
-              reportId,
-              AuthStore.getAccessToken(),
-              getSaveFormdate(),
-            );
-            setModal(false);
-          }}
-          Button2Text="취소"
-          Button2bg="gray"
-          Button2Func={() => {
+            setReportRequestDto();
+            ReportStore.saveDone(reportId, AuthStore.getAccessToken());
             setModal(false);
           }}
         />
       )}
-      <Container component="main" maxWidth="lg">
-        <Title title={'보고서 작성'} />
-        <ReportContainer>
-          <ReportInfoContainer>
-            <ReportElement
-              topic={'구분'}
-              content={
-                ReportStore.report.cadets.isCommon ? '공통과정' : '심화과정'
-              }
-            />
-            <ReportElement
-              topic={'날짜'}
-              content={getDayToString(
-                ReportStore.report.mentoringLogs.meetingAt[START_TIME],
-              )}
-            />
-            <ReportElement
-              topic={'시간'}
-              content={getTimeToString(
-                ReportStore.report.mentoringLogs.meetingAt,
-              )}
-            />
-            <ReportFixableElement
-              topic={'장소'}
-              content={place}
-              contentSetter={setPlace}
+      {isLoaded && (
+        <Container component="main" maxWidth="lg" fixed={true}>
+          <Title title={'보고서 작성'} />
+          <ReportContainer>
+            <ReportInfoContainer>
+              <ReportElement
+                topic={'구분'}
+                content={
+                  ReportStore.report.cadets.isCommon ? '공통과정' : '심화과정'
+                }
+              />
+              <ReportElement
+                topic={'날짜'}
+                content={getDayToString(
+                  ReportStore.report.mentoringLogs.meetingAt[START_TIME],
+                )}
+              />
+              <ReportElement
+                topic={'시간'}
+                content={getTimeToString(
+                  ReportStore.report.mentoringLogs.meetingAt,
+                )}
+              />
+              <ReportFixableElement
+                topic={'장소'}
+                content={place}
+                contentSetter={setPlace}
+                isEditPossible={
+                  ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                }
+                maxLength={50}
+              />
+              <ReportElement
+                topic={'멘토'}
+                content={ReportStore.report.mentors.name}
+              />
+              <ReportElement
+                topic={'카뎃'}
+                content={ReportStore.report.cadets.name}
+              />
+            </ReportInfoContainer>
+            <ReportRowSignature />
+            <ReportRowWrite
+              status={ReportStore.report.status}
+              topic={topic}
+              setTopic={setTopic}
+              content={content}
+              setContent={setContent}
+              feedbackMessage={feedbackMessage}
+              setFeedbackMessage={setFeedbackMessage}
               isEditPossible={
                 ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
               }
-              maxLength={50}
             />
-            <ReportElement
-              topic={'멘토'}
-              content={ReportStore.report.mentors.name}
+            <ReportRowFeedback
+              feedback1={feedback1}
+              setFeedback1={setFeedback1}
+              feedback2={feedback2}
+              setFeedback2={setFeedback2}
+              feedback3={feedback3}
+              setFeedback3={setFeedback3}
+              isEditPossible={
+                ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+              }
             />
-            <ReportElement
-              topic={'카뎃'}
-              content={ReportStore.report.cadets.name}
-            />
-          </ReportInfoContainer>
-          <ReportRowSignature />
-          <ReportRowWrite
-            status={ReportStore.report.status}
-            topic={topic}
-            setTopic={setTopic}
-            content={content}
-            setContent={setContent}
-            feedbackMessage={feedbackMessage}
-            setFeedbackMessage={setFeedbackMessage}
-            isEditPossible={
-              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
-            }
-          />
-          <ReportRowFeedback
-            feedback1={feedback1}
-            setFeedback1={setFeedback1}
-            feedback2={feedback2}
-            setFeedback2={setFeedback2}
-            feedback3={feedback3}
-            setFeedback3={setFeedback3}
-            isEditPossible={
-              ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
-            }
-          />
-        </ReportContainer>
-        {ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE && (
-          <ButtonContainer>
-            <DefualtButton
-              onClick={() => {
-                if (!reportId) {
-                  return;
-                }
-                ReportStore.saveTemporary(
-                  reportId,
-                  AuthStore.getAccessToken(),
-                  getSaveFormdate(),
-                );
-              }}
-            >
-              임시 저장
-            </DefualtButton>
-            <DefualtButton
-              onClick={() => {
-                setModal(true);
-              }}
-            >
-              제출
-            </DefualtButton>
-          </ButtonContainer>
-        )}
-      </Container>
+          </ReportContainer>
+          {ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE && (
+            <ButtonContainer>
+              <DefualtButton
+                onClick={() => {
+                  if (!reportId) {
+                    return;
+                  }
+                  setReportRequestDto();
+                  ReportStore.saveTemporary(
+                    reportId,
+                    AuthStore.getAccessToken(),
+                  );
+                }}
+              >
+                임시 저장
+              </DefualtButton>
+              <DefualtButton
+                onClick={() => {
+                  setModal(true);
+                }}
+              >
+                제출
+              </DefualtButton>
+            </ButtonContainer>
+          )}
+        </Container>
+      )}
     </NoneDrag>
   );
 });

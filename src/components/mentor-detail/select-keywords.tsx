@@ -9,6 +9,7 @@ import Button from '../button';
 import AuthStore from '../../states/auth/AuthStore';
 import { useParams } from 'react-router-dom';
 import ButtonBoxComponent from './button-box';
+import { TwoButtonModal } from '../modal/two-button-modal.tsx/two-button-modal';
 
 const styles = {
   control: (base: any) => ({
@@ -47,6 +48,12 @@ interface Option {
 
 interface Props {
   isActivatedEdit: boolean;
+  isActivateIntroductionEdit: boolean;
+  setIsActivateDeleteModal: (b: boolean) => void;
+  isActivateDeleteModal: boolean;
+  setIsActivateIntroductionEdit: (b: boolean) => void;
+  handleSubmitIntroductionTags: () => void;
+  handleSubmitIntroductionTagsNo: () => void;
 }
 
 function SelectKeywords(props: Props) {
@@ -69,6 +76,20 @@ function SelectKeywords(props: Props) {
       );
     });
   }, []);
+
+  const handleSubmitNo = () => {
+    axiosInstance.get('categories/category/keywords').then(response => {
+      setCategoryKeywords(response.data);
+    });
+    axiosInstance.get(`mentors/${mentorId}/keywords`).then(response => {
+      const mentorKeywords: string[] = response.data;
+      setMentorKeywords(
+        mentorKeywords.map(data => {
+          return { value: data, label: data };
+        }),
+      );
+    });
+  };
 
   const groupOptions = useMemo(() => {
     LoadingStore.on();
@@ -93,6 +114,13 @@ function SelectKeywords(props: Props) {
     display: flex;
     justify-content: flex-end;
     margin-top: 1rem;
+  `;
+
+  const ButtonContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.2rem;
   `;
 
   function patchMentorKeywords(mentorKeywords: Option[]) {
@@ -135,6 +163,45 @@ function SelectKeywords(props: Props) {
         })}
         styles={styles}
       />
+      {props.isActivateIntroductionEdit && (
+        <ButtonContainer>
+          <Button
+            text="수정완료"
+            borderRadius="20px"
+            onClick={() => {
+              props.setIsActivateDeleteModal(true);
+            }}
+          />
+        </ButtonContainer>
+      )}
+      {props.isActivateDeleteModal && (
+        <TwoButtonModal
+          Text="수정하시겠습니까?"
+          TitleText="수정"
+          XButtonFunc={() => {
+            props.setIsActivateDeleteModal(false);
+          }}
+          Button1Func={() => {
+            try {
+              props.setIsActivateDeleteModal(false);
+              props.setIsActivateIntroductionEdit(false);
+            } catch (e) {
+              // ErrorStore
+            }
+            props.handleSubmitIntroductionTags();
+            patchMentorKeywords(mentorKeywords);
+          }}
+          Button2Func={() => {
+            props.setIsActivateDeleteModal(false);
+            props.setIsActivateIntroductionEdit(false);
+            props.handleSubmitIntroductionTagsNo();
+            handleSubmitNo();
+          }}
+          Button1Text="네"
+          Button2Text="아니요"
+          Button2bg={theme.colors.grayThree}
+        />
+      )}
     </Div>
   );
 }

@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-import { faX } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect } from 'react';
 import { sliceMoreInfoStr } from '../../../containers/my-mentoring-mentor/email';
 import defaultTheme from '../../../styles/theme';
 import {
@@ -15,7 +14,6 @@ import {
 interface InfomationModalProps {
   TitleText: string;
   Text: string;
-  XButtonFunc: () => void;
   ButtonText: string;
   ButtonBg: string;
   ButtonFunc: () => void;
@@ -33,17 +31,17 @@ export const ModalInfoBody = styled.div`
 `;
 
 export function InfomationModal(props: InfomationModalProps) {
+  useEffect(() => {
+    document.body.style.overflow = `hidden`;
+    return () => {
+      document.body.style.overflow = `auto`;
+    };
+  }, []);
+
   return (
     <ModalBackground>
       <ModalBox>
-        <XButton>
-          <ModalTitle>{props.TitleText}</ModalTitle>
-          <FontAwesomeIcon
-            icon={faX}
-            style={{ opacity: 0.3, cursor: 'pointer' }}
-            onClick={() => props.XButtonFunc()}
-          />
-        </XButton>
+        <ModalTitle>{props.TitleText}</ModalTitle>
         <ModalInfoBody>{sliceMoreInfoStr(props.Text, 500)}</ModalInfoBody>
         <ModalButtonContainer>
           <ModalButton

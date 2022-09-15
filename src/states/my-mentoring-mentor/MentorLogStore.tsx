@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import {
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
@@ -35,7 +35,6 @@ export const LOGS_PER_PAGE = 15;
 class MentorLogStore {
   logs: MentoringLogs[];
   total: number;
-  curPage: number;
 
   constructor() {
     makeObservable(this, {
@@ -45,13 +44,11 @@ class MentorLogStore {
     });
     this.logs = [];
     this.total = 0;
-    this.curPage = 0;
   }
 
   clearLogs() {
     this.logs = [];
     this.total = 0;
-    this.curPage = 0;
   }
 
   async Initializer(token: string, page: number) {
@@ -66,8 +63,10 @@ class MentorLogStore {
       },
     )
       .then(res => {
-        this.logs = res.data.logs;
-        this.total = res.data.total;
+        runInAction(() => {
+          this.logs = res.data.logs;
+          this.total = res.data.total;
+        });
       })
       .catch(err => {
         ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);

@@ -2,7 +2,7 @@ import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import defaultTheme from '../../styles/theme';
 
-const Fade = keyframes`
+export const Fade = keyframes`
   0% {
    opacity: 0;
   }
@@ -52,7 +52,7 @@ export const ModalBackground = styled.div`
   right: 0;
   background-color: rgba(246, 246, 246, 0.7);
 
-  z-index: 1004;
+  z-index: 999;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -61,6 +61,7 @@ export const ModalBackground = styled.div`
 `;
 
 export const ModalBox = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,7 +76,8 @@ export const ModalBox = styled.div`
 
 export const ModalTitle = styled.div`
   display: flex;
-  justify-content: right;
+  width: 100%;
+  justify-content: left;
   align-items: center;
   text-align: center;
   ${defaultTheme.font.sebangGothic};
@@ -83,10 +85,12 @@ export const ModalTitle = styled.div`
 `;
 
 export const XButton = styled.div`
+  position: absolute;
   display: flex;
-  width: 100%;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  top: 2rem;
+  right: 2rem;
 `;
 
 export const ModalBody = styled.div`

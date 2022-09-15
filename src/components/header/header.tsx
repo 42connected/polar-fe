@@ -1,12 +1,16 @@
 import { debounce } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../../assets/image/logo/logo.png';
+import {
+  DEFAULT_COOKIE_OPTION,
+  removeCookie,
+  TOKEN_LIST,
+} from '../../context/cookies';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import theme from '../../styles/theme';
-import { HeaderLogin } from './login';
 
 const HeaderStyle = styled.header`
   position: relative;
@@ -178,15 +182,24 @@ const movimagestyle = {
 const Header = () => {
   let mdlinks = '/mentor-detail/';
   let mlinks = '/mentors/mentorings/';
-  const [isLogin, setIsLogin] = useState<string>('로그인');
+  const [isClick, setIsClick] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   const handleResize: any = debounce(() => {
     if (window.innerWidth < 600) setIsMobile(true);
     else setIsMobile(false);
   }, 10);
 
   const AlertDetail = () => {
-    return alert('카뎃은 자동 로그아웃됩니다!\n 9월 3째주 comming soon~ :)');
+    ErrorStore.on(
+      '카뎃은 자동 로그아웃됩니다!\n 9월 19~20일 comming soon~ :)',
+      ERROR_DEFAULT_VALUE.TITLE,
+    );
+    removeCookie(TOKEN_LIST.ACCESS_TOKEN, DEFAULT_COOKIE_OPTION);
+    removeCookie(TOKEN_LIST.INTRA_ID, DEFAULT_COOKIE_OPTION);
+    removeCookie(TOKEN_LIST.USER_ROLE, DEFAULT_COOKIE_OPTION);
+    removeCookie(TOKEN_LIST.JOIN, DEFAULT_COOKIE_OPTION);
+    setIsLogin(false);
   };
 
   if (AuthStore.getUserRole()) {
@@ -196,10 +209,27 @@ const Header = () => {
   useEffect(() => {
     window.screen.width <= 600 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
+    {
+      AuthStore.getAccessToken() ? setIsLogin(true) : setIsLogin(false);
+    }
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    {
+      AuthStore.getAccessToken() ? setIsLogin(true) : setIsLogin(false);
+    }
+
+    if (
+      AuthStore.getUserRole() &&
+      AuthStore.getUserRole() === USER_ROLES.CADET
+    ) {
+      AlertDetail();
+    }
+  }, [isClick]);
+
   return (
     <div>
       {isMobile ? ( //mobile
@@ -211,31 +241,28 @@ const Header = () => {
                 polar
               </MovLogoButton>
             </Link>
-            {AuthStore.getAccessToken() ? (
+            {isLogin ? (
               <MovLoginButton
                 onClick={() => {
-                  setIsLogin('로그인');
+                  setIsClick(!isClick);
                   AuthStore.Logout();
                 }}
               >
-                {isLogin}
+                로그아웃
               </MovLoginButton>
             ) : (
               <MovLoginButton
                 onClick={() => {
-                  setIsLogin('로그아웃');
+                  setIsClick(!isClick);
                   AuthStore.Login();
                 }}
               >
-                {isLogin}
+                로그인
               </MovLoginButton>
             )}
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
-                {/* <div>
-                  {AlertDetail()}
-                  <Link to={'/'}>{AuthStore.Logout()}</Link>
-                </div> */}
+                {/*<div>{AlertDetail()}</div>*/}
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
                   target="_blank"
@@ -299,29 +326,29 @@ const Header = () => {
                 polar
               </LogoButton>
             </Link>
-            {AuthStore.getAccessToken() ? (
+            {isLogin ? (
               <LoginButton
                 onClick={() => {
-                  setIsLogin('로그인');
+                  setIsClick(!isClick);
                   AuthStore.Logout();
                 }}
               >
-                {isLogin}
+                로그아웃
               </LoginButton>
             ) : (
               <LoginButton
                 onClick={() => {
-                  setIsLogin('로그아웃');
+                  setIsClick(!isClick);
                   AuthStore.Login();
                 }}
               >
-                {isLogin}
+                로그인
               </LoginButton>
             )}
             {AuthStore.getUserRole() === USER_ROLES.CADET ? (
               <div>
                 {/* <div>
-                  {AuthStore.Logout()}
+                  {AlertDetail()}
                 </div> */}
                 <a
                   href={`${process.env.REACT_APP_BASE_FORM_URL}`}
@@ -330,7 +357,7 @@ const Header = () => {
                 >
                   <SuggestionButton>건의사항</SuggestionButton>
                   <Link to={'/cadets/mentorings'}>
-                    <MovMyMentoringButton>마이페이지</MovMyMentoringButton>
+                    <MyMentoringButton>마이페이지</MyMentoringButton>
                   </Link>
                 </a>
               </div>

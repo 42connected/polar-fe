@@ -1,10 +1,8 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
-import { faX } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCookie, TOKEN_LIST } from '../../context/cookies';
-import UserJoinStore from '../../states/user-join/UserJoinStore';
 import defaultTheme from '../../styles/theme';
 
 const Fade = keyframes`
@@ -65,7 +63,7 @@ const Background = styled.div`
   right: 0;
   background-color: rgba(246, 246, 246, 0.7);
 
-  z-index: 1002;
+  z-index: 1001;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -80,7 +78,7 @@ const Box = styled.div`
   text-align: center;
   flex-direction: column;
   width: 400px;
-  padding: 20px 0px;
+  padding: 30px 0px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: ${defaultTheme.colors.polarGray};
   border-radius: 10px;
@@ -105,7 +103,7 @@ const Button = styled.button`
   text-align: center;
   align-items: center;
   text-decoration: none;
-  height: 40px;
+  height: 35px;
   background-color: ${defaultTheme.colors.polarSimpleMain};
   color: #ffffff;
   width: 40%;
@@ -124,18 +122,16 @@ export function UserJoin() {
   const role = getCookie(TOKEN_LIST.USER_ROLE);
   const url = `/${role}s/join`;
 
+  useEffect(() => {
+    document.body.style.overflow = `hidden`;
+    return () => {
+      document.body.style.overflow = `auto`;
+    };
+  }, []);
+
   return (
     <Background>
       <Box>
-        <XButton>
-          <FontAwesomeIcon
-            icon={faX}
-            style={{ opacity: 0.2 }}
-            onClick={() => {
-              UserJoinStore.off();
-            }}
-          />
-        </XButton>
         안녕하세요 {userName}님 👋
         <br />
         <br />

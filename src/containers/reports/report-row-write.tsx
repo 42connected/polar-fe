@@ -13,12 +13,6 @@ const ReportRowContentTitie = styled.div`
   justify-content: left;
   ${defaultTheme.fontSize.sizeMedium};
   ${defaultTheme.font.sebangGothic};
-  @media screen and (max-width: 900px) {
-    ${defaultTheme.fontSize.sizeExtraSmall};
-  }
-  @media screen and (max-width: 800px) {
-    ${defaultTheme.fontSize.sizeSmall};
-  }
 `;
 
 const ReportSummaryTitle = styled.div`
@@ -27,12 +21,6 @@ const ReportSummaryTitle = styled.div`
   justify-content: left;
   ${defaultTheme.fontSize.sizeExtraSmall};
   ${defaultTheme.font.nanumGothic};
-  @media screen and (max-width: 900px) {
-    ${defaultTheme.fontSize.sizeSmall};
-  }
-  @media screen and (max-width: 800px) {
-    font-size: 1rem;
-  }
 `;
 
 interface ReportRowWriteProps {

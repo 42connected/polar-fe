@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import defaultTheme from '../styles/theme';
 import spinner from '../assets/image/loading-spinner.gif';
+import { useEffect } from 'react';
 
 export const Background = styled.div`
   display: flex;
@@ -16,7 +17,7 @@ export const Background = styled.div`
   right: 0;
   background-color: rgba(246, 246, 246, 0.3);
 
-  z-index: 1000;
+  z-index: 999;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -50,6 +51,13 @@ function getRandomNumber(min: number, max: number) {
 }
 
 export function Loading() {
+  useEffect(() => {
+    document.body.style.overflow = `hidden`;
+    return () => {
+      document.body.style.overflow = `auto`;
+    };
+  }, []);
+
   return (
     <Background>
       <img src={spinner} alt="로딩중" width="5%" />
