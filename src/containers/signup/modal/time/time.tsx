@@ -112,12 +112,33 @@ export function Time(props: TimeProps) {
         />
         <BodySmallFont style={{ paddingBottom: '6px' }}>가능</BodySmallFont>
       </ToggleContainer>
-      <TimeTableContainer style={{ marginTop: '0rem', marginLeft: '3.5rem' }}>
+      <TimeTableContainer
+        style={{
+          marginTop: '0rem',
+          marginLeft: '3.5rem',
+          paddingBottom: '0px',
+          marginBottom: '0px',
+        }}
+      >
         <ColumnDays>
-          <BodyBigFont>요일</BodyBigFont>
+          <BodyBigFont
+            style={{
+              paddingBottom: '0px',
+              marginBottom: '0px',
+            }}
+          >
+            요일
+          </BodyBigFont>
         </ColumnDays>
         <ColumnName>
-          <BodyBigFont>가능시간</BodyBigFont>
+          <BodyBigFont
+            style={{
+              paddingBottom: '0px',
+              marginBottom: '0px',
+            }}
+          >
+            가능시간
+          </BodyBigFont>
         </ColumnName>
         <ColumnLine></ColumnLine>
       </TimeTableContainer>

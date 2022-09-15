@@ -140,6 +140,7 @@ export const TimeTableContainer = styled.ul`
   list-style-type: none;
   margin-right: 2rem;
   margin-bottom: 0rem;
+  margin-top: 1rem;
 `;
 
 export const ColumnDays = styled.li`
