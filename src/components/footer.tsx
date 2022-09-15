@@ -105,11 +105,10 @@ const Footer = () => {
         <FooterBody>
           주소 서울시 강남구 개포로 416 이노베이션 아카데미
         </FooterBody>
-        <FooterBody>문의 polarpolar@42seoul.co.kr</FooterBody>
+        <FooterBody>문의 42polar@gmail.com</FooterBody>
         <FooterLastBody>
           Logo Designed by
           <Atag href="https://www.freepik.com/" target="_blank">
-            {' '}
             Freepik
           </Atag>
         </FooterLastBody>
