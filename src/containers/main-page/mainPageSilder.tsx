@@ -37,6 +37,12 @@ const StyledSlider = styled(Slider)`
     width: '60rem';
     margin: 0 auto;
   }
+  .slick-prev:before {
+    opacity: 0;
+  }
+  .slick-next:before {
+    opacity: 0;
+  }
 `;
 
 const CardBox = styled.div`

@@ -43,7 +43,7 @@ export const MainContainer2 = styled.div`
   width: 100%;
   display: grid;
   grid-template-rows: 500px 95px 100px 180px;
-  grid-template-columns: 400px;
+  grid-template-columns: auto;
   grid-template-areas:
     'img'
     'title'
@@ -82,8 +82,8 @@ export const MainImageStyle2 = styled.div`
   box-sizing: border-box;
   background-color: transparent;
   border-radius: 10%;
-  height: 32rem;
-  width: 41rem;
+  height: 31rem;
+  width: 37rem;
   padding-top: 10rem;
   align-items: center;
   justify-content: center;
