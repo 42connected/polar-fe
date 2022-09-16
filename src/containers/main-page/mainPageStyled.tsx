@@ -42,7 +42,7 @@ export const MainContainer2 = styled.div`
   height: calc(100% - 220px);
   width: 100%;
   display: grid;
-  grid-template-rows: 500px 150px 100px 180px;
+  grid-template-rows: 500px 95px 100px 180px;
   grid-template-columns: 400px;
   grid-template-areas:
     'img'
@@ -82,7 +82,7 @@ export const MainImageStyle2 = styled.div`
   box-sizing: border-box;
   background-color: transparent;
   border-radius: 10%;
-  height: 36rem;
+  height: 32rem;
   width: 41rem;
   padding-top: 10rem;
   align-items: center;
@@ -175,7 +175,7 @@ export const TitleStyle2 = styled.div`
   border-bottom: 1px solid black;
   padding-bottom: 3rem;
   font-size: 3rem;
-  margin-top: 9.5rem;
+  margin-top: 4.5rem;
   bottom: 0;
   grid-area: title;
 `;

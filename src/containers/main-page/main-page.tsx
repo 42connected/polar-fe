@@ -161,7 +161,7 @@ const MainPage = () => {
           <MainContainer2>
             <MainImageStyle2>
               <MoImageGrid1>
-                <ImageSlider w={40} h={36}></ImageSlider>
+                <ImageSlider w={40} h={32}></ImageSlider>
               </MoImageGrid1>
             </MainImageStyle2>
             <TitleStyle2>
