@@ -80,6 +80,8 @@ const SignUpMentor = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [slackId, setSlackId] = useState<string>('');
+  const [company, setCompany] = useState<string>('');
+  const [duty, setDuty] = useState<string>('');
   const [isMailSucess, setIsMailSucesss] = useState(false);
   const [isMailFail, setIsMailFail] = useState(false);
   const [alreadyRegistered, setAlreadyRegistered] = useState<boolean>(false);
@@ -165,6 +167,14 @@ const SignUpMentor = () => {
 
   const onSlackChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSlackId(event.target.value);
+  };
+
+  const onCompanyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCompany(event.target.value);
+  };
+
+  const onDutyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDuty(event.target.value);
   };
 
   async function validateRows(rows: IRows[]): Promise<boolean> {
@@ -289,6 +299,40 @@ const SignUpMentor = () => {
       return;
     }
 
+    if (!company) {
+      setOneButtonModalProps({
+        TitleText: '소속을 입력하세요',
+        Text: '소속을 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+      return;
+    }
+
+    if (!duty) {
+      setOneButtonModalProps({
+        TitleText: '직급을 입력하세요',
+        Text: '직급을 입력하세요',
+        XButtonFunc: () => {
+          setIsError(false);
+        },
+        ButtonText: '확인',
+        ButtonFunc: () => {
+          setIsError(false);
+        },
+      });
+
+      setIsError(true);
+      return;
+    }
+
     if (!alreadyRegistered && !isCodeSucess) {
       setOneButtonModalProps({
         TitleText: 'e-mail 인증을 완료해주세요',
@@ -396,6 +440,8 @@ const SignUpMentor = () => {
           slackId: slackId,
           availableTime: availableTime,
           isActive: checked,
+          company: company,
+          duty: duty,
         },
         {
           withCredentials: true,
@@ -599,7 +645,7 @@ const SignUpMentor = () => {
               ></InfoInput>
             </div>
 
-            <div style={{ paddingBottom: '5px', paddingTop: '15px' }}>
+            <div style={{ paddingBottom: '0px', paddingTop: '15px' }}>
               <NameTitle>슬랙 닉네임</NameTitle>
               <InfoInput
                 type="text"
@@ -620,6 +666,72 @@ const SignUpMentor = () => {
                 * 카뎃과의 연락에 사용됩니다
               </div>
             </div>
+
+            <div style={{ paddingBottom: '5px', paddingTop: '5px' }}>
+              <NameTitle>소속</NameTitle>
+              <InfoInput
+                type="text"
+                onChange={onCompanyChange}
+                maxLength={100}
+                placeholder="현재 재직중인 회사명을 적어주세요."
+                color="blue"
+              ></InfoInput>
+              <div
+                style={{
+                  color: `${theme.colors.fontGray}`,
+                  marginBottom: '0rem',
+                  paddingLeft: '3rem',
+                  paddingBottom: '0rem',
+                  fontSize: '1.5rem',
+                }}
+              >
+                * 재직증명서에서 명칭과 동일해야합니다
+              </div>
+              <div
+                style={{
+                  color: `${theme.colors.fontGray}`,
+                  marginBottom: '0rem',
+                  paddingLeft: '3rem',
+                  paddingBottom: '0rem',
+                  fontSize: '1.5rem',
+                }}
+              >
+                * 보고서 업무에 사용(SongPD님에게만 공개)
+              </div>
+            </div>
+            <div style={{ paddingBottom: '5px', paddingTop: '5px' }}>
+              <NameTitle>직급</NameTitle>
+              <InfoInput
+                type="text"
+                onChange={onDutyChange}
+                maxLength={100}
+                placeholder="현재 직급을 적어주세요.(없다면 없음)"
+                color="blue"
+              ></InfoInput>
+              <div
+                style={{
+                  color: `${theme.colors.fontGray}`,
+                  marginBottom: '0rem',
+                  paddingLeft: '3rem',
+                  paddingBottom: '0rem',
+                  fontSize: '1.5rem',
+                }}
+              >
+                * 다양한 형태로 적어주셔도 됩니다
+              </div>
+              <div
+                style={{
+                  color: `${theme.colors.fontGray}`,
+                  marginBottom: '0rem',
+                  paddingLeft: '3rem',
+                  paddingBottom: '0rem',
+                  fontSize: '1.5rem',
+                }}
+              >
+                * 보고서 업무에 사용(SongPD님에게만 공개)
+              </div>
+            </div>
+
             <>
               {alreadyRegistered && (
                 <ResultMessage>이미 이메일이 등록되었습니다</ResultMessage>
@@ -766,8 +878,8 @@ const SignUpMentor = () => {
               ></InfoInput>
             </div>
 
-            <div style={{ paddingBottom: '5px', paddingTop: '15px' }}>
-              <NameTitle>슬랙 ID</NameTitle>
+            <div style={{ paddingBottom: '0px', paddingTop: '15px' }}>
+              <NameTitle>슬랙 닉네임</NameTitle>
               <InfoInput
                 type="text"
                 onChange={onSlackChange}
@@ -787,6 +899,72 @@ const SignUpMentor = () => {
                 * 카뎃과의 연락에 사용됩니다
               </div>
             </div>
+
+            <div style={{ paddingBottom: '5px', paddingTop: '5px' }}>
+              <NameTitle>소속</NameTitle>
+              <InfoInput
+                type="text"
+                onChange={onCompanyChange}
+                maxLength={100}
+                placeholder="현재 재직중인 회사명을 적어주세요."
+                color="blue"
+              ></InfoInput>
+              <div
+                style={{
+                  color: `${theme.colors.fontGray}`,
+                  marginBottom: '0rem',
+                  paddingLeft: '3rem',
+                  paddingBottom: '0rem',
+                  fontSize: '1.5rem',
+                }}
+              >
+                * 재직증명서에서 명칭과 동일해야합니다
+              </div>
+              <div
+                style={{
+                  color: `${theme.colors.fontGray}`,
+                  marginBottom: '0rem',
+                  paddingLeft: '3rem',
+                  paddingBottom: '0rem',
+                  fontSize: '1.5rem',
+                }}
+              >
+                * 보고서 업무에 사용(SongPD님에게만 공개)
+              </div>
+            </div>
+            <div style={{ paddingBottom: '5px', paddingTop: '5px' }}>
+              <NameTitle>직급</NameTitle>
+              <InfoInput
+                type="text"
+                onChange={onDutyChange}
+                maxLength={100}
+                placeholder="현재 직급을 적어주세요.(없다면 없음)"
+                color="blue"
+              ></InfoInput>
+              <div
+                style={{
+                  color: `${theme.colors.fontGray}`,
+                  marginBottom: '0rem',
+                  paddingLeft: '3rem',
+                  paddingBottom: '0rem',
+                  fontSize: '1.5rem',
+                }}
+              >
+                * 다양한 형태로 적어주셔도 됩니다
+              </div>
+              <div
+                style={{
+                  color: `${theme.colors.fontGray}`,
+                  marginBottom: '0rem',
+                  paddingLeft: '3rem',
+                  paddingBottom: '0rem',
+                  fontSize: '1.5rem',
+                }}
+              >
+                * 보고서 업무에 사용(SongPD님에게만 공개)
+              </div>
+            </div>
+
             <>
               {alreadyRegistered && (
                 <ResultMessage>이미 이메일이 등록되었습니다</ResultMessage>
