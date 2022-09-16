@@ -67,36 +67,27 @@ export const ImageBox = styled.div<{
 
 export const MainImageStyle = styled.div`
   box-sizing: border-box;
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: transparent;
   border-radius: 10%;
   height: 40rem;
   width: 60rem;
-  grid-auto-flow: dense;
   align-items: center;
   justify-content: center;
-  padding-top: 3rem;
   text-align: center;
   grid-area: img;
-  display: grid;
-  grid-template-rows: 300px 100px;
 `;
 
 export const MainImageStyle2 = styled.div`
   box-sizing: border-box;
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: transparent;
   border-radius: 10%;
-  height: 40rem;
-  width: 40rem;
-  grid-auto-flow: dense;
-  margin-top: 10rem;
+  height: 36rem;
+  width: 41rem;
   padding-top: 10rem;
   align-items: center;
   justify-content: center;
   text-align: center;
   grid-area: img;
-  display: grid;
-  grid-template-rows: 200px 100px;
-  transition: all 0.25s ease-in-out;
 `;
 
 export const ImageGrid1 = styled.div`
@@ -162,7 +153,9 @@ export const TextUnder = styled.div`
   padding-bottom: 1rem;
   border-bottom: 1px solid ${theme.colors.polarSimpleMain};
   text-underline-offset: 1rem;
-  ${theme.fontSize.sizeExtraMedium};
+  ${theme.fontSize.sizeLarge};
+  ${theme.font.sebangGothic};
+  ${theme.fontWeight.weightLarge};
 `;
 
 export const TitleStyle = styled.div`
@@ -277,5 +270,6 @@ export const IconButton = styled.button`
 `;
 
 export const TextStyle = styled.div`
-  ${theme.font.nanumGothic};
+  ${theme.font.sebangGothic};
+  line-height: 4.5rem;
 `;
