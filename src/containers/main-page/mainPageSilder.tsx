@@ -63,9 +63,9 @@ function ImageSlider(props: sliderStlye) {
   return (
     <Container w={props.w} h={props.h}>
       <StyledSlider {...settings}>
-        {sliders.map(img => {
+        {sliders.map((img, index: number) => {
           return (
-            <div>
+            <div key={index}>
               <CardBox>
                 <CardImg src={img} w={props.w} h={props.h} />
               </CardBox>

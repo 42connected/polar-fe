@@ -10,7 +10,7 @@ export interface keywordsLists {
   index: number;
 }
 
-export const MainContainer = styled.body`
+export const MainContainer = styled.div`
   background-color: ${theme.colors.polarBackground};
   left: 0;
   ${theme.fontSize.sizeMedium};

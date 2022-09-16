@@ -82,7 +82,7 @@ const MainPage = () => {
   return (
     <>
       {!isMobile ? ( //pc
-        <div>
+        <>
           <MainContainer>
             <MainImageStyle>
               <ImageGrid1>
@@ -154,10 +154,10 @@ const MainPage = () => {
               })}
             </ClickContainer>
           </MainContainer>
-        </div>
+        </>
       ) : (
         // mobile
-        <div>
+        <>
           <MainContainer2>
             <MainImageStyle2>
               <MoImageGrid1>
@@ -228,7 +228,7 @@ const MainPage = () => {
               })}
             </ClickContainer2>
           </MainContainer2>
-        </div>
+        </>
       )}
     </>
   );
