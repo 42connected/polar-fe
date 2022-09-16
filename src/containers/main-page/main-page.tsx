@@ -86,7 +86,7 @@ const MainPage = () => {
           <MainContainer>
             <MainImageStyle>
               <ImageGrid1>
-                <ImageSlider w={58} h={40}></ImageSlider>
+                <ImageSlider w={58} h={38}></ImageSlider>
               </ImageGrid1>
             </MainImageStyle>
             <TitleStyle>

@@ -66,6 +66,7 @@ export const ImageBox = styled.div<{
 `;
 
 export const MainImageStyle = styled.div`
+  padding-top: 1.5rem;
   box-sizing: border-box;
   background-color: transparent;
   border-radius: 10%;
