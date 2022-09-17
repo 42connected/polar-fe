@@ -3,6 +3,7 @@ import {
   ClickContainer2,
   IconImageStyle,
   IconImageStyle2,
+  ImageGrid1,
   keywordsPro,
   KeywordStyle,
   KeywordStyle2,
@@ -11,6 +12,7 @@ import {
   MainContainer2,
   MainImageStyle,
   MainImageStyle2,
+  MoImageGrid1,
   TitleStyle,
   TitleStyle2,
 } from './mainPageStyled';
@@ -33,7 +35,7 @@ import {
   faSitemap,
 } from '@fortawesome/free-solid-svg-icons';
 import { debounce, IconButton } from '@mui/material';
-import { MainImage } from './main-page-imageGrid';
+import ImageSlider from './mainPageSilder';
 
 const MainPage = () => {
   const [isLoading, setLoading] = useState(false);
@@ -80,10 +82,12 @@ const MainPage = () => {
   return (
     <>
       {!isMobile ? ( //pc
-        <div>
+        <>
           <MainContainer>
             <MainImageStyle>
-              <MainImage isMobile={isMobile}></MainImage>
+              <ImageGrid1>
+                <ImageSlider w={58} h={38}></ImageSlider>
+              </ImageGrid1>
             </MainImageStyle>
             <TitleStyle>
               나에게 꼭 맞는
@@ -150,13 +154,15 @@ const MainPage = () => {
               })}
             </ClickContainer>
           </MainContainer>
-        </div>
+        </>
       ) : (
         // mobile
-        <div>
+        <>
           <MainContainer2>
             <MainImageStyle2>
-              <MainImage isMobile={isMobile}></MainImage>
+              <MoImageGrid1>
+                <ImageSlider w={37} h={31}></ImageSlider>
+              </MoImageGrid1>
             </MainImageStyle2>
             <TitleStyle2>
               나에게 꼭 맞는 <MainBlueBody> 멘토 </MainBlueBody> 선택하기
@@ -222,7 +228,7 @@ const MainPage = () => {
               })}
             </ClickContainer2>
           </MainContainer2>
-        </div>
+        </>
       )}
     </>
   );
