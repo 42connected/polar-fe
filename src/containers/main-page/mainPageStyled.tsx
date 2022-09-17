@@ -149,7 +149,7 @@ export const SwapButton = styled.button`
   color: ${theme.colors.graySix};
 `;
 
-export const TextUnder = styled.div`
+export const TextUnder = styled.span`
   box-sizing: border-box;
   padding-bottom: 1rem;
   border-bottom: 1px solid ${theme.colors.polarSimpleMain};
@@ -258,8 +258,8 @@ export const KeywordStyle2 = styled.div<{ colStart: number; rowStart: number }>`
 `;
 
 export const MainBlueBody = styled.span`
-  color: ${theme.fontColor.blueColor};
-  font-weight: 700;
+  color: #5d6dbe;
+  font-weight: 400;
 `;
 
 export const IconButton = styled.button`
@@ -272,5 +272,23 @@ export const IconButton = styled.button`
 
 export const TextStyle = styled.div`
   ${theme.font.sebangGothic};
+  font-size: 1.8rem;
   line-height: 4.5rem;
+  position: absolute;
+  margin: 0 auto;
+  width: 95%;
+  top: 24%;
+  z-index: 3;
+`;
+
+export const NoticeTextStyle = styled.div`
+  ${theme.font.sebangGothic};
+  font-size: 2rem;
+  line-height: 2.7rem;
+  position: absolute;
+  margin: 0 auto;
+  margin-left: 5%;
+  width: 85%;
+  top: 23%;
+  z-index: 3;
 `;

@@ -86,7 +86,7 @@ const MainPage = () => {
           <MainContainer>
             <MainImageStyle>
               <ImageGrid1>
-                <ImageSlider w={58} h={38}></ImageSlider>
+                <ImageSlider w={58} h={38} isMobile={isMobile}></ImageSlider>
               </ImageGrid1>
             </MainImageStyle>
             <TitleStyle>
@@ -161,7 +161,7 @@ const MainPage = () => {
           <MainContainer2>
             <MainImageStyle2>
               <MoImageGrid1>
-                <ImageSlider w={37} h={31}></ImageSlider>
+                <ImageSlider w={37} h={31} isMobile={isMobile}></ImageSlider>
               </MoImageGrid1>
             </MainImageStyle2>
             <TitleStyle2>
