@@ -142,8 +142,7 @@ function MentorDetail() {
         }
       })
       .catch(err => {
-        // ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
-        console.log(err);
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
         setError(true);
       });
     axiosInstance
