@@ -29,6 +29,7 @@ import MentorInfoModal, { ModalType } from '../signup/mentor-info-modal';
 import MyTableComponents from '../../components/mentor-detail/my-table';
 import NotFound from '../not-found/not-found';
 import UserJoinStore from '../../states/user-join/UserJoinStore';
+import { NowDateKr, NumToDateKr } from '../../states/date-kr';
 
 function MentorDetail() {
   const [mentorIntroduction, setMentorIntroduction] = useState<string>('');
@@ -71,7 +72,7 @@ function MentorDetail() {
   const setMentorAvailableTimeData = async (metorAvailableTimeData: string) => {
     const mentorAvailableTimeDataToArray = JSON.parse(metorAvailableTimeData);
     const appointmentsData: appointmentsInterface[] = [];
-    const today = new Date();
+    const today = NowDateKr();
     const todayDay = today.getDay();
     const todayDate = today.getDate();
     const todayMonth = today.getMonth();
@@ -80,14 +81,14 @@ function MentorDetail() {
       (data: mentorAvailableTimeInterface[], index: number) => {
         if (data?.length !== 0) {
           data.forEach(data2 => {
-            const start = new Date(
+            const start = NumToDateKr(
               todayYear,
               todayMonth,
               todayDate + (index - todayDay),
               data2.startHour,
               data2.startMinute,
             );
-            const end = new Date(
+            const end = NumToDateKr(
               todayYear,
               todayMonth,
               todayDate + (index - todayDay),

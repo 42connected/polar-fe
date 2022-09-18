@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { NewDateKr } from '../../states/date-kr';
 import { MentoringLogs } from '../../states/my-mentoring-mentor/MentorLogStore';
 import defaultTheme from '../../styles/theme';
 import {
@@ -89,7 +90,7 @@ const getDayToShortString = (meetingAt: Date): string => {
   if (!meetingAt) {
     return '-';
   }
-  const startTime: Date = new Date(meetingAt);
+  const startTime: Date = NewDateKr(meetingAt);
   if (!isValidTime(startTime)) {
     return '-';
   }

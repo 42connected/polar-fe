@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 import { ApplyModal } from '../containers/cadet-mentoring/modal/modal';
 import { MentoringLog } from '../interfaces/cadet-mentoring/mentoring-log.interface';
+import { NewDateKr } from '../states/date-kr';
 import defaultTheme from '../styles/theme';
 
 const Container = styled.div`
@@ -145,25 +146,25 @@ interface CardProps {
 }
 
 const stringToDate = (log: MentoringLog): void => {
-  log.createdAt = new Date(log.createdAt);
+  log.createdAt = NewDateKr(log.createdAt);
   if (log.meta.meetingAt) {
-    log.meta.meetingAt[0] = new Date(log.meta.meetingAt[0]);
-    log.meta.meetingAt[1] = new Date(log.meta.meetingAt[1]);
+    log.meta.meetingAt[0] = NewDateKr(log.meta.meetingAt[0]);
+    log.meta.meetingAt[1] = NewDateKr(log.meta.meetingAt[1]);
   }
   if (log.meta.requestTime[0])
     log.meta.requestTime[0] = [
-      new Date(log.meta.requestTime[0][0]),
-      new Date(log.meta.requestTime[0][1]),
+      NewDateKr(log.meta.requestTime[0][0]),
+      NewDateKr(log.meta.requestTime[0][1]),
     ];
   if (log.meta.requestTime[1])
     log.meta.requestTime[1] = [
-      new Date(log.meta.requestTime[1][0]),
-      new Date(log.meta.requestTime[1][1]),
+      NewDateKr(log.meta.requestTime[1][0]),
+      NewDateKr(log.meta.requestTime[1][1]),
     ];
   if (log.meta.requestTime[2])
     log.meta.requestTime[2] = [
-      new Date(log.meta.requestTime[2][0]),
-      new Date(log.meta.requestTime[2][1]),
+      NewDateKr(log.meta.requestTime[2][0]),
+      NewDateKr(log.meta.requestTime[2][1]),
     ];
 };
 
