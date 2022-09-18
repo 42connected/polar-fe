@@ -5,6 +5,7 @@ import {
 } from '../../context/axios-interface';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
 import LoadingStore from '../loading/LoadingStore';
+import UserJoinStore from '../user-join/UserJoinStore';
 
 export interface MentoringLogs {
   id: string;
@@ -69,8 +70,11 @@ class MentorLogStore {
         });
       })
       .catch(err => {
-        console.log(err);
-        //ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
+        if (UserJoinStore && !UserJoinStore.needJoin)
+          ErrorStore.on(
+            err?.response?.data?.message,
+            ERROR_DEFAULT_VALUE.TITLE,
+          );
       });
     LoadingStore.off();
   }
