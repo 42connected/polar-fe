@@ -5,6 +5,7 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
+import { NewDateKr, NowDateKr } from '../../../../states/date-kr';
 import defaultTheme from '../../../../styles/theme';
 import { getDayToString, getTimeToString } from '../../../reports/report-form';
 
@@ -38,8 +39,8 @@ export function isValidTime(time: Date): boolean {
 }
 
 function isTimeover(time: Date): boolean {
-  const now = new Date();
-  const requestTime = new Date(time);
+  const now = NowDateKr();
+  const requestTime = NewDateKr(time);
   const LIMIT_TIME_MINUTE = 10;
 
   if (!isValidTime(now) || !isValidTime(requestTime)) {

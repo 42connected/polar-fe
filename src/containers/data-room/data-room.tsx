@@ -14,6 +14,7 @@ import { useMediaQuery } from 'react-responsive';
 import LoadingStore from '../../states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
+import { NowDateKr } from '../../states/date-kr';
 
 export const muiPaginationTheme = createTheme({
   palette: {
@@ -163,7 +164,7 @@ function DataRoom() {
         link.href = blobUrl;
         link.setAttribute(
           'download',
-          `mentoring-data_${new Date()
+          `mentoring-data_${NowDateKr()
             .toLocaleDateString('ko-KR')
             .replaceAll(' ', '')}xlsx`,
         );
