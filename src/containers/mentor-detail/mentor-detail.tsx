@@ -81,14 +81,14 @@ function MentorDetail() {
       (data: mentorAvailableTimeInterface[], index: number) => {
         if (data?.length !== 0) {
           data.forEach(data2 => {
-            const start = NumToDateKr(
+            const start = new Date(
               todayYear,
               todayMonth,
               todayDate + (index - todayDay),
               data2.startHour,
               data2.startMinute,
             );
-            const end = NumToDateKr(
+            const end = new Date(
               todayYear,
               todayMonth,
               todayDate + (index - todayDay),
