@@ -10,7 +10,7 @@ export interface keywordsLists {
   index: number;
 }
 
-export const MainContainer = styled.body`
+export const MainContainer = styled.div`
   background-color: ${theme.colors.polarBackground};
   left: 0;
   ${theme.fontSize.sizeMedium};
@@ -42,8 +42,8 @@ export const MainContainer2 = styled.div`
   height: calc(100% - 220px);
   width: 100%;
   display: grid;
-  grid-template-rows: 500px 150px 100px 180px;
-  grid-template-columns: 400px;
+  grid-template-rows: 500px 95px 100px 180px;
+  grid-template-columns: auto;
   grid-template-areas:
     'img'
     'title'
@@ -66,37 +66,29 @@ export const ImageBox = styled.div<{
 `;
 
 export const MainImageStyle = styled.div`
+  padding-top: 1.5rem;
   box-sizing: border-box;
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: transparent;
   border-radius: 10%;
   height: 40rem;
   width: 60rem;
-  grid-auto-flow: dense;
   align-items: center;
   justify-content: center;
-  padding-top: 3rem;
   text-align: center;
   grid-area: img;
-  display: grid;
-  grid-template-rows: 300px 100px;
 `;
 
 export const MainImageStyle2 = styled.div`
   box-sizing: border-box;
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: transparent;
   border-radius: 10%;
-  height: 40rem;
-  width: 40rem;
-  grid-auto-flow: dense;
-  margin-top: 10rem;
+  height: 31rem;
+  width: 37rem;
   padding-top: 10rem;
   align-items: center;
   justify-content: center;
   text-align: center;
   grid-area: img;
-  display: grid;
-  grid-template-rows: 200px 100px;
-  transition: all 0.25s ease-in-out;
 `;
 
 export const ImageGrid1 = styled.div`
@@ -157,12 +149,14 @@ export const SwapButton = styled.button`
   color: ${theme.colors.graySix};
 `;
 
-export const TextUnder = styled.div`
+export const TextUnder = styled.span`
   box-sizing: border-box;
   padding-bottom: 1rem;
   border-bottom: 1px solid ${theme.colors.polarSimpleMain};
   text-underline-offset: 1rem;
-  ${theme.fontSize.sizeExtraMedium};
+  ${theme.fontSize.sizeLarge};
+  ${theme.font.sebangGothic};
+  ${theme.fontWeight.weightLarge};
 `;
 
 export const TitleStyle = styled.div`
@@ -181,7 +175,7 @@ export const TitleStyle2 = styled.div`
   border-bottom: 1px solid black;
   padding-bottom: 3rem;
   font-size: 3rem;
-  margin-top: 9.5rem;
+  margin-top: 4.5rem;
   bottom: 0;
   grid-area: title;
 `;
@@ -264,8 +258,8 @@ export const KeywordStyle2 = styled.div<{ colStart: number; rowStart: number }>`
 `;
 
 export const MainBlueBody = styled.span`
-  color: ${theme.fontColor.blueColor};
-  font-weight: 700;
+  color: #5d6dbe;
+  font-weight: 400;
 `;
 
 export const IconButton = styled.button`
@@ -277,5 +271,24 @@ export const IconButton = styled.button`
 `;
 
 export const TextStyle = styled.div`
-  ${theme.font.nanumGothic};
+  ${theme.font.sebangGothic};
+  font-size: 1.8rem;
+  line-height: 4.5rem;
+  position: absolute;
+  margin: 0 auto;
+  width: 95%;
+  top: 24%;
+  z-index: 3;
+`;
+
+export const NoticeTextStyle = styled.div`
+  ${theme.font.sebangGothic};
+  font-size: 2rem;
+  line-height: 2.7rem;
+  position: absolute;
+  margin: 0 auto;
+  margin-left: 5%;
+  width: 85%;
+  top: 23%;
+  z-index: 3;
 `;
