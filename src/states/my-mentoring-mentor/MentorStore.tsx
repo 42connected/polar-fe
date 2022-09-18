@@ -106,7 +106,8 @@ class MentorStore {
         return true;
       })
       .catch(err => {
-        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
+        console.log(err);
+        //ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
       });
     LoadingStore.off();
   }
