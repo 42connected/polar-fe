@@ -31,10 +31,6 @@ const isNeedJoin = (config?: AxiosRequestConfig<any>): boolean => {
   return false;
 };
 
-const userWithNoRequiredInfo = () => {
-  UserJoinStore.on();
-};
-
 /**
  * for GET, DELETE method
  * @param method Method, enum type
@@ -48,14 +44,16 @@ export const axiosWithNoData = async (
   config?: AxiosRequestConfig<any>,
 ): Promise<AxiosResponse<any, any>> => {
   if (isNeedJoin(config)) {
-    userWithNoRequiredInfo();
-    throw new Error(`Need Join`);
+    UserJoinStore.on();
   }
 
   switch (method) {
     case AXIOS_METHOD_WITH_NO_DATA.GET:
       return axiosInstance.get(url, config);
     case AXIOS_METHOD_WITH_NO_DATA.DELETE:
+      if (isNeedJoin(config)) {
+        throw new Error(`Need Join`);
+      }
       return axiosInstance.delete(url, config);
   }
 };
@@ -75,7 +73,7 @@ export const axiosWithData = async (
   config?: AxiosRequestConfig<any>,
 ): Promise<AxiosResponse<any, any>> => {
   if (isNeedJoin(config)) {
-    userWithNoRequiredInfo();
+    UserJoinStore.on();
     throw new Error(`Need Join`);
   }
 

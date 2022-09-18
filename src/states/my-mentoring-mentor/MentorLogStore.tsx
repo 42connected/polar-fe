@@ -5,6 +5,7 @@ import {
 } from '../../context/axios-interface';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
 import LoadingStore from '../loading/LoadingStore';
+import UserJoinStore from '../user-join/UserJoinStore';
 
 export interface MentoringLogs {
   id: string;
