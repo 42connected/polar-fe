@@ -613,7 +613,7 @@ const ApplyPage = () => {
 
   const ClickEvent = () => {
     if (!(firstStartTime && firstEndTime)) {
-      setErrorModalMsg('첫번째 가능시간은 필수로 입력되어야 합니다.');
+      setErrorModalMsg('첫번째 신청 시간은 필수로 입력되어야 합니다.');
     } else if (topic.length <= 0) {
       setErrorModalMsg('주제를 입력해주세요');
     } else if (content.length <= 0) {
@@ -715,7 +715,7 @@ const ApplyPage = () => {
                           </HourDiv>
                         </ButtonDiv>
                       ) : (
-                        '가능시간1'
+                        '신청 시간1'
                       )}
                     </PlanButton1>
                     {firstStartTime && firstEndTime ? (
@@ -768,7 +768,7 @@ const ApplyPage = () => {
                           </HourDiv>
                         </ButtonDiv>
                       ) : (
-                        '가능시간2'
+                        '신청 시간2'
                       )}
                     </PlanButton2>
                     {secondStartTime && secondEndTime ? (
@@ -819,7 +819,7 @@ const ApplyPage = () => {
                           </HourDiv>
                         </ButtonDiv>
                       ) : (
-                        '가능시간3'
+                        '신청 시간3'
                       )}
                     </PlanButton2>
                     {thirdStartTime && thirdEndTime ? (
@@ -908,7 +908,7 @@ const ApplyPage = () => {
                           </HourDiv>
                         </ButtonDiv>
                       ) : (
-                        '가능시간1'
+                        '신청 시간1'
                       )}
                     </MovPlanButton1>
                     {firstStartTime && firstEndTime ? (
@@ -961,7 +961,7 @@ const ApplyPage = () => {
                           </HourDiv>
                         </ButtonDiv>
                       ) : (
-                        '가능시간2'
+                        '신청 시간2'
                       )}
                     </MovPlanButton2>
                     {secondStartTime && secondEndTime ? (
@@ -1012,7 +1012,7 @@ const ApplyPage = () => {
                           </HourDiv>
                         </ButtonDiv>
                       ) : (
-                        '가능시간3'
+                        '신청 시간3'
                       )}
                     </MovPlanButton2>
                     {thirdStartTime && thirdEndTime ? (
