@@ -1,7 +1,7 @@
 export interface PostApply {
   topic: string;
   content: string;
-  requestTime1: string[];
-  requestTime2: string[] | null;
-  requestTime3: string[] | null;
+  requestTime1: Date[];
+  requestTime2: Date[] | null;
+  requestTime3: Date[] | null;
 }

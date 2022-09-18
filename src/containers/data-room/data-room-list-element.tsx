@@ -2,6 +2,7 @@ import CheckBox from '../../components/check-box';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { dataRoomProps } from '../../interface/data-room/data-room-props.interface';
+import { NewDateKr } from '../../states/date-kr';
 
 export const TableData = styled.td`
   height: 3.6rem;
@@ -21,10 +22,10 @@ export const Link = styled.a`
 export function refineMeetingAt(rawDate: Date[]) {
   const week = ['일', '월', '화', '수', '목', '금', '토'];
   const dateString: string[] = [
-    new Date(rawDate[0]).toLocaleString('ko-KR'),
-    new Date(rawDate[1]).toLocaleString('ko-KR'),
+    NewDateKr(rawDate[0]).toLocaleString('ko-KR'),
+    NewDateKr(rawDate[1]).toLocaleString('ko-KR'),
   ];
-  const date: Date[] = [new Date(rawDate[0]), new Date(rawDate[1])];
+  const date: Date[] = [NewDateKr(rawDate[0]), NewDateKr(rawDate[1])];
 
   const Div = styled.div`
     display: inline;
@@ -90,7 +91,7 @@ function DataRoomListElement(
       </TableData>
       <TableData>
         {data.mentoringLogs?.createdAt
-          ? new Date(data.mentoringLogs?.createdAt).toLocaleDateString('ko-KR')
+          ? NewDateKr(data.mentoringLogs?.createdAt).toLocaleDateString('ko-KR')
           : ''}
       </TableData>
       <TableData>{data.mentors?.name ?? ''}</TableData>

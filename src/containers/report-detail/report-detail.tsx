@@ -57,6 +57,7 @@ import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { debounce } from '@mui/material';
 import LoadingStore from '../../states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
+import { NewDateKr } from '../../states/date-kr';
 
 const ReportpageStyle = styled.body<{
   height: number;
@@ -129,8 +130,8 @@ const SimpleComponent = (props: {
     <div ref={printRef}>
       {reportDatas?.map((reportdata: reportsPro, index: number, origin) => {
         const meetingAt = [
-          new Date(reportdata?.mentoringLogs.meetingAt[0]),
-          new Date(reportdata?.mentoringLogs.meetingAt[1]),
+          NewDateKr(reportdata?.mentoringLogs.meetingAt[0]),
+          NewDateKr(reportdata?.mentoringLogs.meetingAt[1]),
         ];
         return (
           <div key={index}>
