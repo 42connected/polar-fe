@@ -13,7 +13,7 @@ import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import defaultTheme from '../../styles/theme';
 
-const NoneDrag = styled.div`
+const NoneDrag = styled.body`
   display: flex;
   width: 100%;
   flex-direction: column;
