@@ -29,6 +29,7 @@ import MentorInfoModal, { ModalType } from '../signup/mentor-info-modal';
 import MyTableComponents from '../../components/mentor-detail/my-table';
 import NotFound from '../not-found/not-found';
 import UserJoinStore from '../../states/user-join/UserJoinStore';
+import { NowDateKr, NumToDateKr } from '../../states/date-kr';
 
 function MentorDetail() {
   const [mentorIntroduction, setMentorIntroduction] = useState<string>('');
@@ -71,7 +72,7 @@ function MentorDetail() {
   const setMentorAvailableTimeData = async (metorAvailableTimeData: string) => {
     const mentorAvailableTimeDataToArray = JSON.parse(metorAvailableTimeData);
     const appointmentsData: appointmentsInterface[] = [];
-    const today = new Date();
+    const today = NowDateKr();
     const todayDay = today.getDay();
     const todayDate = today.getDate();
     const todayMonth = today.getMonth();
@@ -141,8 +142,7 @@ function MentorDetail() {
         }
       })
       .catch(err => {
-        // ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
-        console.log(err);
+        ErrorStore.on(err, ERROR_DEFAULT_VALUE.TITLE);
         setError(true);
       });
     axiosInstance

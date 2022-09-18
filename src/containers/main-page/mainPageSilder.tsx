@@ -241,8 +241,8 @@ export const MoNoticeText = (
 );
 
 function ImageSlider(props: sliderStlye) {
-  const sliders = [CadetText, MentorText, NoticeText];
-  const moSliders = [MoCadetText, MoMentorText, MoNoticeText];
+  const sliders = [NoticeText, CadetText, MentorText];
+  const moSliders = [MoNoticeText, MoCadetText, MoMentorText];
   return (
     <Container w={props.w} h={props.h}>
       <StyledSlider {...settings}>
@@ -251,7 +251,7 @@ function ImageSlider(props: sliderStlye) {
               return (
                 <div key={index}>
                   <CardBox>
-                    {index < 2 ? (
+                    {index >= 1 ? (
                       <CardImg src={useImg} w={props.w} h={props.h}></CardImg>
                     ) : (
                       <CardImg
