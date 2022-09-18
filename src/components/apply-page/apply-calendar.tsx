@@ -19,6 +19,7 @@ import Button from '../button';
 import LoadingStore from '../../states/loading/LoadingStore';
 import { ApplyCalendarModalProps } from './apply-calendar-modal';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
+import { NewDateKr, NowDateKr, NumToDateKr } from '../../states/date-kr';
 
 const muiTheme = createTheme({
   palette: {
@@ -104,16 +105,16 @@ interface scheduleType {
 function ApplyCalendar(props: ApplyCalendarModalProps) {
   const { XButtonFunc, mentorIntraId, setStartDateTime, setEndDateTime } =
     props;
-  const [selectDate, onChange] = useState(new Date());
+  const [selectDate, onChange] = useState(NowDateKr());
   const [availableTime, setAvailableTime] = useState(new Array(7).fill([]));
-  const [requestTime, setRequestTime] = useState(new Array(new Array()));
+  const [requestTime, setRequestTime] = useState<Date[][]>(new Array([]));
   const [schedule, setSchedule] = useState(new Array<scheduleType>());
-  const [activeDate, setActiveDate] = useState(new Date());
+  const [activeDate, setActiveDate] = useState(NowDateKr());
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [getMonthArray, setGetMonthArray] = useState(false);
   const [getAvailableTime, setGetAvailableTime] = useState(false);
-  const today = new Date();
+  const today = NowDateKr();
 
   useEffect(() => {
     try {
@@ -176,7 +177,7 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
             }
           })
           .then(() => {
-            const maxDate: number = new Date(
+            const maxDate: number = NumToDateKr(
               activeDate.getFullYear(),
               activeDate.getMonth() + 1,
               0,
@@ -207,7 +208,7 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
       const setInitSchedule = new Promise((resolve, reject) => {
         schedule.forEach((day, index) => {
           availableTime[
-            new Date(
+            NumToDateKr(
               activeDate.getFullYear(),
               activeDate.getMonth(),
               index + 1,
@@ -225,8 +226,8 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
       });
       const setRealSchedule = new Promise((resolve, reject) => {
         requestTime.forEach(data => {
-          const startTime = new Date(data[0]);
-          const endTime = new Date(data[1]);
+          const startTime = NewDateKr(data[0]);
+          const endTime = NewDateKr(data[1]);
           schedule[startTime.getDate() - 1]?.array.fill(
             false,
             startTime.getHours() * 2 + (startTime.getMinutes() > 0 ? 1 : 0),
@@ -253,7 +254,7 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
       });
 
       const setTodaySchedule = new Promise((resolve, reject) => {
-        const today = new Date();
+        const today = NowDateKr();
         const available: number =
           today.getHours() * 2 +
           (today.getMinutes() > 30
@@ -285,7 +286,7 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
             setTodaySchedule.then(data => {
               setAble.then(data => {
                 setSchedule([...schedule]);
-                const maxDate: number = new Date(
+                const maxDate: number = NumToDateKr(
                   selectDate.getFullYear(),
                   selectDate.getMonth() + 1,
                   0,
@@ -294,7 +295,7 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
                   for (let i = selectDate.getDate(); i < maxDate; i++) {
                     if (schedule[i].able === true) {
                       selectDate.setDate(i + 1);
-                      onChange(new Date(selectDate));
+                      onChange(NewDateKr(selectDate));
                       break;
                     }
                   }
@@ -433,10 +434,10 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
           if (startTime === '' || endTime === '')
             alert('시작시간과 끝시간을 모두 선택해주세요');
           else {
-            const startDate = new Date(selectDate);
+            const startDate = NewDateKr(selectDate);
             startDate.setHours(Math.floor(Number(startTime) / 2));
             startDate.setMinutes(Number(startTime) % 2 ? 30 : 0);
-            const endDate = new Date(selectDate);
+            const endDate = NewDateKr(selectDate);
             endDate.setHours(Math.floor((Number(endTime) + 1) / 2));
             endDate.setMinutes((Number(endTime) + 1) % 2 ? 30 : 0);
             setStartDateTime(startDate);
