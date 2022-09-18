@@ -14,7 +14,9 @@ export function NumToDateKr(
   hour?: number,
   minute?: number,
 ): Date {
-  const localDate = new Date(year, month, day, hour, minute);
+  let localDate;
+  if (hour && minute) localDate = new Date(year, month, day, hour, minute);
+  else localDate = new Date(year, month, day);
   const utcDate =
     localDate.getTime() + localDate.getTimezoneOffset() * 60 * 1000;
   const koreaTimeDiff = 9 * 60 * 60 * 1000;
