@@ -101,7 +101,7 @@ export const getDayToString = (meetingAt: Date): string => {
   if (!meetingAt) {
     return '-';
   }
-  const date: string[] = ['월', '화', '수', '목', '금', '토', '일'];
+  const date: string[] = ['일', '월', '화', '수', '목', '금', '토'];
   const startTime: Date = NewDateKr(meetingAt);
   if (!isValidTime(startTime)) {
     return '-';
