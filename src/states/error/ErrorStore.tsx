@@ -1,10 +1,8 @@
 import { action, makeObservable, observable } from 'mobx';
 
 export const ERROR_DEFAULT_VALUE = {
-  // ERROR_MSG: '( 에러 발생 )',
-  // TITLE: '🚨 42폴라 에러',
-  ERROR_MSG: '멘토 정보를 입력해주세요',
-  TITLE: '멘토 정보 입력',
+  ERROR_MSG: '( 에러 발생 )',
+  TITLE: '🚨 42폴라 에러',
 };
 
 class ErrorStore {
