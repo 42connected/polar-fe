@@ -2,7 +2,7 @@ import defaultTheme from '../../styles/theme';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
-export const ContainersPc = styled.div`
+export const ContainersPc = styled.body`
   display: grid;
   background: white;
   grid-template-columns: 1fr;
