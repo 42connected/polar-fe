@@ -25,7 +25,7 @@ import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 
 const NoneDrag = styled.div`
   width: 100%;
-  height: calc(100vh - 210px);
+  height: calc(100vh - 205px);
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -112,7 +112,7 @@ const MyMentoringMentor = observer(() => {
   const RenderEmptyLine = () => {
     const result = [];
     for (let i = 0; i + MentorLogStore?.logs?.length < 15; ++i) {
-      result.push(<TableColumnLine />);
+      result.push(<TableColumnLine key={i} />);
     }
     return result;
   };

@@ -269,7 +269,7 @@ function ImageSlider(props: sliderStlye) {
               return (
                 <div key={index}>
                   <CardBox>
-                    {index < 2 ? (
+                    {index >= 1 ? (
                       <CardImg src={useImg} w={props.w} h={props.h}></CardImg>
                     ) : (
                       <CardImg

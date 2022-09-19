@@ -14,7 +14,6 @@ import AuthStore from '../../states/auth/AuthStore';
 import { ReportRowWrite } from './report-row-write';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 import { isValidTime } from '../my-mentoring-mentor/modal/wait/select-time';
-import { NewDateKr } from '../../states/date-kr';
 
 export const REPORT_STATE = {
   EDIT_POSSIBLE: '작성중',
@@ -102,7 +101,7 @@ export const getDayToString = (meetingAt: Date): string => {
     return '-';
   }
   const date: string[] = ['일', '월', '화', '수', '목', '금', '토'];
-  const startTime: Date = NewDateKr(meetingAt);
+  const startTime: Date = meetingAt;
   if (!isValidTime(startTime)) {
     return '-';
   }
@@ -122,8 +121,8 @@ export const getTimeToString = (meetingAt: Date[]): string => {
   if (!meetingAt) {
     return '';
   }
-  const startTime: Date = NewDateKr(meetingAt[START_TIME]);
-  const endTime: Date = NewDateKr(meetingAt[END_TIME]);
+  const startTime: Date = meetingAt[START_TIME];
+  const endTime: Date = meetingAt[END_TIME];
   if (!isValidTime(startTime) || !isValidTime(endTime)) {
     return '';
   }

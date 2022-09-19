@@ -15,7 +15,7 @@ export const MainContainer = styled.div`
   left: 0;
   ${theme.fontSize.sizeMedium};
   ${theme.font.sebangGothic};
-  height: calc(100vh - 210px);
+  height: calc(100vh - 205px);
   width: 100%;
   display: grid;
   grid-template-rows: 130px 130px 130px;

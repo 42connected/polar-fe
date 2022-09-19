@@ -6,6 +6,7 @@ import {
   getDayToString,
   getTimeToString,
   START_TIME,
+  END_TIME,
 } from '../reports/report-form';
 import { sliceMoreInfoStr } from './email';
 import { isValidTime } from './modal/wait/select-time';
@@ -101,22 +102,54 @@ const getDayToShortString = (meetingAt: Date): string => {
   `;
 };
 
+function stringToDate(log: MentoringLogs) {
+  log.createdAt = NewDateKr(log.createdAt);
+  if (log.meetingAt) {
+    log.meetingAt = [
+      NewDateKr(log.meetingAt[START_TIME]),
+      NewDateKr(log.meetingAt[END_TIME]),
+    ];
+  }
+  if (log.meta.requestTime[0])
+    log.meta.requestTime[0] = [
+      NewDateKr(log.meta.requestTime[0][START_TIME]),
+      NewDateKr(log.meta.requestTime[0][END_TIME]),
+    ];
+  if (log.meta.requestTime[1])
+    log.meta.requestTime[1] = [
+      NewDateKr(log.meta.requestTime[1][START_TIME]),
+      NewDateKr(log.meta.requestTime[1][END_TIME]),
+    ];
+  if (log.meta.requestTime[2])
+    log.meta.requestTime[2] = [
+      NewDateKr(log.meta.requestTime[2][START_TIME]),
+      NewDateKr(log.meta.requestTime[2][END_TIME]),
+    ];
+}
+
 export function TableRow(props: TableRowProps) {
+  const log = JSON.parse(JSON.stringify(props.log));
+  stringToDate(log);
   return (
     <TableColumnLine>
       <TableColumnDate>{getDayToShortString(props?.createdAt)}</TableColumnDate>
       <TableColumnUser>{props.user}</TableColumnUser>
       <TableColumnTopic
         onClick={() => {
-          props.setLog(props.log);
+          props.setLog(log);
           props.setApplyModal(true);
         }}
       >
         {sliceMoreInfoStr(props.topic, 17)}
       </TableColumnTopic>
       <TableColumnTime>
-        <Time>{getDayToString(props?.meetingAt?.[START_TIME])}</Time>
-        <TimeWhile>{getTimeToString(props?.meetingAt)}</TimeWhile>
+        <Time>{getDayToString(NewDateKr(props?.meetingAt?.[START_TIME]))}</Time>
+        <TimeWhile>
+          {getTimeToString([
+            NewDateKr(props?.meetingAt[START_TIME]),
+            NewDateKr(props?.meetingAt[END_TIME]),
+          ])}
+        </TimeWhile>
       </TableColumnTime>
       <StatusButton status={props.mentoringState} />
       <ReportButton
