@@ -62,6 +62,10 @@ export function Time(props: TimeProps) {
   function getRows(availableTimes: IAvailableDate[][]): IRows[] {
     const rows: IRows[] = [];
 
+    if (!availableTimes) {
+      return rows;
+    }
+
     let index = 0;
     for (let i = 0; i < availableTimes.length; i++) {
       for (let j = 0; j < availableTimes[i].length; j++) {
