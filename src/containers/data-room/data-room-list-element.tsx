@@ -48,7 +48,7 @@ export function refineMeetingAt(rawDate: Date[]) {
             ') ' +
             date[0]
               .toTimeString()
-              .slice(0, date[0].toTimeString().lastIndexOf(':'))}
+              .slice(0, date[0].toTimeString().split(' ')[0].lastIndexOf(':'))}
         </Div>
         <ColoredDiv>
           {'(' +
