@@ -185,7 +185,7 @@ export function MentorCard(props: CardProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setApplyModal(true);
   const handleClose = () => setOpen(false);
-  const log = props.log;
+  const log = JSON.parse(JSON.stringify(props.log));
   stringToDate(log);
   return (
     <>
