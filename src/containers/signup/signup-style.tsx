@@ -9,7 +9,7 @@ export const ContainersPc = styled.div`
   grid-template-rows: 1fr auto;
   grid-column-gap: 10rem;
   justify-items: center;
-  height: calc(100vh - 205px);
+  height: 100%;
 `;
 
 export const ContainersMobile = styled.div`
