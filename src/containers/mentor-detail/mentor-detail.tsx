@@ -5,7 +5,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../components/button';
 import { InputCounter } from '../../components/input-counter';
@@ -29,7 +29,7 @@ import MentorInfoModal, { ModalType } from '../signup/mentor-info-modal';
 import MyTableComponents from '../../components/mentor-detail/my-table';
 import NotFound from '../not-found/not-found';
 import UserJoinStore from '../../states/user-join/UserJoinStore';
-import { NowDateKr, NumToDateKr } from '../../states/date-kr';
+import { NowDateKr } from '../../states/date-kr';
 
 function MentorDetail() {
   const [mentorIntroduction, setMentorIntroduction] = useState<string>('');
@@ -47,7 +47,7 @@ function MentorDetail() {
     useState<boolean>(false);
   const [mentorMarkdown, setMentorMarkdown] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
-  const [take, setTake] = useState<number>(5);
+  const [take] = useState<number>(5);
   const [page, setPage] = useState<number>(1);
   const [maxPage, setMaxPage] = useState<number>(1);
   const [isActivateDeleteModal, setIsActivateDeleteModal] =
@@ -67,7 +67,6 @@ function MentorDetail() {
   ] = useState<boolean>(false);
   const [isActivateMentorTimeModal, setIsActivateMentorTimeModal] =
     useState<boolean>(false);
-  const navigate = useNavigate();
 
   const setMentorAvailableTimeData = async (metorAvailableTimeData: string) => {
     const mentorAvailableTimeDataToArray = JSON.parse(metorAvailableTimeData);
@@ -310,7 +309,7 @@ function MentorDetail() {
               <MentorInfoContent>
                 <MentorName>
                   <div className="mentor-name">{mentor?.name} 멘토</div>
-                  <div className="mentor-intra">{mentor?.intraId}</div>
+                  <div className="mentor-intra">{mentor?.slackId}</div>
                   {user?.intraId === mentor?.intraId && user && mentor ? (
                     <FontAwesomeIcon
                       icon={faPencil}
@@ -649,11 +648,9 @@ function MentorDetail() {
                         }
                         borderRadius="10px"
                         onClick={() => {
-                          {
-                            user.role === 'cadet'
-                              ? handleCommentSubmit()
-                              : setIsActivateCommentSubmit(data => !data);
-                          }
+                          user.role === 'cadet'
+                            ? handleCommentSubmit()
+                            : setIsActivateCommentSubmit(data => !data);
                         }}
                         isUnActivated={inputComment.length === 0}
                       />
@@ -782,26 +779,12 @@ const MentorActivateContainer = styled.div`
   }
 `;
 
-const InputUserContent = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  ${theme.fontFrame.titleSmall}
-  margin-right: 1rem;
-`;
-
 const ReplyContainer = styled.div`
   border-bottom: 1px solid ${theme.colors.polarSimpleMain};
 `;
 
 const CommentPageNation = styled.div`
   cursor: pointer;
-`;
-const ButtonBox = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 1rem;
 `;
 
 const MenuBox3 = styled.div`
@@ -873,11 +856,6 @@ const Comment = styled.div`
     height: 5rem;
     border-radius: 50%;
   }
-`;
-
-const TimTableScroll = styled.div`
-  overflow-y: scroll;
-  height: 70rem;
 `;
 
 const MentorCommetsContent = styled.div``;
