@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     height:100%;
-    min-height: calc(100vh - 210px);
+    min-height: calc(100vh - 205px);
     font-family: 'NanumGothic';
     line-height: 1.6;
   }

@@ -113,7 +113,7 @@ const ApplyContainer = styled.div`
   left: 0;
   ${theme.fontSize.sizeMedium};
   ${theme.font.sebangGothic};
-  height: calc(100vh - 220px);
+  height: calc(100vh - 205px);
   width: 100%;
   display: grid;
   grid-template-rows: 80rem;
@@ -133,7 +133,7 @@ const MovApplyContainer = styled.div`
   left: 0;
   ${theme.fontSize.sizeMedium};
   ${theme.font.sebangGothic};
-  height: calc(100% - 220px);
+  height: calc(100vh - 205px);
   width: 100%;
   display: grid;
   grid-template-rows: 70rem 70rem;
