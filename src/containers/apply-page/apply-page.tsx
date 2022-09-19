@@ -21,6 +21,7 @@ import {
   faCalendarCheck,
   faCheck,
   faCircleExclamation,
+  faClock,
   faHighlighter,
   faMessage,
   faX,
@@ -30,6 +31,7 @@ import { useNavigate } from 'react-router-dom';
 import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
 import { NewDateKr, NowDateKr } from '../../states/date-kr';
 import { MainBlueBody } from '../main-page/mainPageStyled';
+import { light } from '@mui/material/styles/createPalette';
 
 const Wrapper = styled.div`
   .modal {
@@ -163,9 +165,8 @@ const MovApplyContainer = styled.div`
 
 const Notice = styled.div`
   background-color: ${theme.colors.polarBackground};
-  border-radius: 1rem;
   box-sizing: border-box;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid #bfbdbd;
   width: 100%;
   ${theme.fontSize.sizeSmall};
   text-align: center;
@@ -191,14 +192,10 @@ const NoticeHeight = styled.div`
 `;
 
 const Chooseplan = styled.div`
-  box-sizing: border-box;
-  //border-top: 1px solid gray;
-  //border-right: 1px solid gray;
-  // border-bottom: 1px solid gray;
   display: flex;
   flex-flow: row;
-  text-align: center;
   flex-direction: column;
+  text-align: center;
   flex-wrap: wrap;
   margin-top: -10rem;
   align-items: center;
@@ -350,7 +347,7 @@ const Line1 = styled.div`
 const HeiLine = styled.div`
   text-align: center;
   align-items: center;
-  border-right: 0.1rem solid #000000;
+  border-right: 0.1rem solid #bfbdbd;
   height: 93vh;
   z-index: 0;
 `;
@@ -379,21 +376,38 @@ const MovLine2 = styled.div`
   width: 45rem;
 `;
 
-const MainText = styled.div`
+const MainText = styled.span`
   box-sizing: border-box;
   border-bottom: 1px solid black;
-  margin-top: 2rem;
-  text-align: center;
   ${theme.font.sebangGothic};
   ${theme.fontWeight.weightLarge};
   ${theme.fontSize.sizeExtraMedium};
 `;
 
-const MainText2 = styled.div`
+const MainTextNoLine = styled.div`
+  margin-top: 2rem;
+  text-align: center;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  ${theme.font.sebangGothic};
+  ${theme.fontWeight.weightLarge};
+  ${theme.fontSize.sizeExtraMedium};
+`;
+
+const IconPadding = styled.span`
+  display: inline-block;
+  text-align: center;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  font-size: 1.2rem;
+`;
+
+const MainText2 = styled.span`
   box-sizing: border-box;
   border-bottom: 1px solid black;
   ${theme.fontWeight.weightLarge};
-  margin-top: 2rem;
   text-align: center;
   ${theme.font.sebangGothic};
   ${theme.fontSize.sizeExtraMedium};
@@ -786,14 +800,12 @@ const ApplyPage = () => {
               <br /> <br />
             </Notice>
             <Chooseplan>
-              <MainText>
-                <FontAwesomeIcon
-                  icon={faCalendarCheck}
-                  size="1x"
-                  color="black"
-                />{' '}
-                일정 선택하기
-              </MainText>
+              <MainTextNoLine>
+                <MainText>일정 선택하기</MainText>{' '}
+                <IconPadding>
+                  <FontAwesomeIcon icon={faClock} size="2x" color="black" />{' '}
+                </IconPadding>
+              </MainTextNoLine>
               <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
               <Wrapper>
                 <ApplyButtonDiv>
@@ -958,10 +970,10 @@ const ApplyPage = () => {
               <HeiLine />
             </Line>
             <Content>
-              <MainText2>
-                <FontAwesomeIcon icon={faHighlighter} size="1x" color="black" />{' '}
-                신청 정보
-              </MainText2>
+              <MainTextNoLine>
+                <MainText2>신청 정보</MainText2>{' '}
+                <FontAwesomeIcon icon={faHighlighter} size="sm" color="black" />{' '}
+              </MainTextNoLine>
               <MiddleText2> · 주제 </MiddleText2>
               <InputCounter
                 setter={setTopic}
