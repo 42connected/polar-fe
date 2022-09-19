@@ -1,6 +1,7 @@
 export default interface MentorDetailProps {
   id: string;
   intraId: string;
+  slackId?: string;
   name?: string;
   email?: string;
   company?: string;

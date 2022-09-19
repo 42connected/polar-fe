@@ -310,7 +310,7 @@ function MentorDetail() {
               <MentorInfoContent>
                 <MentorName>
                   <div className="mentor-name">{mentor?.name} 멘토</div>
-                  <div className="mentor-intra">{mentor?.intraId}</div>
+                  <div className="mentor-intra">{mentor?.slackId}</div>
                   {user?.intraId === mentor?.intraId && user && mentor ? (
                     <FontAwesomeIcon
                       icon={faPencil}
