@@ -101,7 +101,7 @@ function DataRoomListElement(
       <TableData>
         {data.cadets ? (data.cadets?.isCommon ? '공통' : '심화') : ''}
       </TableData>
-      {data.mentoringLogs?.meetingAt[0] ? (
+      {data.mentoringLogs?.meetingAt?.[0] ? (
         refineMeetingAt(data.mentoringLogs.meetingAt)
       ) : (
         <TableData></TableData>
