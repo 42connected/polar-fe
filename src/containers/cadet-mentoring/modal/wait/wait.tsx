@@ -30,9 +30,14 @@ export interface WaitProps {
 }
 
 const getDurationTime = (meetingAt: Date[]): string => {
-  const hour = meetingAt[1].getHours() - meetingAt[0].getHours();
+  let hour = meetingAt[1].getHours() - meetingAt[0].getHours();
   let minute = meetingAt[1].getMinutes() - meetingAt[0].getMinutes();
-  minute = minute > 0 ? minute : -minute;
+
+  if (minute < 0) {
+    minute *= -1;
+    hour -= 1;
+  }
+
   return `${hour}시간 ${minute.toString().padStart(2, '0')}분`;
 };
 
