@@ -27,8 +27,12 @@ const LinkContainer = styled.div`
   align-items: center;
   color: ${defaultTheme.colors.polarSimpleMain};
   font-weight: bold;
-  text-decoration: underline;
   cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+    opacity: 0.6;
+    text-underline-position: under;
+  }
 `;
 
 export interface ReportButtonProps {

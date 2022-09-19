@@ -49,10 +49,13 @@ const TableColumnTopic = styled.div`
   width: 30%;
   justify-content: left;
   align-items: center;
+  color: ${defaultTheme.colors.polarSimpleMain};
   cursor: pointer;
-  text-decoration: underline wavy;
-  text-decoration-color: rgba(0, 0, 0, 0.2);
-  text-underline-position: under;
+  &:hover {
+    text-decoration: underline wavy;
+    opacity: 0.6;
+    text-underline-position: under;
+  }
 `;
 
 const TableColumnTime = styled.div`
@@ -151,7 +154,12 @@ export function TableRow(props: TableRowProps) {
           ])}
         </TimeWhile>
       </TableColumnTime>
-      <StatusButton status={props.mentoringState} />
+      <StatusButton
+        status={props.mentoringState}
+        log={log}
+        setLog={props.setLog}
+        setApplyModal={props.setApplyModal}
+      />
       <ReportButton
         mentoringLogStatus={props.mentoringState}
         report={props?.report}
