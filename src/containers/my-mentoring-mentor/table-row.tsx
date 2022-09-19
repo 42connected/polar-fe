@@ -4,9 +4,9 @@ import { MentoringLogs } from '../../states/my-mentoring-mentor/MentorLogStore';
 import defaultTheme from '../../styles/theme';
 import {
   getDayToString,
-  getTimeToString,
   START_TIME,
   END_TIME,
+  getTimeToString,
 } from '../reports/report-form';
 import { sliceMoreInfoStr } from './email';
 import { isValidTime } from './modal/wait/select-time';
@@ -149,8 +149,8 @@ export function TableRow(props: TableRowProps) {
         <Time>{getDayToString(NewDateKr(props?.meetingAt?.[START_TIME]))}</Time>
         <TimeWhile>
           {getTimeToString([
-            NewDateKr(props?.meetingAt[START_TIME]),
-            NewDateKr(props?.meetingAt[END_TIME]),
+            NewDateKr(props?.meetingAt?.[START_TIME]),
+            NewDateKr(props?.meetingAt?.[END_TIME]),
           ])}
         </TimeWhile>
       </TableColumnTime>
