@@ -355,7 +355,12 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
               (index + 1) % 2 ? '30' : '00'
             }`}</MenuItem>,
           );
-        else if (startTime !== '' && data && index > Number(startTime))
+        else if (
+          startTime !== '' &&
+          data &&
+          index > Number(startTime) &&
+          index - Number(startTime) < 6
+        )
           returnValue.push(
             <MenuItem
               value={index}
@@ -364,7 +369,13 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
               (index + 1) % 2 ? '30' : '00'
             }`}</MenuItem>,
           );
-        else if (startTime !== '' && index > Number(startTime) && !data) break;
+        else if (
+          startTime !== '' &&
+          index > Number(startTime) &&
+          !data &&
+          index - Number(startTime) >= 6
+        )
+          break;
         index++;
       }
     }
