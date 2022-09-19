@@ -70,11 +70,7 @@ class MentorLogStore {
         });
       })
       .catch(err => {
-        if (UserJoinStore && !UserJoinStore.needJoin)
-          ErrorStore.on(
-            err?.response?.data?.message,
-            ERROR_DEFAULT_VALUE.TITLE,
-          );
+        ErrorStore.on(err?.response?.data?.message, ERROR_DEFAULT_VALUE.TITLE);
       });
     LoadingStore.off();
   }

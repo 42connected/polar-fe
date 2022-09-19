@@ -112,7 +112,7 @@ const MyMentoringMentor = observer(() => {
   const RenderEmptyLine = () => {
     const result = [];
     for (let i = 0; i + MentorLogStore?.logs?.length < 15; ++i) {
-      result.push(<TableColumnLine />);
+      result.push(<TableColumnLine key={i} />);
     }
     return result;
   };

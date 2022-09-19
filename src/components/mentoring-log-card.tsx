@@ -168,24 +168,10 @@ const stringToDate = (log: MentoringLog): void => {
     ];
 };
 
-const style = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  height: 500,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-};
-
 export function MentorCard(props: CardProps) {
   const [applyModal, setApplyModal] = useState<boolean>(false);
-  const [open, setOpen] = useState(false);
   const handleOpen = () => setApplyModal(true);
-  const handleClose = () => setOpen(false);
-  const log = props.log;
+  const log = JSON.parse(JSON.stringify(props.log));
   stringToDate(log);
   return (
     <>

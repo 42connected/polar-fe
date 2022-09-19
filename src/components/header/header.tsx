@@ -221,6 +221,13 @@ const Header = () => {
     {
       AuthStore.getAccessToken() ? setIsLogin(true) : setIsLogin(false);
     }
+
+    if (
+      AuthStore.getUserRole() &&
+      AuthStore.getUserRole() === USER_ROLES.CADET
+    ) {
+      AlertDetail();
+    }
   }, [isClick]);
 
   return (
