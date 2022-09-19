@@ -4,9 +4,9 @@ import { MentoringLogs } from '../../states/my-mentoring-mentor/MentorLogStore';
 import defaultTheme from '../../styles/theme';
 import {
   getDayToString,
-  getTimeToString,
   START_TIME,
   END_TIME,
+  makeTimePair,
 } from '../reports/report-form';
 import { sliceMoreInfoStr } from './email';
 import { isValidTime } from './modal/wait/select-time';
@@ -90,6 +90,33 @@ export interface TableRowProps {
   setLog: (l: MentoringLogs) => void;
 }
 
+function makeNewDateKrOrNull(date: Date): Date | null {
+  const localDate = new Date(date);
+  if (!isValidTime(localDate)) {
+    return null;
+  }
+  const utcDate =
+    localDate.getTime() + localDate.getTimezoneOffset() * 60 * 1000;
+  const koreaTimeDiff = 9 * 60 * 60 * 1000;
+  const koreaDate = new Date(utcDate + koreaTimeDiff);
+  return koreaDate;
+}
+
+const getTimeToString = (meetingAt: Date[]): string => {
+  if (!meetingAt) {
+    return '';
+  }
+  const startTime = makeNewDateKrOrNull(meetingAt[START_TIME]);
+  const endTime = makeNewDateKrOrNull(meetingAt[END_TIME]);
+  if (!startTime || !endTime) {
+    return '';
+  }
+
+  return `${startTime.getHours()}:${makeTimePair(
+    startTime.getMinutes(),
+  )} ~ ${endTime.getHours()}:${makeTimePair(endTime.getMinutes())}`;
+};
+
 const getDayToShortString = (meetingAt: Date): string => {
   if (!meetingAt) {
     return '-';
@@ -147,12 +174,7 @@ export function TableRow(props: TableRowProps) {
       </TableColumnTopic>
       <TableColumnTime>
         <Time>{getDayToString(NewDateKr(props?.meetingAt?.[START_TIME]))}</Time>
-        <TimeWhile>
-          {getTimeToString([
-            NewDateKr(props?.meetingAt[START_TIME]),
-            NewDateKr(props?.meetingAt[END_TIME]),
-          ])}
-        </TimeWhile>
+        <TimeWhile>{getTimeToString(props?.meetingAt)}</TimeWhile>
       </TableColumnTime>
       <StatusButton
         status={props.mentoringState}
