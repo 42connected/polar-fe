@@ -98,7 +98,7 @@ export function ModalFooter(props: ModalFooterProps) {
               );
             }}
           >
-            거절
+            취소
           </Button>
           <Button
             style={{ backgroundColor: 'gray' }}
@@ -106,7 +106,7 @@ export function ModalFooter(props: ModalFooterProps) {
               props.setIsReject(false);
             }}
           >
-            취소
+            닫기
           </Button>
         </ModalFooterContainer>
       )}
@@ -120,7 +120,7 @@ export function ModalFooter(props: ModalFooterProps) {
                 props.setIsReject(true);
               }}
             >
-              거절
+              취소
             </Button>
           </ModalFooterContainer>
         )}

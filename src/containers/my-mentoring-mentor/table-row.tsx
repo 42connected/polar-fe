@@ -4,9 +4,9 @@ import { MentoringLogs } from '../../states/my-mentoring-mentor/MentorLogStore';
 import defaultTheme from '../../styles/theme';
 import {
   getDayToString,
-  getTimeToString,
   START_TIME,
   END_TIME,
+  getTimeToString,
 } from '../reports/report-form';
 import { sliceMoreInfoStr } from './email';
 import { isValidTime } from './modal/wait/select-time';
@@ -49,10 +49,13 @@ const TableColumnTopic = styled.div`
   width: 30%;
   justify-content: left;
   align-items: center;
+  color: ${defaultTheme.colors.polarSimpleMain};
   cursor: pointer;
-  text-decoration: underline wavy;
-  text-decoration-color: rgba(0, 0, 0, 0.2);
-  text-underline-position: under;
+  &:hover {
+    text-decoration: underline wavy;
+    opacity: 0.6;
+    text-underline-position: under;
+  }
 `;
 
 const TableColumnTime = styled.div`
@@ -146,12 +149,17 @@ export function TableRow(props: TableRowProps) {
         <Time>{getDayToString(NewDateKr(props?.meetingAt?.[START_TIME]))}</Time>
         <TimeWhile>
           {getTimeToString([
-            NewDateKr(props?.meetingAt[START_TIME]),
-            NewDateKr(props?.meetingAt[END_TIME]),
+            NewDateKr(props?.meetingAt?.[START_TIME]),
+            NewDateKr(props?.meetingAt?.[END_TIME]),
           ])}
         </TimeWhile>
       </TableColumnTime>
-      <StatusButton status={props.mentoringState} />
+      <StatusButton
+        status={props.mentoringState}
+        log={log}
+        setLog={props.setLog}
+        setApplyModal={props.setApplyModal}
+      />
       <ReportButton
         mentoringLogStatus={props.mentoringState}
         report={props?.report}

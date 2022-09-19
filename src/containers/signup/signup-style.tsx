@@ -2,13 +2,14 @@ import defaultTheme from '../../styles/theme';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
-export const ContainersPc = styled.div`
+export const ContainersPc = styled.body`
   display: grid;
   background: white;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr auto;
   grid-column-gap: 10rem;
   justify-items: center;
+  height: 100%;
 `;
 
 export const ContainersMobile = styled.div`
@@ -22,6 +23,7 @@ export const ContainersMobile = styled.div`
   transform: scale(0.7);
   transform-origin: left top;
   padding-left: 2rem;
+  height: calc(100vh - 205px);
 `;
 
 export const RequiredWrapper = styled.div`

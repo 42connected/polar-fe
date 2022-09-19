@@ -13,6 +13,7 @@ const FooterStyle = styled.footer`
 `;
 const FooterBody = styled.footer`
   text-align: center;
+  ${theme.fontWeight.weightSmall};
 `;
 const FooterLastBody = styled.div`
   width: 100%;
@@ -86,9 +87,7 @@ const Footer = () => {
       >
         <FooterTextBody>
           <FooterLeftBody>42서울 Polar</FooterLeftBody>
-          <GithubButton onClick={githubClick}>
-            <img src={github} style={imagestyle} className="App-logo" />
-          </GithubButton>
+          <GithubButton></GithubButton>
           <FooterRightBody>
             <FooterButtonOne>
               <AtagTwo href="https://docs.google.com/forms/d/e/1FAIpQLSeNhqMlp2cFqMKQo664P0j_GiELhy_VNDSIClFenQJ3uoPa2Q/viewform?usp=send_form">
@@ -107,10 +106,7 @@ const Footer = () => {
         </FooterBody>
         <FooterBody>문의 42polar@gmail.com</FooterBody>
         <FooterLastBody>
-          Logo Designed by
-          <Atag href="https://www.freepik.com/" target="_blank">
-            Freepik
-          </Atag>
+          copyright 2022 polar All rights reserved.
         </FooterLastBody>
       </div>
     </FooterStyle>

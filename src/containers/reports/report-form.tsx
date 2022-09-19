@@ -14,6 +14,7 @@ import AuthStore from '../../states/auth/AuthStore';
 import { ReportRowWrite } from './report-row-write';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 import { isValidTime } from '../my-mentoring-mentor/modal/wait/select-time';
+import { NewDateKr } from '../../states/date-kr';
 
 export const REPORT_STATE = {
   EDIT_POSSIBLE: '작성중',
@@ -217,14 +218,21 @@ const ReportForm = observer(() => {
               <ReportElement
                 topic={'날짜'}
                 content={getDayToString(
-                  ReportStore.report.mentoringLogs.meetingAt[START_TIME],
+                  NewDateKr(
+                    ReportStore.report.mentoringLogs.meetingAt[START_TIME],
+                  ),
                 )}
               />
               <ReportElement
                 topic={'시간'}
-                content={getTimeToString(
-                  ReportStore.report.mentoringLogs.meetingAt,
-                )}
+                content={getTimeToString([
+                  NewDateKr(
+                    ReportStore.report.mentoringLogs.meetingAt[START_TIME],
+                  ),
+                  NewDateKr(
+                    ReportStore.report.mentoringLogs.meetingAt[END_TIME],
+                  ),
+                ])}
               />
               <ReportFixableElement
                 topic={'장소'}
