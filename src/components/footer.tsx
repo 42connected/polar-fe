@@ -86,9 +86,7 @@ const Footer = () => {
       >
         <FooterTextBody>
           <FooterLeftBody>42서울 Polar</FooterLeftBody>
-          <GithubButton onClick={githubClick}>
-            <img src={github} style={imagestyle} className="App-logo" />
-          </GithubButton>
+          <GithubButton></GithubButton>
           <FooterRightBody>
             <FooterButtonOne>
               <AtagTwo href="https://docs.google.com/forms/d/e/1FAIpQLSeNhqMlp2cFqMKQo664P0j_GiELhy_VNDSIClFenQJ3uoPa2Q/viewform?usp=send_form">
