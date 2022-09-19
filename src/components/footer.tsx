@@ -13,6 +13,7 @@ const FooterStyle = styled.footer`
 `;
 const FooterBody = styled.footer`
   text-align: center;
+  ${theme.fontWeight.weightSmall};
 `;
 const FooterLastBody = styled.div`
   width: 100%;
@@ -105,10 +106,7 @@ const Footer = () => {
         </FooterBody>
         <FooterBody>문의 42polar@gmail.com</FooterBody>
         <FooterLastBody>
-          Logo Designed by
-          <Atag href="https://www.freepik.com/" target="_blank">
-            Freepik
-          </Atag>
+          copyright 2022 polar All rights reserved.
         </FooterLastBody>
       </div>
     </FooterStyle>
