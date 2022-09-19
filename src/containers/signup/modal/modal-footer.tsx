@@ -262,6 +262,7 @@ export function ModalFooter(props: ModalFooterProps) {
 
         setIsError(true);
         props.setApplyModal(false);
+        window.location.reload();
       } else {
         setOneButtonModalProps({
           TitleText: '제출 실패',

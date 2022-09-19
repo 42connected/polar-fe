@@ -67,8 +67,8 @@ const SignUpCadet = () => {
   async function joinCadetServer() {
     if (!name) {
       setOneButtonModalProps({
-        TitleText: '이름을 입력하세요',
-        Text: '이름을 입력하세요',
+        TitleText: '실명을 입력하세요',
+        Text: '실명을 입력하세요',
         XButtonFunc: () => {
           setIsError(false);
         },
@@ -160,7 +160,7 @@ const SignUpCadet = () => {
             <HeadLetters>필수 정보 입력</HeadLetters>
             <SingupImage src={singupImage} alt="singup-image" />
             <div style={{ paddingBottom: '5px' }}>
-              <NameTitle>본인 이름</NameTitle>
+              <NameTitle>본인 실명</NameTitle>
               <InfoInput
                 type="text"
                 onChange={onNameChange}
@@ -193,7 +193,7 @@ const SignUpCadet = () => {
             <SingupImage src={singupImage} alt="singup-image" />
 
             <div style={{ paddingBottom: '5px' }}>
-              <NameTitle>본인 이름</NameTitle>
+              <NameTitle>본인 실명</NameTitle>
               <InfoInput
                 type="text"
                 onChange={onNameChange}
