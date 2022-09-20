@@ -17,11 +17,21 @@ import { defaultTheme } from 'react-select';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import { ApplyCalendarModal } from '../../components/apply-page/apply-calendar-modal';
 import LoadingStore from '../../states/loading/LoadingStore';
-import { faX } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCalendarCheck,
+  faCheck,
+  faCircleExclamation,
+  faClock,
+  faHighlighter,
+  faMessage,
+  faX,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
 import { NewDateKr, NowDateKr } from '../../states/date-kr';
+import { MainBlueBody } from '../main-page/mainPageStyled';
+import { light } from '@mui/material/styles/createPalette';
 
 const Wrapper = styled.div`
   .modal {
@@ -109,15 +119,15 @@ const Wrapper = styled.div`
   }
 `;
 
-const ApplyContainer = styled.div`
+const ApplyContainer = styled.body`
   left: 0;
   ${theme.fontSize.sizeMedium};
   ${theme.font.sebangGothic};
-  height: calc(100vh - 205px);
+  height: 100%;
   width: 100%;
   display: grid;
-  grid-template-rows: 80rem;
-  grid-template-columns: 75rem 75rem;
+  grid-template-rows: 20rem 63rem;
+  grid-template-columns: 2% 47% 2% 47% 2%;
   transition: all 0.25s ease-in-out;
   grid-template-areas: 'time applyText';
   text-align: center;
@@ -127,6 +137,7 @@ const ApplyContainer = styled.div`
   border-radius: 10px;
   background-color: ${theme.colors.backgoundWhite};
   color: ${theme.colors.blackOne};
+  z-index: 1;
 `;
 
 const MovApplyContainer = styled.div`
@@ -136,10 +147,11 @@ const MovApplyContainer = styled.div`
   height: calc(100% - 205px);
   width: 100%;
   display: grid;
-  grid-template-rows: 70rem 70rem;
-  grid-template-columns: 45rem;
+  grid-template-rows: 20rem 60rem 60rem;
+  grid-template-columns: 100%;
   transition: all 0.25s ease-in-out;
   grid-template-areas:
+    'notice'
     'time '
     'applyText ';
   text-align: center;
@@ -151,17 +163,45 @@ const MovApplyContainer = styled.div`
   color: ${theme.colors.blackOne};
 `;
 
+const Notice = styled.div`
+  background-color: ${theme.colors.polarBackground};
+  box-sizing: border-box;
+  border-bottom: 1px solid #bfbdbd;
+  width: 100%;
+  ${theme.fontSize.sizeSmall};
+  text-align: center;
+  align-items: center;
+  grid-area: notice;
+  grid-column-start: 1;
+  grid-column-end: 6;
+  grid-row-start: 1;
+  grid-row-end: 1;
+  margin-top: -3rem;
+  z-index: 2;
+`;
+const NoticeTitle = styled.span`
+  ${theme.fontWeight.weightLarge};
+  ${theme.fontSize.sizeMedium};
+  margin-bottom: 1rem;
+`;
+
+const NoticeHeight = styled.div`
+  line-height: 1rem;
+`;
+
 const Chooseplan = styled.div`
   display: flex;
   flex-flow: row;
-  text-align: center;
   flex-direction: column;
+  text-align: center;
   flex-wrap: wrap;
+  margin-top: -10rem;
   align-items: center;
   grid-area: time;
-  grid-column-start: 1;
-  grid-row-start: 1;
+  grid-column-start: 2;
+  grid-row-start: 2;
 `;
+
 const Content = styled.div`
   display: flex;
   flex-flow: row;
@@ -169,9 +209,25 @@ const Content = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
-  grid-area: applyText;
-  grid-column-start: 2;
-  grid-row-start: 1;
+  margin-top: -10rem;
+  grid-column-start: 4;
+  grid-row-start: 2;
+`;
+
+const Line = styled.div`
+  display: flex;
+  flex-flow: row;
+  text-align: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: -5rem;
+  grid-column-start: 3;
+  grid-row-start: 2;
+`;
+
+const TextBold = styled.span`
+  ${theme.fontWeight.weightLarge};
 `;
 
 const MovChooseplan = styled.div`
@@ -205,7 +261,7 @@ const PlanButton1 = styled.button`
   background-color: ${theme.colors.polarSimpleMain};
   margin-top: 4rem;
   border-radius: 20px;
-  width: 30rem;
+  width: 100%;
   height: 8rem;
   cursor: pointer;
   border: none;
@@ -280,6 +336,14 @@ const Line1 = styled.div`
   width: 60rem;
 `;
 
+const HeiLine = styled.div`
+  text-align: center;
+  align-items: center;
+  border-right: 0.1rem solid #bfbdbd;
+  height: 93vh;
+  z-index: 0;
+`;
+
 const MovLine1 = styled.div`
   text-align: center;
   align-items: center;
@@ -290,11 +354,10 @@ const MovLine1 = styled.div`
 `;
 
 const Line2 = styled.div`
-  margin-top: 2rem;
   text-align: center;
   align-items: center;
   border-top: 0.1rem solid #000000;
-  width: 60rem;
+  width: 100%;
 `;
 
 const MovLine2 = styled.div`
@@ -305,15 +368,38 @@ const MovLine2 = styled.div`
   width: 45rem;
 `;
 
-const MainText = styled.div`
-  margin-top: 2rem;
-  text-align: center;
+const MainText = styled.span`
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
   ${theme.font.sebangGothic};
+  ${theme.fontWeight.weightLarge};
   ${theme.fontSize.sizeExtraMedium};
 `;
 
-const MainText2 = styled.div`
+const MainTextNoLine = styled.div`
   margin-top: 2rem;
+  text-align: center;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  ${theme.font.sebangGothic};
+  ${theme.fontWeight.weightLarge};
+  ${theme.fontSize.sizeExtraMedium};
+`;
+
+const IconPadding = styled.span`
+  display: inline-block;
+  text-align: center;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  font-size: 1.2rem;
+`;
+
+const MainText2 = styled.span`
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  ${theme.fontWeight.weightLarge};
   text-align: center;
   ${theme.font.sebangGothic};
   ${theme.fontSize.sizeExtraMedium};
@@ -330,7 +416,7 @@ const MiddleText2 = styled.div`
   ${theme.fontSize.sizeExtraSmall};
   font-weight: 400;
   color: ${theme.colors.grayTwo};
-  margin-left: -61.5%;
+  margin-left: -46rem;
   margin-top: 4rem;
   margin-bottom: -2rem;
 `;
@@ -340,7 +426,7 @@ const MovMiddleText2 = styled.div`
   font-weight: 400;
   color: ${theme.colors.grayTwo};
   text-align: left;
-  margin-right: 84%;
+  margin-left: -33rem;
   margin-top: 4rem;
   margin-bottom: -2rem;
 `;
@@ -349,7 +435,7 @@ const MiddleText3 = styled.div`
   ${theme.fontSize.sizeExtraSmall};
   font-weight: 400;
   color: ${theme.colors.grayTwo};
-  margin-left: -57%;
+  margin-left: -43rem;
   margin-bottom: -2rem;
 `;
 
@@ -357,12 +443,13 @@ const MovMiddleText3 = styled.div`
   ${theme.fontSize.sizeExtraSmall};
   font-weight: 400;
   color: ${theme.colors.grayTwo};
-  margin-right: 78%;
+  margin-left: -30rem;
   margin-bottom: -2rem;
 `;
 
 const ApplyButton = styled.button`
   margin-top: 4rem;
+  margin-bottom: 1rem;
   box-shadow: ${theme.shadow.buttonShadow};
   text-align: center;
   ${theme.fontSize.sizeExtraSmall};
@@ -681,10 +768,36 @@ const ApplyPage = () => {
         {!isMobile ? (
           <div>
             <ApplyContainer>
+              <Notice>
+                <NoticeTitle>
+                  <br />
+                  <FontAwesomeIcon
+                    icon={faCircleExclamation}
+                    size="1x"
+                    color="black"
+                  />{' '}
+                  NOTICE
+                </NoticeTitle>
+                <NoticeHeight>
+                  <br />
+                </NoticeHeight>
+                *신청 시간은 <MainBlueBody>실제 멘토링</MainBlueBody>을 진행하는
+                시간입니다.
+                <br /> *신청 시간에는 멘토님의{' '}
+                <MainBlueBody>멘토링 가능시간</MainBlueBody>만 표시됩니다.
+                <br /> *예산과 연관된 시간이니 신청 당{' '}
+                <MainBlueBody>최대 3시간으로</MainBlueBody> 제한하고 있습니다.
+                <br /> *<MainBlueBody>추가 시간</MainBlueBody>을 원하시면{' '}
+                <MainBlueBody>추가 신청</MainBlueBody> 부탁드립니다.
+                <br /> <br />
+              </Notice>
               <Chooseplan>
-                <Line1> </Line1>
-                <MainText>일정 선택하기</MainText>
-                <Line2> </Line2>
+                <MainTextNoLine>
+                  <MainText>일정 선택하기</MainText>{' '}
+                  <IconPadding>
+                    <FontAwesomeIcon icon={faClock} size="2x" color="black" />{' '}
+                  </IconPadding>
+                </MainTextNoLine>
                 <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
                 <Wrapper>
                   <ApplyButtonDiv>
@@ -845,11 +958,19 @@ const ApplyPage = () => {
                   <BottomSize></BottomSize>
                 </Wrapper>
               </Chooseplan>
+              <Line>
+                <HeiLine />
+              </Line>
               <Content>
-                <Line1> </Line1>
-                <MainText2>신청 정보</MainText2>
-                <Line2> </Line2>
-                <MiddleText2> * 주제 </MiddleText2>
+                <MainTextNoLine>
+                  <MainText2>신청 정보</MainText2>{' '}
+                  <FontAwesomeIcon
+                    icon={faHighlighter}
+                    size="sm"
+                    color="black"
+                  />{' '}
+                </MainTextNoLine>
+                <MiddleText2> · 주제 </MiddleText2>
                 <InputCounter
                   setter={setTopic}
                   value={topic}
@@ -858,7 +979,7 @@ const ApplyPage = () => {
                   disabled={false}
                   height="2.6rem"
                 />
-                <MiddleText3> * 궁금한 점 </MiddleText3>
+                <MiddleText3> · 궁금한 점 </MiddleText3>
                 <InputCounter
                   setter={setContent}
                   value={content}
@@ -874,10 +995,38 @@ const ApplyPage = () => {
         ) : (
           <div>
             <MovApplyContainer>
+              <Notice>
+                <NoticeTitle>
+                  <br />
+                  <FontAwesomeIcon
+                    icon={faCircleExclamation}
+                    size="1x"
+                    color="black"
+                  />{' '}
+                  NOTICE
+                </NoticeTitle>
+                <NoticeHeight>
+                  <br />
+                </NoticeHeight>
+                *신청 시간은 <MainBlueBody>실제 멘토링</MainBlueBody>을 진행하는
+                시간입니다.
+                <br /> *신청 시간에는 멘토님의{' '}
+                <MainBlueBody>멘토링 가능시간</MainBlueBody>만 표시됩니다.
+                <br /> *예산과 연관된 시간이니 신청 당{' '}
+                <MainBlueBody>최대 3시간으로</MainBlueBody> 제한하고 있습니다.
+                <br /> *<MainBlueBody>추가 시간</MainBlueBody>을 원하시면{' '}
+                <MainBlueBody>추가 신청</MainBlueBody> 부탁드립니다.
+                <br /> <br />
+              </Notice>
               <MovChooseplan>
-                <MovLine1> </MovLine1>
-                <MainText>일정 선택하기</MainText>
-                <MovLine2> </MovLine2>
+                <MainText>
+                  <FontAwesomeIcon
+                    icon={faCalendarCheck}
+                    size="1x"
+                    color="black"
+                  />{' '}
+                  일정 선택하기
+                </MainText>
                 <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
                 <Wrapper>
                   <ApplyButtonDiv>
@@ -1038,24 +1187,29 @@ const ApplyPage = () => {
                 </Wrapper>
               </MovChooseplan>
               <MovContent>
-                <MovLine1> </MovLine1>
-                <MainText2>신청 정보</MainText2>
-                <MovLine2> </MovLine2>
-                <MovMiddleText2> * 주제 </MovMiddleText2>
+                <MainText2>
+                  <FontAwesomeIcon
+                    icon={faHighlighter}
+                    size="1x"
+                    color="black"
+                  />{' '}
+                  신청 정보
+                </MainText2>
+                <MovMiddleText2> · 주제 </MovMiddleText2>
                 <InputCounter
                   setter={setTopic}
                   value={topic}
                   maxLength={150}
-                  width="40rem"
+                  width="37rem"
                   disabled={false}
                   height="4rem"
                 />
-                <MovMiddleText3> * 궁금한 점 </MovMiddleText3>
+                <MovMiddleText3> · 궁금한 점 </MovMiddleText3>
                 <InputCounter
                   setter={setContent}
                   value={content}
                   maxLength={800}
-                  width="40rem"
+                  width="37rem"
                   disabled={false}
                   height="20rem"
                 />
