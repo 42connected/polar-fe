@@ -250,7 +250,6 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
               day.array[index] = false;
           });
         });
-        console.log(schedule);
         resolve(schedule);
       });
 
@@ -311,7 +310,6 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
           });
         });
       });
-      console.log(schedule);
       LoadingStore.off();
     }
   }, [getMonthArray]);
