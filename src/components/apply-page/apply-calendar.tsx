@@ -250,11 +250,18 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
               day.array[index] = false;
           });
         });
+        console.log(schedule);
         resolve(schedule);
       });
 
       const setTodaySchedule = new Promise((resolve, reject) => {
         const today = NowDateKr();
+        if (
+          activeDate.getMonth() !== today.getMonth() ||
+          activeDate.getFullYear() !== today.getFullYear()
+        )
+          resolve(schedule);
+
         const available: number =
           today.getHours() * 2 +
           (today.getMinutes() > 30
@@ -304,6 +311,7 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
           });
         });
       });
+      console.log(schedule);
       LoadingStore.off();
     }
   }, [getMonthArray]);
@@ -398,6 +406,7 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
             (schedule[date.getDate() - 1]?.able === false ||
               date.getMonth() !== activeDate.getMonth() ||
               (date.getMonth() === today.getMonth() &&
+                date.getFullYear() === today.getFullYear() &&
                 date.getDate() < today.getDate()))
           }
           locale={'ko-KR'}
