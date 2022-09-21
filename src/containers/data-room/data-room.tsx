@@ -1,5 +1,5 @@
 import theme from '../../styles/theme';
-import React, { useState, useCallback, ReactNode } from 'react';
+import React, { useState, useCallback, ReactNode, useEffect } from 'react';
 import { Pagination } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import Button from '../../components/button';
@@ -15,6 +15,12 @@ import LoadingStore from '../../states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 import { NowDateKr } from '../../states/date-kr';
+import {
+  axiosWithNoData,
+  AXIOS_METHOD_WITH_NO_DATA,
+} from '../../context/axios-interface';
+import axios from 'axios';
+import { RequestErrorResponse } from '../apply-page/apply-page';
 
 export const muiPaginationTheme = createTheme({
   palette: {
@@ -119,6 +125,7 @@ function DataRoom() {
     maxWidth: 900,
     minWidth: 500,
   });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const DataRoomBodyForDesktop: React.FC<DRProps> = props => {
     return (
@@ -131,6 +138,32 @@ function DataRoom() {
       </>
     );
   };
+
+  useEffect(() => {
+    LoadingStore.on();
+    axiosWithNoData(
+      AXIOS_METHOD_WITH_NO_DATA.GET,
+      '/bocals/data-room?page=1&take=1',
+      { headers: { Authorization: `bearer ${AuthStore.getAccessToken()}` } },
+    )
+      .catch(error => {
+        if (axios.isAxiosError(error)) {
+          const message = (error.response?.data as RequestErrorResponse)
+            .message;
+          ErrorStore.on(message, ERROR_DEFAULT_VALUE.TITLE);
+        } else
+          ErrorStore.on(
+            '데이터를 가져오는 중 오류가 발생하였습니다.',
+            ERROR_DEFAULT_VALUE.TITLE,
+          );
+        if (error.response?.status === 401 || error.response?.status === 403)
+          navigate('/');
+      })
+      .finally(() => {
+        setIsLoading(false);
+        LoadingStore.off();
+      });
+  }, []);
 
   const getExcel = async () => {
     LoadingStore.on();
@@ -237,58 +270,60 @@ function DataRoom() {
             }}
           />
         )}
-        <DataRoomDiv>
-          <DataRoomBodyForDesktop>
-            <DataRoomTitle>데이터룸</DataRoomTitle>
-            <DataRoomButtonDiv>
-              <DataRoomButton>
-                {isOpenModal && (
-                  <>
-                    <Back onClick={onClickSearchBoxModal}></Back>
-                    <SearchBox
-                      query={query}
-                      setQuery={setQuery}
-                      setSelectedList={setSelectedList}
-                    />
-                  </>
-                )}
-                <DRButton text="정렬" onClick={onClickSearchBoxModal} />
-              </DataRoomButton>
-              <DataRoomButton>
-                <DRButton text="출력" onClick={printReports} />
-              </DataRoomButton>
-              <DataRoomButton>
-                <DRButton text="엑셀 저장" onClick={getExcel} />
-              </DataRoomButton>
-            </DataRoomButtonDiv>
-            {DataRoomList(
-              query,
-              setQuery,
-              offset,
-              setOffset,
-              total,
-              setTotal,
-              selectedList,
-              setSelectedList,
-              isDesktopLarge || isDesktopSmall,
-            )}
-            <DataRoomNavigationDiv>
-              <ThemeProvider theme={muiPaginationTheme}>
-                <Pagination
-                  count={Math.ceil(total / take)}
-                  color="primary"
-                  showFirstButton
-                  showLastButton
-                  onChange={(_, page) => {
-                    setPage(page);
-                    setQuery({ ...query, page: page });
-                    setOffset(page * take > total ? total % take : take);
-                  }}
-                />
-              </ThemeProvider>
-            </DataRoomNavigationDiv>
-          </DataRoomBodyForDesktop>
-        </DataRoomDiv>
+        {!isLoading && (
+          <DataRoomDiv>
+            <DataRoomBodyForDesktop>
+              <DataRoomTitle>데이터룸</DataRoomTitle>
+              <DataRoomButtonDiv>
+                <DataRoomButton>
+                  {isOpenModal && (
+                    <>
+                      <Back onClick={onClickSearchBoxModal}></Back>
+                      <SearchBox
+                        query={query}
+                        setQuery={setQuery}
+                        setSelectedList={setSelectedList}
+                      />
+                    </>
+                  )}
+                  <DRButton text="정렬" onClick={onClickSearchBoxModal} />
+                </DataRoomButton>
+                <DataRoomButton>
+                  <DRButton text="출력" onClick={printReports} />
+                </DataRoomButton>
+                <DataRoomButton>
+                  <DRButton text="엑셀 저장" onClick={getExcel} />
+                </DataRoomButton>
+              </DataRoomButtonDiv>
+              {DataRoomList(
+                query,
+                setQuery,
+                offset,
+                setOffset,
+                total,
+                setTotal,
+                selectedList,
+                setSelectedList,
+                isDesktopLarge || isDesktopSmall,
+              )}
+              <DataRoomNavigationDiv>
+                <ThemeProvider theme={muiPaginationTheme}>
+                  <Pagination
+                    count={Math.ceil(total / take)}
+                    color="primary"
+                    showFirstButton
+                    showLastButton
+                    onChange={(_, page) => {
+                      setPage(page);
+                      setQuery({ ...query, page: page });
+                      setOffset(page * take > total ? total % take : take);
+                    }}
+                  />
+                </ThemeProvider>
+              </DataRoomNavigationDiv>
+            </DataRoomBodyForDesktop>
+          </DataRoomDiv>
+        )}
       </>
     );
 }

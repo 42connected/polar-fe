@@ -495,7 +495,7 @@ const HourDiv = styled.div`
   ${theme.fontSize.sizeExtraMedium};
 `;
 
-type RequestErrorResponse = {
+export type RequestErrorResponse = {
   message: string;
   path: string;
   statusCode: number;
