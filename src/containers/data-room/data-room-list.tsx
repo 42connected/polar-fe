@@ -116,20 +116,16 @@ function DataRoomList(
         })
         .catch(error => {
           if (axios.isAxiosError(error)) {
-            ErrorStore.on(
-              (error.response?.data as RequestErrorResponse).message,
-              ERROR_DEFAULT_VALUE.TITLE,
-            );
-            if (
-              (error.response?.data as RequestErrorResponse).message ===
-              'Unauthorized'
-            )
-              navigate('/');
+            const message = (error.response?.data as RequestErrorResponse)
+              .message;
+            ErrorStore.on(message, ERROR_DEFAULT_VALUE.TITLE);
           } else
             ErrorStore.on(
               '데이터를 가져오는 중 오류가 발생하였습니다.',
               ERROR_DEFAULT_VALUE.TITLE,
             );
+          if (error.response?.status === 401 || error.response?.status === 403)
+            navigate('/');
         })
         .finally(() => {
           LoadingStore.off();
