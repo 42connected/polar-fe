@@ -154,10 +154,6 @@ const MovApplyContainer = styled.div`
     'notice'
     'time '
     'applyText ';
-  /*text-align: center;
-  align-content: center;
-  justify-content: center;
-  align-items: center;*/
   border-radius: 10px;
   background-color: ${theme.colors.backgoundWhite};
   color: ${theme.colors.blackOne};
@@ -177,7 +173,6 @@ const Notice = styled.div`
   grid-column-end: 6;
   grid-row-start: 1;
   grid-row-end: 1;
-  //margin-top: -3rem;
   z-index: 2;
 `;
 const NoticeTitle = styled.span`
