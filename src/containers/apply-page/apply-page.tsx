@@ -126,14 +126,10 @@ const ApplyContainer = styled.body`
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-rows: 3fr 7fr;
+  grid-template-rows: 3fr 7.5fr;
   grid-template-columns: 2% 47% 2% 47% 2%;
   transition: all 0.25s ease-in-out;
   grid-template-areas: 'time applyText';
-  /* text-align: center;
-  align-content: center;
-  justify-content: center;
-  align-items: center;*/
   border-radius: 10px;
   background-color: ${theme.colors.backgoundWhite};
   color: ${theme.colors.blackOne};
@@ -443,7 +439,7 @@ const MovMiddleText3 = styled.div`
 
 const ApplyButton = styled.button`
   margin-top: 4rem;
-  margin-bottom: 1rem;
+  margin-bottom: 5rem;
   box-shadow: ${theme.shadow.buttonShadow};
   text-align: center;
   ${theme.fontSize.sizeExtraSmall};
