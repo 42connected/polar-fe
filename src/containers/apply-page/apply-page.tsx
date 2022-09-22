@@ -711,7 +711,7 @@ const ApplyPage = () => {
     setErrorModal(true);
   };
 
-  /*if (isLoading) {
+  if (isLoading) {
     return <></>;
   } else if (mentorId === undefined) {
     ErrorStore.on('잘못된 접근입니다.', ERROR_DEFAULT_VALUE.TITLE);
@@ -732,485 +732,493 @@ const ApplyPage = () => {
   } else if (role !== USER_ROLES.CADET) {
     ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
     return <Navigate to="/" />;
-  } else*/
-  return (
-    <div>
-      {errorModal && (
-        <OneButtonModal
-          TitleText="⚠️ 42폴라 경고"
-          Text={errorModalMsg}
-          XButtonFunc={() => {
-            setErrorModal(false);
-          }}
-          ButtonText="닫기"
-          ButtonBg="gray"
-          ButtonFunc={() => {
-            setErrorModal(false);
-          }}
-        />
-      )}
-      {successModal && (
-        <OneButtonModal
-          TitleText="요청 완료"
-          Text="요청이 성공적으로 완료되었습니다"
-          XButtonFunc={() => {
-            setSuccessModal(false);
-            navigate('/cadets/mentorings');
-          }}
-          ButtonText="확인"
-          ButtonFunc={() => {
-            setSuccessModal(false);
-            navigate('/cadets/mentorings');
-          }}
-        />
-      )}
-      {!isMobile ? (
-        <div>
-          <ApplyContainer>
-            <Notice>
-              <NoticeTitle>
-                <br />
-                <FontAwesomeIcon
-                  icon={faCircleExclamation}
-                  size="1x"
-                  color="black"
-                />{' '}
-                NOTICE
-              </NoticeTitle>
-              <NoticeHeight>
-                <br />
-              </NoticeHeight>
-              *신청 시간은 <MainBlueBody>실제 멘토링</MainBlueBody>을 진행하는
-              시간입니다.
-              <br /> *신청 시간에는 멘토님의{' '}
-              <MainBlueBody>멘토링 가능시간</MainBlueBody>만 표시됩니다.
-              <br /> *예산과 연관된 시간이니 신청 당{' '}
-              <MainBlueBody>최대 3시간으로</MainBlueBody> 제한하고 있습니다.
-              <br /> *<MainBlueBody>추가 시간</MainBlueBody>을 원하시면{' '}
-              <MainBlueBody>추가 신청</MainBlueBody> 부탁드립니다.
-              <br /> <br />
-            </Notice>
-            <Chooseplan>
-              <MainTextNoLine>
-                <MainText>일정 선택하기</MainText>{' '}
-                <IconPadding>
-                  <FontAwesomeIcon icon={faClock} size="2x" color="black" />{' '}
-                </IconPadding>
-              </MainTextNoLine>
-              <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
-              <Wrapper>
-                <ApplyButtonDiv>
-                  <PlanButton1
-                    onClick={() => {
-                      setModalOpen(1);
-                    }}
-                  >
+  } else
+    return (
+      <div>
+        {errorModal && (
+          <OneButtonModal
+            TitleText="⚠️ 42폴라 경고"
+            Text={errorModalMsg}
+            XButtonFunc={() => {
+              setErrorModal(false);
+            }}
+            ButtonText="닫기"
+            ButtonBg="gray"
+            ButtonFunc={() => {
+              setErrorModal(false);
+            }}
+          />
+        )}
+        {successModal && (
+          <OneButtonModal
+            TitleText="요청 완료"
+            Text="요청이 성공적으로 완료되었습니다"
+            XButtonFunc={() => {
+              setSuccessModal(false);
+              navigate('/cadets/mentorings');
+            }}
+            ButtonText="확인"
+            ButtonFunc={() => {
+              setSuccessModal(false);
+              navigate('/cadets/mentorings');
+            }}
+          />
+        )}
+        {!isMobile ? (
+          <div>
+            <ApplyContainer>
+              <Notice>
+                <NoticeTitle>
+                  <br />
+                  <FontAwesomeIcon
+                    icon={faCircleExclamation}
+                    size="1x"
+                    color="black"
+                  />{' '}
+                  NOTICE
+                </NoticeTitle>
+                <NoticeHeight>
+                  <br />
+                </NoticeHeight>
+                *신청 시간은 <MainBlueBody>실제 멘토링</MainBlueBody>을 진행하는
+                시간입니다.
+                <br /> *신청 시간에는 멘토님의{' '}
+                <MainBlueBody>멘토링 가능시간</MainBlueBody>만 표시됩니다.
+                <br /> *예산과 연관된 시간이니 신청 당{' '}
+                <MainBlueBody>최대 3시간으로</MainBlueBody> 제한하고 있습니다.
+                <br /> *<MainBlueBody>추가 시간</MainBlueBody>을 원하시면{' '}
+                <MainBlueBody>추가 신청</MainBlueBody> 부탁드립니다.
+                <br /> <br />
+              </Notice>
+              <Chooseplan>
+                <MainTextNoLine>
+                  <MainText>일정 선택하기</MainText>{' '}
+                  <IconPadding>
+                    <FontAwesomeIcon icon={faClock} size="2x" color="black" />{' '}
+                  </IconPadding>
+                </MainTextNoLine>
+                <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
+                <Wrapper>
+                  <ApplyButtonDiv>
+                    <PlanButton1
+                      onClick={() => {
+                        setModalOpen(1);
+                      }}
+                    >
+                      {firstStartTime && firstEndTime ? (
+                        <ButtonDiv>
+                          <DateDiv>
+                            {firstStartTime.toLocaleDateString('ko-KR')}
+                          </DateDiv>
+                          <HourDiv>
+                            {firstStartTime
+                              .toTimeString()
+                              .slice(
+                                0,
+                                firstStartTime.toTimeString().lastIndexOf(':'),
+                              ) +
+                              '~' +
+                              firstEndTime
+                                .toTimeString()
+                                .slice(
+                                  0,
+                                  firstEndTime.toTimeString().lastIndexOf(':'),
+                                )}
+                          </HourDiv>
+                        </ButtonDiv>
+                      ) : (
+                        '신청 시간1'
+                      )}
+                    </PlanButton1>
                     {firstStartTime && firstEndTime ? (
-                      <ButtonDiv>
-                        <DateDiv>
-                          {firstStartTime.toLocaleDateString('ko-KR')}
-                        </DateDiv>
-                        <HourDiv>
-                          {firstStartTime
-                            .toTimeString()
-                            .slice(
-                              0,
-                              firstStartTime.toTimeString().lastIndexOf(':'),
-                            ) +
-                            '~' +
-                            firstEndTime
+                      <FontAwesomeIcon
+                        icon={faX}
+                        size="sm"
+                        style={{
+                          opacity: 0.3,
+                          cursor: 'pointer',
+                          color: 'white',
+                          position: 'absolute',
+                          top: '1rem',
+                          right: '1rem',
+                        }}
+                        onClick={() => {
+                          setFirstStartTime(undefined);
+                          setFirstEndTime(undefined);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </ApplyButtonDiv>
+                  {modalOpen !== 0 && setRequestTime({ slot: modalOpen })}
+                  <ApplyButtonDiv>
+                    <PlanButton2
+                      onClick={() => {
+                        setModalOpen(2);
+                      }}
+                    >
+                      {secondStartTime && secondEndTime ? (
+                        <ButtonDiv>
+                          <DateDiv>
+                            {secondStartTime.toLocaleDateString('ko-KR')}
+                          </DateDiv>
+                          <HourDiv>
+                            {secondStartTime
                               .toTimeString()
                               .slice(
                                 0,
-                                firstEndTime.toTimeString().lastIndexOf(':'),
-                              )}
-                        </HourDiv>
-                      </ButtonDiv>
-                    ) : (
-                      '신청 시간1'
-                    )}
-                  </PlanButton1>
-                  {firstStartTime && firstEndTime ? (
-                    <FontAwesomeIcon
-                      icon={faX}
-                      size="sm"
-                      style={{
-                        opacity: 0.3,
-                        cursor: 'pointer',
-                        color: 'white',
-                        position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
-                      }}
-                      onClick={() => {
-                        setFirstStartTime(undefined);
-                        setFirstEndTime(undefined);
-                      }}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </ApplyButtonDiv>
-                {modalOpen !== 0 && setRequestTime({ slot: modalOpen })}
-                <ApplyButtonDiv>
-                  <PlanButton2
-                    onClick={() => {
-                      setModalOpen(2);
-                    }}
-                  >
+                                secondStartTime.toTimeString().lastIndexOf(':'),
+                              ) +
+                              ' ~ ' +
+                              secondEndTime
+                                .toTimeString()
+                                .slice(
+                                  0,
+                                  secondEndTime.toTimeString().lastIndexOf(':'),
+                                )}
+                          </HourDiv>
+                        </ButtonDiv>
+                      ) : (
+                        '신청 시간2'
+                      )}
+                    </PlanButton2>
                     {secondStartTime && secondEndTime ? (
-                      <ButtonDiv>
-                        <DateDiv>
-                          {secondStartTime.toLocaleDateString('ko-KR')}
-                        </DateDiv>
-                        <HourDiv>
-                          {secondStartTime
-                            .toTimeString()
-                            .slice(
-                              0,
-                              secondStartTime.toTimeString().lastIndexOf(':'),
-                            ) +
-                            ' ~ ' +
-                            secondEndTime
+                      <FontAwesomeIcon
+                        icon={faX}
+                        size="sm"
+                        style={{
+                          opacity: 0.3,
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: '1rem',
+                          right: '1rem',
+                        }}
+                        onClick={() => {
+                          setSecondStartTime(undefined);
+                          setSecondEndTime(undefined);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </ApplyButtonDiv>
+                  <ApplyButtonDiv>
+                    <PlanButton2
+                      onClick={() => {
+                        setModalOpen(3);
+                      }}
+                    >
+                      {thirdStartTime && thirdEndTime ? (
+                        <ButtonDiv>
+                          <DateDiv>
+                            {thirdStartTime.toLocaleDateString('ko-KR')}
+                          </DateDiv>
+                          <HourDiv>
+                            {thirdStartTime
                               .toTimeString()
                               .slice(
                                 0,
-                                secondEndTime.toTimeString().lastIndexOf(':'),
-                              )}
-                        </HourDiv>
-                      </ButtonDiv>
-                    ) : (
-                      '신청 시간2'
-                    )}
-                  </PlanButton2>
-                  {secondStartTime && secondEndTime ? (
-                    <FontAwesomeIcon
-                      icon={faX}
-                      size="sm"
-                      style={{
-                        opacity: 0.3,
-                        cursor: 'pointer',
-                        position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
-                      }}
-                      onClick={() => {
-                        setSecondStartTime(undefined);
-                        setSecondEndTime(undefined);
-                      }}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </ApplyButtonDiv>
-                <ApplyButtonDiv>
-                  <PlanButton2
-                    onClick={() => {
-                      setModalOpen(3);
-                    }}
-                  >
+                                thirdStartTime.toTimeString().lastIndexOf(':'),
+                              ) +
+                              ' ~ ' +
+                              thirdEndTime
+                                .toTimeString()
+                                .slice(
+                                  0,
+                                  thirdEndTime.toTimeString().lastIndexOf(':'),
+                                )}
+                          </HourDiv>
+                        </ButtonDiv>
+                      ) : (
+                        '신청 시간3'
+                      )}
+                    </PlanButton2>
                     {thirdStartTime && thirdEndTime ? (
-                      <ButtonDiv>
-                        <DateDiv>
-                          {thirdStartTime.toLocaleDateString('ko-KR')}
-                        </DateDiv>
-                        <HourDiv>
-                          {thirdStartTime
-                            .toTimeString()
-                            .slice(
-                              0,
-                              thirdStartTime.toTimeString().lastIndexOf(':'),
-                            ) +
-                            ' ~ ' +
-                            thirdEndTime
+                      <FontAwesomeIcon
+                        icon={faX}
+                        size="sm"
+                        style={{
+                          opacity: 0.3,
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: '1rem',
+                          right: '1rem',
+                        }}
+                        onClick={() => {
+                          setThirdStartTime(undefined);
+                          setThirdEndTime(undefined);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </ApplyButtonDiv>
+                  <BottomSize></BottomSize>
+                </Wrapper>
+              </Chooseplan>
+              <Line>
+                <HeiLine />
+              </Line>
+              <Content>
+                <MainTextNoLine>
+                  <MainText2>신청 정보</MainText2>{' '}
+                  <FontAwesomeIcon
+                    icon={faHighlighter}
+                    size="sm"
+                    color="black"
+                  />{' '}
+                </MainTextNoLine>
+                <MiddleText2> · 주제 </MiddleText2>
+                <InputCounter
+                  setter={setTopic}
+                  value={topic}
+                  maxLength={150}
+                  width="50rem"
+                  disabled={false}
+                  height="2.6rem"
+                />
+                <MiddleText3> · 궁금한 점 </MiddleText3>
+                <InputCounter
+                  setter={setContent}
+                  value={content}
+                  maxLength={500}
+                  width="50rem"
+                  disabled={false}
+                  height="12rem"
+                />
+                <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
+              </Content>
+            </ApplyContainer>
+          </div>
+        ) : (
+          <div>
+            <MovApplyContainer>
+              <Notice>
+                <NoticeTitle>
+                  <br />
+                  <FontAwesomeIcon
+                    icon={faCircleExclamation}
+                    size="1x"
+                    color="black"
+                  />{' '}
+                  NOTICE
+                </NoticeTitle>
+                <NoticeHeight>
+                  <br />
+                </NoticeHeight>
+                *신청 시간은 <MainBlueBody>실제 멘토링</MainBlueBody>을 진행하는
+                시간입니다.
+                <br /> *신청 시간에는 멘토님의{' '}
+                <MainBlueBody>멘토링 가능시간</MainBlueBody>만 표시됩니다.
+                <br /> *예산과 연관된 시간이니 신청 당{' '}
+                <MainBlueBody>최대 3시간으로</MainBlueBody> 제한하고 있습니다.
+                <br /> *<MainBlueBody>추가 시간</MainBlueBody>을 원하시면{' '}
+                <MainBlueBody>추가 신청</MainBlueBody> 부탁드립니다.
+                <br /> <br />
+              </Notice>
+              <MovChooseplan>
+                <MainText>
+                  <FontAwesomeIcon
+                    icon={faCalendarCheck}
+                    size="1x"
+                    color="black"
+                  />{' '}
+                  일정 선택하기
+                </MainText>
+                <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
+                <Wrapper>
+                  <ApplyButtonDiv>
+                    <MovPlanButton1
+                      onClick={() => {
+                        setModalOpen(1);
+                      }}
+                    >
+                      {firstStartTime && firstEndTime ? (
+                        <ButtonDiv>
+                          <DateDiv>
+                            {firstStartTime.toLocaleDateString('ko-KR')}
+                          </DateDiv>
+                          <HourDiv>
+                            {firstStartTime
                               .toTimeString()
                               .slice(
                                 0,
-                                thirdEndTime.toTimeString().lastIndexOf(':'),
-                              )}
-                        </HourDiv>
-                      </ButtonDiv>
-                    ) : (
-                      '신청 시간3'
-                    )}
-                  </PlanButton2>
-                  {thirdStartTime && thirdEndTime ? (
-                    <FontAwesomeIcon
-                      icon={faX}
-                      size="sm"
-                      style={{
-                        opacity: 0.3,
-                        cursor: 'pointer',
-                        position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
-                      }}
-                      onClick={() => {
-                        setThirdStartTime(undefined);
-                        setThirdEndTime(undefined);
-                      }}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </ApplyButtonDiv>
-                <BottomSize></BottomSize>
-              </Wrapper>
-            </Chooseplan>
-            <Line>
-              <HeiLine />
-            </Line>
-            <Content>
-              <MainTextNoLine>
-                <MainText2>신청 정보</MainText2>{' '}
-                <FontAwesomeIcon icon={faHighlighter} size="sm" color="black" />{' '}
-              </MainTextNoLine>
-              <MiddleText2> · 주제 </MiddleText2>
-              <InputCounter
-                setter={setTopic}
-                value={topic}
-                maxLength={150}
-                width="50rem"
-                disabled={false}
-                height="2.6rem"
-              />
-              <MiddleText3> · 궁금한 점 </MiddleText3>
-              <InputCounter
-                setter={setContent}
-                value={content}
-                maxLength={500}
-                width="50rem"
-                disabled={false}
-                height="12rem"
-              />
-              <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
-            </Content>
-          </ApplyContainer>
-        </div>
-      ) : (
-        <div>
-          <MovApplyContainer>
-            <Notice>
-              <NoticeTitle>
-                <br />
-                <FontAwesomeIcon
-                  icon={faCircleExclamation}
-                  size="1x"
-                  color="black"
-                />{' '}
-                NOTICE
-              </NoticeTitle>
-              <NoticeHeight>
-                <br />
-              </NoticeHeight>
-              *신청 시간은 <MainBlueBody>실제 멘토링</MainBlueBody>을 진행하는
-              시간입니다.
-              <br /> *신청 시간에는 멘토님의{' '}
-              <MainBlueBody>멘토링 가능시간</MainBlueBody>만 표시됩니다.
-              <br /> *예산과 연관된 시간이니 신청 당{' '}
-              <MainBlueBody>최대 3시간으로</MainBlueBody> 제한하고 있습니다.
-              <br /> *<MainBlueBody>추가 시간</MainBlueBody>을 원하시면{' '}
-              <MainBlueBody>추가 신청</MainBlueBody> 부탁드립니다.
-              <br /> <br />
-            </Notice>
-            <MovChooseplan>
-              <MainText>
-                <FontAwesomeIcon
-                  icon={faCalendarCheck}
-                  size="1x"
-                  color="black"
-                />{' '}
-                일정 선택하기
-              </MainText>
-              <MiddleText>*최소 1개의 신청 시간을 선택해 주세요</MiddleText>
-              <Wrapper>
-                <ApplyButtonDiv>
-                  <MovPlanButton1
-                    onClick={() => {
-                      setModalOpen(1);
-                    }}
-                  >
+                                firstStartTime.toTimeString().lastIndexOf(':'),
+                              ) +
+                              '~' +
+                              firstEndTime
+                                .toTimeString()
+                                .slice(
+                                  0,
+                                  firstEndTime.toTimeString().lastIndexOf(':'),
+                                )}
+                          </HourDiv>
+                        </ButtonDiv>
+                      ) : (
+                        '신청 시간1'
+                      )}
+                    </MovPlanButton1>
                     {firstStartTime && firstEndTime ? (
-                      <ButtonDiv>
-                        <DateDiv>
-                          {firstStartTime.toLocaleDateString('ko-KR')}
-                        </DateDiv>
-                        <HourDiv>
-                          {firstStartTime
-                            .toTimeString()
-                            .slice(
-                              0,
-                              firstStartTime.toTimeString().lastIndexOf(':'),
-                            ) +
-                            '~' +
-                            firstEndTime
+                      <FontAwesomeIcon
+                        icon={faX}
+                        size="sm"
+                        style={{
+                          opacity: 0.3,
+                          cursor: 'pointer',
+                          color: 'white',
+                          position: 'absolute',
+                          top: '1rem',
+                          right: '1rem',
+                        }}
+                        onClick={() => {
+                          setFirstStartTime(undefined);
+                          setFirstEndTime(undefined);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </ApplyButtonDiv>
+                  {modalOpen !== 0 && setRequestTime({ slot: modalOpen })}
+                  <ApplyButtonDiv>
+                    <MovPlanButton2
+                      onClick={() => {
+                        setModalOpen(2);
+                      }}
+                    >
+                      {secondStartTime && secondEndTime ? (
+                        <ButtonDiv>
+                          <DateDiv>
+                            {secondStartTime.toLocaleDateString('ko-KR')}
+                          </DateDiv>
+                          <HourDiv>
+                            {secondStartTime
                               .toTimeString()
                               .slice(
                                 0,
-                                firstEndTime.toTimeString().lastIndexOf(':'),
-                              )}
-                        </HourDiv>
-                      </ButtonDiv>
-                    ) : (
-                      '신청 시간1'
-                    )}
-                  </MovPlanButton1>
-                  {firstStartTime && firstEndTime ? (
-                    <FontAwesomeIcon
-                      icon={faX}
-                      size="sm"
-                      style={{
-                        opacity: 0.3,
-                        cursor: 'pointer',
-                        color: 'white',
-                        position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
-                      }}
-                      onClick={() => {
-                        setFirstStartTime(undefined);
-                        setFirstEndTime(undefined);
-                      }}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </ApplyButtonDiv>
-                {modalOpen !== 0 && setRequestTime({ slot: modalOpen })}
-                <ApplyButtonDiv>
-                  <MovPlanButton2
-                    onClick={() => {
-                      setModalOpen(2);
-                    }}
-                  >
+                                secondStartTime.toTimeString().lastIndexOf(':'),
+                              ) +
+                              ' ~ ' +
+                              secondEndTime
+                                .toTimeString()
+                                .slice(
+                                  0,
+                                  secondEndTime.toTimeString().lastIndexOf(':'),
+                                )}
+                          </HourDiv>
+                        </ButtonDiv>
+                      ) : (
+                        '신청 시간2'
+                      )}
+                    </MovPlanButton2>
                     {secondStartTime && secondEndTime ? (
-                      <ButtonDiv>
-                        <DateDiv>
-                          {secondStartTime.toLocaleDateString('ko-KR')}
-                        </DateDiv>
-                        <HourDiv>
-                          {secondStartTime
-                            .toTimeString()
-                            .slice(
-                              0,
-                              secondStartTime.toTimeString().lastIndexOf(':'),
-                            ) +
-                            ' ~ ' +
-                            secondEndTime
+                      <FontAwesomeIcon
+                        icon={faX}
+                        size="sm"
+                        style={{
+                          opacity: 0.3,
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: '1rem',
+                          right: '1rem',
+                        }}
+                        onClick={() => {
+                          setSecondStartTime(undefined);
+                          setSecondEndTime(undefined);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </ApplyButtonDiv>
+                  <ApplyButtonDiv>
+                    <MovPlanButton2
+                      onClick={() => {
+                        setModalOpen(3);
+                      }}
+                    >
+                      {thirdStartTime && thirdEndTime ? (
+                        <ButtonDiv>
+                          <DateDiv>
+                            {thirdStartTime.toLocaleDateString('ko-KR')}
+                          </DateDiv>
+                          <HourDiv>
+                            {thirdStartTime
                               .toTimeString()
                               .slice(
                                 0,
-                                secondEndTime.toTimeString().lastIndexOf(':'),
-                              )}
-                        </HourDiv>
-                      </ButtonDiv>
-                    ) : (
-                      '신청 시간2'
-                    )}
-                  </MovPlanButton2>
-                  {secondStartTime && secondEndTime ? (
-                    <FontAwesomeIcon
-                      icon={faX}
-                      size="sm"
-                      style={{
-                        opacity: 0.3,
-                        cursor: 'pointer',
-                        position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
-                      }}
-                      onClick={() => {
-                        setSecondStartTime(undefined);
-                        setSecondEndTime(undefined);
-                      }}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </ApplyButtonDiv>
-                <ApplyButtonDiv>
-                  <MovPlanButton2
-                    onClick={() => {
-                      setModalOpen(3);
-                    }}
-                  >
+                                thirdStartTime.toTimeString().lastIndexOf(':'),
+                              ) +
+                              ' ~ ' +
+                              thirdEndTime
+                                .toTimeString()
+                                .slice(
+                                  0,
+                                  thirdEndTime.toTimeString().lastIndexOf(':'),
+                                )}
+                          </HourDiv>
+                        </ButtonDiv>
+                      ) : (
+                        '신청 시간3'
+                      )}
+                    </MovPlanButton2>
                     {thirdStartTime && thirdEndTime ? (
-                      <ButtonDiv>
-                        <DateDiv>
-                          {thirdStartTime.toLocaleDateString('ko-KR')}
-                        </DateDiv>
-                        <HourDiv>
-                          {thirdStartTime
-                            .toTimeString()
-                            .slice(
-                              0,
-                              thirdStartTime.toTimeString().lastIndexOf(':'),
-                            ) +
-                            ' ~ ' +
-                            thirdEndTime
-                              .toTimeString()
-                              .slice(
-                                0,
-                                thirdEndTime.toTimeString().lastIndexOf(':'),
-                              )}
-                        </HourDiv>
-                      </ButtonDiv>
+                      <FontAwesomeIcon
+                        icon={faX}
+                        size="sm"
+                        style={{
+                          opacity: 0.3,
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: '1rem',
+                          right: '1rem',
+                        }}
+                        onClick={() => {
+                          setThirdStartTime(undefined);
+                          setThirdEndTime(undefined);
+                        }}
+                      />
                     ) : (
-                      '신청 시간3'
+                      <></>
                     )}
-                  </MovPlanButton2>
-                  {thirdStartTime && thirdEndTime ? (
-                    <FontAwesomeIcon
-                      icon={faX}
-                      size="sm"
-                      style={{
-                        opacity: 0.3,
-                        cursor: 'pointer',
-                        position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
-                      }}
-                      onClick={() => {
-                        setThirdStartTime(undefined);
-                        setThirdEndTime(undefined);
-                      }}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </ApplyButtonDiv>
-              </Wrapper>
-            </MovChooseplan>
-            <MovContent>
-              <MainText2>
-                <FontAwesomeIcon icon={faHighlighter} size="1x" color="black" />{' '}
-                신청 정보
-              </MainText2>
-              <MovMiddleText2> · 주제 </MovMiddleText2>
-              <InputCounter
-                setter={setTopic}
-                value={topic}
-                maxLength={150}
-                width="37rem"
-                disabled={false}
-                height="4rem"
-              />
-              <MovMiddleText3> · 궁금한 점 </MovMiddleText3>
-              <InputCounter
-                setter={setContent}
-                value={content}
-                maxLength={800}
-                width="37rem"
-                disabled={false}
-                height="20rem"
-              />
-              <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
-            </MovContent>
-          </MovApplyContainer>
-        </div>
-      )}
-    </div>
-  );
+                  </ApplyButtonDiv>
+                </Wrapper>
+              </MovChooseplan>
+              <MovContent>
+                <MainText2>
+                  <FontAwesomeIcon
+                    icon={faHighlighter}
+                    size="1x"
+                    color="black"
+                  />{' '}
+                  신청 정보
+                </MainText2>
+                <MovMiddleText2> · 주제 </MovMiddleText2>
+                <InputCounter
+                  setter={setTopic}
+                  value={topic}
+                  maxLength={150}
+                  width="37rem"
+                  disabled={false}
+                  height="4rem"
+                />
+                <MovMiddleText3> · 궁금한 점 </MovMiddleText3>
+                <InputCounter
+                  setter={setContent}
+                  value={content}
+                  maxLength={800}
+                  width="37rem"
+                  disabled={false}
+                  height="20rem"
+                />
+                <ApplyButton onClick={ClickEvent}>제출</ApplyButton>
+              </MovContent>
+            </MovApplyContainer>
+          </div>
+        )}
+      </div>
+    );
 };
 
 export default ApplyPage;
