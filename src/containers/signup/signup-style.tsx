@@ -23,7 +23,7 @@ export const ContainersMobile = styled.div`
   transform: scale(0.7);
   transform-origin: left top;
   padding-left: 2rem;
-  height: calc(100vh - 205px);
+  height: 100%;
 `;
 
 export const RequiredWrapper = styled.div`
