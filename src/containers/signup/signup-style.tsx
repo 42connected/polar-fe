@@ -12,7 +12,7 @@ export const ContainersPc = styled.body`
   height: 100%;
 `;
 
-export const ContainersMobile = styled.div`
+export const ContainersMobile = styled.body`
   display: grid;
   background: white;
   grid-template-columns: 1fr;
