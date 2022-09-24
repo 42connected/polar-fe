@@ -12,7 +12,7 @@ export const ContainersPc = styled.body`
   height: 100%;
 `;
 
-export const ContainersMobile = styled.div`
+export const ContainersMobile = styled.body`
   display: grid;
   background: white;
   grid-template-columns: 1fr;
@@ -23,7 +23,7 @@ export const ContainersMobile = styled.div`
   transform: scale(0.7);
   transform-origin: left top;
   padding-left: 2rem;
-  height: calc(100vh - 205px);
+  height: 100%;
 `;
 
 export const RequiredWrapper = styled.div`
