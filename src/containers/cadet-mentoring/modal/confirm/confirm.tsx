@@ -26,6 +26,7 @@ export interface ConfirmProps {
   isRejectSetter: (p: boolean) => void;
   rejectReason: string;
   rejectReasonSetter: (input: string) => void;
+  feedbackMessage: string | null;
 }
 
 export function Confirm(props: ConfirmProps) {
@@ -48,15 +49,6 @@ export function Confirm(props: ConfirmProps) {
         titleColor={'black'}
         content={props?.mentoringTopic}
       />
-      {props.rejectMessage ? (
-        <ModalInfoElement
-          title={'거절 사유'}
-          titleColor={'black'}
-          content={props?.rejectMessage}
-        />
-      ) : (
-        <></>
-      )}
       <ModalInfoElement
         title={props.isReject ? '취소 사유' : '질문 내용'}
         titleColor={defaultTheme.colors.polarSimpleMain}
@@ -76,6 +68,34 @@ export function Confirm(props: ConfirmProps) {
           countDisabled={true}
           inputDisabled={true}
         />
+      )}
+      {props.feedbackMessage && (
+        <>
+          <ModalInfoElement
+            title={'피드백 메시지'}
+            titleColor={defaultTheme.colors.polarSimpleMain}
+            content={''}
+          />
+          <InputCounter
+            value={props.feedbackMessage}
+            countDisabled={true}
+            inputDisabled={true}
+          />
+        </>
+      )}
+      {props.rejectMessage && (
+        <>
+          <ModalInfoElement
+            title={'거절 사유'}
+            titleColor={defaultTheme.colors.polarSimpleMain}
+            content={''}
+          />
+          <InputCounter
+            value={props?.rejectMessage}
+            countDisabled={true}
+            inputDisabled={true}
+          />
+        </>
       )}
     </Container>
   );
