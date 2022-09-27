@@ -15,6 +15,9 @@ import AuthStore from '../../states/auth/AuthStore';
 import DataRoomListElementMobile from './data-room-list-element-mobile';
 import LoadingStore from '../../states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
+import axios from 'axios';
+import { RequestErrorResponse } from '../apply-page/apply-page';
+import { useNavigate } from 'react-router-dom';
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -53,6 +56,7 @@ function DataRoomList(
   const [datas, setDatas] = useState<dataRoomProps[]>(
     Array(query.take).fill({}),
   );
+  const navigate = useNavigate();
 
   function buttonClickToggle(status: boolean, id: string) {
     if (status && selectedList.findIndex(data => data === id) === -1) {
@@ -109,6 +113,19 @@ function DataRoomList(
               ERROR_DEFAULT_VALUE.TITLE,
             );
           }
+        })
+        .catch(error => {
+          if (axios.isAxiosError(error)) {
+            const message = (error.response?.data as RequestErrorResponse)
+              .message;
+            ErrorStore.on(message, ERROR_DEFAULT_VALUE.TITLE);
+          } else
+            ErrorStore.on(
+              '데이터를 가져오는 중 오류가 발생하였습니다.',
+              ERROR_DEFAULT_VALUE.TITLE,
+            );
+          if (error.response?.status === 401 || error.response?.status === 403)
+            navigate('/');
         })
         .finally(() => {
           LoadingStore.off();
