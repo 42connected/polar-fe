@@ -8,39 +8,59 @@ import LoadingStore from '../loading/LoadingStore';
 
 class KeywordStore {
   keywords: string[];
-  selected: string[];
 
   constructor() {
     makeObservable(this, {
       keywords: observable,
-      selected: observable,
-      pushSelected: action,
-      removeSelectedByKeyword: action,
-      seletedClear: action,
       clear: action,
       Initializer: action,
     });
     this.keywords = [];
-    this.selected = [];
   }
 
-  pushSelected(keyword: string) {
-    this.selected.push(keyword);
-  }
-
-  removeSelectedByKeyword(keyword: string) {
-    const idx = this.selected.indexOf(keyword);
-    if (idx !== -1) {
-      this.selected.splice(idx, 1);
+  /**
+   */
+  pushSelected(category: any, keyword: string) {
+    let keywordsArray = [];
+    const keywords = localStorage.getItem(category);
+    if (keywords) {
+      keywordsArray = JSON.parse(keywords);
     }
+    keywordsArray.push(keyword);
+    localStorage.setItem(category, JSON.stringify(keywordsArray));
   }
 
-  seletedClear() {
-    this.selected = [];
+  /**
+   */
+  removeSelectedByKeyword(category: any, keyword: string) {
+    const keywords = localStorage.getItem(category);
+    if (!keywords) {
+      return;
+    }
+    const keywordsArray = JSON.parse(keywords);
+    const idx = keywordsArray.indexOf(keyword);
+    if (idx !== -1) {
+      keywordsArray.splice(idx, 1);
+    }
+    localStorage.setItem(category, JSON.stringify(keywordsArray));
+  }
+
+  /**
+   */
+  seletedClear(category: any) {
+    localStorage.removeItem(category);
   }
 
   clear() {
     this.keywords = [];
+  }
+
+  getSelected(category: any): string[] {
+    const keywords = localStorage.getItem(category);
+    if (!keywords) {
+      return [];
+    }
+    return JSON.parse(keywords);
   }
 
   async Initializer(category: string) {
