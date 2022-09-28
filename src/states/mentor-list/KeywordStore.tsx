@@ -20,7 +20,8 @@ class KeywordStore {
 
   /**
    */
-  pushSelected(category: any, keyword: string) {
+  pushSelected(category: string | undefined, keyword: string) {
+    if (!category) return;
     let keywordsArray = [];
     const keywords = localStorage.getItem(category);
     if (keywords) {
@@ -32,7 +33,8 @@ class KeywordStore {
 
   /**
    */
-  removeSelectedByKeyword(category: any, keyword: string) {
+  removeSelectedByKeyword(category: string | undefined, keyword: string) {
+    if (!category) return;
     const keywords = localStorage.getItem(category);
     if (!keywords) {
       return;
@@ -47,20 +49,24 @@ class KeywordStore {
 
   /**
    */
-  seletedClear(category: any) {
+  seletedClear(category: string | undefined) {
+    if (!category) return;
     localStorage.removeItem(category);
   }
 
-  clear() {
-    this.keywords = [];
-  }
-
-  getSelected(category: any): string[] {
+  /**
+   */
+  getSelected(category: string | undefined): string[] {
+    if (!category) return [];
     const keywords = localStorage.getItem(category);
     if (!keywords) {
       return [];
     }
     return JSON.parse(keywords);
+  }
+
+  clear() {
+    this.keywords = [];
   }
 
   async Initializer(category: string) {
