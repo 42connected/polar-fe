@@ -13,5 +13,6 @@ export interface MentoringLog {
     requestTime: Date[][];
     meetingAt: Date[];
     rejectMessage: string;
+    feedbackMessage: string | null;
   };
 }

@@ -92,6 +92,7 @@ export function ApplyModal(props: ApplyDetailModalContainerProps) {
                 requestTime={props?.log?.meta?.requestTime}
                 mentor={props?.log?.mentor}
                 setApplyModal={props.setApplyModal}
+                feedbackMessage={props?.log?.meta?.feedbackMessage}
               />
             </Background>
           )}
