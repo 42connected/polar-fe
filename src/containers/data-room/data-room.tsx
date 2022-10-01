@@ -270,7 +270,8 @@ function DataRoom() {
             }}
           />
         )}
-        {!isLoading && (
+        {
+          //!isLoading && 때문에 list 렌더를 밖에서 해야함
           <DataRoomDiv>
             <DataRoomBodyForDesktop>
               <DataRoomTitle>데이터룸</DataRoomTitle>
@@ -323,7 +324,7 @@ function DataRoom() {
               </DataRoomNavigationDiv>
             </DataRoomBodyForDesktop>
           </DataRoomDiv>
-        )}
+        }
       </>
     );
 }
