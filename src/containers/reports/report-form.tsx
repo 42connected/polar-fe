@@ -277,32 +277,6 @@ const ReportForm = observer(() => {
                   maxLength={500}
                 />
               </ReportElementCadet>
-              {/*<ReportFixableElement
-                topic={''}
-                content={extraCadet}
-                contentSetter={setExtraCadet}
-                isEditPossible={
-                  ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
-                }
-                maxLength={50}
-              />*/}
-              {/*<ReportElementCadet>
-                <ReportPartFixableElement
-                  topic={'카뎃'}
-                  fixedContent={
-                    ReportStore.report.cadets.name +
-                    '(' +
-                    ReportStore.report.cadets.intraId +
-                    ')'
-                  }
-                  fixableContent={extraCadet}
-                  fixableContentSetter={setExtraCadet}
-                  isEditPossible={
-                    ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
-                  }
-                  maxLength={40}
-                />
-                </ReportElementCadet>*/}
             </ReportInfoContainer>
             <ReportRowSignature />
             <ReportRowWrite
