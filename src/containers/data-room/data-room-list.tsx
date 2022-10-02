@@ -46,18 +46,11 @@ function DataRoomList(
   query: dataRoomQuery,
   setQuery: (query: dataRoomQuery) => void,
   offset: number,
-  setOffset: (offset: number) => void,
-  total: number,
-  setTotal: (total: number) => void,
+  datas: dataRoomProps[],
   selectedList: string[],
   setSelectedList: (list: string[]) => void,
   isDesktop: boolean,
 ) {
-  const [datas, setDatas] = useState<dataRoomProps[]>(
-    Array(query.take).fill({}),
-  );
-  const navigate = useNavigate();
-
   function buttonClickToggle(status: boolean, id: string) {
     if (status && selectedList.findIndex(data => data === id) === -1) {
       setSelectedList(selectedList.concat(id));
@@ -77,66 +70,6 @@ function DataRoomList(
       setSelectedList([]);
     }
   }
-
-  useEffect(() => {
-    LoadingStore.on();
-    let url = `${API_URL}?page=${query.page}&take=${query.take}`;
-
-    if (query.isAscending)
-      url = url.concat(`&isAscending=${query.isAscending}`);
-    if (query.date) url = url.concat(`&date=${query.date}`);
-    if (query.mentorIntra)
-      url = url.concat(`&mentorIntra=${query.mentorIntra}`);
-    if (query.mentorName) url = url.concat(`&mentorName=${query.mentorName}`);
-
-    try {
-      axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, url, config)
-        .then(async response => {
-          if (response.status === 200) {
-            const tmpOffset: number =
-              query.page * query.take > response.data.total
-                ? response.data.total % query.take
-                : query.take;
-
-            if (tmpOffset < query.take)
-              setDatas(
-                response.data.reports.concat(
-                  Array(query.take - tmpOffset).fill({}),
-                ),
-              );
-            else setDatas(response.data.reports);
-            setTotal(response.data.total);
-            setOffset(tmpOffset);
-          } else {
-            ErrorStore.on(
-              '데이터를 가져오는 중 오류가 발생하였습니다.',
-              ERROR_DEFAULT_VALUE.TITLE,
-            );
-          }
-        })
-        .catch(error => {
-          if (axios.isAxiosError(error)) {
-            const message = (error.response?.data as RequestErrorResponse)
-              .message;
-            ErrorStore.on(message, ERROR_DEFAULT_VALUE.TITLE);
-          } else
-            ErrorStore.on(
-              '데이터를 가져오는 중 오류가 발생하였습니다.',
-              ERROR_DEFAULT_VALUE.TITLE,
-            );
-          if (error.response?.status === 401 || error.response?.status === 403)
-            navigate('/');
-        })
-        .finally(() => {
-          LoadingStore.off();
-        });
-    } catch (error) {
-      ErrorStore.on(
-        '데이터를 가져오는 중 오류가 발생하였습니다.',
-        ERROR_DEFAULT_VALUE.TITLE,
-      );
-    }
-  }, [query, offset, setOffset, setTotal, total]);
 
   function onAscendingChange() {
     setQuery({
@@ -164,7 +97,7 @@ function DataRoomList(
             {isDesktop && <TableHead width="10%">신청 일시</TableHead>}
             <TableHead width="8%">멘토 이름</TableHead>
             <TableHead width="8%">아이디</TableHead>
-            <TableHead width="8%">카뎃 이름</TableHead>
+            <TableHead width="8%">대표 카뎃</TableHead>
             <TableHead width="8%">아이디</TableHead>
             <TableHead width="4%">구분</TableHead>
             <TableHead width="27%">

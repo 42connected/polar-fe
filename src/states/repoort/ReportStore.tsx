@@ -14,6 +14,7 @@ export interface Mentors {
 
 export interface Cadets {
   name: string;
+  intraId: string;
   isCommon: boolean;
 }
 
@@ -28,6 +29,7 @@ export interface Report {
   id: string;
   mentors: Mentors;
   cadets: Cadets;
+  extraCadets: string;
   place: string;
   topic: string;
   content: string;
@@ -42,6 +44,7 @@ export interface Report {
 }
 
 export interface ReportSaveRequestDto {
+  extraCadets: string;
   place: string;
   topic: string;
   content: string;
@@ -64,8 +67,10 @@ class ReportStore {
       mentors: { name: '' },
       cadets: {
         name: '',
+        intraId: '',
         isCommon: true,
       },
+      extraCadets: '',
       place: '',
       topic: '',
       content: '',
@@ -80,6 +85,7 @@ class ReportStore {
     };
 
     this.dto = {
+      extraCadets: '',
       place: '',
       topic: '',
       content: '',
@@ -88,6 +94,10 @@ class ReportStore {
       feedback2: 5,
       feedback3: 5,
     };
+  }
+
+  setExtraCadet(extraCadets: string) {
+    this.dto.extraCadets = extraCadets;
   }
 
   setPlace(place: string) {

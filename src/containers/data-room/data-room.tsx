@@ -21,6 +21,7 @@ import {
 } from '../../context/axios-interface';
 import axios from 'axios';
 import { RequestErrorResponse } from '../apply-page/apply-page';
+import { dataRoomProps } from '../../interface/data-room/data-room-props.interface';
 
 export const muiPaginationTheme = createTheme({
   palette: {
@@ -112,6 +113,14 @@ function DataRoom() {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [selectedList, setSelectedList] = useState<string[]>([]);
   const [offset, setOffset] = useState<number>(0);
+  const [query, setQuery] = useState<dataRoomQuery>({
+    page: page,
+    take: take,
+    isAscending: false,
+  });
+  const [datas, setDatas] = useState<dataRoomProps[]>(
+    Array(query.take).fill({}),
+  );
   const [errorModal, setErrorModal] = useState<boolean>(false);
   const [errorModalMsg, setErrorModalMsg] = useState<string>('');
   const onClickSearchBoxModal = useCallback(() => {
@@ -141,29 +150,68 @@ function DataRoom() {
 
   useEffect(() => {
     LoadingStore.on();
-    axiosWithNoData(
-      AXIOS_METHOD_WITH_NO_DATA.GET,
-      '/bocals/data-room?page=1&take=1',
-      { headers: { Authorization: `bearer ${AuthStore.getAccessToken()}` } },
-    )
-      .catch(error => {
-        if (axios.isAxiosError(error)) {
-          const message = (error.response?.data as RequestErrorResponse)
-            .message;
-          ErrorStore.on(message, ERROR_DEFAULT_VALUE.TITLE);
-        } else
-          ErrorStore.on(
-            '데이터를 가져오는 중 오류가 발생하였습니다.',
-            ERROR_DEFAULT_VALUE.TITLE,
-          );
-        if (error.response?.status === 401 || error.response?.status === 403)
-          navigate('/');
+    let url = `/bocals/data-room?page=${query.page}&take=${query.take}`;
+
+    if (query.isAscending)
+      url = url.concat(`&isAscending=${query.isAscending}`);
+    if (query.date) url = url.concat(`&date=${query.date}`);
+    if (query.mentorIntra)
+      url = url.concat(`&mentorIntra=${query.mentorIntra}`);
+    if (query.mentorName) url = url.concat(`&mentorName=${query.mentorName}`);
+
+    try {
+      axiosWithNoData(AXIOS_METHOD_WITH_NO_DATA.GET, url, {
+        headers: {
+          Authorization: `bearer ${AuthStore.getAccessToken()}`,
+        },
       })
-      .finally(() => {
-        setIsLoading(false);
-        LoadingStore.off();
-      });
-  }, []);
+        .then(async response => {
+          if (response.status === 200) {
+            const tmpOffset: number =
+              query.page * query.take > response.data.total
+                ? response.data.total % query.take
+                : query.take;
+
+            if (tmpOffset < query.take)
+              setDatas(
+                response.data.reports.concat(
+                  Array(query.take - tmpOffset).fill({}),
+                ),
+              );
+            else setDatas(response.data.reports);
+            setTotal(response.data.total);
+            setOffset(tmpOffset);
+          } else {
+            ErrorStore.on(
+              '데이터를 가져오는 중 오류가 발생하였습니다.',
+              ERROR_DEFAULT_VALUE.TITLE,
+            );
+          }
+        })
+        .catch(error => {
+          if (axios.isAxiosError(error)) {
+            const message = (error.response?.data as RequestErrorResponse)
+              .message;
+            ErrorStore.on(message, ERROR_DEFAULT_VALUE.TITLE);
+          } else
+            ErrorStore.on(
+              '데이터를 가져오는 중 오류가 발생하였습니다.',
+              ERROR_DEFAULT_VALUE.TITLE,
+            );
+          if (error.response?.status === 401 || error.response?.status === 403)
+            navigate('/');
+        })
+        .finally(() => {
+          setIsLoading(false);
+          LoadingStore.off();
+        });
+    } catch (error) {
+      ErrorStore.on(
+        '데이터를 가져오는 중 오류가 발생하였습니다.',
+        ERROR_DEFAULT_VALUE.TITLE,
+      );
+    }
+  }, [query, offset, setOffset, setTotal, total]);
 
   const getExcel = async () => {
     LoadingStore.on();
@@ -240,12 +288,6 @@ function DataRoom() {
     navigate(url);
   }
 
-  const [query, setQuery] = useState<dataRoomQuery>({
-    page: page,
-    take: take,
-    isAscending: false,
-  });
-
   if (!AuthStore.getAccessToken()) {
     ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
     AuthStore.Login();
@@ -299,9 +341,7 @@ function DataRoom() {
                 query,
                 setQuery,
                 offset,
-                setOffset,
-                total,
-                setTotal,
+                datas,
                 selectedList,
                 setSelectedList,
                 isDesktopLarge || isDesktopSmall,
