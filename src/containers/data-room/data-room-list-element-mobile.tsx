@@ -1,6 +1,10 @@
 import CheckBox from '../../components/check-box';
 import { dataRoomProps } from '../../interface/data-room/data-room-props.interface';
-import { TableData, Link, refineMeetingAt } from './data-room-list-element';
+import {
+  TableData,
+  CustomLink,
+  refineMeetingAt,
+} from './data-room-list-element';
 
 function DataRoomListElementMobile(
   data: dataRoomProps,
@@ -39,9 +43,9 @@ function DataRoomListElementMobile(
       )}
       <TableData>{data.money?.toLocaleString('ko-KR') ?? ''}</TableData>
       <TableData>
-        <Link href={'https://www.42polar.kr/report-detail?reportId=' + data.id}>
+        <CustomLink to={'/report-detail?reportId=' + data.id}>
           {data.id ? '상세보기' : ''}
-        </Link>
+        </CustomLink>
       </TableData>
     </tr>
   );

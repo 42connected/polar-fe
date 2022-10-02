@@ -15,6 +15,7 @@ import { ReportRowWrite } from './report-row-write';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 import { isValidTime } from '../my-mentoring-mentor/modal/wait/select-time';
 import { NewDateKr } from '../../states/date-kr';
+import { ReportFixableElementWithoutTopic } from './elements/report-fixable-element-without-topic';
 
 export const REPORT_STATE = {
   EDIT_POSSIBLE: '작성중',
@@ -58,7 +59,7 @@ const ButtonContainer = styled.div`
   width: 100%;
 `;
 
-const DefualtButton = styled.button`
+const DefaultButton = styled.button`
   ${defaultTheme.fontSize.sizeExtraSmall};
   ${defaultTheme.font.nanumGothic};
   border-radius: 30px;
@@ -133,9 +134,15 @@ export const getTimeToString = (meetingAt: Date[]): string => {
   )} ~ ${endTime.getHours()}:${makeTimePair(endTime.getMinutes())}`;
 };
 
+const ReportElementCadet = styled.div`
+  grid-column-start: 3;
+  grid-column-end: 5;
+`;
+
 const ReportForm = observer(() => {
   const { reportId } = useParams<string>();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [extraCadet, setExtraCadet] = useState<string>('');
   const [topic, setTopic] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [feedbackMessage, setFeedbackMessage] = useState<string>('');
@@ -167,6 +174,9 @@ const ReportForm = observer(() => {
       ReportStore?.report?.feedback3 &&
         setFeedback3(ReportStore?.report?.feedback3);
 
+      ReportStore?.report?.extraCadets &&
+        setExtraCadet(ReportStore?.report?.extraCadets);
+
       setPlace(ReportStore?.report?.place);
       setIsLoaded(true);
     }
@@ -174,6 +184,7 @@ const ReportForm = observer(() => {
   }, []);
 
   function setReportRequestDto() {
+    ReportStore.setExtraCadet(extraCadet);
     ReportStore.setPlace(place);
     ReportStore.setTopic(topic);
     ReportStore.setContent(content);
@@ -249,8 +260,23 @@ const ReportForm = observer(() => {
               />
               <ReportElement
                 topic={'카뎃'}
-                content={ReportStore.report.cadets.name}
+                content={
+                  ReportStore.report.cadets.name +
+                  '(' +
+                  ReportStore.report.cadets.intraId +
+                  ')'
+                }
               />
+              <ReportElementCadet>
+                <ReportFixableElementWithoutTopic
+                  content={extraCadet}
+                  contentSetter={setExtraCadet}
+                  isEditPossible={
+                    ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                  }
+                  maxLength={500}
+                />
+              </ReportElementCadet>
             </ReportInfoContainer>
             <ReportRowSignature />
             <ReportRowWrite
@@ -279,7 +305,7 @@ const ReportForm = observer(() => {
           </ReportContainer>
           {ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE && (
             <ButtonContainer>
-              <DefualtButton
+              <DefaultButton
                 onClick={() => {
                   if (!reportId) {
                     return;
@@ -292,14 +318,14 @@ const ReportForm = observer(() => {
                 }}
               >
                 임시 저장
-              </DefualtButton>
-              <DefualtButton
+              </DefaultButton>
+              <DefaultButton
                 onClick={() => {
                   setModal(true);
                 }}
               >
                 제출
-              </DefualtButton>
+              </DefaultButton>
             </ButtonContainer>
           )}
         </Container>

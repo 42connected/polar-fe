@@ -101,7 +101,7 @@ export const Title = styled.section`
   height: 6.15rem;
   width: 56.8rem;
   text-align: center;
-  padding-top: 2rem;
+  padding-top: 1.2rem;
 `;
 
 export const NoneValue1 = styled.section`
@@ -334,7 +334,7 @@ export const DateBox = styled.section`
   padding-left: 1rem;
 `;
 
-export const MentoNameBox = styled.section`
+export const MentorNameBox = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   position: absolute;
   align-items: stretch;
@@ -368,9 +368,10 @@ export const MentoSign = styled.span`
   color: black;
 `;
 
-export const KadetNameBox = styled.section`
+export const CadetNameBox = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   position: absolute;
+  display: flex;
   align-items: stretch;
   height: 6rem;
   width: 17.3rem;
@@ -378,7 +379,7 @@ export const KadetNameBox = styled.section`
   grid-row-start: 8;
   border: 1px solid black;
   text-align: left;
-  padding-top: 2rem;
+  padding-top: 0.5rem;
   padding-left: 1rem;
 `;
 

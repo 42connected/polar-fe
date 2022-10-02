@@ -1,8 +1,10 @@
 export interface reportsPro {
   cadets: {
     name: string;
+    intraId: string;
     isCommon: boolean;
   };
+  extraCadets: string;
   content: string;
   createdAt: Date;
   feedback1: number;
