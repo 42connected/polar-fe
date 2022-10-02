@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { dataRoomProps } from '../../interface/data-room/data-room-props.interface';
 import { NewDateKr } from '../../states/date-kr';
+import { Link } from 'react-router-dom';
 
 export const TableData = styled.td`
   height: 3.6rem;
@@ -14,7 +15,7 @@ export const TableData = styled.td`
   border-color: ${theme.colors.grayFour};
 `;
 
-export const Link = styled.a`
+export const CustomLink = styled(Link)`
   color: ${theme.colors.polarSimpleMain};
   ${theme.fontWeight.weightLarge};
 `;
@@ -108,19 +109,14 @@ function DataRoomListElement(
       )}
       <TableData>{data.money?.toLocaleString('ko-KR') ?? ''}</TableData>
       <TableData>
-        <Link href={'https://www.42polar.kr/report-detail?reportId=' + data.id}>
+        <CustomLink to={`/report-detail?reportId=${data.id}`}>
           {data.id ? '상세보기' : ''}
-        </Link>
+        </CustomLink>
       </TableData>
       <TableData>
-        <Link
-          href={
-            'https://www.42polar.kr/report-detail?autoPrint=true&reportId=' +
-            data.id
-          }
-        >
+        <CustomLink to={'/report-detail?autoPrint=true&reportId=' + data.id}>
           {data.id ? '출력' : ''}
-        </Link>
+        </CustomLink>
       </TableData>
     </tr>
   );

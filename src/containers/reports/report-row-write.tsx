@@ -63,6 +63,9 @@ export function ReportRowWrite(props: ReportRowWriteProps) {
           maxLength={800}
           countDisabled={!props.isEditPossible}
           inputDisabled={!props.isEditPossible}
+          placeholder={
+            '🌟 해당 피드백 메시지는 멘토링을 진행한 교육생에게 전달됩니다! 🌟\n'
+          }
         />
       </ReportRowContent>
     </ReportRowContainer>

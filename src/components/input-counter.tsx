@@ -35,6 +35,7 @@ interface InputCounterProps {
   fontSize?: string;
   height?: string;
   inputDisabled: boolean;
+  placeholder?: string;
 }
 
 export function InputCounter(props: InputCounterProps) {
@@ -50,6 +51,7 @@ export function InputCounter(props: InputCounterProps) {
         value={props.value}
         maxLength={props.maxLength}
         disabled={props.inputDisabled}
+        placeholder={props.placeholder}
       />
       {props.countDisabled ? null : (
         <Count {...props}>

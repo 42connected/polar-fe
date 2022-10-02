@@ -82,6 +82,7 @@ export interface ApplyDetailModalProps {
   };
   rejectMessage: string;
   setApplyModal: (b: boolean) => void;
+  feedbackMessage: string | null;
 }
 
 export const MENTORING_STATUS = {
@@ -161,6 +162,7 @@ export function ApplyDetailModal(props: ApplyDetailModalProps) {
             rejectReason={rejectReason}
             rejectReasonSetter={setRejectReason}
             rejectMessage={props.rejectMessage}
+            feedbackMessage={props.feedbackMessage}
           />
         )}
       </ModalBody>
