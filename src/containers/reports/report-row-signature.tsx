@@ -2,7 +2,7 @@ import { ReportRowContainer } from './row-styled';
 import styled from '@emotion/styled';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import defaultTheme from '../../styles/theme';
 import ReportStore from '../../states/repoort/ReportStore';
 import { REPORT_STATE } from './report-form';
@@ -43,7 +43,28 @@ const UploadFileContainer = styled.div`
   display: grid;
   place-items: center;
   width: 100%;
+  height: 150px;
   grid-template-columns: repeat(2, 1fr);
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+`;
+
+const UploadFileDraggingContainer = styled.div`
+  ${defaultTheme.fontSize.sizeMedium};
+  ${defaultTheme.font.sebangGothic};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 150px;
+  border-radius: 5px;
+  border: 3px dotted rgba(0, 0, 0, 0.1);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 `;
 
 const DeleteImgButton = styled.div`
@@ -159,39 +180,104 @@ export const ReportRowSignature = observer(() => {
   const [imageIndex, setImageIndex] = useState<number>(-1);
   const [signatureBlock, setSignatureBlock] = useState<boolean>(false);
 
+  /**
+   * 드래그 앤 드랍 함수 ..
+   */
+  const dragRef = useRef<HTMLLabelElement | null>(null);
+  const [isDrag, setIsDrag] = useState<boolean>(false);
+  const handleDragIn = useCallback((e: DragEvent): void => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDragOut = useCallback((e: DragEvent): void => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setIsDrag(false);
+  }, []);
+
+  const handleDragOver = useCallback((e: DragEvent): void => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (e.dataTransfer!.files) {
+      setIsDrag(true);
+    }
+  }, []);
+
+  const handleDrop = useCallback((e: DragEvent): void => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    onUploadImage(e);
+    setIsDrag(false);
+  }, []);
+
+  useEffect(() => {
+    initDragEvents();
+
+    return () => resetDragEvents();
+  }, []);
+
+  const initDragEvents = useCallback((): void => {
+    if (dragRef.current !== null) {
+      dragRef.current.addEventListener('dragenter', handleDragIn);
+      dragRef.current.addEventListener('dragleave', handleDragOut);
+      dragRef.current.addEventListener('dragover', handleDragOver);
+      dragRef.current.addEventListener('drop', handleDrop);
+    }
+  }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
+
+  const resetDragEvents = useCallback((): void => {
+    if (dragRef.current !== null) {
+      dragRef.current.removeEventListener('dragenter', handleDragIn);
+      dragRef.current.removeEventListener('dragleave', handleDragOut);
+      dragRef.current.removeEventListener('dragover', handleDragOver);
+      dragRef.current.removeEventListener('drop', handleDrop);
+    }
+  }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
+  // ---------------
+
+  const onUploadImage = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement> | any): void => {
+      let selectedFile: File;
+
+      if (e.type === 'drop') {
+        selectedFile = e.dataTransfer.files[0];
+      } else {
+        selectedFile = e.target.files[0];
+      }
+      if (!selectedFile) {
+        return;
+      }
+      if (ReportStore.report.imageUrl.length >= 2) {
+        ErrorStore.on(
+          '사진 파일은 최대 2개까지 업로드 할 수 있습니다.',
+          ERROR_DEFAULT_VALUE.TITLE,
+        );
+        return;
+      }
+      if (selectedFile.size > 3000000) {
+        ErrorStore.on(
+          '3MB 이상 사진 파일은 업로드할 수 없습니다.',
+          ERROR_DEFAULT_VALUE.TITLE,
+        );
+        return;
+      }
+      const img = new FormData();
+      img.append('image', selectedFile);
+      ReportStore.uploadImage(
+        ReportStore.report.id,
+        AuthStore.getAccessToken(),
+        img,
+      );
+    },
+    [],
+  );
+
   const UploadMentoringImg = () => {
     const inputRef = useRef<HTMLInputElement | null>(null);
-
-    const onUploadImage = useCallback(
-      (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.files) {
-          return;
-        }
-        if (ReportStore.report.imageUrl.length >= 2) {
-          ErrorStore.on(
-            '사진 파일은 최대 2개까지 업로드 할 수 있습니다.',
-            ERROR_DEFAULT_VALUE.TITLE,
-          );
-          return;
-        }
-        if (e.target.files[0].size > 3000000) {
-          ErrorStore.on(
-            '3MB 이상 사진 파일은 업로드할 수 없습니다.',
-            ERROR_DEFAULT_VALUE.TITLE,
-          );
-          return;
-        }
-        const img = new FormData();
-        img.append('image', e.target.files[0]);
-        ReportStore.uploadImage(
-          ReportStore.report.id,
-          AuthStore.getAccessToken(),
-          img,
-        );
-      },
-
-      [],
-    );
 
     const uploadImg = useCallback(() => {
       if (!inputRef.current) {
@@ -285,23 +371,32 @@ export const ReportRowSignature = observer(() => {
         <SignatureTitleContainer>
           <SignatureTitle>증빙사진</SignatureTitle>
         </SignatureTitleContainer>
-        <UploadFileContainer>
-          {ReportStore?.report?.imageUrl?.map((e, i) => (
-            <ImageContainer key={i}>
-              <UploadFileBox src={e} />
-              {ReportStore.report.status !== REPORT_STATE.EDIT_IMPOSSIBLE && (
-                <DeleteImgButton
-                  onClick={() => {
-                    setImageIndex(i);
-                    setDeleteModal(true);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faX} />
-                </DeleteImgButton>
-              )}
-            </ImageContainer>
-          ))}
-        </UploadFileContainer>
+        <label ref={dragRef} style={{ width: '100%' }}>
+          {isDrag ? (
+            <UploadFileDraggingContainer>
+              Drop to upload
+            </UploadFileDraggingContainer>
+          ) : (
+            <UploadFileContainer>
+              {ReportStore?.report?.imageUrl?.map((e, i) => (
+                <ImageContainer key={i}>
+                  <UploadFileBox src={e} />
+                  {ReportStore.report.status !==
+                    REPORT_STATE.EDIT_IMPOSSIBLE && (
+                    <DeleteImgButton
+                      onClick={() => {
+                        setImageIndex(i);
+                        setDeleteModal(true);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faX} />
+                    </DeleteImgButton>
+                  )}
+                </ImageContainer>
+              ))}
+            </UploadFileContainer>
+          )}
+        </label>
         <ButtonRow>{UploadMentoringImg()}</ButtonRow>
       </Left>
 
