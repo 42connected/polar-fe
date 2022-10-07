@@ -45,23 +45,18 @@ const UploadFileContainer = styled.div`
   width: 100%;
   height: 150px;
   grid-template-columns: repeat(2, 1fr);
-  border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
 `;
 
 const UploadFileDraggingContainer = styled.div`
-  ${defaultTheme.fontSize.sizeMedium};
-  ${defaultTheme.font.sebangGothic};
+  ${defaultTheme.fontSize.sizeSmall};
+  ${defaultTheme.font.nanumGothic};
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 150px;
   border-radius: 5px;
-  border: 3px dotted rgba(0, 0, 0, 0.1);
+  border: 2px dotted rgba(0, 0, 0, 0.1);
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -367,14 +362,13 @@ export const ReportRowSignature = observer(() => {
             </Button>
           </ButtonRow>
         )}
-
         <SignatureTitleContainer>
           <SignatureTitle>증빙사진</SignatureTitle>
         </SignatureTitleContainer>
         <label ref={dragRef} style={{ width: '100%' }}>
-          {isDrag ? (
+          {isDrag || !ReportStore?.report?.imageUrl?.length ? (
             <UploadFileDraggingContainer>
-              Drop to upload
+              여기에 파일을 드롭하세요.
             </UploadFileDraggingContainer>
           ) : (
             <UploadFileContainer>
