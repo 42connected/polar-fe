@@ -248,11 +248,7 @@ const ReportForm = observer(() => {
               />
               <ReportElement
                 topic={'날짜'}
-                content={getDayToString(
-                  NewDateKr(
-                    ReportStore.report.mentoringLogs.meetingAt[START_TIME],
-                  ),
-                )}
+                content={getDayToString(NewDateKr(startTime))}
               />
               <ReportFixableWithModal
                 topic={'시간'}
