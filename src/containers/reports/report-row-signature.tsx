@@ -239,9 +239,9 @@ export const ReportRowSignature = observer(() => {
       let selectedFile: File;
 
       if (e.type === 'drop') {
-        selectedFile = e.dataTransfer.files[0];
+        selectedFile = e?.dataTransfer?.files?.[0];
       } else {
-        selectedFile = e.target.files[0];
+        selectedFile = e?.target?.files?.[0];
       }
       if (!selectedFile) {
         return;
