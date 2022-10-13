@@ -177,7 +177,7 @@ export function ApplyDetailModal(props: ApplyDetailModalProps) {
         isReject={isReject}
         setIsReject={setIsReject}
         rejectReason={rejectReason}
-        selectedTime={props.requestTime[parseInt(selectedTimeIndex)]}
+        selectedTimeIndex={parseInt(selectedTimeIndex)}
         setModal={setModal}
         setModalText={setModalText}
       />
