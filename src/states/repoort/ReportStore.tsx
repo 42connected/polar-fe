@@ -52,6 +52,7 @@ export interface ReportSaveRequestDto {
   feedback1: number;
   feedback2: number;
   feedback3: number;
+  meetingAt: Date[];
 }
 
 class ReportStore {
@@ -93,6 +94,7 @@ class ReportStore {
       feedback1: 5,
       feedback2: 5,
       feedback3: 5,
+      meetingAt: [],
     };
   }
 
@@ -123,8 +125,13 @@ class ReportStore {
   setFeedback2(n: number) {
     this.dto.feedback2 = n;
   }
+
   setFeedback3(n: number) {
     this.dto.feedback3 = n;
+  }
+
+  setTime(time: Date[]) {
+    this.dto.meetingAt = time;
   }
 
   async saveDone(reportId: string, token: string) {
