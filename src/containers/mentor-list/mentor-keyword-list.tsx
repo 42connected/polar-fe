@@ -31,7 +31,6 @@ const MentorKeywordList = observer(() => {
     }
     return () => {
       KeywordStore.clear();
-      KeywordStore.seletedClear();
     };
   }, []);
 
@@ -40,10 +39,10 @@ const MentorKeywordList = observer(() => {
       <KeywordsLine>
         <KeywordButton
           onClick={() => {
-            KeywordStore.seletedClear();
+            KeywordStore.seletedClear(category);
             MentorsStore.Initializer(
               category,
-              KeywordStore.selected,
+              KeywordStore.getSelected(category),
               undefined,
             );
           }}
@@ -64,8 +63,8 @@ const MentorKeywordList = observer(() => {
             {KeywordStore?.keywords?.map((e, i) => (
               <MentorKeyword
                 name={e}
-                key={i + 3}
-                isClicked={KeywordStore.selected.indexOf(e) !== -1}
+                key={i}
+                isClicked={KeywordStore.getSelected(category).indexOf(e) !== -1}
               />
             ))}
           </>

@@ -16,6 +16,8 @@ import { OneButtonModal } from '../../components/modal/one-button-modal/one-butt
 import { isValidTime } from '../my-mentoring-mentor/modal/wait/select-time';
 import { NewDateKr } from '../../states/date-kr';
 import { ReportFixableElementWithoutTopic } from './elements/report-fixable-element-without-topic';
+import { ReportFixableWithModal } from './elements/report-fixable-with-modal';
+import { TimePickerModal } from './elements/report-time-picker/time-picker-modal';
 
 export const REPORT_STATE = {
   EDIT_POSSIBLE: '작성중',
@@ -151,6 +153,9 @@ const ReportForm = observer(() => {
   const [feedback3, setFeedback3] = useState<number>(5);
   const [place, setPlace] = useState<string>('');
   const [modal, setModal] = useState<boolean>(false);
+  const [timePicker, setTimePicker] = useState<boolean>(false);
+  const [startTime, setStartTime] = useState<Date>(new Date());
+  const [endTime, setEndTime] = useState<Date>(new Date());
 
   useEffect(() => {
     async function Initialize() {
@@ -178,6 +183,11 @@ const ReportForm = observer(() => {
         setExtraCadet(ReportStore?.report?.extraCadets);
 
       setPlace(ReportStore?.report?.place);
+
+      setStartTime(ReportStore?.report?.mentoringLogs?.meetingAt?.[START_TIME]);
+
+      setEndTime(ReportStore?.report?.mentoringLogs?.meetingAt?.[END_TIME]);
+
       setIsLoaded(true);
     }
     Initialize();
@@ -192,6 +202,7 @@ const ReportForm = observer(() => {
     ReportStore.setFeedback2(feedback2);
     ReportStore.setFeedback3(feedback3);
     ReportStore.setFeedbackMessage(feedbackMessage);
+    ReportStore.setTime([startTime, endTime]);
   }
 
   return (
@@ -215,6 +226,15 @@ const ReportForm = observer(() => {
           }}
         />
       )}
+      {timePicker && (
+        <TimePickerModal
+          XButtonFunc={() => {
+            setTimePicker(false);
+          }}
+          setStartDateTime={setStartTime}
+          setEndDateTime={setEndTime}
+        />
+      )}
       {isLoaded && (
         <Container component="main" maxWidth="lg" fixed={true}>
           <Title title={'보고서 작성'} />
@@ -228,22 +248,18 @@ const ReportForm = observer(() => {
               />
               <ReportElement
                 topic={'날짜'}
-                content={getDayToString(
-                  NewDateKr(
-                    ReportStore.report.mentoringLogs.meetingAt[START_TIME],
-                  ),
-                )}
+                content={getDayToString(NewDateKr(startTime))}
               />
-              <ReportElement
+              <ReportFixableWithModal
                 topic={'시간'}
                 content={getTimeToString([
-                  NewDateKr(
-                    ReportStore.report.mentoringLogs.meetingAt[START_TIME],
-                  ),
-                  NewDateKr(
-                    ReportStore.report.mentoringLogs.meetingAt[END_TIME],
-                  ),
+                  NewDateKr(startTime),
+                  NewDateKr(endTime),
                 ])}
+                isEditPossible={
+                  ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                }
+                modalSetter={setTimePicker}
               />
               <ReportFixableElement
                 topic={'장소'}

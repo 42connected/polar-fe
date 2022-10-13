@@ -100,7 +100,11 @@ const MentorList = observer(() => {
   const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
-    MentorsStore.Initializer(category, [], search);
+    MentorsStore.Initializer(
+      category,
+      KeywordStore.getSelected(category),
+      search,
+    );
   }, []);
 
   return (
@@ -128,7 +132,7 @@ const MentorList = observer(() => {
                 MentorsStore.clear();
                 MentorsStore.Initializer(
                   category,
-                  KeywordStore.selected,
+                  KeywordStore.getSelected(category),
                   search,
                 );
               }
