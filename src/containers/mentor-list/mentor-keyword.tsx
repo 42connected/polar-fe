@@ -38,11 +38,19 @@ export function MentorKeyword(props: KeywordProps) {
     <KeywordButton
       onClick={() => {
         if (!props.isClicked) {
-          KeywordStore.pushSelected(props.name);
-          MentorsStore.Initializer(category, KeywordStore.selected, undefined);
+          KeywordStore.pushSelected(category, props.name);
+          MentorsStore.Initializer(
+            category,
+            KeywordStore.getSelected(category),
+            undefined,
+          );
         } else {
-          KeywordStore.removeSelectedByKeyword(props.name);
-          MentorsStore.Initializer(category, KeywordStore.selected, undefined);
+          KeywordStore.removeSelectedByKeyword(category, props.name);
+          MentorsStore.Initializer(
+            category,
+            KeywordStore.getSelected(category),
+            undefined,
+          );
         }
       }}
       color={props.isClicked ? defaultTheme.colors.polarSimpleMain : 'gray'}
