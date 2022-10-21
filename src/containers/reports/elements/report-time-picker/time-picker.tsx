@@ -170,9 +170,13 @@ function TimePicker(props: TimePickerProps) {
             const startDate = NewDateKr(selectDate);
             startDate.setHours(Math.floor(Number(startTime) / 2));
             startDate.setMinutes(Number(startTime) % 2 ? 30 : 0);
+            startDate.setSeconds(0);
+            startDate.setMilliseconds(0);
             const endDate = NewDateKr(selectDate);
             endDate.setHours(Math.floor(Number(endTime) / 2));
             endDate.setMinutes(Number(endTime) % 2 ? 30 : 0);
+            endDate.setSeconds(0);
+            endDate.setMilliseconds(0);
             setStartDateTime(startDate);
             setEndDateTime(endDate);
             XButtonFunc();
