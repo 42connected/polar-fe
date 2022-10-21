@@ -41,7 +41,7 @@ interface ModalFooterProps {
   isReject: boolean;
   setIsReject: (b: boolean) => void;
   rejectReason: string;
-  selectedTime: Date[];
+  selectedTimeIndex: number;
   setModal: (b: boolean) => void;
   setModalText: (s: string) => void;
 }
@@ -78,7 +78,7 @@ export function ModalFooter(props: ModalFooterProps) {
 
   const approveMentoring = async (
     mentoringLogId: string,
-    selectedAt: Date[],
+    selectedAtIndex: number,
     token: string,
   ) => {
     LoadingStore.on();
@@ -87,7 +87,7 @@ export function ModalFooter(props: ModalFooterProps) {
       `/mentoring-logs/approve`,
       {
         mentoringLogId: mentoringLogId,
-        meetingAt: selectedAt,
+        meetingAtIndex: selectedAtIndex,
       },
       {
         headers: {
@@ -168,7 +168,7 @@ export function ModalFooter(props: ModalFooterProps) {
           <Button
             style={{ backgroundColor: defaultTheme.colors.polarSimpleMain }}
             onClick={() => {
-              if (!props?.selectedTime) {
+              if (isNaN(props?.selectedTimeIndex)) {
                 ErrorStore.on(
                   '멘토링 가능한 시간을 선택해주세요',
                   ERROR_DEFAULT_VALUE.TITLE,
@@ -177,7 +177,7 @@ export function ModalFooter(props: ModalFooterProps) {
               }
               approveMentoring(
                 props.id,
-                props.selectedTime,
+                props.selectedTimeIndex,
                 AuthStore.getAccessToken(),
               );
             }}

@@ -999,6 +999,10 @@ const MentorImage = styled.img`
   width: 18rem;
   height: 18rem;
   border-radius: 50%;
+  @media screen and (max-width: 700px) {
+    width: 13rem;
+    height: 13rem;
+  }
 `;
 
 const MentorInfo = styled.div`
@@ -1024,10 +1028,24 @@ const MentorName = styled.div`
     ${theme.fontFrame.titleLarge};
     ${theme.font.sebangGothic};
     font-weight: 900;
+    @media screen and (max-width: 700px) {
+      margin-top: 1rem;
+      ${theme.fontFrame.titleMedium};
+    }
+    @media screen and (max-width: 600px) {
+      margin-top: 1rem;
+      ${theme.fontFrame.titleSmall};
+    }
   }
   .mentor-intra {
     margin-left: 1rem;
     ${theme.fontFrame.titleSmall};
+    @media screen and (max-width: 600px) {
+      ${theme.fontFrame.subTitleSmall};
+    }
+    @media screen and (max-width: 450px) {
+      ${theme.fontFrame.bodySmall};
+    }
   }
   .icon {
     margin-left: 0.5rem;
