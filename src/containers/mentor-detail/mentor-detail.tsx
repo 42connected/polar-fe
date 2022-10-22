@@ -940,6 +940,7 @@ const MentorIntroduction = styled.div`
   color: ${theme.colors.blackThree};
   font-weight: 900;
   word-spacing: 0.1rem;
+  white-space: pre-wrap;
 `;
 
 const MentorBody1Right1 = styled.div`
