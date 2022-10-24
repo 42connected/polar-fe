@@ -2,6 +2,9 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "@date-io/date-fns": "^2.15.0",
     "@devexpress/dx-react-core": "^3.0.5",
@@ -56,19 +59,17 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "start-prod": "serve -s build",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "format": "prettier --write \"src/**/*.ts\""
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "start:v1": "yarn workspace polar-v1 start",
+    "start:v2": "yarn workspace polar-v2 start",
+    "start-prod": "serve -s dist",
+    "build:v1": "yarn workspace polar-v2 build",
+    "build:v2": "yarn workspace polar-v2 build",
+
+    "lint:v1": "yarn workspace polar-v1 lint",
+    "lint:v2": "yarn workspace polar-v2 lint",
+
+    "format:v1": "yarn workspace polar-v1 format",
+    "format:v2": "yarn workspace polar-v2 format"
   },
   "browserslist": {
     "production": [
@@ -81,14 +82,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/loadable__component": "^5.13.4",
-    "@types/react-calendar": "^3.5.2",
-    "@types/react-dom": "^18.0.6",
-    "@types/react-slick": "^0.23.10",
-    "@types/styled-components": "^5.1.26",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }

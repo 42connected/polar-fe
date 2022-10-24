@@ -1,0 +1,6 @@
+pre-commit:
+  commands:
+    es-linter:
+      run: npm run lint
+    prettier:
+      run: npm run format
