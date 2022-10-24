@@ -1,6 +1,10 @@
 pre-commit:
   commands:
     es-linter:
-      run: npm run lint
+      run: |
+        yarn lint:v1
+        yarn lint:v2
     prettier:
-      run: npm run format
+      run: |
+        yarn format:v1
+        yarn format:v2
