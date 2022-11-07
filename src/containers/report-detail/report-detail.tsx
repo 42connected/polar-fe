@@ -51,6 +51,8 @@ import {
   ImgLogo4,
   MentoSign,
   SignText,
+  PlaceBox2,
+  Cadet,
 } from './reportStyled';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
@@ -172,15 +174,23 @@ const SimpleComponent = (props: {
                   <img src={reportdata?.signatureUrl} style={signimagestyle} />
                 </MentoSign>
               </MentorNameBox>
-              <SubTitle9>멘티이름</SubTitle9>
-              <CadetNameBox>
+              <Cadet>멘티이름</Cadet>
+              {/* <CadetNameBox>
                 {reportdata?.cadets.name +
                   '(' +
                   reportdata?.cadets.intraId +
                   ')' +
                   ', ' +
                   reportdata?.extraCadets}
-              </CadetNameBox>
+              </CadetNameBox> */}
+              <PlaceBox2>
+                {reportdata?.cadets.name +
+                  '(' +
+                  reportdata?.cadets.intraId +
+                  ')' +
+                  ', ' +
+                  reportdata?.extraCadets}
+              </PlaceBox2>
               <NoneValue3></NoneValue3>
               <SubTitle5>멘토링개요</SubTitle5>
               <ContentTitle1>주제</ContentTitle1>
@@ -297,9 +307,9 @@ const ReportDetail = () => {
   async function getAllReportData() {
     LoadingStore.on();
     await Promise.all(reportIds.map(id => getReports(id)));
-    if (isAutoPrint) {
-      buttonRef?.current?.click();
-    }
+    // if (isAutoPrint) {
+    //   buttonRef?.current?.click();
+    // }
     LoadingStore.off();
   }
 

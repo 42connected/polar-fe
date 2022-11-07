@@ -12,7 +12,13 @@ export const ReportContainer = styled.span<{
   display: grid;
   height: 100%;
   width: 100%;
-  grid-template-rows: 10.7rem 5.8rem 0.6rem 4rem 0.6rem 3.9rem 4.1rem 5.3rem 0.6rem 8rem 24rem 26rem 11rem 10.7rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem 9.5rem;
+  grid-template-rows:
+    10.7rem 5.8rem 0.6rem 4rem 0.6rem 3.9rem 4.1rem 5.3rem minmax(
+      max-content,
+      5.3rem
+    )
+    8rem 24rem 26rem 11rem 10.7rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem
+    9.5rem;
   grid-template-columns: 7rem 8.5rem 5.5rem 17rem 5.7rem 7rem 18rem;
   grid-template-areas:
     'side img1 . . . img2 side'
@@ -22,7 +28,8 @@ export const ReportContainer = styled.span<{
     '. . . . . . .'
     'side subtitle2 . date . time side'
     'side subtitle3 . place . . side '
-    'side subtitle4 . m_name . c_name side'
+    'side subtitle4 . m_name . . .'
+    'c_name side . . . . .'
     '. . . . . . .'
     'side subtitle5 . . subject . side'
     'side subtitle5 . . content . side'
@@ -139,7 +146,7 @@ export const NoneValue3 = styled.section`
   box-sizing: border-box;
   grid-column-start: 2;
   grid-column-end: 7;
-  grid-row-start: 9;
+  grid-row-start: 10;
   border: 1px solid black;
   height: 1.5rem;
   width: 56.8rem;
@@ -300,10 +307,11 @@ export const SubTitle9 = styled.section`
   position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
-  grid-column-start: 5;
-  grid-row-start: 8;
+  border-right: 0px;
+  grid-column-start: 2;
+  grid-row-start: 9;
   height: 6rem;
-  width: 6.2rem;
+  width: 9.1rem;
   text-align: center;
   padding-top: 2rem;
 `;
@@ -338,14 +346,14 @@ export const MentorNameBox = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   position: absolute;
   align-items: stretch;
-  height: 6rem;
-  width: 23rem;
+  height: 5.6rem;
+  width: 47.8rem;
   grid-column-start: 3;
-  grid-column-end: 4;
+  grid-column-end: 7;
   grid-row-start: 8;
   border: 1px solid black;
   border-left: 0;
-  text-align: left;
+  text-align: center;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -374,9 +382,10 @@ export const CadetNameBox = styled.section`
   display: flex;
   align-items: stretch;
   height: 6rem;
-  width: 17.3rem;
-  grid-column-start: 6;
-  grid-row-start: 8;
+  //width: 50.3rem;
+  grid-column-start: 3;
+  grid-column-start: 7;
+  grid-row-start: 9;
   border: 1px solid black;
   text-align: left;
   padding-top: 0.5rem;
@@ -609,4 +618,41 @@ export const Number2 = styled.section`
 
 export const Titleplus = styled.span`
   font-weight: bold;
+`;
+
+export const PlaceBox2 = styled.section`
+  ${theme.fontSize.sizeExtraSmall};
+  position: relative;
+  //height: 10.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  width: 46.6rem;
+  grid-column-start: 3;
+  grid-column-end: 7;
+  grid-row-start: 9;
+  margin-left: 0.1rem;
+  border: 1px solid black;
+  border-bottom: 1px;
+  text-align: left;
+  padding-top: 1.2rem;
+  padding-left: 1rem;
+`;
+
+export const Cadet = styled.section`
+  ${theme.fontSize.sizeExtraSmall};
+  background-color: ${theme.colors.grayFive};
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  border-bottom: 1px;
+  grid-column-start: 2;
+  grid-row-start: 9;
+  //height: 4.5rem;
+  width: 9.1rem;
+  text-align: center;
+  padding-top: 1.3rem;
 `;
