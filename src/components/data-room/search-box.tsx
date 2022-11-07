@@ -7,6 +7,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { Box, ThemeProvider } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { createTheme } from '@mui/material';
+import { StringToDateKr } from '../../states/date-kr';
 
 const SearchBoxBackground = styled.div`
   position: absolute;
@@ -142,9 +143,15 @@ interface SearchBoxProps {
 }
 
 function SearchBox(props: SearchBoxProps) {
-  const [mentorName, setMentorName] = useState<string>();
-  const [mentorIntraId, setMentorIntraId] = useState<string>();
-  const [date, setDate] = useState<Date | null>(null);
+  const [mentorName, setMentorName] = useState<string>(
+    props.query?.mentorName ?? '',
+  );
+  const [mentorIntraId, setMentorIntraId] = useState<string>(
+    props.query?.mentorIntra ?? '',
+  );
+  const [date, setDate] = useState<Date | null>(
+    props.query?.date ? StringToDateKr(props.query?.date) : null,
+  );
 
   return (
     <form
