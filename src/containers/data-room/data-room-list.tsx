@@ -1,8 +1,4 @@
 import DataRoomListElement from './data-room-list-element';
-import {
-  axiosWithNoData,
-  AXIOS_METHOD_WITH_NO_DATA,
-} from '../../context/axios-interface';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { dataRoomQuery } from '../../interface/data-room/data-room-query.interface';
