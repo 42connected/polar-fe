@@ -7,17 +7,10 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { dataRoomQuery } from '../../interface/data-room/data-room-query.interface';
 import { dataRoomProps } from '../../interface/data-room/data-room-props.interface';
-import { useState, useEffect } from 'react';
 import CheckBox from '../../components/check-box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
-import AuthStore from '../../states/auth/AuthStore';
 import DataRoomListElementMobile from './data-room-list-element-mobile';
-import LoadingStore from '../../states/loading/LoadingStore';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
-import axios from 'axios';
-import { RequestErrorResponse } from '../apply-page/apply-page';
-import { useNavigate } from 'react-router-dom';
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -34,13 +27,6 @@ const TableHead = styled.th<{ width?: string }>`
   border-bottom-width: 0.05rem;
   border-color: ${theme.colors.grayThree};
 `;
-
-const API_URL = `/bocals/data-room`;
-const config = {
-  headers: {
-    Authorization: `bearer ${AuthStore.getAccessToken()}`,
-  },
-};
 
 function DataRoomList(
   query: dataRoomQuery,
