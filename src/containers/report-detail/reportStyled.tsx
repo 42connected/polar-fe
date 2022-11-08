@@ -30,7 +30,6 @@ export const ReportContainer = styled.span<{
     'side subtitle3 . place . . side '
     'side subtitle4 . m_name . . .'
     'c_name side . . . . .'
-    '. . . . . . .'
     'side subtitle5 . . subject . side'
     'side subtitle5 . . content . side'
     'side subtitle5 . . comment . side'
@@ -623,18 +622,19 @@ export const Titleplus = styled.span`
 export const PlaceBox2 = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   position: relative;
-  //height: 10.3rem;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   width: 46.6rem;
   grid-column-start: 3;
   grid-column-end: 7;
   grid-row-start: 9;
   margin-left: 0.1rem;
   border: 1px solid black;
-  border-bottom: 1px;
+  border-bottom: 1px solid black;
   text-align: left;
   padding-top: 1.2rem;
+  padding-bottom: 1.3rem;
   padding-left: 1rem;
 `;
 
@@ -648,11 +648,11 @@ export const Cadet = styled.section`
   box-sizing: border-box;
   border-left: 1px solid black;
   border-top: 1px solid black;
-  border-bottom: 1px;
+  border-bottom: 1px solid black;
   grid-column-start: 2;
   grid-row-start: 9;
-  //height: 4.5rem;
   width: 9.1rem;
   text-align: center;
   padding-top: 1.3rem;
+  padding-bottom: 1.3rem;
 `;

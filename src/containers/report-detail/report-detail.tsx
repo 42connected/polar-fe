@@ -175,14 +175,6 @@ const SimpleComponent = (props: {
                 </MentoSign>
               </MentorNameBox>
               <Cadet>멘티이름</Cadet>
-              {/* <CadetNameBox>
-                {reportdata?.cadets.name +
-                  '(' +
-                  reportdata?.cadets.intraId +
-                  ')' +
-                  ', ' +
-                  reportdata?.extraCadets}
-              </CadetNameBox> */}
               <PlaceBox2>
                 {reportdata?.cadets.name +
                   '(' +
@@ -191,7 +183,6 @@ const SimpleComponent = (props: {
                   ', ' +
                   reportdata?.extraCadets}
               </PlaceBox2>
-              <NoneValue3></NoneValue3>
               <SubTitle5>멘토링개요</SubTitle5>
               <ContentTitle1>주제</ContentTitle1>
               <ContentBody1>{reportdata?.topic}</ContentBody1>
