@@ -17,11 +17,11 @@ export const ReportContainer = styled.span<{
       max-content,
       5.3rem
     )
-    8rem 24rem 26rem 11rem 10.7rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem
+    8rem 24rem 26rem 0rem 10.7rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem
     9.5rem;
   grid-template-columns: 7rem 8.5rem 5.5rem 17rem 5.7rem 7rem 18rem;
   grid-template-areas:
-    'side img1 . . . img2 side'
+    'side img1 . . . . side'
     'side title title title title title side'
     '. . . . . . .'
     'side subtitle1 minititle1 isCommon minititle2 notCommon side'
@@ -34,7 +34,7 @@ export const ReportContainer = styled.span<{
     'side subtitle5 . . content . side'
     'side subtitle5 . . comment . side'
     '. . . num . . .'
-    'side img1 . . . img2 side'
+    'side img1 . . . . side'
     'side subtitle6 . img3 . . side'
     'side subtitle7 . . feedbacktitle . side'
     'side subtitle7 . . feedback1 . side'
@@ -368,7 +368,7 @@ export const SignText = styled.div`
 
 export const MentoSign = styled.span`
   position: absolute;
-  margin-left: 7rem;
+  margin-left: 17rem;
   align-items: center;
   align-content: center;
   justify-content: center;

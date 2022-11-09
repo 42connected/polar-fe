@@ -195,7 +195,6 @@ const SimpleComponent = (props: {
                 <br /> 남기는 말
               </ContentTitle3>
               <ContentBody3>{reportdata?.feedbackMessage}</ContentBody3>
-              <Number1> - 1 -</Number1>
               <SubTitle6>증빙사진</SubTitle6>
               <ContentBody4>
                 {reportdata?.imageUrl[0] ? (
@@ -231,7 +230,6 @@ const SimpleComponent = (props: {
                 <br />
               </ContentBody5>
               <ContentBody6>(재)이노베이션 아카데미 귀하</ContentBody6>
-              <Number2> - 2 -</Number2>
               {reportdata?.cadets.isCommon ? (
                 <IsCommonBox> o </IsCommonBox>
               ) : (
@@ -245,15 +243,9 @@ const SimpleComponent = (props: {
               <ImgLogo1>
                 <img src={ino1} style={imagestyle2} className="report-image" />
               </ImgLogo1>
-              <ImgLogo2>
-                <img src={ino2} style={imagestyle3} className="report-image" />
-              </ImgLogo2>
               <ImgLogo3>
                 <img src={ino1} style={imagestyle2} className="report-image" />
               </ImgLogo3>
-              <ImgLogo4>
-                <img src={ino2} style={imagestyle3} className="report-image" />
-              </ImgLogo4>
             </ReportContainer>
           </div>
         );
@@ -312,63 +304,63 @@ const ReportDetail = () => {
     };
   }, []);
 
-  if (!AuthStore.getAccessToken()) {
+  /*if (!AuthStore.getAccessToken()) {
     ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
     AuthStore.Login();
     return <></>;
   } else if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
     ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
     return <Navigate to="/" />;
-  } else
-    return (
-      <div>
-        {isMobile ? (
-          <ReportpageStyle2 height={reportDatas.length}>
-            <ImgBody>
-              <SimpleComponent
-                printRef={componentRef}
-                reportDatas={reportDatas}
-              />
-            </ImgBody>
-            <ReactToPrint
-              content={() => componentRef.current}
-              trigger={() => (
-                <ButtonBody>
-                  <PrintButton ref={buttonRef}>출력</PrintButton>
-                </ButtonBody>
-              )}
-              onAfterPrint={() => {
-                if (isAutoPrint) {
-                  navigate('/data-room');
-                }
-              }}
+  } else*/
+  return (
+    <div>
+      {isMobile ? (
+        <ReportpageStyle2 height={reportDatas.length}>
+          <ImgBody>
+            <SimpleComponent
+              printRef={componentRef}
+              reportDatas={reportDatas}
             />
-          </ReportpageStyle2>
-        ) : (
-          <ReportpageStyle height={reportDatas.length}>
-            <ImgBody>
-              <SimpleComponent
-                printRef={componentRef}
-                reportDatas={reportDatas}
-              />
-            </ImgBody>
-            <ReactToPrint
-              content={() => componentRef.current}
-              trigger={() => (
-                <ButtonBody>
-                  <PrintButton ref={buttonRef}>출력</PrintButton>
-                </ButtonBody>
-              )}
-              onAfterPrint={() => {
-                if (isAutoPrint) {
-                  navigate('/data-room');
-                }
-              }}
+          </ImgBody>
+          <ReactToPrint
+            content={() => componentRef.current}
+            trigger={() => (
+              <ButtonBody>
+                <PrintButton ref={buttonRef}>출력</PrintButton>
+              </ButtonBody>
+            )}
+            onAfterPrint={() => {
+              if (isAutoPrint) {
+                navigate('/data-room');
+              }
+            }}
+          />
+        </ReportpageStyle2>
+      ) : (
+        <ReportpageStyle height={reportDatas.length}>
+          <ImgBody>
+            <SimpleComponent
+              printRef={componentRef}
+              reportDatas={reportDatas}
             />
-          </ReportpageStyle>
-        )}
-      </div>
-    );
+          </ImgBody>
+          <ReactToPrint
+            content={() => componentRef.current}
+            trigger={() => (
+              <ButtonBody>
+                <PrintButton ref={buttonRef}>출력</PrintButton>
+              </ButtonBody>
+            )}
+            onAfterPrint={() => {
+              if (isAutoPrint) {
+                navigate('/data-room');
+              }
+            }}
+          />
+        </ReportpageStyle>
+      )}
+    </div>
+  );
 };
 
 export default ReportDetail;
