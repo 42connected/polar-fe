@@ -22,7 +22,6 @@ import {
 } from '@mui/material';
 import theme from '../../styles/theme';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
-import { MENTORING_STATUS } from './modal/apply-detail-modal';
 
 const NoneDrag = styled.div`
   width: 100%;
