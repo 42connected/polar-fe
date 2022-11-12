@@ -353,6 +353,7 @@ function DataRoom() {
                     color="primary"
                     showFirstButton
                     showLastButton
+                    page={page}
                     onChange={(_, page) => {
                       setPage(page);
                       setQuery({ ...query, page: page });
