@@ -13,11 +13,8 @@ export const ReportContainer = styled.span<{
   height: 100%;
   width: 100%;
   grid-template-rows:
-    10.7rem 5.8rem 0.6rem 4rem 0.6rem 3.9rem 4.1rem 5.3rem minmax(
-      max-content,
-      5.3rem
-    )
-    8rem 24rem 26rem 0rem 10.7rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem
+    10.7rem 5.8rem 0.6rem 4rem 0.6rem 3.9rem 4.1rem 5.3rem 12.5rem
+    8rem 24rem 26rem 3rem 10.7rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem
     9.5rem;
   grid-template-columns: 7rem 8.5rem 5.5rem 17rem 5.7rem 7rem 18rem;
   grid-template-areas:
@@ -368,7 +365,7 @@ export const SignText = styled.div`
 
 export const MentoSign = styled.span`
   position: absolute;
-  margin-left: 17rem;
+  margin-left: 11vw;
   align-items: center;
   align-content: center;
   justify-content: center;
@@ -631,7 +628,6 @@ export const PlaceBox2 = styled.section`
   grid-row-start: 9;
   margin-left: 0.1rem;
   border: 1px solid black;
-  border-bottom: 1px solid black;
   text-align: left;
   padding-top: 1.2rem;
   padding-bottom: 1.3rem;

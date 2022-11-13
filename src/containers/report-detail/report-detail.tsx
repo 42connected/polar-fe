@@ -61,13 +61,13 @@ import LoadingStore from '../../states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import { NewDateKr } from '../../states/date-kr';
 
-const ReportpageStyle = styled.body<{
+const ReportpageStyle = styled.div<{
   height: number;
 }>`
   background-color: ${theme.colors.backgoundWhite};
   margin-left: 40rem;
   width: 100%;
-  height: ${props => props.height * 240 + 'vh'};
+  height: ${props => props.height * 200 + 'vh'};
   margin-left: 0;
 `;
 
@@ -77,7 +77,7 @@ const ReportpageStyle2 = styled.div<{
   background-color: ${theme.colors.backgoundWhite};
   margin-left: 40rem;
   width: 100%;
-  height: ${props => props.height * 280 + 'vh'};
+  height: ${props => props.height * 200 + 'vh'};
   margin-left: 0;
 `;
 
@@ -123,11 +123,20 @@ const PrintButton = styled.button`
   box-shadow: ${theme.shadow.buttonShadow};
 `;
 
+const TableStyled = styled.table`
+  page-break-after: always;
+`;
+
+const PlaceBoxStyled = styled.div<{ len: number }>`
+  ${props => (props.len > 200 ? 'font-size: 1rem' : 'font-size: 1.6rem')};
+`;
+
 const SimpleComponent = (props: {
   printRef: any;
   reportDatas: reportsPro[];
 }) => {
   const { printRef, reportDatas } = props;
+
   return (
     <div ref={printRef}>
       {reportDatas?.map((reportdata: reportsPro, index: number, origin) => {
@@ -176,12 +185,15 @@ const SimpleComponent = (props: {
               </MentorNameBox>
               <Cadet>멘티이름</Cadet>
               <PlaceBox2>
-                {reportdata?.cadets.name +
-                  '(' +
-                  reportdata?.cadets.intraId +
-                  ')' +
-                  ', ' +
-                  reportdata?.extraCadets}
+                <PlaceBoxStyled len={reportdata?.extraCadets.length}>
+                  {console.log(reportdata?.extraCadets.length)}
+                  {reportdata?.cadets.name +
+                    '(' +
+                    reportdata?.cadets.intraId +
+                    ')' +
+                    ', ' +
+                    reportdata?.extraCadets}
+                </PlaceBoxStyled>
               </PlaceBox2>
               <SubTitle5>멘토링개요</SubTitle5>
               <ContentTitle1>주제</ContentTitle1>
@@ -304,63 +316,63 @@ const ReportDetail = () => {
     };
   }, []);
 
-  /*if (!AuthStore.getAccessToken()) {
+  if (!AuthStore.getAccessToken()) {
     ErrorStore.on('로그인이 필요한 서비스입니다.', ERROR_DEFAULT_VALUE.TITLE);
     AuthStore.Login();
     return <></>;
   } else if (AuthStore.getUserRole() !== USER_ROLES.BOCAL) {
     ErrorStore.on('접근 권한이 없습니다.', ERROR_DEFAULT_VALUE.TITLE);
     return <Navigate to="/" />;
-  } else*/
-  return (
-    <div>
-      {isMobile ? (
-        <ReportpageStyle2 height={reportDatas.length}>
-          <ImgBody>
-            <SimpleComponent
-              printRef={componentRef}
-              reportDatas={reportDatas}
+  } else
+    return (
+      <div>
+        {isMobile ? (
+          <ReportpageStyle2 height={reportDatas.length}>
+            <ImgBody>
+              <SimpleComponent
+                printRef={componentRef}
+                reportDatas={reportDatas}
+              />
+            </ImgBody>
+            <ReactToPrint
+              content={() => componentRef.current}
+              trigger={() => (
+                <ButtonBody>
+                  <PrintButton ref={buttonRef}>출력</PrintButton>
+                </ButtonBody>
+              )}
+              onAfterPrint={() => {
+                if (isAutoPrint) {
+                  navigate('/data-room');
+                }
+              }}
             />
-          </ImgBody>
-          <ReactToPrint
-            content={() => componentRef.current}
-            trigger={() => (
-              <ButtonBody>
-                <PrintButton ref={buttonRef}>출력</PrintButton>
-              </ButtonBody>
-            )}
-            onAfterPrint={() => {
-              if (isAutoPrint) {
-                navigate('/data-room');
-              }
-            }}
-          />
-        </ReportpageStyle2>
-      ) : (
-        <ReportpageStyle height={reportDatas.length}>
-          <ImgBody>
-            <SimpleComponent
-              printRef={componentRef}
-              reportDatas={reportDatas}
+          </ReportpageStyle2>
+        ) : (
+          <ReportpageStyle height={reportDatas.length}>
+            <ImgBody>
+              <SimpleComponent
+                printRef={componentRef}
+                reportDatas={reportDatas}
+              />
+            </ImgBody>
+            <ReactToPrint
+              content={() => componentRef.current}
+              trigger={() => (
+                <ButtonBody>
+                  <PrintButton ref={buttonRef}>출력</PrintButton>
+                </ButtonBody>
+              )}
+              onAfterPrint={() => {
+                if (isAutoPrint) {
+                  navigate('/data-room');
+                }
+              }}
             />
-          </ImgBody>
-          <ReactToPrint
-            content={() => componentRef.current}
-            trigger={() => (
-              <ButtonBody>
-                <PrintButton ref={buttonRef}>출력</PrintButton>
-              </ButtonBody>
-            )}
-            onAfterPrint={() => {
-              if (isAutoPrint) {
-                navigate('/data-room');
-              }
-            }}
-          />
-        </ReportpageStyle>
-      )}
-    </div>
-  );
+          </ReportpageStyle>
+        )}
+      </div>
+    );
 };
 
 export default ReportDetail;
