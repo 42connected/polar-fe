@@ -10,12 +10,10 @@ export const ReportContainer = styled.span<{
   ${theme.fontSize.sizeExtraSmall};
   ${theme.font.nanumGothic};
   display: grid;
-  height: 100%;
   width: 100%;
   grid-template-rows:
     10.7rem 5.8rem 0.6rem 4rem 0.6rem 3.9rem 4.1rem 5.3rem 12.5rem
-    8rem 24rem 26rem 3rem 10.7rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem
-    9.5rem;
+    8rem 24rem 26rem 0rem 10rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem;
   grid-template-columns: 7rem 8.5rem 5.5rem 17rem 5.7rem 7rem 18rem;
   grid-template-areas:
     'side img1 . . . . side'
@@ -38,14 +36,13 @@ export const ReportContainer = styled.span<{
     'side subtitle7 . . feedback2 . side'
     'side subtitle7 . . feedback3 . side'
     'side foot foot foot foot foot side'
-    '. . . num . . .';
   text-align: center;
   justify-content: center;
   grid-gap: 0.4rem;
   transition: all 0.25s ease-in-out;
   border-radius: 10px;
   margin-left: -2rem;
-  margin-top: ${props => props.index * 225 + 'rem'};
+  margin-top: ${props => props.index * 224.4 + 'rem'};
   background-color: ${theme.colors.backgoundWhite};
 `;
 
@@ -316,6 +313,7 @@ export const IsCommonBox = styled.section`
   ${theme.fontSize.sizeMedium};
   position: absolute;
   align-items: stretch;
+  text-align: center;
   grid-area: isCommon;
   height: 4.3rem;
   width: 17.3rem;
