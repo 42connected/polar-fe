@@ -7,6 +7,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { Box, ThemeProvider } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { createTheme } from '@mui/material';
+import { StringToDateKr } from '../../states/date-kr';
 
 const SearchBoxBackground = styled.div`
   position: absolute;
@@ -137,22 +138,31 @@ function BasicDatePicker({ value, setValue }: datepickertype) {
 
 interface SearchBoxProps {
   query: dataRoomQuery;
+  setPage: (page: number) => void;
   setQuery: (query: dataRoomQuery) => void;
   setSelectedList: (list: string[]) => void;
 }
 
 function SearchBox(props: SearchBoxProps) {
-  const [mentorName, setMentorName] = useState<string>();
-  const [mentorIntraId, setMentorIntraId] = useState<string>();
-  const [date, setDate] = useState<Date | null>(null);
+  const [mentorName, setMentorName] = useState<string>(
+    props.query?.mentorName ?? '',
+  );
+  const [mentorIntraId, setMentorIntraId] = useState<string>(
+    props.query?.mentorIntra ?? '',
+  );
+  const [date, setDate] = useState<Date | null>(
+    props.query?.date ? StringToDateKr(props.query?.date) : null,
+  );
 
   return (
     <form
       onSubmit={event => {
         props.setSelectedList([]);
         event.preventDefault();
+        props.setPage(1);
         props.setQuery({
           ...props.query,
+          page: 1,
           mentorName: mentorName,
           mentorIntra: mentorIntraId,
           date: date
@@ -205,8 +215,10 @@ function SearchBox(props: SearchBoxProps) {
               setMentorName('');
               setDate(null);
               props.setSelectedList([]);
+              props.setPage(1);
               props.setQuery({
                 ...props.query,
+                page: 1,
                 mentorName: undefined,
                 mentorIntra: undefined,
                 date: undefined,

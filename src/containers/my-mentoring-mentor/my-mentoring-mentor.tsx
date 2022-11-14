@@ -26,10 +26,6 @@ import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 const NoneDrag = styled.div`
   width: 100%;
   height: calc(100vh - 205px);
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   height: 100%;
 `;
 
