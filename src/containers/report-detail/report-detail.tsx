@@ -51,6 +51,8 @@ import {
   ImgLogo4,
   MentoSign,
   SignText,
+  PlaceBox2,
+  Cadet,
 } from './reportStyled';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
@@ -59,13 +61,13 @@ import LoadingStore from '../../states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import { NewDateKr } from '../../states/date-kr';
 
-const ReportpageStyle = styled.body<{
+const ReportpageStyle = styled.div<{
   height: number;
 }>`
   background-color: ${theme.colors.backgoundWhite};
   margin-left: 40rem;
   width: 100%;
-  height: ${props => props.height * 240 + 'vh'};
+  height: ${props => props.height * 200 + 'vh'};
   margin-left: 0;
 `;
 
@@ -75,7 +77,7 @@ const ReportpageStyle2 = styled.div<{
   background-color: ${theme.colors.backgoundWhite};
   margin-left: 40rem;
   width: 100%;
-  height: ${props => props.height * 280 + 'vh'};
+  height: ${props => props.height * 200 + 'vh'};
   margin-left: 0;
 `;
 
@@ -121,11 +123,20 @@ const PrintButton = styled.button`
   box-shadow: ${theme.shadow.buttonShadow};
 `;
 
+const TableStyled = styled.table`
+  page-break-after: always;
+`;
+
+const PlaceBoxStyled = styled.div<{ len: number }>`
+  ${props => (props.len > 200 ? 'font-size: 1rem' : 'font-size: 1.6rem')};
+`;
+
 const SimpleComponent = (props: {
   printRef: any;
   reportDatas: reportsPro[];
 }) => {
   const { printRef, reportDatas } = props;
+
   return (
     <div ref={printRef}>
       {reportDatas?.map((reportdata: reportsPro, index: number, origin) => {
@@ -172,16 +183,17 @@ const SimpleComponent = (props: {
                   <img src={reportdata?.signatureUrl} style={signimagestyle} />
                 </MentoSign>
               </MentorNameBox>
-              <SubTitle9>멘티이름</SubTitle9>
-              <CadetNameBox>
-                {reportdata?.cadets.name +
-                  '(' +
-                  reportdata?.cadets.intraId +
-                  ')' +
-                  ', ' +
-                  reportdata?.extraCadets}
-              </CadetNameBox>
-              <NoneValue3></NoneValue3>
+              <Cadet>멘티이름</Cadet>
+              <PlaceBox2>
+                <PlaceBoxStyled len={reportdata?.extraCadets.length}>
+                  {reportdata?.cadets.name +
+                    '(' +
+                    reportdata?.cadets.intraId +
+                    ')' +
+                    ', ' +
+                    reportdata?.extraCadets}
+                </PlaceBoxStyled>
+              </PlaceBox2>
               <SubTitle5>멘토링개요</SubTitle5>
               <ContentTitle1>주제</ContentTitle1>
               <ContentBody1>{reportdata?.topic}</ContentBody1>
@@ -194,7 +206,6 @@ const SimpleComponent = (props: {
                 <br /> 남기는 말
               </ContentTitle3>
               <ContentBody3>{reportdata?.feedbackMessage}</ContentBody3>
-              <Number1> - 1 -</Number1>
               <SubTitle6>증빙사진</SubTitle6>
               <ContentBody4>
                 {reportdata?.imageUrl[0] ? (
@@ -230,7 +241,6 @@ const SimpleComponent = (props: {
                 <br />
               </ContentBody5>
               <ContentBody6>(재)이노베이션 아카데미 귀하</ContentBody6>
-              <Number2> - 2 -</Number2>
               {reportdata?.cadets.isCommon ? (
                 <IsCommonBox> o </IsCommonBox>
               ) : (
@@ -244,15 +254,9 @@ const SimpleComponent = (props: {
               <ImgLogo1>
                 <img src={ino1} style={imagestyle2} className="report-image" />
               </ImgLogo1>
-              <ImgLogo2>
-                <img src={ino2} style={imagestyle3} className="report-image" />
-              </ImgLogo2>
               <ImgLogo3>
                 <img src={ino1} style={imagestyle2} className="report-image" />
               </ImgLogo3>
-              <ImgLogo4>
-                <img src={ino2} style={imagestyle3} className="report-image" />
-              </ImgLogo4>
             </ReportContainer>
           </div>
         );
@@ -320,7 +324,7 @@ const ReportDetail = () => {
     return <Navigate to="/" />;
   } else
     return (
-      <div>
+      <>
         {isMobile ? (
           <ReportpageStyle2 height={reportDatas.length}>
             <ImgBody>
@@ -366,7 +370,7 @@ const ReportDetail = () => {
             />
           </ReportpageStyle>
         )}
-      </div>
+      </>
     );
 };
 

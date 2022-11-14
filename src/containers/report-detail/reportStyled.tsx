@@ -10,39 +10,39 @@ export const ReportContainer = styled.span<{
   ${theme.fontSize.sizeExtraSmall};
   ${theme.font.nanumGothic};
   display: grid;
-  height: 100%;
   width: 100%;
-  grid-template-rows: 10.7rem 5.8rem 0.6rem 4rem 0.6rem 3.9rem 4.1rem 5.3rem 0.6rem 8rem 24rem 26rem 11rem 10.7rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem 9.5rem;
+  grid-template-rows:
+    10.7rem 5.8rem 0.6rem 4rem 0.6rem 3.9rem 4.1rem 5.3rem 12.5rem
+    8rem 24rem 26rem 0rem 10rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem;
   grid-template-columns: 7rem 8.5rem 5.5rem 17rem 5.7rem 7rem 18rem;
   grid-template-areas:
-    'side img1 . . . img2 side'
+    'side img1 . . . . side'
     'side title title title title title side'
     '. . . . . . .'
     'side subtitle1 minititle1 isCommon minititle2 notCommon side'
     '. . . . . . .'
     'side subtitle2 . date . time side'
     'side subtitle3 . place . . side '
-    'side subtitle4 . m_name . c_name side'
-    '. . . . . . .'
+    'side subtitle4 . m_name . . .'
+    'c_name side . . . . .'
     'side subtitle5 . . subject . side'
     'side subtitle5 . . content . side'
     'side subtitle5 . . comment . side'
     '. . . num . . .'
-    'side img1 . . . img2 side'
+    'side img1 . . . . side'
     'side subtitle6 . img3 . . side'
     'side subtitle7 . . feedbacktitle . side'
     'side subtitle7 . . feedback1 . side'
     'side subtitle7 . . feedback2 . side'
     'side subtitle7 . . feedback3 . side'
     'side foot foot foot foot foot side'
-    '. . . num . . .';
   text-align: center;
   justify-content: center;
   grid-gap: 0.4rem;
   transition: all 0.25s ease-in-out;
   border-radius: 10px;
   margin-left: -2rem;
-  margin-top: ${props => props.index * 225 + 'rem'};
+  margin-top: ${props => props.index * 224.4 + 'rem'};
   background-color: ${theme.colors.backgoundWhite};
 `;
 
@@ -139,7 +139,7 @@ export const NoneValue3 = styled.section`
   box-sizing: border-box;
   grid-column-start: 2;
   grid-column-end: 7;
-  grid-row-start: 9;
+  grid-row-start: 10;
   border: 1px solid black;
   height: 1.5rem;
   width: 56.8rem;
@@ -171,7 +171,7 @@ export const SubTitle2 = styled.section`
   grid-column-start: 2;
   grid-row-start: 6;
   height: 4.4rem;
-  width: 9.1rem;
+  width: 9rem;
   text-align: center;
   padding-top: 1.3rem;
 `;
@@ -181,12 +181,12 @@ export const SubTitle3 = styled.section`
   background-color: ${theme.colors.grayFive};
   position: absolute;
   box-sizing: border-box;
-  border-left: 1px solid black;
-  border-top: 1px solid black;
+  border: 1px solid black;
+  border-bottom: 0;
   grid-column-start: 2;
   grid-row-start: 7;
   height: 4.5rem;
-  width: 9.1rem;
+  width: 9rem;
   text-align: center;
   padding-top: 1.3rem;
 `;
@@ -201,7 +201,7 @@ export const SubTitle4 = styled.section`
   grid-column-start: 2;
   grid-row-start: 8;
   height: 6rem;
-  width: 9.1rem;
+  width: 9rem;
   text-align: center;
   padding-top: 2rem;
 `;
@@ -300,10 +300,11 @@ export const SubTitle9 = styled.section`
   position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
-  grid-column-start: 5;
-  grid-row-start: 8;
+  border-right: 0px;
+  grid-column-start: 2;
+  grid-row-start: 9;
   height: 6rem;
-  width: 6.2rem;
+  width: 9.1rem;
   text-align: center;
   padding-top: 2rem;
 `;
@@ -312,6 +313,7 @@ export const IsCommonBox = styled.section`
   ${theme.fontSize.sizeMedium};
   position: absolute;
   align-items: stretch;
+  text-align: center;
   grid-area: isCommon;
   height: 4.3rem;
   width: 17.3rem;
@@ -338,14 +340,14 @@ export const MentorNameBox = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   position: absolute;
   align-items: stretch;
-  height: 6rem;
-  width: 23rem;
+  height: 5.6rem;
+  width: 47.8rem;
   grid-column-start: 3;
-  grid-column-end: 4;
+  grid-column-end: 7;
   grid-row-start: 8;
   border: 1px solid black;
   border-left: 0;
-  text-align: left;
+  text-align: center;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -361,7 +363,7 @@ export const SignText = styled.div`
 
 export const MentoSign = styled.span`
   position: absolute;
-  margin-left: 7rem;
+  margin-left: 11vw;
   align-items: center;
   align-content: center;
   justify-content: center;
@@ -374,9 +376,10 @@ export const CadetNameBox = styled.section`
   display: flex;
   align-items: stretch;
   height: 6rem;
-  width: 17.3rem;
-  grid-column-start: 6;
-  grid-row-start: 8;
+  //width: 50.3rem;
+  grid-column-start: 3;
+  grid-column-start: 7;
+  grid-row-start: 9;
   border: 1px solid black;
   text-align: left;
   padding-top: 0.5rem;
@@ -401,13 +404,14 @@ export const PlaceBox = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   position: absolute;
   height: 4.3rem;
-  width: 46.6rem;
+  width: 46.7rem;
   grid-column-start: 3;
   grid-column-end: 7;
   grid-row-start: 7;
   margin-left: 0.1rem;
   border: 1px solid black;
   border-bottom: 0px;
+  border-left: 0px;
   text-align: left;
   padding-top: 1.2rem;
   padding-left: 1rem;
@@ -609,4 +613,42 @@ export const Number2 = styled.section`
 
 export const Titleplus = styled.span`
   font-weight: bold;
+`;
+
+export const PlaceBox2 = styled.section`
+  ${theme.fontSize.sizeExtraSmall};
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 46.7rem;
+  grid-column-start: 3;
+  grid-column-end: 7;
+  grid-row-start: 9;
+  margin-left: 0.1rem;
+  height: 13rem;
+  border: 1px solid black;
+  border-left: 0;
+  border-bottom: 0;
+  text-align: left;
+  padding-left: 1rem;
+`;
+
+export const Cadet = styled.section`
+  ${theme.fontSize.sizeExtraSmall};
+  background-color: ${theme.colors.grayFive};
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 1px solid black;
+  grid-column-start: 2;
+  grid-row-start: 9;
+  width: 9rem;
+  height: 13rem;
+  text-align: center;
+  padding-top: 1.3rem;
+  padding-bottom: 1.3rem;
 `;
