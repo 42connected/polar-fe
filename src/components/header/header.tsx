@@ -228,7 +228,7 @@ const Header = () => {
       {isMobile ? ( //mobile
         <HeaderStyle>
           <div className="header">
-            <Link to="/">
+            <Link to="/" reloadDocument={true}>
               <MovLogoButton>
                 <img src={logo} style={movimagestyle} className="App-logo" />
                 polar
@@ -292,7 +292,7 @@ const Header = () => {
                 >
                   <MovSuggestionButton>건의사항</MovSuggestionButton>
                 </a>
-                <Link to="/data-room">
+                <Link to="/data-room" reloadDocument={true}>
                   <MovDataRoomButton>데이터룸</MovDataRoomButton>
                 </Link>
               </div>
@@ -313,7 +313,7 @@ const Header = () => {
         //pc
         <HeaderStyle>
           <div className="header">
-            <Link to="/">
+            <Link to="/" reloadDocument={true}>
               <LogoButton>
                 <img src={logo} style={imagestyle} className="App-logo" />
                 polar
@@ -379,7 +379,7 @@ const Header = () => {
                 >
                   <SuggestionButton>건의사항</SuggestionButton>
                 </a>
-                <Link to="/data-room">
+                <Link to="/data-room" reloadDocument={true}>
                   <DataRoomButton>데이터룸</DataRoomButton>
                 </Link>
               </div>

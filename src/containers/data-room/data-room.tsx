@@ -323,6 +323,7 @@ function DataRoom() {
                       <Back onClick={onClickSearchBoxModal}></Back>
                       <SearchBox
                         query={query}
+                        setPage={setPage}
                         setQuery={setQuery}
                         setSelectedList={setSelectedList}
                       />
@@ -353,6 +354,7 @@ function DataRoom() {
                     color="primary"
                     showFirstButton
                     showLastButton
+                    page={page}
                     onChange={(_, page) => {
                       setPage(page);
                       setQuery({ ...query, page: page });
