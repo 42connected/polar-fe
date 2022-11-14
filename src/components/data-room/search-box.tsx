@@ -138,6 +138,7 @@ function BasicDatePicker({ value, setValue }: datepickertype) {
 
 interface SearchBoxProps {
   query: dataRoomQuery;
+  setPage: (page: number) => void;
   setQuery: (query: dataRoomQuery) => void;
   setSelectedList: (list: string[]) => void;
 }
@@ -158,8 +159,10 @@ function SearchBox(props: SearchBoxProps) {
       onSubmit={event => {
         props.setSelectedList([]);
         event.preventDefault();
+        props.setPage(1);
         props.setQuery({
           ...props.query,
+          page: 1,
           mentorName: mentorName,
           mentorIntra: mentorIntraId,
           date: date
@@ -212,8 +215,10 @@ function SearchBox(props: SearchBoxProps) {
               setMentorName('');
               setDate(null);
               props.setSelectedList([]);
+              props.setPage(1);
               props.setQuery({
                 ...props.query,
+                page: 1,
                 mentorName: undefined,
                 mentorIntra: undefined,
                 date: undefined,
