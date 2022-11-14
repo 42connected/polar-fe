@@ -60,6 +60,7 @@ import { debounce } from '@mui/material';
 import LoadingStore from '../../states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import { NewDateKr } from '../../states/date-kr';
+import { autoAction } from 'mobx/dist/internal';
 
 const ReportpageStyle = styled.div<{
   height: number;
@@ -82,8 +83,8 @@ const ReportpageStyle2 = styled.div<{
 `;
 
 const imagestyle1 = {
-  width: '30rem',
-  height: 'auto',
+  width: 'auto-fit',
+  height: 'auto-fit',
 };
 const imagestyle2 = {
   height: '3.6rem',
@@ -209,17 +210,28 @@ const SimpleComponent = (props: {
               <SubTitle6>증빙사진</SubTitle6>
               <ContentBody4>
                 {reportdata?.imageUrl[0] ? (
-                  <img src={reportdata?.imageUrl[0]} style={imagestyle1} />
+                  <img
+                    src={reportdata?.imageUrl[0]}
+                    style={{
+                      height: 'auto',
+                      maxWidth: '30rem',
+                      maxHeight: '30rem',
+                      minWidth: '20rem',
+                    }}
+                  />
                 ) : (
                   ''
                 )}
                 {reportdata?.imageUrl[1] ? (
-                  <img src={reportdata?.imageUrl[1]} style={imagestyle1} />
-                ) : (
-                  ''
-                )}
-                {reportdata?.imageUrl[2] ? (
-                  <img src={reportdata?.imageUrl[2]} style={imagestyle1} />
+                  <img
+                    src={reportdata?.imageUrl[1]}
+                    style={{
+                      height: 'auto',
+                      maxWidth: '30rem',
+                      maxHeight: '30rem',
+                      minWidth: '20rem',
+                    }}
+                  />
                 ) : (
                   ''
                 )}

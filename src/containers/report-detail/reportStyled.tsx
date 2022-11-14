@@ -73,7 +73,7 @@ export const ImgLogo3 = styled.section`
   grid-column-end: 3;
   grid-row-start: 14;
   margin-left: -0.2rem;
-  padding-top: 6.8rem;
+  padding-top: 6rem;
 `;
 
 export const ImgLogo4 = styled.section`
