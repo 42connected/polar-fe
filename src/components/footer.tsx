@@ -2,19 +2,18 @@ import styled from 'styled-components';
 import theme from '../styles/theme';
 
 const Container = styled.footer`
+  ${theme.font.sebangGothic};
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 9rem;
+  height: 14rem;
   color: white;
   background-color: ${theme.colors.polarSimpleMain};
-  font-size: 0.9rem;
-  ${theme.fontWeight.weightLarge};
+  font-size: 1.2rem;
   justify-content: center;
   text-align: center;
   position: relative;
   bottom: 0;
-  line-height: 120%;
 `;
 
 const A = styled.a`
@@ -22,11 +21,9 @@ const A = styled.a`
   color: white;
 `;
 const FooterDiv = styled.div`
-${theme.font.sebangGothic};
   display: flex;
   justify-content: space-between;
-  padding: 0 3% 1.8rem 3%;
-  ${theme.fontWeight.weightLarge};
+  padding: 2rem 3% 1rem 3%;
 `;
 const Adiv = styled.div`
   display: grid;
@@ -51,7 +48,7 @@ const Footer = () => {
             </A>
           </Adiv>
         </FooterDiv>
-        <div>
+        <div style={{paddingBottom:"3rem"}}>
           <div>주소 서울시 강남구 개포로 416 이노베이션 아카데미 문의</div>
           <div>copyright 2022 polar All rights reserved.</div>
           <div>폴라팀에게 문의하기 : 42polar@gmail.com</div>
