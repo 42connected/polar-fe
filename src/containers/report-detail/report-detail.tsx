@@ -68,7 +68,6 @@ const ReportpageStyle = styled.div<{
   background-color: ${theme.colors.backgoundWhite};
   margin-left: 40rem;
   width: 100%;
-  height: ${props => props.height * 200 + 'vh'};
   margin-left: 0;
 `;
 
@@ -78,7 +77,6 @@ const ReportpageStyle2 = styled.div<{
   background-color: ${theme.colors.backgoundWhite};
   margin-left: 40rem;
   width: 100%;
-  height: ${props => props.height * 200 + 'vh'};
   margin-left: 0;
 `;
 
@@ -197,16 +195,22 @@ const SimpleComponent = (props: {
               </PlaceBox2>
               <SubTitle5>멘토링개요</SubTitle5>
               <ContentTitle1>주제</ContentTitle1>
-              <ContentBody1>{reportdata?.topic}</ContentBody1>
+              <ContentBody1 len={reportdata?.topic.length}>
+                {reportdata?.topic}
+              </ContentBody1>
               <ContentTitle2>내용</ContentTitle2>
-              <ContentBody2>{reportdata?.content}</ContentBody2>
+              <ContentBody2 len={reportdata?.content.length}>
+                {reportdata?.content}
+              </ContentBody2>
               <ContentTitle3>
                 교육생
                 <br />
                 에게
                 <br /> 남기는 말
               </ContentTitle3>
-              <ContentBody3>{reportdata?.feedbackMessage}</ContentBody3>
+              <ContentBody3 len={reportdata?.feedbackMessage.length}>
+                {reportdata?.feedbackMessage}
+              </ContentBody3>
               <SubTitle6>증빙사진</SubTitle6>
               <ContentBody4>
                 {reportdata?.imageUrl[0] ? (
@@ -215,7 +219,7 @@ const SimpleComponent = (props: {
                     style={{
                       height: 'auto',
                       maxWidth: '30rem',
-                      maxHeight: '30rem',
+                      maxHeight: '35rem',
                       minWidth: '20rem',
                     }}
                   />
@@ -228,7 +232,7 @@ const SimpleComponent = (props: {
                     style={{
                       height: 'auto',
                       maxWidth: '30rem',
-                      maxHeight: '30rem',
+                      maxHeight: '35rem',
                       minWidth: '20rem',
                     }}
                   />
