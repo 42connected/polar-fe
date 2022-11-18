@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
-import ReportStore from '../../states/repoort/ReportStore';
-import defaultTheme from '../../styles/theme';
-import { REPORT_STATE } from './report-form';
+import ReportStore from '@/states/repoort/ReportStore';
+import defaultTheme from '@/styles/theme';
+import { REPORT_STATE } from '@/containers/reports/report-form';
 
 const PageTitle = styled.div`
   ${defaultTheme.font.sebangGothic};

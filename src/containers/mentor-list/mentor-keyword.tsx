@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import { useParams } from 'react-router-dom';
-import KeywordStore from '../../states/mentor-list/KeywordStore';
-import MentorsStore from '../../states/mentor-list/MentorsStore';
-import defaultTheme from '../../styles/theme';
+import KeywordStore from '@/states/mentor-list/KeywordStore';
+import MentorsStore from '@/states/mentor-list/MentorsStore';
+import defaultTheme from '@/styles/theme';
 
 export const KeywordButton = styled.button`
   ${defaultTheme.font.sebangGothic};

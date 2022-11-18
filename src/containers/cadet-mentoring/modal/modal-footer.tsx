@@ -2,13 +2,11 @@ import styled from '@emotion/styled';
 import {
   axiosWithData,
   AXIOS_METHOD_WITH_DATA,
-} from '../../../context/axios-interface';
-import AuthStore from '../../../states/auth/AuthStore';
-import ErrorStore, {
-  ERROR_DEFAULT_VALUE,
-} from '../../../states/error/ErrorStore';
-import LoadingStore from '../../../states/loading/LoadingStore';
-import defaultTheme from '../../../styles/theme';
+} from '@/context/axios-interface';
+import AuthStore from '@/states/auth/AuthStore';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
+import LoadingStore from '@/states/loading/LoadingStore';
+import defaultTheme from '@/styles/theme';
 
 const ModalFooterContainer = styled.div`
   display: flex;

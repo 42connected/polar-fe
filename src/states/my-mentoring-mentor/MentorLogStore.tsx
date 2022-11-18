@@ -2,10 +2,10 @@ import { action, makeObservable, observable, runInAction } from 'mobx';
 import {
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
-} from '../../context/axios-interface';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
-import LoadingStore from '../loading/LoadingStore';
-import UserJoinStore from '../user-join/UserJoinStore';
+} from '@/context/axios-interface';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
+import LoadingStore from '@/states/loading/LoadingStore';
+import UserJoinStore from '@/states/user-join/UserJoinStore';
 
 export interface MentoringLogs {
   id: string;

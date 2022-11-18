@@ -6,10 +6,10 @@ import {
   ModalBackground,
   ModalButton,
   ModalButtonContainer,
-} from '../../components/modal/modal-styled';
-import AuthStore from '../../states/auth/AuthStore';
-import ReportStore from '../../states/repoort/ReportStore';
-import defaultTheme from '../../styles/theme';
+} from '@/components/modal/modal-styled';
+import AuthStore from '@/states/auth/AuthStore';
+import ReportStore from '@/states/repoort/ReportStore';
+import defaultTheme from '@/styles/theme';
 
 const CanvasModalBox = styled.div`
   display: flex;

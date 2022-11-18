@@ -2,26 +2,29 @@ import styled from '@emotion/styled';
 import { Container } from '@mui/system';
 import { observer } from 'mobx-react-lite';
 import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
-import defaultTheme from '../../styles/theme';
-import { TableTitle } from './table-title';
-import { TableColumnLine, TableRow } from './table-row';
+import defaultTheme from '@/styles/theme';
+import { TableTitle } from '@/containers/my-mentoring-mentor/table-title';
+import {
+  TableColumnLine,
+  TableRow,
+} from '@/containers/my-mentoring-mentor/table-row';
 import MentorLogStore, {
   LOGS_PER_PAGE,
   MentoringLogs,
-} from '../../states/my-mentoring-mentor/MentorLogStore';
+} from '@/states/my-mentoring-mentor/MentorLogStore';
 import { useEffect, useState } from 'react';
-import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
-import { Email } from './email';
-import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
-import { ApplyModal } from './modal/modal';
+import AuthStore, { USER_ROLES } from '@/states/auth/AuthStore';
+import { Email } from '@/containers/my-mentoring-mentor/email';
+import MentorStore from '@/states/my-mentoring-mentor/MentorStore';
+import { ApplyModal } from '@/containers/my-mentoring-mentor/modal/modal';
 import {
   createTheme,
   Pagination,
   PaginationItem,
   ThemeProvider,
 } from '@mui/material';
-import theme from '../../styles/theme';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
+import theme from '@/styles/theme';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
 
 const NoneDrag = styled.div`
   width: 100%;

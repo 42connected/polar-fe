@@ -1,15 +1,15 @@
-import { ReportRowContainer } from './row-styled';
+import { ReportRowContainer } from '@/containers/reports/row-styled';
 import styled from '@emotion/styled';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import defaultTheme from '../../styles/theme';
-import ReportStore from '../../states/repoort/ReportStore';
-import { REPORT_STATE } from './report-form';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
-import AuthStore from '../../states/auth/AuthStore';
-import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
-import { CanvasModal } from './canvas-modal';
+import defaultTheme from '@/styles/theme';
+import ReportStore from '@/states/repoort/ReportStore';
+import { REPORT_STATE } from '@/containers/reports/report-form';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
+import AuthStore from '@/states/auth/AuthStore';
+import { OneButtonModal } from '@/components/modal/one-button-modal/one-button-modal';
+import { CanvasModal } from '@/containers/reports/canvas-modal';
 import { observer } from 'mobx-react-lite';
 
 const Left = styled.div`

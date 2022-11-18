@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
-import AuthStore from '../../states/auth/AuthStore';
-import ReportStore from '../../states/repoort/ReportStore';
-import defaultTheme from '../../styles/theme';
-import { MENTORING_STATUS } from './modal/apply-detail-modal';
+import AuthStore from '@/states/auth/AuthStore';
+import ReportStore from '@/states/repoort/ReportStore';
+import defaultTheme from '@/styles/theme';
+import { MENTORING_STATUS } from '@/containers/my-mentoring-mentor/modal/apply-detail-modal';
 
 const TableColumnReport = styled.div`
   display: flex;

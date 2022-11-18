@@ -2,10 +2,10 @@ import {
   ReportRowContainer,
   ReportRowTitle,
   ReportRowContent,
-} from './row-styled';
+} from '@/containers/reports/row-styled';
 import styled from '@emotion/styled';
 import { Rating } from '@mui/material';
-import defaultTheme from '../../styles/theme';
+import defaultTheme from '@/styles/theme';
 
 const ReportRowContentTitie = styled.div`
   width: 100%;

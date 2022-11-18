@@ -1,6 +1,6 @@
-import defaultTheme from '../../styles/theme';
+import defaultTheme from '@/styles/theme';
 import styled from 'styled-components';
-import theme from '../../styles/theme';
+import theme from '@/styles/theme';
 
 export const ContainersPc = styled.body`
   display: grid;

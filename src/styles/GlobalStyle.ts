@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import defaultTheme from './theme';
+import defaultTheme from '@/styles/theme';
 
 const GlobalStyle = createGlobalStyle`
   button{

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { CommentProps } from '../../interface/mentor-detail/comment-props.interface';
+import { CommentProps } from '@/interface/mentor-detail/comment-props.interface';
 
 function CommentComponent(props: CommentProps | any) {
   return (
