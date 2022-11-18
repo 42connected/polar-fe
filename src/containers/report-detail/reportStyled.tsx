@@ -2,9 +2,7 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 /*grid*/
-export const ReportContainer = styled.div<{
-  index: number;
-}>`
+export const ReportContainer = styled.div`
   position: absolute;
   left: 0;
   ${theme.fontSize.sizeExtraSmall};

@@ -154,7 +154,7 @@ const SimpleComponent = (props: {
                 </table>
               </>
             ) : null}
-            <ReportContainer index={index}>
+            <ReportContainer>
               <Title>
                 <Titleplus>42 SEOUL</Titleplus> 멘토링 보고서(멘토용)
               </Title>
