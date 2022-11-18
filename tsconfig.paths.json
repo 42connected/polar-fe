@@ -7,13 +7,13 @@
       "@/components/*": ["src/components/*"],
       "@/containers/*": ["src/containers/*"],
       "@/context/*": ["src/context/*"],
+      "@/hooks/*": ["src/hooks/*"],
       "@/interface/*": ["src/interface/*"],
       "@/interfaces/*": ["src/interfaces/*"],
       "@/states/*": ["src/states/*"],
       "@/styles/*": ["src/styles/*"],
       "@/utils/*": ["src/utils/*"],
-      "@/hooks/*": ["src/hooks/*"],
-      "@/services/*": ["src/services/*"]
+      "@/services/*": ["src/services/*"],
     }
   }
 }
