@@ -12,8 +12,8 @@ export const ReportContainer = styled.span<{
   display: grid;
   width: 100%;
   grid-template-rows:
-    10.7rem 5.8rem 0.6rem 4rem 0.6rem 3.9rem 4.1rem 5.3rem 12.5rem
-    8rem 24rem 26rem 0rem 10rem 62.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem;
+    6rem 5.8rem 0.6rem 4rem 0.6rem 3.9rem 4.1rem 5.3rem 12.5rem
+    8rem 27rem 27rem 0rem 10rem 75.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem;
   grid-template-columns: 7rem 8.5rem 5.5rem 17rem 5.7rem 7rem 18rem;
   grid-template-areas:
     'side img1 . . . . side'
@@ -42,7 +42,6 @@ export const ReportContainer = styled.span<{
   transition: all 0.25s ease-in-out;
   border-radius: 10px;
   margin-left: -2rem;
-  margin-top: ${props => props.index * 224.4 + 'rem'};
   background-color: ${theme.colors.backgoundWhite};
 `;
 
@@ -53,7 +52,7 @@ export const ImgLogo1 = styled.section`
   grid-column-start: 2;
   grid-column-end: 3;
   margin-left: -0.2rem;
-  padding-top: 5rem;
+  padding-top: 2rem;
 `;
 
 export const ImgLogo2 = styled.section`
@@ -214,7 +213,7 @@ export const SubTitle5 = styled.section`
   border: 1px solid black;
   grid-column-start: 2;
   grid-row-start: 10;
-  height: 58.8rem;
+  height: 63.3rem;
   width: 9.1rem;
   text-align: center;
   padding-top: 30rem;
@@ -228,7 +227,7 @@ export const SubTitle6 = styled.section`
   border: 1px solid black;
   grid-column-start: 2;
   grid-row-start: 15;
-  height: 62.7rem;
+  height: 75.7rem;
   width: 9.1rem;
   text-align: center;
   padding-top: 30rem;
@@ -457,7 +456,7 @@ export const ContentTitle2 = styled.section`
   border-left: 1px solid black;
   grid-column-start: 3;
   grid-row-start: 11;
-  height: 24.6rem;
+  height: 27.5rem;
   margin-top: -0.15rem;
   width: 5.5rem;
   text-align: center;
@@ -472,14 +471,14 @@ export const ContentTitle3 = styled.section`
   border: 1px solid black;
   grid-column-start: 3;
   grid-row-start: 12;
-  height: 26rem;
+  height: 27.5rem;
   width: 5.5rem;
   text-align: center;
   padding-top: 10rem;
 `;
 
-export const ContentBody1 = styled.section`
-  ${theme.fontSize.sizeSmall};
+export const ContentBody1 = styled.section<{ len: number }>`
+  ${props => (props.len > 100 ? 'font-size: 1rem' : 'font-size: 1.3rem')};
   background-color: ${theme.colors.graySix};
   display: flex;
   flex-wrap: wrap;
@@ -491,13 +490,13 @@ export const ContentBody1 = styled.section`
   height: 8.3rem;
   width: 42.5rem;
   text-align: left;
-  padding-top: 1.3rem;
+  padding-top: 0.8rem;
   margin-left: -0.5rem;
-  padding-left: 1rem;
+  padding-left: 0.5rem;
 `;
 
-export const ContentBody2 = styled.section`
-  ${theme.fontSize.sizeSmall};
+export const ContentBody2 = styled.section<{ len: number }>`
+  ${props => (props.len > 400 ? 'font-size: 1rem' : 'font-size: 1.3rem')};
   background-color: ${theme.colors.graySix};
   position: absolute;
   box-sizing: border-box;
@@ -507,28 +506,29 @@ export const ContentBody2 = styled.section`
   margin-top: -0.1rem;
   grid-column-start: 4;
   grid-row-start: 11;
-  height: 24.5rem;
+  height: 27.5rem;
   width: 42.5rem;
   text-align: left;
-  padding-top: 1.3rem;
+  padding-top: 0.5rem;
   margin-left: -0.5rem;
-  padding-left: 1rem;
+  padding-left: 0.5rem;
 `;
 
-export const ContentBody3 = styled.section`
-  ${theme.fontSize.sizeSmall};
+export const ContentBody3 = styled.section<{ len: number }>`
+  ${props => (props.len > 400 ? 'font-size: 1rem' : 'font-size: 1.3rem')};
   background-color: ${theme.colors.graySix};
   position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   grid-column-start: 4;
   grid-row-start: 12;
-  height: 26rem;
+  height: 27.5rem;
   width: 42.5rem;
   text-align: left;
-  padding-top: 1.3rem;
+  padding-top: 0.5rem;
   margin-left: -0.55rem;
-  padding-left: 1rem;
+  padding-left: 0.5rem;
+  overflow: hidden;
 `;
 
 export const ContentBody4 = styled.section`
@@ -540,7 +540,7 @@ export const ContentBody4 = styled.section`
   grid-column-start: 3;
   grid-column-end: 4;
   grid-row-start: 15;
-  height: 62.7rem;
+  height: 75.7rem;
   width: 47.7rem;
   text-align: left;
   padding-top: 1.3rem;

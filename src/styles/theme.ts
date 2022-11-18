@@ -1,6 +1,6 @@
-import { DefaultTheme } from 'styled-components';
+import { ThemeV1 } from 'styled-components';
 
-const defaultTheme: DefaultTheme = {
+const defaultThemeV1: ThemeV1 = {
   shadow: {
     defaultShadow: '0px 4px 4px rgba(0, 0, 0, 0.2)',
     buttonShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
@@ -66,4 +66,4 @@ const defaultTheme: DefaultTheme = {
   },
 };
 
-export default defaultTheme;
+export default defaultThemeV1;
