@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import defaultTheme from '../../styles/theme';
-import { MentoringLogs } from '../../states/my-mentoring-mentor/MentorLogStore';
+import defaultTheme from '@/styles/theme';
+import { MentoringLogs } from '@/states/my-mentoring-mentor/MentorLogStore';
 
 const StatusColumn = styled.div`
   display: flex;

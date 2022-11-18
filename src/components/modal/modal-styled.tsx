@@ -1,6 +1,6 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
-import defaultTheme from '../../styles/theme';
+import defaultTheme from '@/styles/theme';
 
 export const Fade = keyframes`
   0% {

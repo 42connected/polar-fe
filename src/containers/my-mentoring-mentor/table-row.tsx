@@ -1,17 +1,17 @@
 import styled from '@emotion/styled';
-import { NewDateKr } from '../../states/date-kr';
-import { MentoringLogs } from '../../states/my-mentoring-mentor/MentorLogStore';
-import defaultTheme from '../../styles/theme';
+import { NewDateKr } from '@/states/date-kr';
+import { MentoringLogs } from '@/states/my-mentoring-mentor/MentorLogStore';
+import defaultTheme from '@/styles/theme';
 import {
   getDayToString,
   START_TIME,
   END_TIME,
   getTimeToString,
-} from '../reports/report-form';
-import { sliceMoreInfoStr } from './email';
-import { isValidTime } from './modal/wait/select-time';
-import { ReportButton } from './report-button';
-import { StatusButton } from './status-button';
+} from '@/containers/reports/report-form';
+import { sliceMoreInfoStr } from '@/containers/my-mentoring-mentor/email';
+import { isValidTime } from '@/containers/my-mentoring-mentor/modal/wait/select-time';
+import { ReportButton } from '@/containers/my-mentoring-mentor/report-button';
+import { StatusButton } from '@/containers/my-mentoring-mentor/status-button';
 
 export const TableColumnLine = styled.div`
   display: flex;

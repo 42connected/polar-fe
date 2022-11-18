@@ -2,7 +2,7 @@ import {
   axiosInstance,
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
-} from '../axios-interface';
+} from '@/context/axios-interface';
 
 export const getMentorDetailWithParams = async (
   accessToken: string,

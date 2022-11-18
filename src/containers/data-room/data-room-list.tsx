@@ -1,12 +1,12 @@
-import DataRoomListElement from './data-room-list-element';
+import DataRoomListElement from '@/containers/data-room/data-room-list-element';
 import styled from 'styled-components';
-import theme from '../../styles/theme';
-import { dataRoomQuery } from '../../interface/data-room/data-room-query.interface';
-import { dataRoomProps } from '../../interface/data-room/data-room-props.interface';
-import CheckBox from '../../components/check-box';
+import theme from '@/styles/theme';
+import { dataRoomQuery } from '@/interface/data-room/data-room-query.interface';
+import { dataRoomProps } from '@/interface/data-room/data-room-props.interface';
+import CheckBox from '@/components/check-box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
-import DataRoomListElementMobile from './data-room-list-element-mobile';
+import DataRoomListElementMobile from '@/containers/data-room/data-room-list-element-mobile';
 
 const Table = styled.table`
   border-collapse: collapse;

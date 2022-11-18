@@ -5,9 +5,12 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
-import { NewDateKr, NowDateKr } from '../../../../states/date-kr';
-import defaultTheme from '../../../../styles/theme';
-import { getDayToString, getTimeToString } from '../../../reports/report-form';
+import { NewDateKr, NowDateKr } from '@/states/date-kr';
+import defaultTheme from '@/styles/theme';
+import {
+  getDayToString,
+  getTimeToString,
+} from '@/containers/reports/report-form';
 
 export const Title = styled.div`
   font-weight: bold;

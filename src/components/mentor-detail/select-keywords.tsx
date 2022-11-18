@@ -1,15 +1,15 @@
 import { useEffect, useState, useMemo } from 'react';
 import Select from 'react-select';
-import theme from '../../styles/theme';
+import theme from '@/styles/theme';
 import { lighten } from '@mui/material';
 import styled from 'styled-components';
-import { axiosInstance } from '../../context/axios-interface';
-import LoadingStore from '../../states/loading/LoadingStore';
-import Button from '../button';
-import AuthStore from '../../states/auth/AuthStore';
+import { axiosInstance } from '@/context/axios-interface';
+import LoadingStore from '@/states/loading/LoadingStore';
+import Button from '@/components/button';
+import AuthStore from '@/states/auth/AuthStore';
 import { useParams } from 'react-router-dom';
-import ButtonBoxComponent from './button-box';
-import { TwoButtonModal } from '../modal/two-button-modal.tsx/two-button-modal';
+import ButtonBoxComponent from '@/components/mentor-detail/button-box';
+import { TwoButtonModal } from '@/components/modal/two-button-modal.tsx/two-button-modal';
 
 const styles = {
   control: (base: any) => ({

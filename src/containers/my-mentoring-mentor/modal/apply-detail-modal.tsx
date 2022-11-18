@@ -2,11 +2,11 @@ import styled from '@emotion/styled';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { OneButtonModal } from '../../../components/modal/one-button-modal/one-button-modal';
-import defaultTheme from '../../../styles/theme';
-import { Confirm } from './confirm/confirm';
-import { ModalFooter } from './modal-footer';
-import { Wait } from './wait/wait';
+import { OneButtonModal } from '@/components/modal/one-button-modal/one-button-modal';
+import defaultTheme from '@/styles/theme';
+import { Confirm } from '@/containers/my-mentoring-mentor/modal/confirm/confirm';
+import { ModalFooter } from '@/containers/my-mentoring-mentor/modal/modal-footer';
+import { Wait } from '@/containers/my-mentoring-mentor/modal/wait/wait';
 
 const Box = styled.div`
   display: flex;

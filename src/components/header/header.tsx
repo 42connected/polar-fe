@@ -2,15 +2,15 @@ import { debounce } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
-import logo from '../../assets/image/logo/logo.png';
+import logo from '@/assets/image/logo/logo.png';
 import {
   DEFAULT_COOKIE_OPTION,
   removeCookie,
   TOKEN_LIST,
-} from '../../context/cookies';
-import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
-import theme from '../../styles/theme';
+} from '@/context/cookies';
+import AuthStore, { USER_ROLES } from '@/states/auth/AuthStore';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
+import theme from '@/styles/theme';
 
 const HeaderStyle = styled.header`
   position: relative;

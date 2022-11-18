@@ -1,23 +1,23 @@
 import styled from '@emotion/styled';
 import Container from '@mui/material/Container';
-import { Title } from './title';
-import { ReportElement } from './elements/report-element';
-import { ReportRowFeedback } from './report-row-feedback';
-import { ReportRowSignature } from './report-row-signature';
-import { ReportFixableElement } from './elements/report-fixable-element';
+import { Title } from '@/containers/reports/title';
+import { ReportElement } from '@/containers/reports/elements/report-element';
+import { ReportRowFeedback } from '@/containers/reports/report-row-feedback';
+import { ReportRowSignature } from '@/containers/reports/report-row-signature';
+import { ReportFixableElement } from '@/containers/reports/elements/report-fixable-element';
 import { useEffect, useState } from 'react';
-import defaultTheme from '../../styles/theme';
+import defaultTheme from '@/styles/theme';
 import { useParams } from 'react-router-dom';
-import ReportStore from '../../states/repoort/ReportStore';
+import ReportStore from '@/states/repoort/ReportStore';
 import { observer } from 'mobx-react-lite';
-import AuthStore from '../../states/auth/AuthStore';
-import { ReportRowWrite } from './report-row-write';
-import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
-import { isValidTime } from '../my-mentoring-mentor/modal/wait/select-time';
-import { NewDateKr } from '../../states/date-kr';
-import { ReportFixableElementWithoutTopic } from './elements/report-fixable-element-without-topic';
-import { ReportFixableWithModal } from './elements/report-fixable-with-modal';
-import { TimePickerModal } from './elements/report-time-picker/time-picker-modal';
+import AuthStore from '@/states/auth/AuthStore';
+import { ReportRowWrite } from '@/containers/reports/report-row-write';
+import { OneButtonModal } from '@/components/modal/one-button-modal/one-button-modal';
+import { isValidTime } from '@/containers/my-mentoring-mentor/modal/wait/select-time';
+import { NewDateKr } from '@/states/date-kr';
+import { ReportFixableElementWithoutTopic } from '@/containers/reports/elements/report-fixable-element-without-topic';
+import { ReportFixableWithModal } from '@/containers/reports/elements/report-fixable-with-modal';
+import { TimePickerModal } from '@/containers/reports/elements/report-time-picker/time-picker-modal';
 
 export const REPORT_STATE = {
   EDIT_POSSIBLE: '작성중',

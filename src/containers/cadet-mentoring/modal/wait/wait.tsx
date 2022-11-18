@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
-import { InputCounter } from '../../../../components/input-counter';
-import defaultTheme from '../../../../styles/theme';
-import { ModalInfoElement } from '../../../my-mentoring-mentor/modal/modal-info-element';
+import { InputCounter } from '@/components/input-counter';
+import defaultTheme from '@/styles/theme';
+import { ModalInfoElement } from '@/containers/my-mentoring-mentor/modal/modal-info-element';
 
 const Container = styled.div`
   display: flex;
