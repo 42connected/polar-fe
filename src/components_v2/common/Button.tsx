@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import defaultTheme from '../../styles/theme';
+import defaultTheme from '../../../styles/themeV2';
 
 interface BtnProps {
   type: 'submit' | 'button';

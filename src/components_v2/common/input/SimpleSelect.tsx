@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { createTheme, ThemeProvider } from '@mui/material';
-import defaultTheme from '@/src/styles/theme';
+import defaultTheme from '../../../styles/themeV2';
 import {
   selectProps,
   selectList,

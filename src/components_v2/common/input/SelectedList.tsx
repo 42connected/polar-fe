@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { selectList } from '@/src/interfaces/selectProps.interface';
-import defaultTheme from '@/src/styles/theme';
+import defaultTheme from '../../../styles/themeV2';
 
 interface Props {
   modify?: boolean;

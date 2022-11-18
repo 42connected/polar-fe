@@ -1,6 +1,6 @@
 import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
-import defaultTheme from '@/src/styles/theme';
+import defaultTheme from '../../../styles/themeV2';
 
 /**
  * 스타일링 된 `Input` 컴포넌트
