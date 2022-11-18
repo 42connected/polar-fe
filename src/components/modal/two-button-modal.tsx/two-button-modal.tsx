@@ -1,6 +1,6 @@
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { sliceMoreInfoStr } from '@/containers/my-mentoring-mentor/email';
+import { sliceMoreInfoStr } from '@/containers/v1/my-mentoring-mentor/email';
 import {
   ModalBackground,
   ModalBody,

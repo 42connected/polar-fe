@@ -1,12 +1,12 @@
 import { Suspense } from 'react';
 import { observer } from 'mobx-react-lite';
 
-import ScrollToTop from '@/containers/scroll-to-top/scroll-to-top';
+import ScrollToTop from '@/containers/v1/scroll-to-top/scroll-to-top';
 import LoadingStore from '@/states/loading/LoadingStore';
 import UserJoinStore from '@/states/user-join/UserJoinStore';
 import ErrorStore from '@/states/error/ErrorStore';
-import { UserJoin } from '@/containers/user-join/user-join';
-import { Error } from '@/containers/error/error';
+import { UserJoin } from '@/containers/v1/user-join/user-join';
+import { Error } from '@/containers/v1/error/error';
 import Footer from '@/components/footer';
 import Header from '@/components/header/header';
 import { Loading } from '@/components/loading';
