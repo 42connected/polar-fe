@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from './App';
-import GlobalStyle from './styles/GlobalStyle';
-import reportWebVitals from './reportWebVitals';
-import Providers from './components/common/Providers';
-import './assets/font/font.css';
-import './index.css';
+import App from '@/src/App';
+import GlobalStyle from '@/styles/GlobalStyle';
+import reportWebVitals from '@/src/reportWebVitals';
+import Providers from '@/components/common/Providers';
+import '@/assets/font/font.css';
+import '@/src/index.css';
 
 ReactDOM.render(
   <React.StrictMode>
