@@ -2,9 +2,7 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 /*grid*/
-export const ReportContainer = styled.span<{
-  index: number;
-}>`
+export const ReportContainer = styled.div`
   position: absolute;
   left: 0;
   ${theme.fontSize.sizeExtraSmall};
@@ -401,6 +399,7 @@ export const TimeBox = styled.section`
 
 export const PlaceBox = styled.section`
   ${theme.fontSize.sizeExtraSmall};
+  overflow: hidden;
   position: absolute;
   height: 4.3rem;
   width: 46.7rem;
@@ -477,11 +476,14 @@ export const ContentTitle3 = styled.section`
   padding-top: 10rem;
 `;
 
-export const ContentBody1 = styled.section<{ len: number }>`
+export const ContentBody1 = styled.textarea<{ len: number }>`
   ${props => (props.len > 100 ? 'font-size: 1rem' : 'font-size: 1.3rem')};
   background-color: ${theme.colors.graySix};
+  ${theme.font.nanumGothic};
   display: flex;
   flex-wrap: wrap;
+  overflow: hidden;
+  resize: none;
   position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
@@ -495,9 +497,14 @@ export const ContentBody1 = styled.section<{ len: number }>`
   padding-left: 0.5rem;
 `;
 
-export const ContentBody2 = styled.section<{ len: number }>`
+export const ContentBody2 = styled.textarea<{ len: number }>`
   ${props => (props.len > 400 ? 'font-size: 1rem' : 'font-size: 1.3rem')};
   background-color: ${theme.colors.graySix};
+  ${theme.font.nanumGothic};
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  resize: none;
   position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
@@ -514,9 +521,14 @@ export const ContentBody2 = styled.section<{ len: number }>`
   padding-left: 0.5rem;
 `;
 
-export const ContentBody3 = styled.section<{ len: number }>`
+export const ContentBody3 = styled.textarea<{ len: number }>`
   ${props => (props.len > 400 ? 'font-size: 1rem' : 'font-size: 1.3rem')};
   background-color: ${theme.colors.graySix};
+  ${theme.font.nanumGothic};
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  resize: none;
   position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
