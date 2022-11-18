@@ -2,10 +2,10 @@ import {
   ReportRowContainer,
   ReportRowTitle,
   ReportRowContent,
-} from './row-styled';
+} from '@/containers/reports/row-styled';
 import styled from '@emotion/styled';
-import defaultTheme from '../../styles/theme';
-import { InputCounter } from '../../components/input-counter';
+import defaultTheme from '@/styles/theme';
+import { InputCounter } from '@/components/input-counter';
 
 const ReportRowContentTitie = styled.div`
   width: 100%;

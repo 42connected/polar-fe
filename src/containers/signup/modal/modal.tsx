@@ -1,8 +1,8 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
-import { ModalType } from '../mentor-info-modal';
+import { ModalType } from '@/containers/signup/mentor-info-modal';
 
-import { ApplyDetailModal } from './apply-detail-modal';
+import { ApplyDetailModal } from '@/containers/signup/modal/apply-detail-modal';
 
 const Fade = keyframes`
   0% {

@@ -2,8 +2,8 @@ import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getCookie, TOKEN_LIST } from '../../context/cookies';
-import defaultTheme from '../../styles/theme';
+import { getCookie, TOKEN_LIST } from '@/context/cookies';
+import defaultTheme from '@/styles/theme';
 
 const Fade = keyframes`
   0% {

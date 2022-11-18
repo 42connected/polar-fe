@@ -1,9 +1,9 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
-import { MentoringLogs } from '../../../states/my-mentoring-mentor/MentorLogStore';
-import defaultTheme from '../../../styles/theme';
-import { ApplyDetailModal } from './apply-detail-modal';
+import { MentoringLogs } from '@/states/my-mentoring-mentor/MentorLogStore';
+import defaultTheme from '@/styles/theme';
+import { ApplyDetailModal } from '@/containers/my-mentoring-mentor/modal/apply-detail-modal';
 
 const Fade = keyframes`
   0% {

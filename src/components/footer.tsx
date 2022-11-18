@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import theme from '../styles/theme';
+import theme from '@/styles/theme';
 
 const Container = styled.footer`
   ${theme.font.sebangGothic};
@@ -36,24 +36,24 @@ const Footer = () => {
   const mentorLink =
     'https://docs.google.com/forms/d/e/1FAIpQLSe7CJGFRImjU0NAtPwjWdjTz9-Chttx1gDf1rpvBZIhaUQ34A/viewform';
   return (
-      <Container>
-        <FooterDiv>
-          42Polar by Cadets
-          <Adiv>
-            <A href={serviceLink} target="_blank">
-              사이트 건의사항
-            </A>
-            <A href={mentorLink} target="_blank">
-              멘토제도 문의(SongPD)
-            </A>
-          </Adiv>
-        </FooterDiv>
-        <div style={{paddingBottom:"3rem"}}>
-          <div>주소 서울시 강남구 개포로 416 이노베이션 아카데미 문의</div>
-          <div>copyright 2022 polar All rights reserved.</div>
-          <div>폴라팀에게 문의하기 : 42polar@gmail.com</div>
-        </div>
-      </Container>
+    <Container>
+      <FooterDiv>
+        42Polar by Cadets
+        <Adiv>
+          <A href={serviceLink} target="_blank">
+            사이트 건의사항
+          </A>
+          <A href={mentorLink} target="_blank">
+            멘토제도 문의(SongPD)
+          </A>
+        </Adiv>
+      </FooterDiv>
+      <div style={{ paddingBottom: '3rem' }}>
+        <div>주소 서울시 강남구 개포로 416 이노베이션 아카데미 문의</div>
+        <div>copyright 2022 polar All rights reserved.</div>
+        <div>폴라팀에게 문의하기 : 42polar@gmail.com</div>
+      </div>
+    </Container>
   );
 };
 export default Footer;

@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
-import defaultTheme from '../../styles/theme';
-import defaultProfile from '../../assets/image/defaultProfileImage.png';
-import { sliceMoreInfoStr } from '../my-mentoring-mentor/email';
+import defaultTheme from '@/styles/theme';
+import defaultProfile from '@/assets/image/defaultProfileImage.png';
+import { sliceMoreInfoStr } from '@/containers/my-mentoring-mentor/email';
 
 const Container = styled.div`
   position: relative;

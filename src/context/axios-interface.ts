@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import UserJoinStore from '../states/user-join/UserJoinStore';
-import { getCookie, TOKEN_LIST } from './cookies';
+import UserJoinStore from '@/states/user-join/UserJoinStore';
+import { getCookie, TOKEN_LIST } from '@/context/cookies';
 
 export const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_BACKEND_URL,

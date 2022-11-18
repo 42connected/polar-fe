@@ -1,11 +1,11 @@
 import { Container } from '@mui/material';
 import styled from '@emotion/styled';
-import defaultTheme from '../../styles/theme';
-import { MentorCard } from './mentor-card';
+import defaultTheme from '@/styles/theme';
+import { MentorCard } from '@/containers/mentor-list/mentor-card';
 import { useParams } from 'react-router-dom';
-import MentorKeywordList from './mentor-keyword-list';
-import MentorsStore from '../../states/mentor-list/MentorsStore';
-import KeywordStore from '../../states/mentor-list/KeywordStore';
+import MentorKeywordList from '@/containers/mentor-list/mentor-keyword-list';
+import MentorsStore from '@/states/mentor-list/MentorsStore';
+import KeywordStore from '@/states/mentor-list/KeywordStore';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 

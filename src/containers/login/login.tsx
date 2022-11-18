@@ -2,13 +2,13 @@ import styled from '@emotion/styled';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Loading } from '../../components/loading';
+import { Loading } from '@/components/loading';
 import {
   DEFAULT_COOKIE_OPTION,
   setCookie,
   TOKEN_LIST,
-} from '../../context/cookies';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
+} from '@/context/cookies';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
 
 const Background = styled.div`
   display: flex;

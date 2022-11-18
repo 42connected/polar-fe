@@ -1,17 +1,17 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { MentorCard } from '../../components/mentoring-log-card';
+import { MentorCard } from '@/components/mentoring-log-card';
 import {
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
-} from '../../context/axios-interface';
-import { Header } from './header';
-import LoadingStore from '../../states/loading/LoadingStore';
-import { MentoringLog } from '../../interfaces/cadet-mentoring/mentoring-log.interface';
-import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
-import defaultTheme from '../../styles/theme';
+} from '@/context/axios-interface';
+import { Header } from '@/containers/cadet-mentoring/header';
+import LoadingStore from '@/states/loading/LoadingStore';
+import { MentoringLog } from '@/interfaces/cadet-mentoring/mentoring-log.interface';
+import AuthStore, { USER_ROLES } from '@/states/auth/AuthStore';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
+import defaultTheme from '@/styles/theme';
 
 const NoneDrag = styled.body`
   display: flex;

@@ -15,13 +15,13 @@ import {
   MoImageGrid1,
   TitleStyle,
   TitleStyle2,
-} from './mainPageStyled';
+} from '@/containers/main-page/mainPageStyled';
 import { useEffect, useRef, useState } from 'react';
 import {
   axiosInstance,
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
-} from '../../context/axios-interface';
+} from '@/context/axios-interface';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -35,7 +35,7 @@ import {
   faSitemap,
 } from '@fortawesome/free-solid-svg-icons';
 import { debounce, IconButton } from '@mui/material';
-import ImageSlider from './mainPageSilder';
+import ImageSlider from '@/containers/main-page/mainPageSilder';
 
 const MainPage = () => {
   const [isLoading, setLoading] = useState(false);
