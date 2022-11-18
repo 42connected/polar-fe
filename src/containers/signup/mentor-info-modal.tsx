@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ApplyModal } from './modal/modal';
+import { ApplyModal } from '@/containers/signup/modal/modal';
 
 export enum ModalType {
   AVAILABLE_TIME,

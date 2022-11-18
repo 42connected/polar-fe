@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import theme from '../styles/theme';
+import theme from '@/styles/theme';
 
 interface MenuBoxProps {
-    width?: string;
-    height?: string;
+  width?: string;
+  height?: string;
 }
 
 const MenuBox = styled.div<MenuBoxProps>`
@@ -17,5 +17,5 @@ const MenuBox = styled.div<MenuBoxProps>`
   padding-bottom: 0.2rem;
   display: flex;
   align-items: flex-end;
-`
+`;
 export default MenuBox;

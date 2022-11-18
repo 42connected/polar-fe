@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import { InputCounter } from '../../../../components/input-counter';
-import defaultTheme from '../../../../styles/theme';
-import { ModalInfoElement } from '../modal-info-element';
-import { constTime } from './const-time';
+import { InputCounter } from '@/components/input-counter';
+import defaultTheme from '@/styles/theme';
+import { ModalInfoElement } from '@/containers/my-mentoring-mentor/modal/modal-info-element';
+import { constTime } from '@/containers/my-mentoring-mentor/modal/confirm/const-time';
 
 const Container = styled.div`
   display: flex;

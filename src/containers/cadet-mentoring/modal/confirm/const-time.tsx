@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
-import defaultTheme from '../../../../styles/theme';
-import { getDayToString, getTimeToString } from '../../../reports/report-form';
+import defaultTheme from '@/styles/theme';
+import {
+  getDayToString,
+  getTimeToString,
+} from '@/containers/reports/report-form';
 
 export const Title = styled.div`
   font-weight: bold;

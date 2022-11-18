@@ -4,9 +4,9 @@ import qs from 'qs';
 import {
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
-} from '../../context/axios-interface';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
-import LoadingStore from '../loading/LoadingStore';
+} from '@/context/axios-interface';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
+import LoadingStore from '@/states/loading/LoadingStore';
 
 export interface Categories {
   id: string;

@@ -1,8 +1,8 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
-import { MentoringLog } from '../../../interfaces/cadet-mentoring/mentoring-log.interface';
-import { ApplyDetailModal } from './apply-detail-modal';
+import { MentoringLog } from '@/interfaces/cadet-mentoring/mentoring-log.interface';
+import { ApplyDetailModal } from '@/containers/cadet-mentoring/modal/apply-detail-modal';
 
 const Fade = keyframes`
   0% {

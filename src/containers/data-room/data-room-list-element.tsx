@@ -1,8 +1,8 @@
-import CheckBox from '../../components/check-box';
+import CheckBox from '@/components/check-box';
 import styled from 'styled-components';
-import theme from '../../styles/theme';
-import { dataRoomProps } from '../../interface/data-room/data-room-props.interface';
-import { NewDateKr } from '../../states/date-kr';
+import theme from '@/styles/theme';
+import { dataRoomProps } from '@/interface/data-room/data-room-props.interface';
+import { NewDateKr } from '@/states/date-kr';
 import { Link } from 'react-router-dom';
 
 export const TableData = styled.td`

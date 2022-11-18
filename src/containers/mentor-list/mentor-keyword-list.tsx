@@ -1,11 +1,14 @@
 import styled from '@emotion/styled';
-import { KeywordButton, MentorKeyword } from './mentor-keyword';
+import {
+  KeywordButton,
+  MentorKeyword,
+} from '@/containers/mentor-list/mentor-keyword';
 import { useEffect, useState } from 'react';
-import defaultTheme from '../../styles/theme';
-import KeywordStore from '../../states/mentor-list/KeywordStore';
+import defaultTheme from '@/styles/theme';
+import KeywordStore from '@/states/mentor-list/KeywordStore';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
-import MentorsStore from '../../states/mentor-list/MentorsStore';
+import MentorsStore from '@/states/mentor-list/MentorsStore';
 
 const Container = styled.div`
   display: flex;

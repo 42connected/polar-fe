@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import defaultTheme from '../../styles/theme';
+import defaultTheme from '@/styles/theme';
 
 export const ReportRowContainer = styled.div`
   display: flex;
