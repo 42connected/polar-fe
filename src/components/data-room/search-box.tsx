@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { dataRoomQuery } from '@/interface/data-room/data-room-query.interface';
+import { dataRoomQuery } from '@/src/interfaces/data-room/data-room-query.interface';
 import theme from '@/styles/theme';
 import Button from '@/components/button';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
