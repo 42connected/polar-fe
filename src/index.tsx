@@ -1,22 +1,19 @@
+import React from 'react';
 import ReactDOM from 'react-dom';
+
+import App from '@/src/App';
 import GlobalStyle from '@/styles/GlobalStyle';
 import reportWebVitals from '@/src/reportWebVitals';
+import Providers from '@/components/common/Providers';
 import '@/assets/font/font.css';
-import { ThemeProvider } from 'styled-components';
-import App from '@/src/App';
 import '@/src/index.css';
-import themeV1 from '@/styles/theme';
-import themeV2 from '@/styles/themeV2';
-import React from 'react';
 
 ReactDOM.render(
   <React.StrictMode>
     <GlobalStyle />
-    <ThemeProvider theme={themeV1}>
-      <ThemeProvider theme={themeV2}>
-        <App />
-      </ThemeProvider>
-    </ThemeProvider>
+    <Providers>
+      <App />
+    </Providers>
   </React.StrictMode>,
   document.getElementById('root'),
 );

@@ -12,7 +12,8 @@
       "@/interfaces/*": ["src/interfaces/*"],
       "@/states/*": ["src/states/*"],
       "@/styles/*": ["src/styles/*"],
-      "@/utils/*": ["src/utils/*"]
+      "@/utils/*": ["src/utils/*"],
+      "@/services/*": ["src/services/*"]
     }
   }
 }
