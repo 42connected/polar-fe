@@ -1,6 +1,6 @@
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { sliceMoreInfoStr } from '../../../containers/my-mentoring-mentor/email';
+import { sliceMoreInfoStr } from '@/containers/my-mentoring-mentor/email';
 import {
   ModalBackground,
   ModalBody,
@@ -10,7 +10,7 @@ import {
   ModalTitle,
   XButton,
 } from '../modal-styled';
-import theme from '../../../styles/theme';
+import theme from '@/styles/theme';
 import { useEffect } from 'react';
 
 export interface OneButtonModalProps {

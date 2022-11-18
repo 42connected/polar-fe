@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import defaultTheme from '../../../styles/theme';
+import defaultTheme from '@/styles/theme';
 
 export const Title = styled.div`
   font-weight: bold;

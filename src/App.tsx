@@ -1,17 +1,17 @@
 import { observer } from 'mobx-react-lite';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Login } from './containers/login/login';
-import { UserJoin } from './containers/user-join/user-join';
-import { Error } from './containers/error/error';
-import LoadingStore from './states/loading/LoadingStore';
-import Footer from './components/footer';
-import Header from './components/header/header';
-import { Loading } from './components/loading';
-import UserJoinStore from './states/user-join/UserJoinStore';
-import ErrorStore from './states/error/ErrorStore';
+import { Login } from '@/containers/login/login';
+import { UserJoin } from '@/containers/user-join/user-join';
+import { Error } from '@/containers/error/error';
+import LoadingStore from '@/states/loading/LoadingStore';
+import Footer from '@/components/footer';
+import Header from '@/components/header/header';
+import { Loading } from '@/components/loading';
+import UserJoinStore from '@/states/user-join/UserJoinStore';
+import ErrorStore from '@/states/error/ErrorStore';
 import loadable from '@loadable/component';
 import { Suspense } from 'react';
-import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
+import ScrollToTop from '@/containers/scroll-to-top/scroll-to-top';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}

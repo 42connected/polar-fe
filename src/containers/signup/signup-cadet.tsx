@@ -1,6 +1,6 @@
 import axios from 'axios';
-import singupImage from '../../assets/signup/signup.png';
-import AuthStore from '../../states/auth/AuthStore';
+import singupImage from '@/assets/signup/signup.png';
+import AuthStore from '@/states/auth/AuthStore';
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import {
@@ -12,19 +12,19 @@ import {
   NameTitle,
   RequiredWrapper,
   SingupImage,
-} from './signup-style';
-import UserJoinStore from '../../states/user-join/UserJoinStore';
+} from '@/containers/signup/signup-style';
+import UserJoinStore from '@/states/user-join/UserJoinStore';
 import { debounce } from '@mui/material';
-import LoadingStore from '../../states/loading/LoadingStore';
+import LoadingStore from '@/states/loading/LoadingStore';
 import {
   OneButtonModal,
   OneButtonModalProps,
-} from '../../components/modal/one-button-modal/one-button-modal';
+} from '@/components/modal/one-button-modal/one-button-modal';
 import {
   DEFAULT_COOKIE_OPTION,
   setCookie,
   TOKEN_LIST,
-} from '../../context/cookies';
+} from '@/context/cookies';
 
 const SignUpCadet = () => {
   const [name, setName] = useState<string>('');

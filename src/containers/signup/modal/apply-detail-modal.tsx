@@ -5,18 +5,18 @@ import { useEffect, useState } from 'react';
 import {
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
-} from '../../../context/axios-interface';
-import { Mentor } from '../../../states/my-mentoring-mentor/MentorStore';
-import defaultTheme from '../../../styles/theme';
-import { ModalType } from '../mentor-info-modal';
-import { Info } from './info/info';
+} from '@/context/axios-interface';
+import { Mentor } from '@/states/my-mentoring-mentor/MentorStore';
+import defaultTheme from '@/styles/theme';
+import { ModalType } from '@/containers/signup/mentor-info-modal';
+import { Info } from '@/containers/signup/modal/info/info';
 import {
   ApplyDetailModalProps,
   IRows,
   MentorsData,
-} from './mentor-details-modal-inteface';
-import { ModalFooter } from './modal-footer';
-import { Time } from './time/time';
+} from '@/containers/signup/modal/mentor-details-modal-inteface';
+import { ModalFooter } from '@/containers/signup/modal/modal-footer';
+import { Time } from '@/containers/signup/modal/time/time';
 
 const Box = styled.div`
   display: flex;

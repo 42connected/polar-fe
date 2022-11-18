@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import defaultTheme from '../styles/theme';
+import defaultTheme from '@/styles/theme';
 
 const Input = styled.textarea<InputCounterProps>`
   width: ${props => props.width ?? '80%'};

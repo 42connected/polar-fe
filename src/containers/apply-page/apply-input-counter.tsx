@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import theme from '../../styles/theme';
+import theme from '@/styles/theme';
 
 const Input = styled.textarea<InputCounterProps>`
   margin-top: 3rem;

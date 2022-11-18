@@ -1,8 +1,11 @@
 import styled from '@emotion/styled';
-import { ReportElementRoot, Topic } from './element-styled';
+import {
+  ReportElementRoot,
+  Topic,
+} from '@/containers/reports/elements/element-styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
-import defaultTheme from '../../../styles/theme';
+import defaultTheme from '@/styles/theme';
 
 const FixableElement = styled.div`
   display: flex;

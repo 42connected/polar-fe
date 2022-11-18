@@ -2,10 +2,10 @@ import styled from '@emotion/styled';
 import { faCheck, faPencil, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import AuthStore from '../../states/auth/AuthStore';
-import ErrorStore from '../../states/error/ErrorStore';
-import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
-import defaultTheme from '../../styles/theme';
+import AuthStore from '@/states/auth/AuthStore';
+import ErrorStore from '@/states/error/ErrorStore';
+import MentorStore from '@/states/my-mentoring-mentor/MentorStore';
+import defaultTheme from '@/styles/theme';
 
 const Container = styled.div`
   display: flex;

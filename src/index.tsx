@@ -1,12 +1,12 @@
 import ReactDOM from 'react-dom';
-import GlobalStyle from './styles/GlobalStyle';
-import reportWebVitals from './reportWebVitals';
-import './assets/font/font.css';
+import GlobalStyle from '@/styles/GlobalStyle';
+import reportWebVitals from '@/src/reportWebVitals';
+import '@/assets/font/font.css';
 import { ThemeProvider } from 'styled-components';
-import themeV1 from './styles/theme';
-import themeV2 from './styles/themeV2';
-import App from './App';
-import './index.css';
+import App from '@/src/App';
+import '@/src/index.css';
+import themeV1 from '@/styles/theme';
+import themeV2 from '@/styles/themeV2';
 import React from 'react';
 
 ReactDOM.render(

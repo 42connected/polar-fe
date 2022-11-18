@@ -2,14 +2,14 @@ import { action, makeObservable } from 'mobx';
 import {
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
-} from '../../context/axios-interface';
+} from '@/context/axios-interface';
 import {
   DEFAULT_COOKIE_OPTION,
   getCookie,
   removeCookie,
   TOKEN_LIST,
-} from '../../context/cookies';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../error/ErrorStore';
+} from '@/context/cookies';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
 
 export interface User {
   intraId: string;

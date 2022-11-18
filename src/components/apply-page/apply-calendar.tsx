@@ -2,24 +2,24 @@ import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
-import theme from '../../styles/theme';
+import theme from '@/styles/theme';
 import { lighten } from '@mui/material';
 import {
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
-} from '../../context/axios-interface';
-import AuthStore from '../../states/auth/AuthStore';
+} from '@/context/axios-interface';
+import AuthStore from '@/states/auth/AuthStore';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
-import Button from '../button';
-import LoadingStore from '../../states/loading/LoadingStore';
-import { ApplyCalendarModalProps } from './apply-calendar-modal';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
-import { NewDateKr, NowDateKr, NumToDateKr } from '../../states/date-kr';
+import Button from '@/components/button';
+import LoadingStore from '@/states/loading/LoadingStore';
+import { ApplyCalendarModalProps } from '@/components/apply-page/apply-calendar-modal';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
+import { NewDateKr, NowDateKr, NumToDateKr } from '@/states/date-kr';
 
 const muiTheme = createTheme({
   palette: {

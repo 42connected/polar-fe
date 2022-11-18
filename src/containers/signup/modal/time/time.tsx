@@ -1,7 +1,7 @@
 import { Switch } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import Columns from '../../../../components/signup/getColumns';
-import addButtonImage from '../../../../assets/signup/addButton.png';
+import Columns from '@/components/signup/getColumns';
+import addButtonImage from '@/assets/signup/addButton.png';
 import {
   AddButtonImage,
   BodyBigFont,
@@ -13,13 +13,13 @@ import {
   NameTitle,
   TimeTableContainer,
   ToggleContainer,
-} from './time-style';
+} from '@/containers/signup/modal/time/time-style';
 import {
   AddColumnsProps,
   IAvailableDate,
   IRows,
   MentorsData,
-} from '../mentor-details-modal-inteface';
+} from '@/containers/signup/modal/mentor-details-modal-inteface';
 
 function AddColumns(props: AddColumnsProps) {
   return (

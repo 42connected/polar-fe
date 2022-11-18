@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
-import { ApplyModal } from '../containers/cadet-mentoring/modal/modal';
-import { MentoringLog } from '../interfaces/cadet-mentoring/mentoring-log.interface';
-import { NewDateKr } from '../states/date-kr';
-import defaultTheme from '../styles/theme';
+import { ApplyModal } from '@/containers/cadet-mentoring/modal/modal';
+import { MentoringLog } from '@/interfaces/cadet-mentoring/mentoring-log.interface';
+import { NewDateKr } from '@/states/date-kr';
+import defaultTheme from '@/styles/theme';
 
 const Container = styled.div`
   display: flex;

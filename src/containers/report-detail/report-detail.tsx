@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import {
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
-} from '../../context/axios-interface';
-import theme from '../../styles/theme';
-import { reportsPro } from './getreportdata';
-import ino1 from '../../assets/image/logo/ino1.png';
-import ino2 from '../../assets/image/logo/ino2.png';
+} from '@/context/axios-interface';
+import theme from '@/styles/theme';
+import { reportsPro } from '@/containers/report-detail/getreportdata';
+import ino1 from '@/assets/image/logo/ino1.png';
+import ino2 from '@/assets/image/logo/ino2.png';
 import {
   NoneValue3,
   SubTitle9,
@@ -53,13 +53,13 @@ import {
   SignText,
   PlaceBox2,
   Cadet,
-} from './reportStyled';
-import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
+} from '@/containers/report-detail/reportStyled';
+import AuthStore, { USER_ROLES } from '@/states/auth/AuthStore';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { debounce } from '@mui/material';
-import LoadingStore from '../../states/loading/LoadingStore';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
-import { NewDateKr } from '../../states/date-kr';
+import LoadingStore from '@/states/loading/LoadingStore';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
+import { NewDateKr } from '@/states/date-kr';
 import { autoAction } from 'mobx/dist/internal';
 
 const ReportpageStyle = styled.div<{

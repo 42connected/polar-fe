@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import { normalize } from 'styled-normalize';
-import defaultThemeV2 from './themeV2';
+import defaultThemeV2 from '@/styles/themeV2';
 
 const GlobalStyle = createGlobalStyle`
   ${normalize};

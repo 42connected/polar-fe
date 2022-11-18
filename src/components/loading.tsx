@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import defaultTheme from '../styles/theme';
-import spinner from '../assets/image/loading-spinner.gif';
+import defaultTheme from '@/styles/theme';
+import spinner from '@/assets/image/loading-spinner.gif';
 import { useEffect } from 'react';
 
 export const Background = styled.div`

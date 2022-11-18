@@ -1,4 +1,4 @@
-import { ModalType } from '../mentor-info-modal';
+import { ModalType } from '@/containers/signup/mentor-info-modal';
 
 export interface IRows {
   id: number;

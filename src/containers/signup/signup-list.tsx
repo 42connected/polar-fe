@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import addButtonImage from '../../assets/signup/addButton.png';
+import addButtonImage from '@/assets/signup/addButton.png';
 
 const AddButtonImage = styled.img`
   width: 1.8rem;
