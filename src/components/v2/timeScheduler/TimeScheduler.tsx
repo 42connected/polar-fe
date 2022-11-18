@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Week from '@/src/components_v2/timeScheduler/Week';
-import TimeBody from '@/src/components_v2/timeScheduler/TimeBody';
+import Week from '@/components/v2/timeScheduler/Week';
+import TimeBody from '@/components/v2/timeScheduler/TimeBody';
 import { useSchedule } from '@/hooks/useSchedule';
 
 export default function TimeScheduler() {

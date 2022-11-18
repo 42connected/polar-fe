@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Loading } from '@/components/loading';
+import { Loading } from '@/components/v1/loading';
 import {
   DEFAULT_COOKIE_OPTION,
   setCookie,

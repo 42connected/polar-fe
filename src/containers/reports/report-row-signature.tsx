@@ -8,7 +8,7 @@ import ReportStore from '@/states/repoort/ReportStore';
 import { REPORT_STATE } from '@/containers/reports/report-form';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
 import AuthStore from '@/states/auth/AuthStore';
-import { OneButtonModal } from '@/components/modal/one-button-modal/one-button-modal';
+import { OneButtonModal } from '@/components/v1/modal/one-button-modal/one-button-modal';
 import { CanvasModal } from '@/containers/reports/canvas-modal';
 import { observer } from 'mobx-react-lite';
 

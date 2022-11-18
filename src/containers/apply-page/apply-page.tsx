@@ -12,10 +12,10 @@ import {
 } from '@/context/axios-interface';
 import { Navigate, useParams } from 'react-router-dom';
 import AuthStore, { USER_ROLES } from '@/states/auth/AuthStore';
-import { OneButtonModal } from '@/components/modal/one-button-modal/one-button-modal';
+import { OneButtonModal } from '@/components/v1/modal/one-button-modal/one-button-modal';
 import { defaultTheme } from 'react-select';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
-import { ApplyCalendarModal } from '@/components/apply-page/apply-calendar-modal';
+import { ApplyCalendarModal } from '@/components/v1/apply-page/apply-calendar-modal';
 import LoadingStore from '@/states/loading/LoadingStore';
 import {
   faCalendarCheck,

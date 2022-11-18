@@ -3,7 +3,7 @@ import { format, isEqual, isSaturday } from 'date-fns';
 import { useHover } from 'react-aria';
 import styled from 'styled-components';
 
-import SelectedTimeBlock from '@/src/components_v2/timeScheduler/SelectedTimeBlock';
+import SelectedTimeBlock from '@/components/v2/timeScheduler/SelectedTimeBlock';
 import { DuringDate, Schedule } from '@/interfaces/timeScheduler.interface';
 
 interface Props {

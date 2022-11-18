@@ -5,7 +5,7 @@ import {
 } from '@/containers/reports/row-styled';
 import styled from '@emotion/styled';
 import defaultTheme from '@/styles/theme';
-import { InputCounter } from '@/components/input-counter';
+import { InputCounter } from '@/components/v1/input-counter';
 
 const ReportRowContentTitie = styled.div`
   width: 100%;

@@ -2,10 +2,10 @@ import theme from '@/styles/theme';
 import React, { useState, useCallback, ReactNode, useEffect } from 'react';
 import { Pagination } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
-import Button from '@/components/button';
+import Button from '@/components/v1/button';
 import { ThemeProvider } from '@mui/system';
 import styled from 'styled-components';
-import SearchBox from '@/components/data-room/search-box';
+import SearchBox from '@/components/v1/data-room/search-box';
 import DataRoomList from '@/containers/data-room/data-room-list';
 import AuthStore, { USER_ROLES } from '@/states/auth/AuthStore';
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -13,7 +13,7 @@ import { dataRoomQuery } from '@/interface/data-room/data-room-query.interface';
 import { useMediaQuery } from 'react-responsive';
 import LoadingStore from '@/states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
-import { OneButtonModal } from '@/components/modal/one-button-modal/one-button-modal';
+import { OneButtonModal } from '@/components/v1/modal/one-button-modal/one-button-modal';
 import { NowDateKr } from '@/states/date-kr';
 import {
   axiosWithNoData,

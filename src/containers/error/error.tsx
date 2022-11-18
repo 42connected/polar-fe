@@ -6,7 +6,7 @@ import {
   ModalButton,
   ModalButtonContainer,
   ModalTitle,
-} from '@/components/modal/modal-styled';
+} from '@/components/v1/modal/modal-styled';
 import ErrorStore from '@/states/error/ErrorStore';
 import defaultTheme from '@/styles/theme';
 import { sliceMoreInfoStr } from '@/containers/my-mentoring-mentor/email';
