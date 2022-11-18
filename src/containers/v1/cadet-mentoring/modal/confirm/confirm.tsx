@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { InputCounter } from '@/components/input-counter';
+import { InputCounter } from '@/components/v1/input-counter';
 import defaultTheme from '@/styles/theme';
 import { ModalInfoElement } from '@/containers/v1/my-mentoring-mentor/modal/modal-info-element';
 import { constTime } from '@/containers/v1/cadet-mentoring/modal/confirm/const-time';

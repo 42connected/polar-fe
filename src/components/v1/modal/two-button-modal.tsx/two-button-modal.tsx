@@ -9,7 +9,7 @@ import {
   ModalButtonContainer,
   ModalTitle,
   XButton,
-} from '@/components/modal/modal-styled';
+} from '@/components/v1/modal/modal-styled';
 import theme from '@/styles/theme';
 import { useEffect } from 'react';
 

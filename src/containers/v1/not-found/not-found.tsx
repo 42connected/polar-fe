@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
-import { OneButtonModal } from '@/components/modal/one-button-modal/one-button-modal';
+import { OneButtonModal } from '@/components/v1/modal/one-button-modal/one-button-modal';
 import defaultTheme from '@/styles/theme';
 
 const Background = styled.div`

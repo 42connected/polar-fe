@@ -15,9 +15,9 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
-import Button from '@/components/button';
+import Button from '@/components/v1/button';
 import LoadingStore from '@/states/loading/LoadingStore';
-import { ApplyCalendarModalProps } from '@/components/apply-page/apply-calendar-modal';
+import { ApplyCalendarModalProps } from '@/components/v1/apply-page/apply-calendar-modal';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
 import { NewDateKr, NowDateKr, NumToDateKr } from '@/states/date-kr';
 

@@ -1,5 +1,5 @@
-import CheckBox from '@/components/check-box';
-import { dataRoomProps } from '@/src/interfaces/data-room/data-room-props.interface';
+import CheckBox from '@/components/v1/check-box';
+import { dataRoomProps } from '@/interfaces/data-room/data-room-props.interface';
 import {
   TableData,
   CustomLink,

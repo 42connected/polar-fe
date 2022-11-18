@@ -19,7 +19,7 @@ import LoadingStore from '@/states/loading/LoadingStore';
 import {
   OneButtonModal,
   OneButtonModalProps,
-} from '@/components/modal/one-button-modal/one-button-modal';
+} from '@/components/v1/modal/one-button-modal/one-button-modal';
 import {
   DEFAULT_COOKIE_OPTION,
   setCookie,
