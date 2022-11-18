@@ -7,8 +7,8 @@ import {
   ModalBox,
   ModalButtonContainer,
   ModalTitle,
-} from '@/components/modal/modal-styled';
-import ApplyCalendar from '@/components/apply-page/apply-calendar';
+} from '@/components/v1/modal/modal-styled';
+import ApplyCalendar from '@/components/v1/apply-page/apply-calendar';
 
 const TitleContainer = styled.div`
   display: flex;

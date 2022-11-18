@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { MentorCard } from '@/components/mentoring-log-card';
+import { MentorCard } from '@/components/v1/mentoring-log-card';
 import {
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { dataRoomQuery } from '@/interface/data-room/data-room-query.interface';
 import theme from '@/styles/theme';
-import Button from '@/components/button';
+import Button from '@/components/v1/button';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { Box, ThemeProvider } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';

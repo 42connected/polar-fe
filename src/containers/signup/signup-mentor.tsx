@@ -3,7 +3,7 @@ import axios from 'axios';
 import singupImage from '@/assets/signup/signup.png';
 import addButtonImage from '@/assets/signup/addButton.png';
 import { useEffect, useRef, useState } from 'react';
-import Columns from '@/components/signup/getColumns';
+import Columns from '@/components/v1/signup/getColumns';
 import React from 'react';
 import LoadingStore from '@/states/loading/LoadingStore';
 import { Navigate } from 'react-router-dom';
@@ -34,7 +34,7 @@ import {
 import {
   OneButtonModal,
   OneButtonModalProps,
-} from '@/components/modal/one-button-modal/one-button-modal';
+} from '@/components/v1/modal/one-button-modal/one-button-modal';
 import {
   DEFAULT_COOKIE_OPTION,
   setCookie,

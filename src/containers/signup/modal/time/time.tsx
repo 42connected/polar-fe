@@ -1,6 +1,6 @@
 import { Switch } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import Columns from '@/components/signup/getColumns';
+import Columns from '@/components/v1/signup/getColumns';
 import addButtonImage from '@/assets/signup/addButton.png';
 import {
   AddButtonImage,

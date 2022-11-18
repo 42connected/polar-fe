@@ -1,4 +1,4 @@
-import CheckBox from '@/components/check-box';
+import CheckBox from '@/components/v1/check-box';
 import styled from 'styled-components';
 import theme from '@/styles/theme';
 import { dataRoomProps } from '@/interface/data-room/data-room-props.interface';

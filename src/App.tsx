@@ -7,9 +7,10 @@ import UserJoinStore from '@/states/user-join/UserJoinStore';
 import ErrorStore from '@/states/error/ErrorStore';
 import { UserJoin } from '@/containers/user-join/user-join';
 import { Error } from '@/containers/error/error';
-import Footer from '@/components/footer';
-import Header from '@/components/header/header';
-import { Loading } from '@/components/loading';
+import Footer from '@/components/v1/footer';
+import Header from '@/components/v1/header/header';
+import { Loading } from '@/components/v1/loading';
+import loadable from '@loadable/component';
 import Routes from '@/src//Routes';
 
 /*

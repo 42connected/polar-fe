@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import {
   OneButtonModal,
   OneButtonModalProps,
-} from '@/components/modal/one-button-modal/one-button-modal';
+} from '@/components/v1/modal/one-button-modal/one-button-modal';
 import AuthStore from '@/states/auth/AuthStore';
 import LoadingStore from '@/states/loading/LoadingStore';
 import theme from '@/styles/theme';
