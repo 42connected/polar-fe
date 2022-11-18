@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { InputHTMLAttributes, useState } from 'react';
-import defaultTheme from '../../../styles/themeV2';
+import defaultTheme from '@/styles/themeV2';
 
 interface Props extends InputHTMLAttributes<HTMLTextAreaElement> {
   maxLength?: number;

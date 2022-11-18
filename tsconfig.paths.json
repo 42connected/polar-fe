@@ -7,10 +7,12 @@
       "@/components/*": ["src/components/*"],
       "@/containers/*": ["src/containers/*"],
       "@/context/*": ["src/context/*"],
+      "@/hooks/*": ["src/hooks/*"],
       "@/interface/*": ["src/interface/*"],
       "@/interfaces/*": ["src/interfaces/*"],
       "@/states/*": ["src/states/*"],
-      "@/styles/*": ["src/styles/*"]
+      "@/styles/*": ["src/styles/*"],
+      "@/utils/*": ["src/utils/*"]
     }
   }
 }

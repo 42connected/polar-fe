@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-import defaultTheme from '../../../styles/theme';
+import defaultTheme from '@/styles/themeV2';
 import Button from '../Button';
 import { ErrorModalBox } from './ModalBox';
 

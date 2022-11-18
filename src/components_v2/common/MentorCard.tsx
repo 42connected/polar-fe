@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import defaultTheme from '../../../styles/themeV2';
+import defaultTheme from '@/styles/themeV2';
 import Button from './Button';
 
 interface mentorCardProps {
