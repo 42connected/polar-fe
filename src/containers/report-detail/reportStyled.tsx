@@ -42,7 +42,6 @@ export const ReportContainer = styled.span<{
   transition: all 0.25s ease-in-out;
   border-radius: 10px;
   margin-left: -2rem;
-  margin-top: ${props => props.index * 224.52 + 'rem'};
   background-color: ${theme.colors.backgoundWhite};
 `;
 
