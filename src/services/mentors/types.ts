@@ -1,3 +1,3 @@
-import { Mentor } from '@/src/interfaces';
+import MentorDetailProps from '@/interface/mentor-detail/mentor-detail.interface';
 
-export type GetMentorDetailResponse = Mentor;
+export type GetMentorDetailResponse = MentorDetailProps;

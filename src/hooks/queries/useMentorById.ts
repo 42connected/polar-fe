@@ -10,7 +10,7 @@ export const useMentorById = (slackId: string) => {
       return {
         ...response,
         createdAt: new Date(response.createdAt),
-        updatedAt: new Date(response.updatedAt),
+        updatedAt: response.updatedAt ? new Date(response.updatedAt) : null,
       };
     },
     enabled: !!slackId,
