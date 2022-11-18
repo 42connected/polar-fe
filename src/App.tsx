@@ -1,15 +1,16 @@
-import { observer } from 'mobx-react-lite';
-import { UserJoin } from './containers/user-join/user-join';
-import { Error } from './containers/error/error';
-import LoadingStore from './states/loading/LoadingStore';
-import Footer from './components/footer';
-import Header from './components/header/header';
-import { Loading } from './components/loading';
-import UserJoinStore from './states/user-join/UserJoinStore';
-import ErrorStore from './states/error/ErrorStore';
 import { Suspense } from 'react';
-import ScrollToTop from './containers/scroll-to-top/scroll-to-top';
-import Routes from './Routes';
+import { observer } from 'mobx-react-lite';
+
+import ScrollToTop from '@/containers/scroll-to-top/scroll-to-top';
+import LoadingStore from '@/states/loading/LoadingStore';
+import UserJoinStore from '@/states/user-join/UserJoinStore';
+import ErrorStore from '@/states/error/ErrorStore';
+import { UserJoin } from '@/containers/user-join/user-join';
+import { Error } from '@/containers/error/error';
+import Footer from '@/components/footer';
+import Header from '@/components/header/header';
+import { Loading } from '@/components/loading';
+import Routes from '@/src//Routes';
 
 /*
  * <Route path='/경로' element={<컴포넌트 />}

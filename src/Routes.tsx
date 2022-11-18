@@ -1,33 +1,31 @@
 import { Route, Routes as ReactRouterRoutes } from 'react-router-dom';
 import loadable from '@loadable/component';
 
-// import Login from './containers/login/login';
-
-const Login = loadable(() => import('./containers/login/login'));
+const Login = loadable(() => import('@/containers/login/login'));
 const MentorList = loadable(
-  () => import('./containers/mentor-list/mentor-list'),
+  () => import('@/containers/mentor-list/mentor-list'),
 );
-const DataRoom = loadable(() => import('./containers/data-room/data-room'));
+const DataRoom = loadable(() => import('@/containers/data-room/data-room'));
 const MyMentoringMentor = loadable(
-  () => import('./containers/my-mentoring-mentor/my-mentoring-mentor'),
+  () => import('@/containers/my-mentoring-mentor/my-mentoring-mentor'),
 );
 const CadetMentoring = loadable(
-  () => import('./containers/cadet-mentoring/cadet-mentoring'),
+  () => import('@/containers/cadet-mentoring/cadet-mentoring'),
 );
 const SignUpMentor = loadable(
-  () => import('./containers/signup/signup-mentor'),
+  () => import('@/containers/signup/signup-mentor'),
 );
-const NotFound = loadable(() => import('./containers/not-found/not-found'));
-const ReportForm = loadable(() => import('./containers/reports/report-form'));
-const MainPage = loadable(() => import('./containers/main-page/main-page'));
-const ApplyPage = loadable(() => import('./containers/apply-page/apply-page'));
+const NotFound = loadable(() => import('@/containers/not-found/not-found'));
+const ReportForm = loadable(() => import('@/containers/reports/report-form'));
+const MainPage = loadable(() => import('@/containers/main-page/main-page'));
+const ApplyPage = loadable(() => import('@/containers/apply-page/apply-page'));
 const ReportDetail = loadable(
-  () => import('./containers/report-detail/report-detail'),
+  () => import('@/containers/report-detail/report-detail'),
 );
 const MentorDetail = loadable(
-  () => import('./containers/mentor-detail/mentor-detail'),
+  () => import('@/containers/mentor-detail/mentor-detail'),
 );
-const SignUpCadet = loadable(() => import('./containers/signup/signup-cadet'));
+const SignUpCadet = loadable(() => import('@/containers/signup/signup-cadet'));
 
 function Routes() {
   return (
