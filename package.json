@@ -54,6 +54,7 @@
     "react-slick": "^0.29.0",
     "react-table": "^7.8.0",
     "react-to-print": "^2.14.7",
+    "recoil": "^0.7.6",
     "serve": "^14.0.1",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.5",

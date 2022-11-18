@@ -13,7 +13,8 @@
       "@/states/*": ["src/states/*"],
       "@/styles/*": ["src/styles/*"],
       "@/utils/*": ["src/utils/*"],
-      "@/services/*": ["src/services/*"]
+      "@/services/*": ["src/services/*"],
+      "@/recoil/*": ["src/recoil/*"]
     }
   }
 }
