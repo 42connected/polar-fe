@@ -31,6 +31,13 @@ const Div = styled.div`
   margin-top: 2rem;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.2rem;
+`;
+
 interface CategoryAndKeywords {
   name: string;
   keywords: string[];
@@ -64,6 +71,7 @@ function SelectKeywords(props: Props) {
   const mentorId = useParams().intraId;
 
   useEffect(() => {
+    LoadingStore.on();
     axiosInstance.get('categories/category/keywords').then(response => {
       setCategoryKeywords(response.data);
     });
@@ -75,6 +83,7 @@ function SelectKeywords(props: Props) {
         }),
       );
     });
+    LoadingStore.off();
   }, []);
 
   const handleSubmitNo = () => {
@@ -92,7 +101,6 @@ function SelectKeywords(props: Props) {
   };
 
   const groupOptions = useMemo(() => {
-    LoadingStore.on();
     const groups: GroupOption[] = categoryKeywords.map(data => {
       const group: GroupOption = { label: data.name, options: [] };
       data.keywords.forEach(keyword =>
@@ -100,7 +108,6 @@ function SelectKeywords(props: Props) {
       );
       return group;
     });
-    LoadingStore.off();
     return groups;
   }, [categoryKeywords]);
 
@@ -109,19 +116,6 @@ function SelectKeywords(props: Props) {
       Authorization: `bearer ${AuthStore.getAccessToken()}`,
     },
   };
-
-  const ButtonBoxComponent = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 1rem;
-  `;
-
-  const ButtonContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1.2rem;
-  `;
 
   function patchMentorKeywords(mentorKeywords: Option[]) {
     const newMentorKeywords: { keywords: string[] } = { keywords: [] };
