@@ -5,6 +5,59 @@ import defaultTheme from '@/styles/themeV2';
 import Button from '../Button';
 import { ConfirmModalBox } from './ModalBox';
 
+interface ModalProps {
+  XButtonFunc: () => void;
+}
+
+function ConfirmModal(props: ModalProps) {
+  const { XButtonFunc } = props;
+
+  return (
+    <div>
+      <ModalBackground>
+        <ConfirmModalBox>
+          <XButton>
+            <FontAwesomeIcon
+              icon={faXmark}
+              size="2x"
+              style={{ opacity: 0.3, cursor: 'pointer' }}
+              onClick={XButtonFunc}
+            />
+          </XButton>
+          <ModalContainer>
+            <ModalConfirmText>정말로 취소하시겠습니까?</ModalConfirmText>
+          </ModalContainer>
+          <ButtonContainer>
+            <ConfirmButton>
+              <Button
+                type="button"
+                size="small"
+                onClick={XButtonFunc}
+                fullWidth
+              >
+                네
+              </Button>
+            </ConfirmButton>
+            <ConfirmButton>
+              <Button
+                type="button"
+                size="small"
+                bgColor="red"
+                onClick={XButtonFunc}
+                fullWidth
+              >
+                아니오
+              </Button>
+            </ConfirmButton>
+          </ButtonContainer>
+        </ConfirmModalBox>
+      </ModalBackground>
+    </div>
+  );
+}
+
+export default ConfirmModal;
+
 const ModalBackground = styled.div`
   display: flex;
   flex-direction: column;
@@ -62,55 +115,3 @@ const ButtonContainer = styled.div`
 const ConfirmButton = styled.div`
   width: 5.7rem;
 `;
-
-interface ModalProps {
-  XButtonFunc: () => void;
-}
-
-function ConfirmModal(props: ModalProps) {
-  const { XButtonFunc } = props;
-  return (
-    <div>
-      <ModalBackground>
-        <ConfirmModalBox>
-          <XButton>
-            <FontAwesomeIcon
-              icon={faXmark}
-              size="2x"
-              style={{ opacity: 0.3, cursor: 'pointer' }}
-              onClick={XButtonFunc}
-            />
-          </XButton>
-          <ModalContainer>
-            <ModalConfirmText>정말로 취소하시겠습니까?</ModalConfirmText>
-          </ModalContainer>
-          <ButtonContainer>
-            <ConfirmButton>
-              <Button
-                type="button"
-                size="small"
-                onClick={XButtonFunc}
-                fullWidth
-              >
-                네
-              </Button>
-            </ConfirmButton>
-            <ConfirmButton>
-              <Button
-                type="button"
-                size="small"
-                bgColor="red"
-                onClick={XButtonFunc}
-                fullWidth
-              >
-                아니오
-              </Button>
-            </ConfirmButton>
-          </ButtonContainer>
-        </ConfirmModalBox>
-      </ModalBackground>
-    </div>
-  );
-}
-
-export default ConfirmModal;

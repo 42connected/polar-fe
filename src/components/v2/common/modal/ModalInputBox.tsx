@@ -1,6 +1,23 @@
 import styled from 'styled-components';
 import defaultTheme from '@/styles/themeV2';
 
+interface ModalInputBoxProps {
+  title: string;
+  content: string;
+}
+
+function ModalInputBoxResult(props: ModalInputBoxProps) {
+  const { title, content } = props;
+  return (
+    <ModalInputBox>
+      <ModalInputTitle>{title}</ModalInputTitle>
+      <ModalTextBox value={content} readOnly />
+    </ModalInputBox>
+  );
+}
+
+export default ModalInputBoxResult;
+
 const ModalInputBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -32,20 +49,3 @@ const ModalTextBox = styled.textarea`
   letter-spacing: 0.03rem;
   line-height: 1.3rem;
 `;
-
-interface ModalInputBoxProps {
-  title: string;
-  content: string;
-}
-
-function ModalInputBoxResult(props: ModalInputBoxProps) {
-  const { title, content } = props;
-  return (
-    <ModalInputBox>
-      <ModalInputTitle>{title}</ModalInputTitle>
-      <ModalTextBox value={content} readOnly />
-    </ModalInputBox>
-  );
-}
-
-export default ModalInputBoxResult;

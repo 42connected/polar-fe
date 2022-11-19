@@ -9,7 +9,7 @@ const ModalBox = styled.div`
   background-color: ${defaultTheme.colors.white};
   box-shadow: rgba(0, 0, 0, 0.3) 0rem 0.3rem 0.4rem 0.1rem;
   border-radius: 1rem;
-  padding-top: 2.5rem;
+  padding: 2rem;
   overflow: auto;
 `;
 
@@ -31,4 +31,12 @@ export const ErrorModalBox = styled(ModalBox)`
 export const GuideModalBox = styled(ModalBox)`
   width: 31rem;
   height: 43.5rem;
+`;
+
+export const MentoringListModalBox = styled(ModalBox)`
+  padding: 1.5rem;
+  padding-bottom: 1rem;
+  margin: 1rem;
+  width: 31.8rem;
+  height: 16.5rem;
 `;

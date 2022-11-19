@@ -5,6 +5,50 @@ import defaultTheme from '@/styles/themeV2';
 import Button from '../Button';
 import { ErrorModalBox } from './ModalBox';
 
+interface ModalProps {
+  XButtonFunc: () => void;
+}
+
+function ErrorModal(props: ModalProps) {
+  const { XButtonFunc } = props;
+
+  return (
+    <ModalBackground>
+      <ErrorModalBox>
+        <ModalTitleContainer>
+          <XButton onClick={XButtonFunc}>
+            <FontAwesomeIcon
+              icon={faXmark}
+              size="2x"
+              style={{ opacity: 0.3, cursor: 'pointer' }}
+              onClick={XButtonFunc}
+            />
+          </XButton>
+          <ErrorModalTitle>🚨 42폴라 에러</ErrorModalTitle>
+        </ModalTitleContainer>
+        <ModalContainer>
+          <ErrorModalText>로그인이 필요한 페이지입니다.</ErrorModalText>
+        </ModalContainer>
+        <ButtonContainer>
+          <ErrorButton>
+            <Button
+              type="button"
+              size="medium"
+              bgColor="red"
+              onClick={XButtonFunc}
+              fullWidth
+            >
+              닫기
+            </Button>
+          </ErrorButton>
+        </ButtonContainer>
+      </ErrorModalBox>
+    </ModalBackground>
+  );
+}
+
+export default ErrorModal;
+
 const ModalBackground = styled.div`
   display: flex;
   flex-direction: column;
@@ -81,46 +125,3 @@ const ErrorModalText = styled.div`
 const ErrorButton = styled.div`
   width: 6rem;
 `;
-
-interface ModalProps {
-  XButtonFunc: () => void;
-}
-
-function ErrorModal(props: ModalProps) {
-  const { XButtonFunc } = props;
-  return (
-    <ModalBackground>
-      <ErrorModalBox>
-        <ModalTitleContainer>
-          <XButton onClick={XButtonFunc}>
-            <FontAwesomeIcon
-              icon={faXmark}
-              size="2x"
-              style={{ opacity: 0.3, cursor: 'pointer' }}
-              onClick={XButtonFunc}
-            />
-          </XButton>
-          <ErrorModalTitle>🚨 42폴라 에러</ErrorModalTitle>
-        </ModalTitleContainer>
-        <ModalContainer>
-          <ErrorModalText>로그인이 필요한 페이지입니다.</ErrorModalText>
-        </ModalContainer>
-        <ButtonContainer>
-          <ErrorButton>
-            <Button
-              type="button"
-              size="medium"
-              bgColor="red"
-              onClick={XButtonFunc}
-              fullWidth
-            >
-              닫기
-            </Button>
-          </ErrorButton>
-        </ButtonContainer>
-      </ErrorModalBox>
-    </ModalBackground>
-  );
-}
-
-export default ErrorModal;

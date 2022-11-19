@@ -6,79 +6,13 @@ import { GuideModalBox } from './ModalBox';
 import Button from '../Button';
 import ModalInputBox from './ModalInputBox';
 
-const ModalBackground = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(246, 246, 246, 0.7);
-  z-index: ${defaultTheme.zIndex.modal};
-`;
-
-const XButton = styled.button`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 1rem;
-  right: 1rem;
-  background-color: transparent;
-  border: none;
-`;
-
-const ModalTitleContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-`;
-
-const ModalTitle = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  width: 100%;
-  font-family: ${defaultTheme.font.sebangGothic};
-  font-size: ${defaultTheme.mobileFontSize.sizeLarge};
-`;
-
-const ModalBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  width: 25rem;
-  height: 28rem;
-  background-color: ${defaultTheme.colors.inputBoxColor};
-  border-radius: 1rem;
-  margin-top: 2.6rem;
-  padding: 1rem;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  width: 100%;
-  margin: 0 auto;
-  margin-bottom: 2.6rem;
-  margin-top: 2.6rem;
-`;
-
-const GuideButton = styled.div`
-  width: 8.3rem;
-`;
-
 interface ModalProps {
   XButtonFunc: () => void;
 }
 
 function GuideModal(props: ModalProps) {
   const { XButtonFunc } = props;
+
   return (
     <div>
       <ModalBackground>
@@ -164,3 +98,70 @@ function GuideModal(props: ModalProps) {
 }
 
 export default GuideModal;
+
+const ModalBackground = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(246, 246, 246, 0.7);
+  z-index: ${defaultTheme.zIndex.modal};
+`;
+
+const XButton = styled.button`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 1rem;
+  right: 1rem;
+  background-color: transparent;
+  border: none;
+`;
+
+const ModalTitleContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
+
+const ModalTitle = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  font-family: ${defaultTheme.font.sebangGothic};
+  font-size: ${defaultTheme.mobileFontSize.sizeLarge};
+`;
+
+const ModalBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 25rem;
+  height: 28rem;
+  background-color: ${defaultTheme.colors.inputBoxColor};
+  border-radius: 1rem;
+  margin-top: 2.6rem;
+  padding: 1rem;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  margin: 0 auto;
+  margin-bottom: 2.6rem;
+  margin-top: 2.6rem;
+`;
+
+const GuideButton = styled.div`
+  width: 8.3rem;
+`;
