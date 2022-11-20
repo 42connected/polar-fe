@@ -56,6 +56,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+		"deploy" : "aws s3 sync ./build s3://polar42-fe-production --profile=joyoo",
     "start": "react-scripts start",
     "start-prod": "serve -s build",
     "build": "react-scripts build",
