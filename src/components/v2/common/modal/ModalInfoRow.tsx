@@ -1,6 +1,23 @@
 import styled from 'styled-components';
 import defaultTheme from '@/styles/themeV2';
 
+interface ModalInfoRowProps {
+  title: string;
+  content: any;
+}
+
+function ModalInfoRowResult(props: ModalInfoRowProps) {
+  const { title, content } = props;
+  return (
+    <ModalInfoRow>
+      <ModalInfoTitle>{title}</ModalInfoTitle>
+      <ModalInfoContent>{content}</ModalInfoContent>
+    </ModalInfoRow>
+  );
+}
+
+export default ModalInfoRowResult;
+
 const ModalInfoRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -27,20 +44,3 @@ const ModalInfoContent = styled.div`
   letter-spacing: 0.03rem;
   line-height: 1.3rem;
 `;
-
-interface ModalInfoRowProps {
-  title: string;
-  content: any;
-}
-
-function ModalInfoRowResult(props: ModalInfoRowProps) {
-  const { title, content } = props;
-  return (
-    <ModalInfoRow>
-      <ModalInfoTitle>{title}</ModalInfoTitle>
-      <ModalInfoContent>{content}</ModalInfoContent>
-    </ModalInfoRow>
-  );
-}
-
-export default ModalInfoRowResult;

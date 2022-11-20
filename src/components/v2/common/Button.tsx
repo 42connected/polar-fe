@@ -4,11 +4,11 @@ import defaultTheme from '@/styles/themeV2';
 
 interface BtnProps {
   type: 'submit' | 'button';
+  size: 'large' | 'medium' | 'small' | 'modalMedium' | 'modalSmall';
   bgColor?: string;
   textColor?: string;
   children: React.ReactNode;
   fullWidth?: boolean;
-  size: 'large' | 'medium' | 'small' | 'modalMedium' | 'modalSmall';
   border?: string;
   onClick?: any;
   shadow?: string;
@@ -63,8 +63,7 @@ const StyledBtn = styled.button<BtnProps>`
   outline: none;
   cursor: pointer;
   align-items: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  justify-content: center;
   border-radius: ${props => props.radius};
   box-shadow: ${props => props.shadow};
   color: ${props => props.textColor};
@@ -76,10 +75,19 @@ const StyledBtn = styled.button<BtnProps>`
   & + & {
     margin-left: 1rem;
   }
-  ${sizeStyles}
-  ${fullWidthStyle}
+  ${sizeStyles};
+  ${fullWidthStyle};
 `;
 
+/**
+ * `Button` 컴포넌트 필수 인자
+ * @param {*} type 'submit' | 'button' 현재 버튼의 쓰임을 지정 (필수)
+ * @param {*} size 'large' | 'medium' | 'small' | 'modalMedium' | 'modalSmall' 지정 크기 사용 (필수)
+ *
+ * `Button` 컴포넌트 선택 인자
+ * @param {*} fullWidth 원하는 크기만큼 width를 채우고 싶은 경우 사용
+ * else ...
+ */
 export default function Button({
   type,
   bgColor,
