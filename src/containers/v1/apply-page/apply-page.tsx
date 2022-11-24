@@ -25,7 +25,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
-import MentorDetailProps from '@/interfaces/mentor-detail/mentor-detail.interface';
+import MentorDetailProps from '@/interfaces/v1/mentor-detail/mentor-detail.interface';
 import { NewDateKr, NowDateKr } from '@/states/date-kr';
 import { MainBlueBody } from '@/src/containers/v1/main-page/mainPageStyled';
 

@@ -9,7 +9,7 @@ import DataRoomList from '@/containers/v1/data-room/data-room-list';
 import SearchBox from '@/components/v1/data-room/search-box';
 import AuthStore, { USER_ROLES } from '@/states/auth/AuthStore';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { dataRoomQuery } from '@/src/interfaces/data-room/data-room-query.interface';
+import { dataRoomQuery } from '@/interfaces/v1/data-room/data-room-query.interface';
 import { useMediaQuery } from 'react-responsive';
 import LoadingStore from '@/states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
@@ -21,7 +21,7 @@ import {
 } from '@/context/axios-interface';
 import axios from 'axios';
 import { RequestErrorResponse } from '@/containers/v1/apply-page/apply-page';
-import { dataRoomProps } from '@/src/interfaces/data-room/data-room-props.interface';
+import { dataRoomProps } from '@/interfaces/v1/data-room/data-room-props.interface';
 
 export const muiPaginationTheme = createTheme({
   palette: {

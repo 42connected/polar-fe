@@ -1,4 +1,4 @@
-import MentorDetailProps from '@/interfaces/mentor-detail/mentor-detail.interface';
+import MentorDetailProps from '@/interfaces/v1/mentor-detail/mentor-detail.interface';
 
 export interface GetMentorsByCategoriesResponse {
   category: { id: string; name: string };

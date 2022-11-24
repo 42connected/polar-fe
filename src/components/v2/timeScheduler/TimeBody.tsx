@@ -3,7 +3,7 @@ import { isEqual } from 'date-fns';
 import styled from 'styled-components';
 
 import { useSchedule } from '@/hooks/useSchedule';
-import { DuringDate } from '@/interfaces/timeScheduler.interface';
+import { DuringDate } from '@/interfaces/v2/timeScheduler.interface';
 
 interface Props {
   selectedDate: Partial<DuringDate>;

@@ -12,7 +12,7 @@ import {
   axiosWithData,
   AXIOS_METHOD_WITH_DATA,
 } from '@/context/axios-interface';
-import { ResumeProps } from '@/interfaces/cadet-mentoring/resume-props.interface';
+import { ResumeProps } from '@/interfaces/v1/cadet-mentoring/resume-props.interface';
 import AuthStore from '@/states/auth/AuthStore';
 
 const Container = styled.div`

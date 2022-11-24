@@ -1,8 +1,8 @@
 import DataRoomListElement from '@/containers/v1/data-room/data-room-list-element';
 import styled from 'styled-components';
 import theme from '@/styles/theme';
-import { dataRoomQuery } from '@/src/interfaces/data-room/data-room-query.interface';
-import { dataRoomProps } from '@/src/interfaces/data-room/data-room-props.interface';
+import { dataRoomQuery } from '@/interfaces/v1/data-room/data-room-query.interface';
+import { dataRoomProps } from '@/interfaces/v1/data-room/data-room-props.interface';
 import CheckBox from '@/components/v1/check-box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';

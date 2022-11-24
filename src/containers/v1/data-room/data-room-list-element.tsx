@@ -1,7 +1,7 @@
 import CheckBox from '@/components/v1/check-box';
 import styled from 'styled-components';
 import theme from '@/styles/theme';
-import { dataRoomProps } from '@/src/interfaces/data-room/data-room-props.interface';
+import { dataRoomProps } from '@/interfaces/v1/data-room/data-room-props.interface';
 import { NewDateKr } from '@/states/date-kr';
 import { Link } from 'react-router-dom';
 

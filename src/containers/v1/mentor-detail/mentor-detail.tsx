@@ -17,10 +17,10 @@ import { TwoButtonModal } from '@/components/v1/modal/two-button-modal.tsx/two-b
 import PageNationComponent from '@/components/v1/page-nation';
 import { axiosInstance } from '@/context/axios-interface';
 import { getCookie, TOKEN_LIST } from '@/context/cookies';
-import { appointmentsInterface } from '@/interfaces/mentor-detail/appointments.interface';
-import { CommentProps } from '@/interfaces/mentor-detail/comment-props.interface';
-import { mentorAvailableTimeInterface } from '@/interfaces/mentor-detail/mentor-available-time.interface';
-import MentorDetailProps from '@/interfaces/mentor-detail/mentor-detail.interface';
+import { appointmentsInterface } from '@/interfaces/v1/mentor-detail/appointments.interface';
+import { CommentProps } from '@/interfaces/v1/mentor-detail/comment-props.interface';
+import { mentorAvailableTimeInterface } from '@/interfaces/v1/mentor-detail/mentor-available-time.interface';
+import MentorDetailProps from '@/interfaces/v1/mentor-detail/mentor-detail.interface';
 import AuthStore, { User } from '@/states/auth/AuthStore';
 import theme from '@/styles/theme';
 import MarkdownRender from '@/containers/v1/mentor-detail/markdownRender';

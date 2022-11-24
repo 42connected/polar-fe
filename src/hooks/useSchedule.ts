@@ -7,7 +7,7 @@ import { getDateTheAppliedNewTime, isBetweenDates } from '@/utils/date';
 import {
   DuringDate,
   SelectDuringDate,
-} from '@/interfaces/timeScheduler.interface';
+} from '@/interfaces/v2/timeScheduler.interface';
 
 export const useSchedule = () => {
   const { body, navigation } = useCalendar({

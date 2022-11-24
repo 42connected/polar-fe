@@ -2,7 +2,7 @@ import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { selectList } from '@/src/interfaces/selectProps.interface';
+import { selectList } from '@/interfaces/v2/selectProps.interface';
 import defaultTheme from '@/styles/themeV2';
 
 interface Props {

@@ -8,7 +8,7 @@ import {
 } from '@/context/axios-interface';
 import { Header } from '@/containers/v1/cadet-mentoring/header';
 import LoadingStore from '@/states/loading/LoadingStore';
-import { MentoringLog } from '@/interfaces/cadet-mentoring/mentoring-log.interface';
+import { MentoringLog } from '@/interfaces/v1/cadet-mentoring/mentoring-log.interface';
 import AuthStore, { USER_ROLES } from '@/states/auth/AuthStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
 import defaultTheme from '@/styles/theme';
