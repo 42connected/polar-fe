@@ -62,12 +62,11 @@ import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
 import { NewDateKr } from '@/states/date-kr';
 import { autoAction } from 'mobx/dist/internal';
 
-const ReportpageStyle = styled.div<{
-  height: number;
-}>`
+const ReportpageStyle = styled.div`
   background-color: ${theme.colors.backgoundWhite};
   margin-left: 40rem;
   width: 100%;
+  height: 300rem;
   margin-left: 0;
 `;
 
@@ -144,155 +143,153 @@ const SimpleComponent = (props: {
           NewDateKr(reportdata?.mentoringLogs.meetingAt[1]),
         ];
         return (
-          <>
+          <div key={index}>
             {index != 0 ? (
-              <table style={{ pageBreakAfter: 'always' }}>
-                <div></div>
-              </table>
+              <>
+                <table style={{ pageBreakAfter: 'always' }}>
+                  <tbody></tbody>
+                </table>
+                <table style={{ pageBreakAfter: 'always' }}>
+                  <tbody></tbody>
+                </table>
+              </>
             ) : null}
-            <table key={index} style={{ pageBreakAfter: 'always' }}>
-              <ReportContainer index={index}>
-                <Title>
-                  <Titleplus>42 SEOUL</Titleplus> 멘토링 보고서(멘토용)
-                </Title>
-                <NoneValue1></NoneValue1>
-                <SubTitle1>구분</SubTitle1>
-                <MiniTitle1>공통과정</MiniTitle1>
-                <MiniTitle2>심화과정</MiniTitle2>
-                <NoneValue2></NoneValue2>
-                <SubTitle2>날짜</SubTitle2>
-                <DateBox>
-                  {reportdata?.mentoringLogs
-                    ? meetingAt[0].toLocaleDateString('ko-KR')
-                    : ''}
-                </DateBox>
-                <SubTitle8>시간</SubTitle8>
-                <TimeBox>
-                  {reportdata?.mentoringLogs
-                    ? meetingAt[0].getHours().toString().padStart(2, '0') +
-                      ':' +
-                      meetingAt[0].getMinutes().toString().padStart(2, '0') +
-                      '~' +
-                      meetingAt[1].getHours().toString().padStart(2, '0') +
-                      ':' +
-                      meetingAt[1].getMinutes().toString().padStart(2, '0')
-                    : ''}
-                </TimeBox>
-                <SubTitle3>장소</SubTitle3>
-                <PlaceBox>{reportdata?.place}</PlaceBox>
-                <SubTitle4>멘토이름</SubTitle4>
-                <MentorNameBox>
-                  {reportdata?.mentors.name}
-                  <SignText>(인)</SignText>
-                  <MentoSign>
-                    <img
-                      src={reportdata?.signatureUrl}
-                      style={signimagestyle}
-                    />
-                  </MentoSign>
-                </MentorNameBox>
-                <Cadet>멘티이름</Cadet>
-                <PlaceBox2>
-                  <PlaceBoxStyled len={reportdata?.extraCadets.length}>
-                    {reportdata?.cadets.name +
-                      '(' +
-                      reportdata?.cadets.intraId +
-                      ')' +
-                      ', ' +
-                      reportdata?.extraCadets}
-                  </PlaceBoxStyled>
-                </PlaceBox2>
-                <SubTitle5>멘토링개요</SubTitle5>
-                <ContentTitle1>주제</ContentTitle1>
-                <ContentBody1 len={reportdata?.topic.length}>
-                  {reportdata?.topic}
-                </ContentBody1>
-                <ContentTitle2>내용</ContentTitle2>
-                <ContentBody2 len={reportdata?.content.length}>
-                  {reportdata?.content}
-                </ContentBody2>
-                <ContentTitle3>
-                  교육생
-                  <br />
-                  에게
-                  <br /> 남기는 말
-                </ContentTitle3>
-                <ContentBody3 len={reportdata?.feedbackMessage.length}>
-                  {reportdata?.feedbackMessage}
-                </ContentBody3>
-                <SubTitle6>증빙사진</SubTitle6>
-                <ContentBody4>
-                  {reportdata?.imageUrl[0] ? (
-                    <img
-                      src={reportdata?.imageUrl[0]}
-                      style={{
-                        height: 'auto',
-                        maxWidth: '30rem',
-                        maxHeight: '35rem',
-                        minWidth: '20rem',
-                      }}
-                    />
-                  ) : (
-                    ''
-                  )}
-                  {reportdata?.imageUrl[1] ? (
-                    <img
-                      src={reportdata?.imageUrl[1]}
-                      style={{
-                        height: 'auto',
-                        maxWidth: '30rem',
-                        maxHeight: '35rem',
-                        minWidth: '20rem',
-                      }}
-                    />
-                  ) : (
-                    ''
-                  )}
-                </ContentBody4>
-                <SubTitle7>
-                  멘토링 <br /> 피드백
-                </SubTitle7>
-                <ContentBody5>
-                  멘토링에 대한 느낌을 점수로 적어주세요. (최고 5점, 최저 1점)
-                  <br />
-                  1. 교육생이 궁금한 것을 잘 정리해왔나요? (
-                  {reportdata?.feedback1})
-                  <br />
-                  2. 교육생과 함께 한 시간이 만족스러웠나요? (
-                  {reportdata?.feedback2})
-                  <br />
-                  3. 교육생이 전달한 내용을 잘 이해했나요? (
-                  {reportdata?.feedback3})
-                  <br />
-                </ContentBody5>
-                <ContentBody6>(재)이노베이션 아카데미 귀하</ContentBody6>
-                {reportdata?.cadets.isCommon ? (
-                  <IsCommonBox> o </IsCommonBox>
-                ) : (
-                  <IsCommonBox> </IsCommonBox>
-                )}
-                {reportdata?.cadets.isCommon ? (
-                  <NotCommonBox> </NotCommonBox>
-                ) : (
-                  <NotCommonBox> o </NotCommonBox>
-                )}
-                <ImgLogo1>
+            <ReportContainer>
+              <Title>
+                <Titleplus>42 SEOUL</Titleplus> 멘토링 보고서(멘토용)
+              </Title>
+              <NoneValue1></NoneValue1>
+              <SubTitle1>구분</SubTitle1>
+              <MiniTitle1>공통과정</MiniTitle1>
+              <MiniTitle2>심화과정</MiniTitle2>
+              <NoneValue2></NoneValue2>
+              <SubTitle2>날짜</SubTitle2>
+              <DateBox>
+                {reportdata?.mentoringLogs
+                  ? meetingAt[0].toLocaleDateString('ko-KR')
+                  : ''}
+              </DateBox>
+              <SubTitle8>시간</SubTitle8>
+              <TimeBox>
+                {reportdata?.mentoringLogs
+                  ? meetingAt[0].getHours().toString().padStart(2, '0') +
+                    ':' +
+                    meetingAt[0].getMinutes().toString().padStart(2, '0') +
+                    '~' +
+                    meetingAt[1].getHours().toString().padStart(2, '0') +
+                    ':' +
+                    meetingAt[1].getMinutes().toString().padStart(2, '0')
+                  : ''}
+              </TimeBox>
+              <SubTitle3>장소</SubTitle3>
+              <PlaceBox>{reportdata?.place}</PlaceBox>
+              <SubTitle4>멘토이름</SubTitle4>
+              <MentorNameBox>
+                {reportdata?.mentors.name}
+                <SignText>(인)</SignText>
+                <MentoSign>
+                  <img src={reportdata?.signatureUrl} style={signimagestyle} />
+                </MentoSign>
+              </MentorNameBox>
+              <Cadet>멘티이름</Cadet>
+              <PlaceBox2>
+                <PlaceBoxStyled len={reportdata?.extraCadets.length}>
+                  {reportdata?.cadets.name +
+                    '(' +
+                    reportdata?.cadets.intraId +
+                    ')' +
+                    ', ' +
+                    reportdata?.extraCadets}
+                </PlaceBoxStyled>
+              </PlaceBox2>
+              <SubTitle5>멘토링개요</SubTitle5>
+              <ContentTitle1>주제</ContentTitle1>
+              <ContentBody1
+                len={reportdata?.topic.length}
+                readOnly
+                value={reportdata?.topic}
+              ></ContentBody1>
+              <ContentTitle2>내용</ContentTitle2>
+              <ContentBody2
+                len={reportdata?.content.length}
+                readOnly
+                value={reportdata?.content}
+              ></ContentBody2>
+              <ContentTitle3>
+                교육생
+                <br />
+                에게
+                <br /> 남기는 말
+              </ContentTitle3>
+              <ContentBody3
+                len={reportdata?.feedbackMessage.length}
+                readOnly
+                value={reportdata?.feedbackMessage}
+              ></ContentBody3>
+              <SubTitle6>증빙사진</SubTitle6>
+              <ContentBody4>
+                {reportdata?.imageUrl[0] ? (
                   <img
-                    src={ino1}
-                    style={imagestyle2}
-                    className="report-image"
+                    src={reportdata?.imageUrl[0]}
+                    style={{
+                      height: 'auto',
+                      maxWidth: '30rem',
+                      maxHeight: '35rem',
+                      minWidth: '20rem',
+                    }}
                   />
-                </ImgLogo1>
-                <ImgLogo3>
+                ) : (
+                  ''
+                )}
+                {reportdata?.imageUrl[1] ? (
                   <img
-                    src={ino1}
-                    style={imagestyle2}
-                    className="report-image"
+                    src={reportdata?.imageUrl[1]}
+                    style={{
+                      height: 'auto',
+                      maxWidth: '30rem',
+                      maxHeight: '35rem',
+                      minWidth: '20rem',
+                    }}
                   />
-                </ImgLogo3>
-              </ReportContainer>
-            </table>
-          </>
+                ) : (
+                  ''
+                )}
+              </ContentBody4>
+              <SubTitle7>
+                멘토링 <br /> 피드백
+              </SubTitle7>
+              <ContentBody5>
+                멘토링에 대한 느낌을 점수로 적어주세요. (최고 5점, 최저 1점)
+                <br />
+                1. 교육생이 궁금한 것을 잘 정리해왔나요? (
+                {reportdata?.feedback1})
+                <br />
+                2. 교육생과 함께 한 시간이 만족스러웠나요? (
+                {reportdata?.feedback2})
+                <br />
+                3. 교육생이 전달한 내용을 잘 이해했나요? (
+                {reportdata?.feedback3})
+                <br />
+              </ContentBody5>
+              <ContentBody6>(재)이노베이션 아카데미 귀하</ContentBody6>
+              {reportdata?.cadets.isCommon ? (
+                <IsCommonBox> o </IsCommonBox>
+              ) : (
+                <IsCommonBox> </IsCommonBox>
+              )}
+              {reportdata?.cadets.isCommon ? (
+                <NotCommonBox> </NotCommonBox>
+              ) : (
+                <NotCommonBox> o </NotCommonBox>
+              )}
+              <ImgLogo1>
+                <img src={ino1} style={imagestyle2} className="report-image" />
+              </ImgLogo1>
+              <ImgLogo3>
+                <img src={ino1} style={imagestyle2} className="report-image" />
+              </ImgLogo3>
+            </ReportContainer>
+          </div>
         );
       })}
     </div>
@@ -359,51 +356,27 @@ const ReportDetail = () => {
   } else
     return (
       <>
-        {isMobile ? (
-          <ReportpageStyle2 height={reportDatas.length}>
-            <ImgBody>
-              <SimpleComponent
-                printRef={componentRef}
-                reportDatas={reportDatas}
-              />
-            </ImgBody>
-            <ReactToPrint
-              content={() => componentRef.current}
-              trigger={() => (
-                <ButtonBody>
-                  <PrintButton ref={buttonRef}>출력</PrintButton>
-                </ButtonBody>
-              )}
-              onAfterPrint={() => {
-                if (isAutoPrint) {
-                  navigate('/data-room');
-                }
-              }}
+        <ReportpageStyle>
+          <ImgBody>
+            <SimpleComponent
+              printRef={componentRef}
+              reportDatas={reportDatas}
             />
-          </ReportpageStyle2>
-        ) : (
-          <ReportpageStyle height={reportDatas.length}>
-            <ImgBody>
-              <SimpleComponent
-                printRef={componentRef}
-                reportDatas={reportDatas}
-              />
-            </ImgBody>
-            <ReactToPrint
-              content={() => componentRef.current}
-              trigger={() => (
-                <ButtonBody>
-                  <PrintButton ref={buttonRef}>출력</PrintButton>
-                </ButtonBody>
-              )}
-              onAfterPrint={() => {
-                if (isAutoPrint) {
-                  navigate('/data-room');
-                }
-              }}
-            />
-          </ReportpageStyle>
-        )}
+          </ImgBody>
+          <ReactToPrint
+            content={() => componentRef.current}
+            trigger={() => (
+              <ButtonBody>
+                <PrintButton ref={buttonRef}>출력</PrintButton>
+              </ButtonBody>
+            )}
+            onAfterPrint={() => {
+              if (isAutoPrint) {
+                navigate('/data-room');
+              }
+            }}
+          />
+        </ReportpageStyle>
       </>
     );
 };
