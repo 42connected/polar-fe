@@ -65,6 +65,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+		"deploy" : "aws s3 sync ./build s3://polar42-fe-production --profile=joyoo",
     "start": "craco start",
     "start-prod": "serve -s build",
     "build": "craco build",

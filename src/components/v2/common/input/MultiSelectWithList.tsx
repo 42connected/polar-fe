@@ -2,7 +2,7 @@ import { SetStateAction } from 'react';
 import Box from '@mui/material/Box';
 import MultiSelect from './MultiSelect';
 import SelectedList from './SelectedList';
-import { selectList } from '@/src/interfaces/selectProps.interface';
+import { selectList } from '@/interfaces/v2/selectProps.interface';
 
 interface Props {
   list: selectList[];

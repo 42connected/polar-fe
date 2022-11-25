@@ -5,7 +5,7 @@ import Checkbox from '@mui/material/Checkbox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { selectList } from '@/src/interfaces/selectProps.interface';
+import { selectList } from '@/interfaces/v2/selectProps.interface';
 import defaultTheme from '@/styles/themeV2';
 
 interface Props {

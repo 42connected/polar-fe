@@ -4,7 +4,7 @@ import { useHover } from 'react-aria';
 import styled from 'styled-components';
 
 import SelectedTimeBlock from '@/components/v2/timeScheduler/SelectedTimeBlock';
-import { DuringDate, Schedule } from '@/interfaces/timeScheduler.interface';
+import { DuringDate, Schedule } from '@/interfaces/v2/timeScheduler.interface';
 
 interface Props {
   schedule: Schedule[];

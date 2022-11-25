@@ -3,7 +3,7 @@ import { differenceInMinutes, endOfDay, isSameDay } from 'date-fns';
 import styled from 'styled-components';
 
 import { isBetweenDates } from '@/utils/date';
-import { DuringDate } from '@/interfaces/timeScheduler.interface';
+import { DuringDate } from '@/interfaces/v2/timeScheduler.interface';
 
 interface Props {
   startDate: Date;
