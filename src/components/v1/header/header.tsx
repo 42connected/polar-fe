@@ -349,10 +349,10 @@ const Header = () => {
                   rel="noreferrer"
                 >
                   <SuggestionButton>건의사항</SuggestionButton>
-                  <Link to={'/cadets/mentorings'}>
-                    <MyMentoringButton>마이페이지</MyMentoringButton>
-                  </Link>
                 </a>
+                <Link to={'/cadets/mentorings'}>
+                  <MyMentoringButton>마이페이지</MyMentoringButton>
+                </Link>
               </div>
             ) : AuthStore.getUserRole() === USER_ROLES.MENTOR ? (
               <div>
