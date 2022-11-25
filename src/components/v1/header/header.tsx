@@ -1,8 +1,8 @@
 import { debounce } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import logo from '../../assets/image/logo/logoNew3.png';
+import logo from '@/assets/image/logo/logoNew3.png';
 import {
   DEFAULT_COOKIE_OPTION,
   removeCookie,
