@@ -4,12 +4,15 @@ import { useState } from 'react';
 import {
   OneButtonModal,
   OneButtonModalProps,
-} from '../../../components/modal/one-button-modal/one-button-modal';
-import AuthStore from '../../../states/auth/AuthStore';
-import LoadingStore from '../../../states/loading/LoadingStore';
-import defaultTheme from '../../../styles/theme';
-import { ModalType } from '../mentor-info-modal';
-import { IAvailableDate, IRows } from './mentor-details-modal-inteface';
+} from '@/components/v1/modal/one-button-modal/one-button-modal';
+import AuthStore from '@/states/auth/AuthStore';
+import LoadingStore from '@/states/loading/LoadingStore';
+import defaultTheme from '@/styles/theme';
+import { ModalType } from '@/containers/signup/mentor-info-modal';
+import {
+  IAvailableDate,
+  IRows,
+} from '@/containers/signup/modal/mentor-details-modal-inteface';
 
 const ModalFooterContainer = styled.div`
   display: flex;

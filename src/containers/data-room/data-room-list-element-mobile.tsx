@@ -1,10 +1,10 @@
-import CheckBox from '../../components/check-box';
-import { dataRoomProps } from '../../interface/data-room/data-room-props.interface';
+import CheckBox from '@/components/v1/check-box';
+import { dataRoomProps } from '@/interface/data-room/data-room-props.interface';
 import {
   TableData,
   CustomLink,
   refineMeetingAt,
-} from './data-room-list-element';
+} from '@/containers/data-room/data-room-list-element';
 
 function DataRoomListElementMobile(
   data: dataRoomProps,

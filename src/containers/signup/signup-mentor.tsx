@@ -1,15 +1,15 @@
 import { debounce, Switch } from '@mui/material';
 import axios from 'axios';
-import singupImage from '../../assets/signup/signup.png';
-import addButtonImage from '../../assets/signup/addButton.png';
+import singupImage from '@/assets/signup/signup.png';
+import addButtonImage from '@/assets/signup/addButton.png';
 import { useEffect, useRef, useState } from 'react';
-import Columns from '../../components/signup/getColumns';
+import Columns from '@/components/v1/signup/getColumns';
 import React from 'react';
-import LoadingStore from '../../states/loading/LoadingStore';
+import LoadingStore from '@/states/loading/LoadingStore';
 import { Navigate } from 'react-router-dom';
-import MentorStore from '../../states/my-mentoring-mentor/MentorStore';
-import AuthStore from '../../states/auth/AuthStore';
-import UserJoinStore from '../../states/user-join/UserJoinStore';
+import MentorStore from '@/states/my-mentoring-mentor/MentorStore';
+import AuthStore from '@/states/auth/AuthStore';
+import UserJoinStore from '@/states/user-join/UserJoinStore';
 import {
   AddButtonImage,
   BodyBigFont,
@@ -30,17 +30,17 @@ import {
   SingupImage,
   TimeTableContainer,
   ToggleContainer,
-} from './signup-style';
+} from '@/containers/signup/signup-style';
 import {
   OneButtonModal,
   OneButtonModalProps,
-} from '../../components/modal/one-button-modal/one-button-modal';
+} from '@/components/v1/modal/one-button-modal/one-button-modal';
 import {
   DEFAULT_COOKIE_OPTION,
   setCookie,
   TOKEN_LIST,
-} from '../../context/cookies';
-import theme from '../../styles/theme';
+} from '@/context/cookies';
+import theme from '@/styles/theme';
 
 interface AddColumnsProps {
   rows: IRows[];

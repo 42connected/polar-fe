@@ -3,17 +3,17 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styled from 'styled-components';
-import useImg from '../../assets/image/mainpageImg/img2.png';
-import noticeImg from '../../assets/image/mainpageImg/img3.png';
+import useImg from '@/assets/image/mainpageImg/img2.png';
+import noticeImg from '@/assets/image/mainpageImg/img3.png';
 import {
   MainBlueBody,
   NoticeTextStyle,
   TextStyle,
   TextUnder,
-} from './mainPageStyled';
+} from '@/containers/main-page/mainPageStyled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
-import theme from '../../styles/theme';
+import theme from '@/styles/theme';
 
 const settings = {
   dots: true,

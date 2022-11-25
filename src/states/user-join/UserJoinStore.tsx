@@ -1,5 +1,5 @@
 import { action, makeObservable, observable } from 'mobx';
-import ErrorStore from '../error/ErrorStore';
+import ErrorStore from '@/states/error/ErrorStore';
 
 class UserJoinStore {
   needJoin: boolean;

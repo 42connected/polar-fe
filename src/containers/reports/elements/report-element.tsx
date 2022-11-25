@@ -1,4 +1,8 @@
-import { ReportElementRoot, Topic, Content } from './element-styled';
+import {
+  ReportElementRoot,
+  Topic,
+  Content,
+} from '@/containers/reports/elements/element-styled';
 
 export interface ReportElementProps {
   topic: string;

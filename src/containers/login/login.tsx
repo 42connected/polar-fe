@@ -1,14 +1,14 @@
 import styled from '@emotion/styled';
 import axios from 'axios';
 import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Loading } from '../../components/loading';
+import { useSearchParams } from 'react-router-dom';
+import { Loading } from '@/components/v1/loading';
 import {
   DEFAULT_COOKIE_OPTION,
   setCookie,
   TOKEN_LIST,
-} from '../../context/cookies';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
+} from '@/context/cookies';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
 
 const Background = styled.div`
   display: flex;
@@ -19,11 +19,11 @@ const Background = styled.div`
 `;
 
 export function Login() {
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
   const code = params.get('code');
 
   useEffect(() => {
-    if (ErrorStore.isError === true) {
+    if (ErrorStore.isError) {
       return;
     }
     axios
@@ -64,3 +64,5 @@ export function Login() {
     </Background>
   );
 }
+
+export default Login;

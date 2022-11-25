@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { InfomationModal } from '../../components/modal/infomation-modal/infomation-modal';
-import defaultTheme from '../../styles/theme';
+import { InfomationModal } from '@/components/v1/modal/infomation-modal/infomation-modal';
+import defaultTheme from '@/styles/theme';
 
 const TableColumnLine = styled.div`
   display: flex;

@@ -7,8 +7,8 @@ import {
   ModalBox,
   ModalButtonContainer,
   ModalTitle,
-} from '../../../../components/modal/modal-styled';
-import TimePicker from './time-picker';
+} from '@/components/v1/modal/modal-styled';
+import TimePicker from '@/containers/reports/elements/report-time-picker/time-picker';
 
 const TitleContainer = styled.div`
   display: flex;

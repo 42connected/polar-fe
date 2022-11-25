@@ -1,22 +1,22 @@
 import styled from 'styled-components';
-import theme from '../../styles/theme';
+import theme from '@/styles/theme';
 import { useEffect, useState } from 'react';
 import { Button, debounce } from '@mui/material';
-import { InputCounter } from './apply-input-counter';
+import { InputCounter } from '@/containers/apply-page/apply-input-counter';
 import axios, { AxiosError } from 'axios';
-import { PostApply } from './apply-interface';
+import { PostApply } from '@/containers/apply-page/apply-interface';
 import {
   axiosInstance,
   axiosWithNoData,
   AXIOS_METHOD_WITH_NO_DATA,
-} from '../../context/axios-interface';
+} from '@/context/axios-interface';
 import { Navigate, useParams } from 'react-router-dom';
-import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
-import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
+import AuthStore, { USER_ROLES } from '@/states/auth/AuthStore';
+import { OneButtonModal } from '@/components/v1/modal/one-button-modal/one-button-modal';
 import { defaultTheme } from 'react-select';
-import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
-import { ApplyCalendarModal } from '../../components/apply-page/apply-calendar-modal';
-import LoadingStore from '../../states/loading/LoadingStore';
+import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
+import { ApplyCalendarModal } from '@/components/v1/apply-page/apply-calendar-modal';
+import LoadingStore from '@/states/loading/LoadingStore';
 import {
   faCalendarCheck,
   faCheck,
@@ -28,9 +28,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
-import MentorDetailProps from '../../interface/mentor-detail/mentor-detail.interface';
-import { NewDateKr, NowDateKr } from '../../states/date-kr';
-import { MainBlueBody } from '../main-page/mainPageStyled';
+import MentorDetailProps from '@/interface/mentor-detail/mentor-detail.interface';
+import { NewDateKr, NowDateKr } from '@/states/date-kr';
+import { MainBlueBody } from '@/containers/main-page/mainPageStyled';
 import { light } from '@mui/material/styles/createPalette';
 
 const Wrapper = styled.div`

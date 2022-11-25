@@ -3,18 +3,18 @@ import { useEffect, useState } from 'react';
 import {
   OneButtonModal,
   OneButtonModalProps,
-} from '../../../../components/modal/one-button-modal/one-button-modal';
-import AuthStore from '../../../../states/auth/AuthStore';
-import LoadingStore from '../../../../states/loading/LoadingStore';
-import theme from '../../../../styles/theme';
-import { MentorsData } from '../mentor-details-modal-inteface';
+} from '@/components/v1/modal/one-button-modal/one-button-modal';
+import AuthStore from '@/states/auth/AuthStore';
+import LoadingStore from '@/states/loading/LoadingStore';
+import theme from '@/styles/theme';
+import { MentorsData } from '@/containers/signup/modal/mentor-details-modal-inteface';
 import {
   CertificationSendingButton,
   Container,
   InfoInput,
   NameTitle,
   ResultMessage,
-} from './info-style';
+} from '@/containers/signup/modal/info/info-style';
 
 interface InfoProps {
   setName: React.Dispatch<React.SetStateAction<string>>;

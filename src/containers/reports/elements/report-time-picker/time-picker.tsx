@@ -8,9 +8,9 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
-import theme from '../../../../styles/theme';
-import { NewDateKr, NowDateKr } from '../../../../states/date-kr';
-import Button from '../../../../components/button';
+import theme from '@/styles/theme';
+import { NewDateKr, NowDateKr } from '@/states/date-kr';
+import Button from '@/components/v1/button';
 import { useState } from 'react';
 
 const muiTheme = createTheme({
