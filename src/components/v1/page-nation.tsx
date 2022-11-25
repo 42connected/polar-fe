@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { axiosInstance } from '@/context/axios-interface';
-import { MentoringLogProps } from '@/interface/mentor-detail/mentoringLogProps';
+import { MentoringLogProps } from '@/interfaces/v1/mentor-detail/mentoringLogProps';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
 import theme from '@/styles/theme';
 

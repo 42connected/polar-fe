@@ -3,10 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { createTheme, ThemeProvider } from '@mui/material';
 import defaultTheme from '@/styles/themeV2';
-import {
-  selectProps,
-  selectList,
-} from '@/src/interfaces/selectProps.interface';
+import { selectProps, selectList } from '@/interfaces/v2/selectProps.interface';
 
 const theme = createTheme({
   palette: {

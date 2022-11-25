@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
-import { ApplyModal } from '@/containers/cadet-mentoring/modal/modal';
-import { MentoringLog } from '@/interfaces/cadet-mentoring/mentoring-log.interface';
+import { ApplyModal } from '@/containers/v1/cadet-mentoring/modal/modal';
+import { MentoringLog } from '@/interfaces/v1/cadet-mentoring/mentoring-log.interface';
 import { NewDateKr } from '@/states/date-kr';
 import defaultTheme from '@/styles/theme';
 

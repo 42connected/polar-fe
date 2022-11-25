@@ -52,6 +52,7 @@ const CalendarDiv = styled.div`
   .react-calendar__tile {
     justify-content: center;
     align-items: center;
+    font-size: 1.4rem;
   }
   .react-calendar__tile--now {
     background-color: ${lighten(theme.colors.polarBrightMain, 0.6)};

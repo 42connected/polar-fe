@@ -4,7 +4,7 @@ import {
   BodyBigFont,
   DeleteButtonImage,
   TimeTableContainer,
-} from '@/containers/signup/signup-style';
+} from '@/containers/v1/signup/signup-style';
 
 const days: string[] = ['일', '월', '화', '수', '목', '금', '토'];
 
