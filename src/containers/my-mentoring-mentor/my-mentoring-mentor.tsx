@@ -155,7 +155,7 @@ const MyMentoringMentor = observer(() => {
             <TableTitle />
             {MentorLogStore.logs.map((e, i) => (
               <TableRow
-                key={i}
+                key={e.id}
                 user={e.cadet.intraId}
                 mentoringId={e.id}
                 topic={e.topic}
