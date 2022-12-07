@@ -7,10 +7,10 @@ import { ReportRowSignature } from './report-row-signature';
 import { ReportFixableElement } from './elements/report-fixable-element';
 import { useEffect, useState } from 'react';
 import defaultTheme from '../../styles/theme';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import ReportStore from '../../states/repoort/ReportStore';
 import { observer } from 'mobx-react-lite';
-import AuthStore from '../../states/auth/AuthStore';
+import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { ReportRowWrite } from './report-row-write';
 import { OneButtonModal } from '../../components/modal/one-button-modal/one-button-modal';
 import { isValidTime } from '../my-mentoring-mentor/modal/wait/select-time';
@@ -76,6 +76,11 @@ const DefaultButton = styled.button`
     opacity: 0.8;
   }
   cursor: pointer;
+  box-shadow: ${defaultTheme.shadow.buttonShadow};
+`;
+
+const ModifyButton = styled(DefaultButton)`
+  //box-shadow: ${defaultTheme.shadow.buttonShadow};
 `;
 
 export const START_TIME = 0;
@@ -156,6 +161,10 @@ const ReportForm = observer(() => {
   const [timePicker, setTimePicker] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<Date>(new Date());
   const [endTime, setEndTime] = useState<Date>(new Date());
+  const locate = useLocation();
+  const [isModify, setIsModify] = useState<boolean>(
+    locate.state !== null ? true : false,
+  );
 
   useEffect(() => {
     async function Initialize() {
@@ -257,7 +266,8 @@ const ReportForm = observer(() => {
                   NewDateKr(endTime),
                 ])}
                 isEditPossible={
-                  ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                  ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
+                  isModify === true
                 }
                 modalSetter={setTimePicker}
               />
@@ -266,7 +276,8 @@ const ReportForm = observer(() => {
                 content={place}
                 contentSetter={setPlace}
                 isEditPossible={
-                  ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                  ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
+                  isModify === true
                 }
                 maxLength={50}
               />
@@ -288,7 +299,8 @@ const ReportForm = observer(() => {
                   content={extraCadet}
                   contentSetter={setExtraCadet}
                   isEditPossible={
-                    ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                    ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
+                    isModify === true
                   }
                   maxLength={500}
                 />
@@ -304,7 +316,8 @@ const ReportForm = observer(() => {
               feedbackMessage={feedbackMessage}
               setFeedbackMessage={setFeedbackMessage}
               isEditPossible={
-                ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
+                isModify === true
               }
             />
             <ReportRowFeedback
@@ -315,26 +328,30 @@ const ReportForm = observer(() => {
               feedback3={feedback3}
               setFeedback3={setFeedback3}
               isEditPossible={
-                ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE
+                ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
+                isModify === true
               }
             />
           </ReportContainer>
-          {ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE && (
+          {(ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
+            isModify === true) && (
             <ButtonContainer>
-              <DefaultButton
-                onClick={() => {
-                  if (!reportId) {
-                    return;
-                  }
-                  setReportRequestDto();
-                  ReportStore.saveTemporary(
-                    reportId,
-                    AuthStore.getAccessToken(),
-                  );
-                }}
-              >
-                임시 저장
-              </DefaultButton>
+              {isModify !== true && (
+                <DefaultButton
+                  onClick={() => {
+                    if (!reportId) {
+                      return;
+                    }
+                    setReportRequestDto();
+                    ReportStore.saveTemporary(
+                      reportId,
+                      AuthStore.getAccessToken(),
+                    );
+                  }}
+                >
+                  임시 저장
+                </DefaultButton>
+              )}
               <DefaultButton
                 onClick={() => {
                   setModal(true);

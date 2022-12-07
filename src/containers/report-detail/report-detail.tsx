@@ -371,7 +371,10 @@ const ReportDetail = () => {
         <ReportpageStyle>
           <ButtonBody>
             {reportIds.length == 1 ? (
-              <Link to={`../mentorings/reports/${reportIds[0]}`}>
+              <Link
+                to={`../mentorings/reports/${reportIds[0]}`}
+                state={{ modify: true }}
+              >
                 <ModifyButton>보고서 수정</ModifyButton>
               </Link>
             ) : null}
