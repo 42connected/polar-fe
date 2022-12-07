@@ -337,7 +337,7 @@ const ReportDetail = () => {
       datas.push(response.data);
       setreportDatas([...datas]);
     } catch (e) {
-      console.log(e);
+      ErrorStore.on('유효하지 않는 데이터입니다.', ERROR_DEFAULT_VALUE.TITLE);
     }
   };
 
