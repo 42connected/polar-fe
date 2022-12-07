@@ -55,7 +55,7 @@ import {
   Cadet,
 } from './reportStyled';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { Container, debounce } from '@mui/material';
 import LoadingStore from '../../states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
@@ -68,6 +68,9 @@ const ReportpageStyle = styled.div`
   width: 100%;
   height: 300rem;
   margin-left: 0;
+  display: flex;
+  top: 0;
+  justify-content: center;
 `;
 
 const ReportpageStyle2 = styled.div<{
@@ -96,29 +99,38 @@ const signimagestyle = {
   height: '3.8rem',
 };
 
-const ImgBody = styled.section`
+const ImgBody = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  padding-top: 5rem;
+  padding-top: 10rem;
 `;
-const ButtonBody = styled.section`
+const ButtonBody = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
 `;
+
 const PrintButton = styled.button`
   cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+  margin-top: 1rem;
   z-index: 1;
   font-size: 1.8rem;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: ${theme.colors.polarSimpleMain};
+  color: white;
+  border: none;
   border-radius: 10px;
   width: 15rem;
-  height: 4rem;
+  height: 5rem;
   box-shadow: ${theme.shadow.buttonShadow};
+`;
+
+const ModifyButton = styled(PrintButton)`
+  margin-right: 3rem;
 `;
 
 const TableStyled = styled.table`
@@ -357,6 +369,13 @@ const ReportDetail = () => {
     return (
       <>
         <ReportpageStyle>
+          <ButtonBody>
+            {reportIds.length == 1 ? (
+              <Link to={`/report-detail?reportId=${reportIds[0]}`}>
+                <ModifyButton>보고서 수정</ModifyButton>
+              </Link>
+            ) : null}
+          </ButtonBody>
           <ImgBody>
             <SimpleComponent
               printRef={componentRef}
