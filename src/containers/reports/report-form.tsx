@@ -22,6 +22,7 @@ import { TimePickerModal } from './elements/report-time-picker/time-picker-modal
 export const REPORT_STATE = {
   EDIT_POSSIBLE: '작성중',
   EDIT_IMPOSSIBLE: '작성완료',
+  EDIT_ONLYONE: '수정기간',
 };
 
 const NoneDrag = styled.div`
@@ -146,6 +147,14 @@ const ReportElementCadet = styled.div`
   grid-column-end: 5;
 `;
 
+function IsEidt(isModify: boolean) {
+  return (
+    ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
+    ReportStore.report.status === REPORT_STATE.EDIT_ONLYONE ||
+    isModify === true
+  );
+}
+
 const ReportForm = observer(() => {
   const { reportId } = useParams<string>();
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -265,20 +274,14 @@ const ReportForm = observer(() => {
                   NewDateKr(startTime),
                   NewDateKr(endTime),
                 ])}
-                isEditPossible={
-                  ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
-                  isModify === true
-                }
+                isEditPossible={IsEidt(isModify)}
                 modalSetter={setTimePicker}
               />
               <ReportFixableElement
                 topic={'장소'}
                 content={place}
                 contentSetter={setPlace}
-                isEditPossible={
-                  ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
-                  isModify === true
-                }
+                isEditPossible={IsEidt(isModify)}
                 maxLength={50}
               />
               <ReportElement
@@ -298,10 +301,7 @@ const ReportForm = observer(() => {
                 <ReportFixableElementWithoutTopic
                   content={extraCadet}
                   contentSetter={setExtraCadet}
-                  isEditPossible={
-                    ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
-                    isModify === true
-                  }
+                  isEditPossible={IsEidt(isModify)}
                   maxLength={500}
                 />
               </ReportElementCadet>
@@ -315,10 +315,7 @@ const ReportForm = observer(() => {
               setContent={setContent}
               feedbackMessage={feedbackMessage}
               setFeedbackMessage={setFeedbackMessage}
-              isEditPossible={
-                ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
-                isModify === true
-              }
+              isEditPossible={IsEidt(isModify)}
             />
             <ReportRowFeedback
               feedback1={feedback1}
@@ -327,14 +324,10 @@ const ReportForm = observer(() => {
               setFeedback2={setFeedback2}
               feedback3={feedback3}
               setFeedback3={setFeedback3}
-              isEditPossible={
-                ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
-                isModify === true
-              }
+              isEditPossible={IsEidt(isModify)}
             />
           </ReportContainer>
-          {(ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE ||
-            isModify === true) && (
+          {IsEidt(isModify) && (
             <ButtonContainer>
               {isModify !== true && (
                 <DefaultButton
