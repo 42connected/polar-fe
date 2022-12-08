@@ -329,7 +329,7 @@ const ReportForm = observer(() => {
           </ReportContainer>
           {IsEidt(isModify) && (
             <ButtonContainer>
-              {isModify !== true && (
+              {ReportStore.report.status === REPORT_STATE.EDIT_POSSIBLE && (
                 <DefaultButton
                   onClick={() => {
                     if (!reportId) {
