@@ -8,10 +8,7 @@ import {
 import theme from '../../styles/theme';
 import { reportsPro } from './getreportdata';
 import ino1 from '../../assets/image/logo/ino1.png';
-import ino2 from '../../assets/image/logo/ino2.png';
 import {
-  NoneValue3,
-  SubTitle9,
   PlaceBox,
   SubTitle2,
   NoneValue2,
@@ -31,7 +28,6 @@ import {
   DateBox,
   TimeBox,
   MentorNameBox,
-  CadetNameBox,
   ContentTitle1,
   ContentTitle2,
   ContentTitle3,
@@ -41,14 +37,10 @@ import {
   ContentBody4,
   ContentBody5,
   ContentBody6,
-  Number1,
-  Number2,
   IsCommonBox,
   NotCommonBox,
   ImgLogo1,
-  ImgLogo2,
   ImgLogo3,
-  ImgLogo4,
   MentoSign,
   SignText,
   PlaceBox2,
@@ -56,11 +48,10 @@ import {
 } from './reportStyled';
 import AuthStore, { USER_ROLES } from '../../states/auth/AuthStore';
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
-import { Container, debounce } from '@mui/material';
+import { debounce } from '@mui/material';
 import LoadingStore from '../../states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '../../states/error/ErrorStore';
 import { NewDateKr } from '../../states/date-kr';
-import { autoAction } from 'mobx/dist/internal';
 
 const ReportpageStyle = styled.div`
   background-color: ${theme.colors.backgoundWhite};
@@ -73,27 +64,11 @@ const ReportpageStyle = styled.div`
   justify-content: center;
 `;
 
-const ReportpageStyle2 = styled.div<{
-  height: number;
-}>`
-  background-color: ${theme.colors.backgoundWhite};
-  margin-left: 40rem;
-  width: 100%;
-  margin-left: 0;
-`;
-
-const imagestyle1 = {
-  width: 'auto-fit',
-  height: 'auto-fit',
-};
 const imagestyle2 = {
   height: '3.6rem',
   width: '11rem',
 };
-const imagestyle3 = {
-  height: '4.5rem',
-  width: '8rem',
-};
+
 const signimagestyle = {
   width: '3.8rem',
   height: '3.8rem',
@@ -103,10 +78,11 @@ const ImgBody = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding-top: 10rem;
+  padding-top: 5rem;
 `;
 const ButtonBody = styled.div`
   display: flex;
+  z-index: 5;
 `;
 
 const PrintButton = styled.button`
@@ -133,10 +109,6 @@ const ModifyButton = styled(PrintButton)`
   margin-right: 3rem;
 `;
 
-const TableStyled = styled.table`
-  page-break-after: always;
-`;
-
 const PlaceBoxStyled = styled.div<{ len: number }>`
   ${props => (props.len > 200 ? 'font-size: 1rem' : 'font-size: 1.6rem')};
 `;
@@ -156,7 +128,7 @@ const SimpleComponent = (props: {
         ];
         return (
           <div key={index}>
-            {index != 0 ? (
+            {index !== 0 ? (
               <>
                 <table style={{ pageBreakAfter: 'always' }}>
                   <tbody></tbody>
@@ -200,7 +172,11 @@ const SimpleComponent = (props: {
                 {reportdata?.mentors.name}
                 <SignText>(인)</SignText>
                 <MentoSign>
-                  <img src={reportdata?.signatureUrl} style={signimagestyle} />
+                  <img
+                    src={reportdata?.signatureUrl}
+                    style={signimagestyle}
+                    alt=""
+                  />
                 </MentoSign>
               </MentorNameBox>
               <Cadet>멘티이름</Cadet>
@@ -246,9 +222,10 @@ const SimpleComponent = (props: {
                     style={{
                       height: 'auto',
                       maxWidth: '30rem',
-                      maxHeight: '35rem',
+                      maxHeight: '32rem',
                       minWidth: '20rem',
                     }}
+                    alt=""
                   />
                 ) : (
                   ''
@@ -259,9 +236,10 @@ const SimpleComponent = (props: {
                     style={{
                       height: 'auto',
                       maxWidth: '30rem',
-                      maxHeight: '35rem',
+                      maxHeight: '32rem',
                       minWidth: '20rem',
                     }}
+                    alt=""
                   />
                 ) : (
                   ''
@@ -295,10 +273,20 @@ const SimpleComponent = (props: {
                 <NotCommonBox> o </NotCommonBox>
               )}
               <ImgLogo1>
-                <img src={ino1} style={imagestyle2} className="report-image" />
+                <img
+                  src={ino1}
+                  style={imagestyle2}
+                  className="report-image"
+                  alt=""
+                />
               </ImgLogo1>
               <ImgLogo3>
-                <img src={ino1} style={imagestyle2} className="report-image" />
+                <img
+                  src={ino1}
+                  style={imagestyle2}
+                  className="report-image"
+                  alt=""
+                />
               </ImgLogo3>
             </ReportContainer>
           </div>
@@ -370,7 +358,7 @@ const ReportDetail = () => {
       <>
         <ReportpageStyle>
           <ButtonBody>
-            {reportIds.length == 1 ? (
+            {reportIds.length === 1 ? (
               <Link
                 to={`../mentorings/reports/${reportIds[0]}`}
                 state={{ modify: true }}

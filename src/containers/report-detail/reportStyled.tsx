@@ -11,7 +11,7 @@ export const ReportContainer = styled.div`
   width: 100%;
   grid-template-rows:
     6rem 5.8rem 0.6rem 4rem 0.6rem 3.9rem 4.1rem 5.3rem 12.5rem
-    8rem 27rem 27rem 0rem 10rem 75.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem;
+    8rem 27rem 27rem 0rem 6rem 72.5rem 3rem 2.4rem 2.4rem 2.4rem 4.3rem;
   grid-template-columns: 7rem 8.5rem 5.5rem 17rem 5.7rem 7rem 18rem;
   grid-template-areas:
     'side img1 . . . . side'
@@ -45,10 +45,11 @@ export const ReportContainer = styled.div`
 
 export const ImgLogo1 = styled.section`
   ${theme.fontSize.sizeMedium};
-  position: absolute;
   grid-area: img1;
   grid-column-start: 2;
   grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 1;
   margin-left: -0.2rem;
   padding-top: 2rem;
 `;
@@ -65,12 +66,11 @@ export const ImgLogo2 = styled.section`
 
 export const ImgLogo3 = styled.section`
   ${theme.fontSize.sizeMedium};
-  position: absolute;
   grid-column-start: 2;
   grid-column-end: 3;
   grid-row-start: 14;
   margin-left: -0.2rem;
-  padding-top: 6rem;
+  padding-top: 2rem;
 `;
 
 export const ImgLogo4 = styled.section`
@@ -89,7 +89,6 @@ export const Title = styled.section`
   align-content: center;
   justify-content: center;
   box-sizing: border-box;
-  position: absolute;
   grid-area: img2;
   grid-column-start: 2;
   grid-column-end: 7;
@@ -103,7 +102,6 @@ export const Title = styled.section`
 
 export const NoneValue1 = styled.section`
   background-color: ${theme.colors.backgoundWhite};
-  position: absolute;
   box-sizing: border-box;
   grid-column-start: 2;
   grid-column-end: 7;
@@ -118,7 +116,6 @@ export const NoneValue1 = styled.section`
 `;
 export const NoneValue2 = styled.section`
   background-color: ${theme.colors.backgoundWhite};
-  position: absolute;
   box-sizing: border-box;
   grid-column-start: 2;
   grid-column-end: 7;
@@ -146,7 +143,6 @@ export const NoneValue3 = styled.section`
 export const SubTitle1 = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   background-color: ${theme.colors.grayFive};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   border-top: 0px;
@@ -161,7 +157,6 @@ export const SubTitle1 = styled.section`
 export const SubTitle2 = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   background-color: ${theme.colors.grayFive};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   border-top: 0px;
@@ -176,7 +171,6 @@ export const SubTitle2 = styled.section`
 export const SubTitle3 = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   background-color: ${theme.colors.grayFive};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   border-bottom: 0;
@@ -191,7 +185,6 @@ export const SubTitle3 = styled.section`
 export const SubTitle4 = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   background-color: ${theme.colors.grayFive};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   border-bottom: 0px;
@@ -206,7 +199,6 @@ export const SubTitle4 = styled.section`
 export const SubTitle5 = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   background-color: ${theme.colors.grayFive};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   grid-column-start: 2;
@@ -220,12 +212,11 @@ export const SubTitle5 = styled.section`
 export const SubTitle6 = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   background-color: ${theme.colors.grayFive};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   grid-column-start: 2;
   grid-row-start: 15;
-  height: 75.7rem;
+  height: 72.7rem;
   width: 9.1rem;
   text-align: center;
   padding-top: 30rem;
@@ -234,7 +225,6 @@ export const SubTitle6 = styled.section`
 export const SubTitle7 = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   background-color: ${theme.colors.grayFive};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   grid-column-start: 2;
@@ -249,7 +239,6 @@ export const SubTitle7 = styled.section`
 export const MiniTitle1 = styled.section`
   ${theme.fontSize.sizeSmall};
   background-color: ${theme.colors.graySix};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   border-top: 0px;
@@ -264,7 +253,6 @@ export const MiniTitle1 = styled.section`
 export const MiniTitle2 = styled.section`
   ${theme.fontSize.sizeSmall};
   background-color: ${theme.colors.graySix};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   border-top: 0px;
@@ -279,7 +267,6 @@ export const MiniTitle2 = styled.section`
 export const SubTitle8 = styled.section`
   ${theme.fontSize.sizeSmall};
   background-color: ${theme.colors.grayFive};
-  position: absolute;
   box-sizing: border-box;
   border-left: 1px solid black;
   border-right: 1px solid black;
@@ -308,7 +295,6 @@ export const SubTitle9 = styled.section`
 
 export const IsCommonBox = styled.section`
   ${theme.fontSize.sizeMedium};
-  position: absolute;
   align-items: stretch;
   text-align: center;
   grid-area: isCommon;
@@ -321,7 +307,6 @@ export const IsCommonBox = styled.section`
 
 export const DateBox = styled.section`
   ${theme.fontSize.sizeExtraSmall};
-  position: absolute;
   align-items: stretch;
   height: 4rem;
   width: 23rem;
@@ -335,7 +320,6 @@ export const DateBox = styled.section`
 
 export const MentorNameBox = styled.section`
   ${theme.fontSize.sizeExtraSmall};
-  position: absolute;
   align-items: stretch;
   height: 5.6rem;
   width: 47.8rem;
@@ -359,8 +343,7 @@ export const SignText = styled.div`
 `;
 
 export const MentoSign = styled.span`
-  position: absolute;
-  margin-left: 11vw;
+  margin-left: 1vw;
   align-items: center;
   align-content: center;
   justify-content: center;
@@ -373,7 +356,6 @@ export const CadetNameBox = styled.section`
   display: flex;
   align-items: stretch;
   height: 6rem;
-  //width: 50.3rem;
   grid-column-start: 3;
   grid-column-start: 7;
   grid-row-start: 9;
@@ -385,7 +367,6 @@ export const CadetNameBox = styled.section`
 
 export const TimeBox = styled.section`
   ${theme.fontSize.sizeExtraSmall};
-  position: absolute;
   align-items: stretch;
   height: 4.3rem;
   width: 17.4rem;
@@ -400,7 +381,6 @@ export const TimeBox = styled.section`
 export const PlaceBox = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   overflow: hidden;
-  position: absolute;
   height: 4.3rem;
   width: 46.7rem;
   grid-column-start: 3;
@@ -417,7 +397,6 @@ export const PlaceBox = styled.section`
 
 export const NotCommonBox = styled.section`
   ${theme.fontSize.sizeMedium};
-  position: absolute;
   align-items: stretch;
   text-align: center;
   grid-area: notCommon;
@@ -436,7 +415,6 @@ export const NotCommonBox = styled.section`
 export const ContentTitle1 = styled.section`
   ${theme.fontSize.sizeSmall};
   background-color: ${theme.colors.backgoundWhite};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   grid-column-start: 3;
@@ -450,7 +428,6 @@ export const ContentTitle1 = styled.section`
 export const ContentTitle2 = styled.section`
   ${theme.fontSize.sizeSmall};
   background-color: ${theme.colors.backgoundWhite};
-  position: absolute;
   box-sizing: border-box;
   border-left: 1px solid black;
   grid-column-start: 3;
@@ -465,7 +442,6 @@ export const ContentTitle2 = styled.section`
 export const ContentTitle3 = styled.section`
   ${theme.fontSize.sizeSmall};
   background-color: ${theme.colors.backgoundWhite};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   grid-column-start: 3;
@@ -484,7 +460,6 @@ export const ContentBody1 = styled.textarea<{ len: number }>`
   flex-wrap: wrap;
   overflow: hidden;
   resize: none;
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   grid-column-start: 4;
@@ -505,7 +480,6 @@ export const ContentBody2 = styled.textarea<{ len: number }>`
   flex-wrap: wrap;
   overflow: hidden;
   resize: none;
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   border-top: 0px;
@@ -529,7 +503,6 @@ export const ContentBody3 = styled.textarea<{ len: number }>`
   flex-wrap: wrap;
   overflow: hidden;
   resize: none;
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   grid-column-start: 4;
@@ -546,13 +519,12 @@ export const ContentBody3 = styled.textarea<{ len: number }>`
 export const ContentBody4 = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   background-color: ${theme.colors.backgoundWhite};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   grid-column-start: 3;
   grid-column-end: 4;
   grid-row-start: 15;
-  height: 75.7rem;
+  height: 72.7rem;
   width: 47.7rem;
   text-align: left;
   padding-top: 1.3rem;
@@ -562,7 +534,6 @@ export const ContentBody4 = styled.section`
 export const ContentBody5 = styled.section`
   ${theme.fontSize.sizeExtraSmall};
   background-color: ${theme.colors.backgoundWhite};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   grid-column-start: 3;
@@ -581,7 +552,6 @@ export const ContentBody5 = styled.section`
 export const ContentBody6 = styled.section`
   ${theme.fontSize.sizeExtraMedium};
   background-color: ${theme.colors.backgoundWhite};
-  position: absolute;
   box-sizing: border-box;
   border: 1px solid black;
   grid-column-start: 2;
