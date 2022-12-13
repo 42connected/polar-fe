@@ -97,7 +97,6 @@ function DataRoomListElement(
       </TableData>
       <TableData>{data.mentors?.name ?? ''}</TableData>
       <TableData>{data.mentors?.intraId ?? ''}</TableData>
-      <TableData>{data.cadets?.name ?? ''}</TableData>
       <TableData>{data.cadets?.intraId ?? ''}</TableData>
       <TableData>
         {data.cadets ? (data.cadets?.isCommon ? '공통' : '심화') : ''}
@@ -113,10 +112,11 @@ function DataRoomListElement(
           {data.id ? '상세보기' : ''}
         </CustomLink>
       </TableData>
+      <TableData>{data.status ?? ''}</TableData>
       <TableData>
-        <CustomLink to={'/report-detail?autoPrint=true&reportId=' + data.id}>
-          {data.id ? '출력' : ''}
-        </CustomLink>
+        {data.updatedAt
+          ? NewDateKr(data.updatedAt).toLocaleString('ko-KR')
+          : ''}
       </TableData>
     </tr>
   );

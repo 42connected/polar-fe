@@ -2,6 +2,7 @@ export type dataRoomProps = {
   id: string;
   place: string;
   createdAt: Date;
+  updatedAt: Date;
   signatureUrl: string;
   imageUrl: string[];
   money: number;
@@ -18,7 +19,6 @@ export type dataRoomProps = {
   };
   cadets: {
     intraId: string;
-    name: string;
     isCommon: boolean;
   };
 };

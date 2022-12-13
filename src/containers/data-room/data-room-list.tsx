@@ -79,10 +79,9 @@ function DataRoomList(
             {isDesktop && <TableHead width="10%">신청 일시</TableHead>}
             <TableHead width="8%">멘토 이름</TableHead>
             <TableHead width="8%">아이디</TableHead>
-            <TableHead width="8%">대표 카뎃</TableHead>
-            <TableHead width="8%">아이디</TableHead>
+            <TableHead width="8%">카뎃 아이디</TableHead>
             <TableHead width="4%">구분</TableHead>
-            <TableHead width="27%">
+            <TableHead width="20%">
               멘토링 시간{' '}
               {query.isAscending === true && (
                 <FontAwesomeIcon
@@ -103,7 +102,8 @@ function DataRoomList(
             </TableHead>
             <TableHead width="8%">금액</TableHead>
             <TableHead width="8%">보고서</TableHead>
-            {isDesktop && <TableHead width="8%">보고서 출력</TableHead>}
+            <TableHead width="8%">보고서 상태</TableHead>
+            {isDesktop && <TableHead width="15%">최근 수정</TableHead>}
           </tr>
         </thead>
         <tbody>
