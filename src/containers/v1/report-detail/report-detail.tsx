@@ -10,8 +10,6 @@ import { reportsPro } from '@/containers/v1/report-detail/getreportdata';
 import ino1 from '@/assets/image/logo/ino1.png';
 import ino2 from '@/assets/image/logo/ino2.png';
 import {
-  NoneValue3,
-  SubTitle9,
   PlaceBox,
   SubTitle2,
   NoneValue2,
@@ -31,7 +29,6 @@ import {
   DateBox,
   TimeBox,
   MentorNameBox,
-  CadetNameBox,
   ContentTitle1,
   ContentTitle2,
   ContentTitle3,
@@ -41,21 +38,17 @@ import {
   ContentBody4,
   ContentBody5,
   ContentBody6,
-  Number1,
-  Number2,
   IsCommonBox,
   NotCommonBox,
   ImgLogo1,
-  ImgLogo2,
   ImgLogo3,
-  ImgLogo4,
   MentoSign,
   SignText,
   PlaceBox2,
   Cadet,
 } from '@/containers/v1/report-detail/reportStyled';
 import AuthStore, { USER_ROLES } from '@/states/auth/AuthStore';
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { debounce } from '@mui/material';
 import LoadingStore from '@/states/loading/LoadingStore';
 import ErrorStore, { ERROR_DEFAULT_VALUE } from '@/states/error/ErrorStore';
@@ -68,61 +61,54 @@ const ReportpageStyle = styled.div`
   width: 100%;
   height: 300rem;
   margin-left: 0;
+  display: flex;
+  top: 0;
+  justify-content: center;
 `;
 
-const ReportpageStyle2 = styled.div<{
-  height: number;
-}>`
-  background-color: ${theme.colors.backgoundWhite};
-  margin-left: 40rem;
-  width: 100%;
-  margin-left: 0;
-`;
-
-const imagestyle1 = {
-  width: 'auto-fit',
-  height: 'auto-fit',
-};
 const imagestyle2 = {
   height: '3.6rem',
   width: '11rem',
 };
-const imagestyle3 = {
-  height: '4.5rem',
-  width: '8rem',
-};
+
 const signimagestyle = {
   width: '3.8rem',
   height: '3.8rem',
 };
 
-const ImgBody = styled.section`
+const ImgBody = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
   padding-top: 5rem;
 `;
-const ButtonBody = styled.section`
+const ButtonBody = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  z-index: 5;
 `;
+
 const PrintButton = styled.button`
   cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+  margin-top: 1rem;
   z-index: 1;
   font-size: 1.8rem;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${theme.colors.backgoundWhite};
+  background-color: ${theme.colors.polarSimpleMain};
+  color: white;
+  border: none;
   border-radius: 10px;
   width: 15rem;
-  height: 4rem;
+  height: 5rem;
   box-shadow: ${theme.shadow.buttonShadow};
 `;
 
-const TableStyled = styled.table`
-  page-break-after: always;
+const ModifyButton = styled(PrintButton)`
+  margin-right: 3rem;
 `;
 
 const PlaceBoxStyled = styled.div<{ len: number }>`
@@ -144,7 +130,7 @@ const SimpleComponent = (props: {
         ];
         return (
           <div key={index}>
-            {index != 0 ? (
+            {index !== 0 ? (
               <>
                 <table style={{ pageBreakAfter: 'always' }}>
                   <tbody></tbody>
@@ -188,7 +174,11 @@ const SimpleComponent = (props: {
                 {reportdata?.mentors.name}
                 <SignText>(인)</SignText>
                 <MentoSign>
-                  <img src={reportdata?.signatureUrl} style={signimagestyle} />
+                  <img
+                    src={reportdata?.signatureUrl}
+                    style={signimagestyle}
+                    alt=""
+                  />
                 </MentoSign>
               </MentorNameBox>
               <Cadet>멘티이름</Cadet>
@@ -234,9 +224,10 @@ const SimpleComponent = (props: {
                     style={{
                       height: 'auto',
                       maxWidth: '30rem',
-                      maxHeight: '35rem',
+                      maxHeight: '32rem',
                       minWidth: '20rem',
                     }}
+                    alt=""
                   />
                 ) : (
                   ''
@@ -247,9 +238,10 @@ const SimpleComponent = (props: {
                     style={{
                       height: 'auto',
                       maxWidth: '30rem',
-                      maxHeight: '35rem',
+                      maxHeight: '32rem',
                       minWidth: '20rem',
                     }}
+                    alt=""
                   />
                 ) : (
                   ''
@@ -283,10 +275,20 @@ const SimpleComponent = (props: {
                 <NotCommonBox> o </NotCommonBox>
               )}
               <ImgLogo1>
-                <img src={ino1} style={imagestyle2} className="report-image" />
+                <img
+                  src={ino1}
+                  style={imagestyle2}
+                  className="report-image"
+                  alt=""
+                />
               </ImgLogo1>
               <ImgLogo3>
-                <img src={ino1} style={imagestyle2} className="report-image" />
+                <img
+                  src={ino1}
+                  style={imagestyle2}
+                  className="report-image"
+                  alt=""
+                />
               </ImgLogo3>
             </ReportContainer>
           </div>
@@ -325,7 +327,7 @@ const ReportDetail = () => {
       datas.push(response.data);
       setreportDatas([...datas]);
     } catch (e) {
-      console.log(e);
+      ErrorStore.on('유효하지 않는 데이터입니다.', ERROR_DEFAULT_VALUE.TITLE);
     }
   };
 
@@ -357,6 +359,16 @@ const ReportDetail = () => {
     return (
       <>
         <ReportpageStyle>
+          <ButtonBody>
+            {reportIds.length === 1 ? (
+              <Link
+                to={`../mentorings/reports/${reportIds[0]}`}
+                state={{ modify: true }}
+              >
+                <ModifyButton>보고서 수정</ModifyButton>
+              </Link>
+            ) : null}
+          </ButtonBody>
           <ImgBody>
             <SimpleComponent
               printRef={componentRef}

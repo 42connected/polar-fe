@@ -31,7 +31,6 @@ function DataRoomListElementMobile(
       </TableData>
       <TableData>{data.mentors?.name ?? ''}</TableData>
       <TableData>{data.mentors?.intraId ?? ''}</TableData>
-      <TableData>{data.cadets?.name ?? ''}</TableData>
       <TableData>{data.cadets?.intraId ?? ''}</TableData>
       <TableData>
         {data.cadets ? (data.cadets?.isCommon ? '공통' : '심화') : ''}
@@ -47,6 +46,7 @@ function DataRoomListElementMobile(
           {data.id ? '상세보기' : ''}
         </CustomLink>
       </TableData>
+      <TableData>{data.status ?? ''}</TableData>
     </tr>
   );
 }

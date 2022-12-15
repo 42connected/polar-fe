@@ -17,6 +17,7 @@ import theme from '@/styles/theme';
 
 const settings = {
   dots: true,
+  arrows: false,
   infinite: true,
   speed: 500,
   autoplay: true,
@@ -43,12 +44,6 @@ const StyledSlider = styled(Slider)`
   .slick-list {
     width: '60rem';
     margin: 0 auto;
-  }
-  .slick-prev:before {
-    opacity: 0;
-  }
-  .slick-next:before {
-    opacity: 0;
   }
 `;
 

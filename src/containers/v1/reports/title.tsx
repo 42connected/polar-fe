@@ -10,6 +10,7 @@ const PageTitle = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding: 20px 0px 20px 30px;
   margin: 50px 0px;
+  display: flex;
 `;
 
 export interface TitleProps {
@@ -21,10 +22,11 @@ export function Title(props: TitleProps) {
     <>
       <PageTitle>
         {props.title}
-        {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE ? (
+        {ReportStore.report.status === REPORT_STATE.EDIT_IMPOSSIBLE && (
           <> (작성 완료됨, 수정불가)</>
-        ) : (
-          <></>
+        )}
+        {ReportStore.report.status === REPORT_STATE.EDIT_ONLYONE && (
+          <> (수정 기간, 제출 후에도 수정 가능)</>
         )}
       </PageTitle>
     </>

@@ -90,6 +90,18 @@ const DRButton = styled(Button)`
   z-index: 100;
 `;
 
+const DRButtonReport = styled(Button)`
+  z-index: 100;
+  background-color: ${theme.colors.polarSimpleMain};
+  border-radius: 30%;
+`;
+
+const DRButtonReportAll = styled(Button)`
+  z-index: 100;
+  background-color: ${theme.colors.polarSimpleMain};
+  border-radius: 20%;
+`;
+
 type DRProps = {
   children: ReactNode;
 };
@@ -172,13 +184,13 @@ function DataRoom() {
                 ? response.data.total % query.take
                 : query.take;
 
-            if (tmpOffset < query.take)
+            if (tmpOffset < query.take) {
               setDatas(
                 response.data.reports.concat(
                   Array(query.take - tmpOffset).fill({}),
                 ),
               );
-            else setDatas(response.data.reports);
+            } else setDatas(response.data.reports);
             setTotal(response.data.total);
             setOffset(tmpOffset);
           } else {
@@ -212,6 +224,174 @@ function DataRoom() {
       );
     }
   }, [query, offset, setOffset, setTotal, total]);
+
+  const SetReportStatusAllToModify = async () => {
+    LoadingStore.on();
+
+    const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}/bocals/data-room/reports/all/edit`;
+
+    try {
+      const res = await fetch(realurl, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `bearer ${AuthStore.getAccessToken()}`,
+          'Content-type': 'application/json',
+        },
+      });
+
+      if (res.status === 200) {
+      } else {
+        LoadingStore.off();
+        ErrorStore.on(
+          '레포트 상태를 변경하는 도중 오류가 발생하였습니다.',
+          ERROR_DEFAULT_VALUE.TITLE,
+        );
+        return;
+      }
+    } catch (error) {
+      LoadingStore.off();
+      ErrorStore.on(
+        '레포트 상태를 변경하는 도중 오류가 발생하였습니다.',
+        ERROR_DEFAULT_VALUE.TITLE,
+      );
+      return;
+    }
+
+    LoadingStore.off();
+
+    window.location.reload();
+  };
+
+  const SetReportStatusAllToDone = async () => {
+    LoadingStore.on();
+
+    const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}/bocals/data-room/reports/all/done`;
+
+    try {
+      const res = await fetch(realurl, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `bearer ${AuthStore.getAccessToken()}`,
+          'Content-type': 'application/json',
+        },
+      });
+
+      if (res.status === 200) {
+      } else {
+        LoadingStore.off();
+        ErrorStore.on(
+          '레포트 상태를 변경하는 도중 오류가 발생하였습니다.',
+          ERROR_DEFAULT_VALUE.TITLE,
+        );
+        return;
+      }
+    } catch (error) {
+      LoadingStore.off();
+      ErrorStore.on(
+        '레포트 상태를 변경하는 도중 오류가 발생하였습니다.',
+        ERROR_DEFAULT_VALUE.TITLE,
+      );
+      return;
+    }
+
+    LoadingStore.off();
+
+    window.location.reload();
+  };
+
+  const SetReportStatusToModify = async () => {
+    LoadingStore.on();
+
+    const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}/bocals/data-room/reports/edit`;
+    const data = {
+      id: selectedList,
+    };
+
+    if (selectedList.length === 0) {
+      LoadingStore.off();
+      setErrorModalMsg('멘토링 정보를 하나 이상 선택해주세요.');
+      setErrorModal(true);
+      return;
+    }
+
+    try {
+      const res = await fetch(realurl, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `bearer ${AuthStore.getAccessToken()}`,
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      if (res.status === 200) {
+      } else {
+        LoadingStore.off();
+        ErrorStore.on(
+          '레포트 상태를 변경하는 도중 오류가 발생하였습니다.',
+          ERROR_DEFAULT_VALUE.TITLE,
+        );
+        return;
+      }
+    } catch (error) {
+      LoadingStore.off();
+      ErrorStore.on(
+        '레포트 상태를 변경하는 도중 오류가 발생하였습니다.',
+        ERROR_DEFAULT_VALUE.TITLE,
+      );
+      return;
+    }
+
+    LoadingStore.off();
+
+    window.location.reload();
+  };
+
+  const SetReportStatusToDone = async () => {
+    LoadingStore.on();
+
+    const realurl = `${process.env.REACT_APP_BASE_BACKEND_URL}/bocals/data-room/reports/done`;
+    const data = {
+      id: selectedList,
+    };
+
+    if (selectedList.length === 0) {
+      LoadingStore.off();
+      setErrorModalMsg('멘토링 정보를 하나 이상 선택해주세요.');
+      setErrorModal(true);
+      return;
+    }
+
+    try {
+      const res = await fetch(realurl, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `bearer ${AuthStore.getAccessToken()}`,
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      if (res.status === 200) {
+      } else {
+        LoadingStore.off();
+        ErrorStore.on(
+          '레포트 상태를 변경하는 도중 오류가 발생하였습니다.',
+          ERROR_DEFAULT_VALUE.TITLE,
+        );
+        return;
+      }
+    } catch (error) {
+      LoadingStore.off();
+      ErrorStore.on(
+        '레포트 상태를 변경하는 도중 오류가 발생하였습니다.',
+        ERROR_DEFAULT_VALUE.TITLE,
+      );
+      return;
+    }
+
+    LoadingStore.off();
+
+    window.location.reload();
+  };
 
   const getExcel = async () => {
     LoadingStore.on();
@@ -336,6 +516,30 @@ function DataRoom() {
                 </DataRoomButton>
                 <DataRoomButton>
                   <DRButton text="엑셀 저장" onClick={getExcel} />
+                </DataRoomButton>
+                <DataRoomButton>
+                  <DRButtonReport
+                    text="선택수정"
+                    onClick={SetReportStatusToModify}
+                  />
+                </DataRoomButton>
+                <DataRoomButton>
+                  <DRButtonReport
+                    text="선택완료"
+                    onClick={SetReportStatusToDone}
+                  />
+                </DataRoomButton>
+                <DataRoomButton>
+                  <DRButtonReportAll
+                    text="전체수정"
+                    onClick={SetReportStatusAllToModify}
+                  />
+                </DataRoomButton>
+                <DataRoomButton>
+                  <DRButtonReportAll
+                    text="전체완료"
+                    onClick={SetReportStatusAllToDone}
+                  />
                 </DataRoomButton>
               </DataRoomButtonDiv>
               {DataRoomList(
