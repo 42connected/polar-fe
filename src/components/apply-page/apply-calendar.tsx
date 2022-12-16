@@ -462,9 +462,21 @@ function ApplyCalendar(props: ApplyCalendarModalProps) {
             endDate.setMinutes((Number(endTime) + 1) % 2 ? 30 : 0);
             endDate.setSeconds(0);
             endDate.setMilliseconds(0);
-            setStartDateTime(startDate);
-            setEndDateTime(endDate);
-            XButtonFunc();
+
+            if (
+              startDate.getTime() >=
+                NewDateKr(new Date(2022, 11, 19, 0, 0, 0, 0)).getTime() ||
+              endDate.getTime() >=
+                NewDateKr(new Date(2022, 11, 19, 0, 0, 0, 0)).getTime()
+            ) {
+              alert(
+                '2022년 12월 19일 이후 멘토링을 신청할 수 없습니다(22년 멘토링 신청 마감)',
+              );
+            } else {
+              setStartDateTime(startDate);
+              setEndDateTime(endDate);
+              XButtonFunc();
+            }
           }
         }}
       ></Button>
